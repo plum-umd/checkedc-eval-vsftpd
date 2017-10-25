@@ -34,10 +34,10 @@ static void handle_cwd(struct vsf_session* p_sess);
 static void handle_pasv(struct vsf_session* p_sess, int is_epsv);
 static void handle_retr(struct vsf_session* p_sess, int is_http);
 static void handle_cdup(struct vsf_session* p_sess);
-static void handle_list(struct vsf_session* p_sess);
+static void handle_list(_Ptr<struct vsf_session> p_sess);
 static void handle_type(struct vsf_session* p_sess);
 static void handle_port(struct vsf_session* p_sess);
-static void handle_stor(struct vsf_session* p_sess);
+static void handle_stor(_Ptr<struct vsf_session> p_sess);
 static void handle_mkd(struct vsf_session* p_sess);
 static void handle_rmd(struct vsf_session* p_sess);
 static void handle_dele(struct vsf_session* p_sess);
@@ -50,9 +50,9 @@ static void handle_site(struct vsf_session* p_sess);
 static void handle_appe(struct vsf_session* p_sess);
 static void handle_mdtm(struct vsf_session* p_sess);
 static void handle_site_chmod(struct vsf_session* p_sess,
-                              struct mystr* p_arg_str);
+                              _Ptr<struct mystr> p_arg_str);
 static void handle_site_umask(struct vsf_session* p_sess,
-                              struct mystr* p_arg_str);
+                              _Ptr<struct mystr> p_arg_str);
 static void handle_eprt(struct vsf_session* p_sess);
 static void handle_help(struct vsf_session* p_sess);
 static void handle_stou(struct vsf_session* p_sess);
@@ -63,22 +63,22 @@ static void handle_logged_in_pass(struct vsf_session* p_sess);
 static void handle_http(struct vsf_session* p_sess);
 
 static int pasv_active(struct vsf_session* p_sess);
-static int port_active(struct vsf_session* p_sess);
-static void pasv_cleanup(struct vsf_session* p_sess);
-static void port_cleanup(struct vsf_session* p_sess);
-static void handle_dir_common(struct vsf_session* p_sess, int full_details,
+static int port_active(_Ptr<struct vsf_session> p_sess);
+static void pasv_cleanup(_Ptr<struct vsf_session> p_sess);
+static void port_cleanup(_Ptr<struct vsf_session> p_sess);
+static void handle_dir_common(_Ptr<struct vsf_session> p_sess, int full_details,
                               int stat_cmd);
-static void prepend_path_to_filename(struct mystr* p_str);
+static void prepend_path_to_filename(_Ptr<struct mystr> p_str);
 static int get_remote_transfer_fd(struct vsf_session* p_sess,
-                                  const char* p_status_msg);
+                                  _Ptr<const char> p_status_msg);
 static void check_abor(struct vsf_session* p_sess);
 static void handle_sigurg(void* p_private);
-static void handle_upload_common(struct vsf_session* p_sess, int is_append,
+static void handle_upload_common(_Ptr<struct vsf_session> p_sess, int is_append,
                                  int is_unique);
-static void get_unique_filename(struct mystr* p_outstr,
-                                const struct mystr* p_base);
+static void get_unique_filename(_Ptr<struct mystr> p_outstr,
+                                _Ptr<const struct mystr> p_base);
 static int data_transfer_checks_ok(struct vsf_session* p_sess);
-static void resolve_tilde(struct mystr* p_str, struct vsf_session* p_sess);
+static void resolve_tilde(_Ptr<struct mystr> p_str, _Ptr<struct vsf_session> p_sess);
 
 void
 process_post_login(struct vsf_session* p_sess)
@@ -792,7 +792,7 @@ file_close_out:
 }
 
 static void
-handle_list(struct vsf_session* p_sess)
+handle_list(_Ptr<struct vsf_session> p_sess)
 {
   handle_dir_common(p_sess, 1, 0);
 }
@@ -1007,7 +1007,7 @@ handle_port(struct vsf_session* p_sess)
 }
 
 static void
-handle_stor(struct vsf_session* p_sess)
+handle_stor(_Ptr<struct vsf_session> p_sess)
 {
   handle_upload_common(p_sess, 0, 0);
 }
@@ -1017,7 +1017,7 @@ handle_upload_common(struct vsf_session* p_sess, int is_append, int is_unique)
 {
   static struct vsf_sysutil_statbuf* s_p_statbuf;
   static struct mystr s_filename;
-  struct mystr* p_filename;
+  _Ptr<struct mystr> p_filename;
   struct vsf_transfer_ret trans_ret;
   int new_file_fd;
   int remote_fd;
@@ -1359,7 +1359,7 @@ handle_nlst(struct vsf_session* p_sess)
 }
 
 static void
-prepend_path_to_filename(struct mystr* p_str)
+prepend_path_to_filename(_Ptr<struct mystr> p_str)
 {
   static struct mystr s_tmp_str;
   /* Only prepend current working directory if the incoming filename is
@@ -1425,7 +1425,7 @@ handle_sigurg(void* p_private)
 }
 
 static int
-get_remote_transfer_fd(struct vsf_session* p_sess, const char* p_status_msg)
+get_remote_transfer_fd(struct vsf_session* p_sess, _Ptr<const char> p_status_msg)
 {
   int remote_fd;
   if (!pasv_active(p_sess) && !port_active(p_sess))
@@ -1531,7 +1531,7 @@ handle_site(struct vsf_session* p_sess)
 }
 
 static void
-handle_site_chmod(struct vsf_session* p_sess, struct mystr* p_arg_str)
+handle_site_chmod(struct vsf_session* p_sess, _Ptr<struct mystr> p_arg_str)
 {
   static struct mystr s_chmod_file_str;
   unsigned int perms;
@@ -1573,7 +1573,7 @@ handle_site_chmod(struct vsf_session* p_sess, struct mystr* p_arg_str)
 }
 
 static void
-handle_site_umask(struct vsf_session* p_sess, struct mystr* p_arg_str)
+handle_site_umask(struct vsf_session* p_sess, _Ptr<struct mystr> p_arg_str)
 {
   static struct mystr s_umask_resp_str;
   if (str_isempty(p_arg_str))
@@ -1782,7 +1782,7 @@ handle_stou(struct vsf_session* p_sess)
 }
 
 static void
-get_unique_filename(struct mystr* p_outstr, const struct mystr* p_base_str)
+get_unique_filename(_Ptr<struct mystr> p_outstr, _Ptr<const struct mystr> p_base_str)
 {
   /* Use silly wu-ftpd algorithm for compatibility. It has races of course, if
    * two sessions are using the same file prefix at the same time.
@@ -1790,7 +1790,7 @@ get_unique_filename(struct mystr* p_outstr, const struct mystr* p_base_str)
   static struct vsf_sysutil_statbuf* s_p_statbuf;
   static struct mystr s_stou_str;
   unsigned int suffix = 1;
-  const struct mystr* p_real_base_str = p_base_str;
+  _Ptr<const struct mystr> p_real_base_str =  p_base_str;
   int retval;
   if (str_isempty(p_real_base_str))
   {
@@ -1914,7 +1914,7 @@ data_transfer_checks_ok(struct vsf_session* p_sess)
 }
 
 static void
-resolve_tilde(struct mystr* p_str, struct vsf_session* p_sess)
+resolve_tilde(_Ptr<struct mystr> p_str, _Ptr<struct vsf_session> p_sess)
 {
   unsigned int len = str_getlen(p_str);
   if (len > 0 && str_get_char_at(p_str, 0) == '~')

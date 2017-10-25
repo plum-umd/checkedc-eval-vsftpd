@@ -33,7 +33,7 @@ static void handle_user_command(struct vsf_session* p_sess);
 static void handle_pass_command(struct vsf_session* p_sess);
 static void handle_get(struct vsf_session* p_sess);
 static void check_login_delay();
-static void check_login_fails(struct vsf_session* p_sess);
+static void check_login_fails(_Ptr<struct vsf_session> p_sess);
 
 void
 init_connection(struct vsf_session* p_sess)
@@ -293,7 +293,7 @@ static void check_login_delay()
   }
 }
 
-static void check_login_fails(struct vsf_session* p_sess)
+static void check_login_fails(_Ptr<struct vsf_session> p_sess)
 {
   if (++p_sess->login_fails >= tunable_max_login_fails)
   {

@@ -21,15 +21,15 @@
 
 /* File private functions */
 static enum EVSFPrivopLoginResult handle_anonymous_login(
-  struct vsf_session* p_sess, const struct mystr* p_pass_str);
+  _Ptr<struct vsf_session> p_sess, _Ptr<const struct mystr> p_pass_str);
 static enum EVSFPrivopLoginResult handle_local_login(
-  struct vsf_session* p_sess, struct mystr* p_user_str,
-  const struct mystr* p_pass_str);
-static void setup_username_globals(struct vsf_session* p_sess,
-                                   const struct mystr* p_str);
+  _Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_user_str,
+  _Ptr<const struct mystr> p_pass_str);
+static void setup_username_globals(_Ptr<struct vsf_session> p_sess,
+                                   _Ptr<const struct mystr> p_str);
 static enum EVSFPrivopLoginResult handle_login(
-  struct vsf_session* p_sess, struct mystr* p_user_str,
-  const struct mystr* p_pass_str);
+  _Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_user_str,
+  _Ptr<const struct mystr> p_pass_str);
 
 int
 vsf_privop_get_ftp_port_sock(struct vsf_session* p_sess,
@@ -252,7 +252,7 @@ vsf_privop_do_file_chown(struct vsf_session* p_sess, int fd)
 
 enum EVSFPrivopLoginResult
 vsf_privop_do_login(struct vsf_session* p_sess,
-                    const struct mystr* p_pass_str)
+                    _Ptr<const struct mystr> p_pass_str)
 {
   enum EVSFPrivopLoginResult result =
     handle_login(p_sess, &p_sess->user_str, p_pass_str);
@@ -277,8 +277,8 @@ vsf_privop_do_login(struct vsf_session* p_sess,
 }
 
 static enum EVSFPrivopLoginResult
-handle_login(struct vsf_session* p_sess, struct mystr* p_user_str,
-             const struct mystr* p_pass_str)
+handle_login(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_user_str,
+             _Ptr<const struct mystr> p_pass_str)
 {
   /* Do not assume PAM can cope with dodgy input, even though it
    * almost certainly can.
@@ -342,8 +342,8 @@ handle_login(struct vsf_session* p_sess, struct mystr* p_user_str,
 }
 
 static enum EVSFPrivopLoginResult
-handle_anonymous_login(struct vsf_session* p_sess,
-                       const struct mystr* p_pass_str)
+handle_anonymous_login(_Ptr<struct vsf_session> p_sess,
+                       _Ptr<const struct mystr> p_pass_str)
 {
   if (!str_isempty(&p_sess->banned_email_str) &&
       str_contains_line(&p_sess->banned_email_str, p_pass_str))
@@ -380,9 +380,9 @@ handle_anonymous_login(struct vsf_session* p_sess,
 }
 
 static enum EVSFPrivopLoginResult
-handle_local_login(struct vsf_session* p_sess,
-                   struct mystr* p_user_str,
-                   const struct mystr* p_pass_str)
+handle_local_login(_Ptr<struct vsf_session> p_sess,
+                   _Ptr<struct mystr> p_user_str,
+                   _Ptr<const struct mystr> p_pass_str)
 {
   if (!vsf_sysdep_check_auth(p_user_str, p_pass_str, &p_sess->remote_ip_str))
   {
@@ -393,7 +393,7 @@ handle_local_login(struct vsf_session* p_sess,
 }
 
 static void
-setup_username_globals(struct vsf_session* p_sess, const struct mystr* p_str)
+setup_username_globals(_Ptr<struct vsf_session> p_sess, _Ptr<const struct mystr> p_str)
 {
   str_copy(&p_sess->user_str, p_str);
   if (tunable_setproctitle_enable)

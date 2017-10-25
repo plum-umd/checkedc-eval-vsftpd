@@ -721,7 +721,7 @@ ssl_add_entropy(struct vsf_session* p_sess)
 #else /* VSF_BUILD_SSL */
 
 void
-ssl_init(struct vsf_session* p_sess)
+ssl_init(_Ptr<struct vsf_session> p_sess)
 {
   (void) p_sess;
   die("SSL: ssl_enable is set but SSL support not compiled in");
@@ -752,7 +752,7 @@ handle_prot(struct vsf_session* p_sess)
 }
 
 int
-ssl_read(struct vsf_session* p_sess, void* p_ssl, char* p_buf, unsigned int len)
+ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl, char* p_buf, unsigned int len)
 {
   (void) p_sess;
   (void) p_ssl;
@@ -762,7 +762,7 @@ ssl_read(struct vsf_session* p_sess, void* p_ssl, char* p_buf, unsigned int len)
 }
 
 int
-ssl_peek(struct vsf_session* p_sess, void* p_ssl, char* p_buf, unsigned int len)
+ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl, _Ptr<char> p_buf, unsigned int len)
 {
   (void) p_sess;
   (void) p_ssl;
@@ -781,7 +781,7 @@ ssl_write(void* p_ssl, const char* p_buf, unsigned int len)
 }
 
 int
-ssl_write_str(void* p_ssl, const struct mystr* p_str)
+ssl_write_str(void* p_ssl, _Ptr<const struct mystr> p_str)
 {
   (void) p_ssl;
   (void) p_str;
@@ -822,13 +822,13 @@ ssl_comm_channel_set_producer_context(struct vsf_session* p_sess)
 }
 
 void
-ssl_add_entropy(struct vsf_session* p_sess)
+ssl_add_entropy(_Ptr<struct vsf_session> p_sess)
 {
   (void) p_sess;
 }
 
 int
-ssl_read_into_str(struct vsf_session* p_sess, void* p_ssl, struct mystr* p_str)
+ssl_read_into_str(struct vsf_session* p_sess, void* p_ssl, _Ptr<struct mystr> p_str)
 {
   (void) p_sess;
   (void) p_ssl;

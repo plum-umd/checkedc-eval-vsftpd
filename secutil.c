@@ -13,9 +13,9 @@
 #include "sysdeputil.h"
 
 void
-vsf_secutil_change_credentials(const struct mystr* p_user_str,
-                               const struct mystr* p_dir_str,
-                               const struct mystr* p_ext_dir_str,
+vsf_secutil_change_credentials(_Ptr<const struct mystr> p_user_str,
+                               _Ptr<const struct mystr> p_dir_str,
+                               _Ptr<const struct mystr> p_ext_dir_str,
                                unsigned int caps, unsigned int options)
 {
   struct vsf_sysutil_user* p_user;

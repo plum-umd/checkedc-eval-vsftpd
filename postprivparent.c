@@ -23,14 +23,14 @@
 #include "sysdeputil.h"
 #include "seccompsandbox.h"
 
-static void minimize_privilege(struct vsf_session* p_sess);
-static void process_post_login_req(struct vsf_session* p_sess);
-static void cmd_process_chown(struct vsf_session* p_sess);
-static void cmd_process_get_data_sock(struct vsf_session* p_sess);
-static void cmd_process_pasv_cleanup(struct vsf_session* p_sess);
-static void cmd_process_pasv_active(struct vsf_session* p_sess);
-static void cmd_process_pasv_listen(struct vsf_session* p_sess);
-static void cmd_process_pasv_accept(struct vsf_session* p_sess);
+static void minimize_privilege(_Ptr<struct vsf_session> p_sess);
+static void process_post_login_req(_Ptr<struct vsf_session> p_sess);
+static void cmd_process_chown(_Ptr<struct vsf_session> p_sess);
+static void cmd_process_get_data_sock(_Ptr<struct vsf_session> p_sess);
+static void cmd_process_pasv_cleanup(_Ptr<struct vsf_session> p_sess);
+static void cmd_process_pasv_active(_Ptr<struct vsf_session> p_sess);
+static void cmd_process_pasv_listen(_Ptr<struct vsf_session> p_sess);
+static void cmd_process_pasv_accept(_Ptr<struct vsf_session> p_sess);
 
 void
 vsf_priv_parent_postlogin(struct vsf_session* p_sess)
@@ -44,7 +44,7 @@ vsf_priv_parent_postlogin(struct vsf_session* p_sess)
 }
 
 static void
-process_post_login_req(struct vsf_session* p_sess)
+process_post_login_req(_Ptr<struct vsf_session> p_sess)
 {
   char cmd;
   /* Blocks */
@@ -80,7 +80,7 @@ process_post_login_req(struct vsf_session* p_sess)
 }
 
 static void
-minimize_privilege(struct vsf_session* p_sess)
+minimize_privilege(_Ptr<struct vsf_session> p_sess)
 {
   /* So, we logged in and forked a totally unprivileged child. Our job
    * now is to minimize the privilege we need in order to act as a helper

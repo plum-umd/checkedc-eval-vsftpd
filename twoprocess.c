@@ -34,14 +34,14 @@ static void handle_sigchld(void* duff);
 static void handle_sigterm(void* duff);
 static void process_login_req(struct vsf_session* p_sess);
 static void common_do_login(struct vsf_session* p_sess,
-                            const struct mystr* p_user_str, int do_chroot,
+                            _Ptr<const struct mystr> p_user_str, int do_chroot,
                             int anon);
-static void handle_per_user_config(const struct mystr* p_user_str);
-static void calculate_chdir_dir(int anon, struct mystr* p_userdir_str,
-                                struct mystr* p_chroot_str,
-                                struct mystr* p_chdir_str,
-                                const struct mystr* p_user_str,
-                                const struct mystr* p_orig_user_str);
+static void handle_per_user_config(_Ptr<const struct mystr> p_user_str);
+static void calculate_chdir_dir(int anon, _Ptr<struct mystr> p_userdir_str,
+                                _Ptr<struct mystr> p_chroot_str,
+                                _Ptr<struct mystr> p_chdir_str,
+                                _Ptr<const struct mystr> p_user_str,
+                                _Ptr<const struct mystr> p_orig_user_str);
 
 static void
 handle_sigchld(void* duff)
@@ -181,7 +181,7 @@ drop_all_privs(void)
 
 void
 vsf_two_process_login(struct vsf_session* p_sess,
-                      const struct mystr* p_pass_str)
+                      _Ptr<const struct mystr> p_pass_str)
 {
   char result;
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_LOGIN);
@@ -379,11 +379,11 @@ process_login_req(struct vsf_session* p_sess)
 }
 
 static void
-common_do_login(struct vsf_session* p_sess, const struct mystr* p_user_str,
+common_do_login(struct vsf_session* p_sess, _Ptr<const struct mystr> p_user_str,
                 int do_chroot, int anon)
 {
   int was_anon = anon;
-  const struct mystr* p_orig_user_str = p_user_str;
+  _Ptr<const struct mystr> p_orig_user_str =  p_user_str;
   int newpid;
   vsf_sysutil_install_null_sighandler(kVSFSysUtilSigCHLD);
   /* Tells the pre-login child all is OK (it may exit in response) */
@@ -484,7 +484,7 @@ common_do_login(struct vsf_session* p_sess, const struct mystr* p_user_str,
 }
 
 static void
-handle_per_user_config(const struct mystr* p_user_str)
+handle_per_user_config(_Ptr<const struct mystr> p_user_str)
 {
   struct mystr filename_str = INIT_MYSTR;
   struct vsf_sysutil_statbuf* p_statbuf = 0;
@@ -518,11 +518,11 @@ handle_per_user_config(const struct mystr* p_user_str)
 }
 
 static void
-calculate_chdir_dir(int anon_login, struct mystr* p_userdir_str,
-                    struct mystr* p_chroot_str,
-                    struct mystr* p_chdir_str,
-                    const struct mystr* p_user_str,
-                    const struct mystr* p_orig_user_str)
+calculate_chdir_dir(int anon_login, _Ptr<struct mystr> p_userdir_str,
+                    _Ptr<struct mystr> p_chroot_str,
+                    _Ptr<struct mystr> p_chdir_str,
+                    _Ptr<const struct mystr> p_user_str,
+                    _Ptr<const struct mystr> p_orig_user_str)
 {
   if (!anon_login)
   {

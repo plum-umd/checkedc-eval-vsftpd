@@ -28,7 +28,7 @@
  */
 static void die_unless_privileged(void);
 static void do_sanity_checks(void);
-static void session_init(struct vsf_session* p_sess);
+static void session_init(_Ptr<struct vsf_session> p_sess);
 static void env_init(void);
 static void limits_init(void);
 
@@ -329,7 +329,7 @@ limits_init(void)
 }
 
 static void
-session_init(struct vsf_session* p_sess)
+session_init(_Ptr<struct vsf_session> p_sess)
 {
   /* Get the addresses of the control connection */
   vsf_sysutil_getpeername(VSFTP_COMMAND_FD, &p_sess->p_remote_addr);

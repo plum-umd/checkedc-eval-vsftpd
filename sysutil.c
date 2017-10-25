@@ -96,12 +96,12 @@ struct vsf_sysutil_sockaddr
 static void vsf_sysutil_common_sighandler(int signum);
 static void vsf_sysutil_alrm_sighandler(int signum);
 static int vsf_sysutil_translate_sig(const enum EVSFSysUtilSignal sig);
-static void vsf_sysutil_set_sighandler(int sig, void (*p_handlefunc)(int));
+static void vsf_sysutil_set_sighandler(int sig, _Ptr<void (int )> p_handlefunc);
 static int vsf_sysutil_translate_memprot(
   const enum EVSFSysUtilMapPermission perm);
 static int vsf_sysutil_translate_openmode(
   const enum EVSFSysUtilOpenMode mode);
-static void vsf_sysutil_alloc_statbuf(struct vsf_sysutil_statbuf** p_ptr);
+static void vsf_sysutil_alloc_statbuf(_Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);
 void vsf_sysutil_sockaddr_alloc(struct vsf_sysutil_sockaddr** p_sockptr);
 static int lock_internal(int fd, int lock_type);
 
@@ -259,7 +259,7 @@ vsf_sysutil_install_async_sighandler(const enum EVSFSysUtilSignal sig,
 }
 
 static void
-vsf_sysutil_set_sighandler(int sig, void (*p_handlefunc)(int))
+vsf_sysutil_set_sighandler(int sig, _Ptr<void (int )> p_handlefunc)
 {
   int retval;
   struct sigaction sigact;
@@ -627,21 +627,21 @@ vsf_sysutil_wait_reap_one(void)
 }
 
 int
-vsf_sysutil_wait_get_retval(const struct vsf_sysutil_wait_retval* p_waitret)
+vsf_sysutil_wait_get_retval(_Ptr<const struct vsf_sysutil_wait_retval> p_waitret)
 {
   return p_waitret->syscall_retval;
 }
 
 int
 vsf_sysutil_wait_exited_normally(
-  const struct vsf_sysutil_wait_retval* p_waitret)
+  _Ptr<const struct vsf_sysutil_wait_retval> p_waitret)
 {
   int status = ((struct vsf_sysutil_wait_retval*) p_waitret)->exit_status;
   return WIFEXITED(status);
 }
 
 int
-vsf_sysutil_wait_get_exitcode(const struct vsf_sysutil_wait_retval* p_waitret)
+vsf_sysutil_wait_get_exitcode(_Ptr<const struct vsf_sysutil_wait_retval> p_waitret)
 {
   int status;
   if (!vsf_sysutil_wait_exited_normally(p_waitret))
@@ -2202,7 +2202,7 @@ vsf_sysutil_is_port_reserved(unsigned short the_port)
 const char*
 vsf_sysutil_inet_ntop(const struct vsf_sysutil_sockaddr* p_sockptr)
 {
-  const struct sockaddr* p_sockaddr = &p_sockptr->u.u_sockaddr;
+  _Ptr<const struct sockaddr> p_sockaddr =  &p_sockptr->u.u_sockaddr;
   if (p_sockaddr->sa_family == AF_INET)
   {
     return inet_ntoa(p_sockptr->u.u_sockaddr_in.sin_addr);

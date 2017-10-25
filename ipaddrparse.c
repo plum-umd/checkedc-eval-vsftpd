@@ -12,15 +12,15 @@
 #include "sysutil.h"
 #include "str.h"
 
-static int ipv6_parse_main(struct mystr* p_out_str,
-                           const struct mystr* p_in_str);
-static int ipv6_parse_hex(struct mystr* p_out_str,
-                          const struct mystr* p_in_str);
-static int ipv4_parse_dotquad(struct mystr* p_out_str,
-                              const struct mystr* p_in_str);
+static int ipv6_parse_main(_Ptr<struct mystr> p_out_str,
+                           _Ptr<const struct mystr> p_in_str);
+static int ipv6_parse_hex(_Ptr<struct mystr> p_out_str,
+                          _Ptr<const struct mystr> p_in_str);
+static int ipv4_parse_dotquad(_Ptr<struct mystr> p_out_str,
+                              _Ptr<const struct mystr> p_in_str);
 
 const unsigned char*
-vsf_sysutil_parse_ipv6(const struct mystr* p_str)
+vsf_sysutil_parse_ipv6(_Ptr<const struct mystr> p_str)
 {
   static struct mystr s_ret;
   static struct mystr s_rhs_ret;
@@ -59,7 +59,7 @@ vsf_sysutil_parse_ipv6(const struct mystr* p_str)
 }
 
 const unsigned char*
-vsf_sysutil_parse_ipv4(const struct mystr* p_str)
+vsf_sysutil_parse_ipv4(_Ptr<const struct mystr> p_str)
 {
   static unsigned char items[4];
   return vsf_sysutil_parse_uchar_string_sep(p_str, '.', items, sizeof(items));
@@ -67,7 +67,7 @@ vsf_sysutil_parse_ipv4(const struct mystr* p_str)
 
 const unsigned char*
 vsf_sysutil_parse_uchar_string_sep(
-  const struct mystr* p_str, char sep, unsigned char* p_items,
+  _Ptr<const struct mystr> p_str, char sep, unsigned char* p_items,
   unsigned int items)
 {
   static struct mystr s_tmp_str;
@@ -101,7 +101,7 @@ vsf_sysutil_parse_uchar_string_sep(
 }
 
 static int
-ipv6_parse_main(struct mystr* p_out_str, const struct mystr* p_in_str)
+ipv6_parse_main(_Ptr<struct mystr> p_out_str, _Ptr<const struct mystr> p_in_str)
 {
   static struct mystr s_lhs_str;
   static struct mystr s_rhs_str;
@@ -132,7 +132,7 @@ ipv6_parse_main(struct mystr* p_out_str, const struct mystr* p_in_str)
 }
 
 static int
-ipv6_parse_hex(struct mystr* p_out_str, const struct mystr* p_in_str)
+ipv6_parse_hex(_Ptr<struct mystr> p_out_str, _Ptr<const struct mystr> p_in_str)
 {
   unsigned int len = str_getlen(p_in_str);
   unsigned int i;
@@ -166,7 +166,7 @@ ipv6_parse_hex(struct mystr* p_out_str, const struct mystr* p_in_str)
 }
 
 static int
-ipv4_parse_dotquad(struct mystr* p_out_str, const struct mystr* p_in_str)
+ipv4_parse_dotquad(_Ptr<struct mystr> p_out_str, _Ptr<const struct mystr> p_in_str)
 {
   unsigned int len = str_getlen(p_in_str);
   unsigned int i;

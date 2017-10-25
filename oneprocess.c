@@ -30,11 +30,11 @@
 static void one_process_start(void* p_arg);
 
 void
-vsf_one_process_start(struct vsf_session* p_sess)
+vsf_one_process_start(_Ptr<struct vsf_session> p_sess)
 {
   if (tunable_ptrace_sandbox)
   {
-    struct pt_sandbox* p_sandbox = ptrace_sandbox_alloc();
+    _Ptr<struct pt_sandbox> p_sandbox =  ptrace_sandbox_alloc();
     if (p_sandbox == 0)
     {
       die("could not allocate sandbox (only works for 32-bit builds)");
@@ -113,7 +113,7 @@ one_process_start(void* p_arg)
 
 void
 vsf_one_process_login(struct vsf_session* p_sess,
-                      const struct mystr* p_pass_str)
+                      _Ptr<const struct mystr> p_pass_str)
 {
   enum EVSFPrivopLoginResult login_result =
     vsf_privop_do_login(p_sess, p_pass_str);

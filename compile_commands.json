@@ -17,7 +17,7 @@
             "dummyinc", 
             "logging.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "logging.c"
     }, 
     {
@@ -38,7 +38,7 @@
             "dummyinc", 
             "secutil.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "secutil.c"
     }, 
     {
@@ -59,7 +59,7 @@
             "dummyinc", 
             "ftpdataio.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "ftpdataio.c"
     }, 
     {
@@ -80,7 +80,7 @@
             "dummyinc", 
             "secbuf.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "secbuf.c"
     }, 
     {
@@ -101,7 +101,7 @@
             "dummyinc", 
             "sysutil.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "sysutil.c"
     }, 
     {
@@ -122,7 +122,7 @@
             "dummyinc", 
             "ptracesandbox.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "ptracesandbox.c"
     }, 
     {
@@ -143,7 +143,7 @@
             "dummyinc", 
             "ls.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "ls.c"
     }, 
     {
@@ -164,7 +164,7 @@
             "dummyinc", 
             "ftpcmdio.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "ftpcmdio.c"
     }, 
     {
@@ -185,7 +185,7 @@
             "dummyinc", 
             "oneprocess.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "oneprocess.c"
     }, 
     {
@@ -206,7 +206,7 @@
             "dummyinc", 
             "str.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "str.c"
     }, 
     {
@@ -227,7 +227,7 @@
             "dummyinc", 
             "seccompsandbox.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "seccompsandbox.c"
     }, 
     {
@@ -248,7 +248,7 @@
             "dummyinc", 
             "twoprocess.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "twoprocess.c"
     }, 
     {
@@ -269,7 +269,7 @@
             "dummyinc", 
             "readwrite.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "readwrite.c"
     }, 
     {
@@ -290,7 +290,7 @@
             "dummyinc", 
             "netstr.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "netstr.c"
     }, 
     {
@@ -311,7 +311,7 @@
             "dummyinc", 
             "ipaddrparse.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "ipaddrparse.c"
     }, 
     {
@@ -332,7 +332,7 @@
             "dummyinc", 
             "banner.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "banner.c"
     }, 
     {
@@ -353,7 +353,7 @@
             "dummyinc", 
             "sslslave.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "sslslave.c"
     }, 
     {
@@ -374,7 +374,7 @@
             "dummyinc", 
             "opts.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "opts.c"
     }, 
     {
@@ -395,7 +395,7 @@
             "dummyinc", 
             "hash.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "hash.c"
     }, 
     {
@@ -416,7 +416,7 @@
             "dummyinc", 
             "prelogin.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "prelogin.c"
     }, 
     {
@@ -437,7 +437,7 @@
             "dummyinc", 
             "privsock.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "privsock.c"
     }, 
     {
@@ -458,7 +458,7 @@
             "dummyinc", 
             "parseconf.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "parseconf.c"
     }, 
     {
@@ -479,7 +479,7 @@
             "dummyinc", 
             "main.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "main.c"
     }, 
     {
@@ -500,7 +500,7 @@
             "dummyinc", 
             "filestr.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "filestr.c"
     }, 
     {
@@ -521,7 +521,7 @@
             "dummyinc", 
             "ftppolicy.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "ftppolicy.c"
     }, 
     {
@@ -542,7 +542,7 @@
             "dummyinc", 
             "sysdeputil.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "sysdeputil.c"
     }, 
     {
@@ -563,7 +563,7 @@
             "dummyinc", 
             "postprivparent.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "postprivparent.c"
     }, 
     {
@@ -584,7 +584,7 @@
             "dummyinc", 
             "standalone.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "standalone.c"
     }, 
     {
@@ -605,7 +605,7 @@
             "dummyinc", 
             "ascii.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "ascii.c"
     }, 
     {
@@ -626,7 +626,7 @@
             "dummyinc", 
             "tunables.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "tunables.c"
     }, 
     {
@@ -647,7 +647,7 @@
             "dummyinc", 
             "tcpwrap.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "tcpwrap.c"
     }, 
     {
@@ -668,7 +668,7 @@
             "dummyinc", 
             "access.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "access.c"
     }, 
     {
@@ -689,7 +689,7 @@
             "dummyinc", 
             "utility.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "utility.c"
     }, 
     {
@@ -710,7 +710,7 @@
             "dummyinc", 
             "strlist.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "strlist.c"
     }, 
     {
@@ -731,7 +731,7 @@
             "dummyinc", 
             "ssl.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "ssl.c"
     }, 
     {
@@ -752,7 +752,7 @@
             "dummyinc", 
             "sysstr.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "sysstr.c"
     }, 
     {
@@ -773,7 +773,7 @@
             "dummyinc", 
             "postlogin.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "postlogin.c"
     }, 
     {
@@ -794,7 +794,7 @@
             "dummyinc", 
             "features.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "features.c"
     }, 
     {
@@ -815,7 +815,7 @@
             "dummyinc", 
             "privops.c"
         ], 
-        "directory": "/Users/mwhicks/src/vsftpd-3.0.3", 
+        "directory": "/Users/mwhicks/src/foo/vsftpd-3.0.3", 
         "file": "privops.c"
     }
 ]

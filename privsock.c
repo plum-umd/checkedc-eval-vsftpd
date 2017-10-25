@@ -85,7 +85,7 @@ priv_sock_send_cmd(int fd, char cmd)
 }
 
 void
-priv_sock_send_str(int fd, const struct mystr* p_str)
+priv_sock_send_str(int fd, _Ptr<const struct mystr> p_str)
 {
   unsigned int len = str_getlen(p_str);
   priv_sock_send_int(fd, (int) len);
@@ -150,7 +150,7 @@ priv_sock_get_cmd(int fd)
 }
 
 void
-priv_sock_get_str(int fd, struct mystr* p_dest)
+priv_sock_get_str(int fd, _Ptr<struct mystr> p_dest)
 {
   unsigned int len = (unsigned int) priv_sock_get_int(fd);
   if (len > VSFTP_PRIVSOCK_MAXSTR)

@@ -228,12 +228,12 @@ static int s_zero_fd = -1;
 /* File private functions/variables */
 static int do_sendfile(const int out_fd, const int in_fd,
                        unsigned int num_send, filesize_t start_pos);
-static void vsf_sysutil_setproctitle_internal(const char* p_text);
+static void vsf_sysutil_setproctitle_internal(_Ptr<const char> p_buf);
 static struct mystr s_proctitle_prefix_str;
 
 /* These two aren't static to avoid OpenBSD build warnings. */
-void vsf_insert_uwtmp(const struct mystr* p_user_str,
-                      const struct mystr* p_host_str);
+void vsf_insert_uwtmp(_Ptr<const struct mystr> p_user_str,
+                      _Ptr<const struct mystr> p_host_str);
 void vsf_remove_uwtmp(void);
 
 #ifndef VSF_SYSDEP_HAVE_PAM
@@ -313,14 +313,14 @@ typedef lo_const void* pam_item_t;
 
 static pam_handle_t* s_pamh;
 static struct mystr s_pword_str;
-static int pam_conv_func(int nmsg, const struct pam_message** p_msg,
-                         struct pam_response** p_reply, void* p_addata);
+static int pam_conv_func(int nmsg, const struct pam_message*_Ptr<const struct pam_message> p_msg,
+                         _Ptr<struct pam_response*> p_reply, void* p_addata);
 static void vsf_auth_shutdown(void);
 
 int
-vsf_sysdep_check_auth(struct mystr* p_user_str,
-                      const struct mystr* p_pass_str,
-                      const struct mystr* p_remote_host)
+vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str,
+                      _Ptr<const struct mystr> p_pass_str,
+                      _Ptr<const struct mystr> p_remote_host)
 {
   int retval = -1;
 #ifdef PAM_USER
@@ -447,8 +447,8 @@ vsf_auth_shutdown(void)
 }
 
 static int
-pam_conv_func(int nmsg, const struct pam_message** p_msg,
-              struct pam_response** p_reply, void* p_addata)
+pam_conv_func(int nmsg, const struct pam_message*_Ptr<const struct pam_message> p_msg,
+              _Ptr<struct pam_response*> p_reply, void* p_addata)
 {
   int i;
   struct pam_response* p_resps = 0;
@@ -653,7 +653,7 @@ vsf_sysdep_adopt_capabilities(unsigned int caps)
 
 int
 vsf_sysutil_sendfile(const int out_fd, const int in_fd,
-                     filesize_t* p_offset, filesize_t num_send,
+                     _Ptr<filesize_t> p_offset, filesize_t num_send,
                      unsigned int max_chunk)
 {
   /* Grr - why is off_t signed? */
@@ -846,14 +846,14 @@ static int do_sendfile(const int out_fd, const int in_fd,
 }
 
 void
-vsf_sysutil_set_proctitle_prefix(const struct mystr* p_str)
+vsf_sysutil_set_proctitle_prefix(_Ptr<const struct mystr> p_str)
 {
   str_copy(&s_proctitle_prefix_str, p_str);
 }
 
 /* This delegation is common to all setproctitle() implementations */
 void
-vsf_sysutil_setproctitle_str(const struct mystr* p_str)
+vsf_sysutil_setproctitle_str(_Ptr<const struct mystr> p_str)
 {
   vsf_sysutil_setproctitle(str_getbuf(p_str));
 }
@@ -972,7 +972,7 @@ vsf_sysutil_setproctitle_init(int argc, const char* argv[])
 }
 
 void
-vsf_sysutil_setproctitle_internal(const char* p_buf)
+vsf_sysutil_setproctitle_internal(_Ptr<const char> p_buf)
 {
   (void) p_buf;
 }
@@ -1030,9 +1030,9 @@ vsf_sysutil_send_fd(int sock_fd, int send_fd)
 {
   int retval;
   struct msghdr msg;
-  struct cmsghdr* p_cmsg;
+  _Ptr<struct cmsghdr> p_cmsg;
   struct iovec vec;
-  char cmsgbuf[CMSG_SPACE(sizeof(send_fd))];
+  _Ptr<char> cmsgbuf;
   int* p_fds;
   char sendchar = 0;
   msg.msg_control = cmsgbuf;
@@ -1069,8 +1069,8 @@ vsf_sysutil_recv_fd(const int sock_fd)
   char recvchar;
   struct iovec vec;
   int recv_fd;
-  char cmsgbuf[CMSG_SPACE(sizeof(recv_fd))];
-  struct cmsghdr* p_cmsg;
+  _Ptr<char> cmsgbuf;
+  _Ptr<struct cmsghdr> p_cmsg;
   int* p_fd;
   vec.iov_base = &recvchar;
   vec.iov_len = sizeof(recvchar);
@@ -1183,8 +1183,8 @@ static int s_uwtmp_inserted;
 static struct utmpx s_utent;
 
 void
-vsf_insert_uwtmp(const struct mystr* p_user_str,
-                 const struct mystr* p_host_str)
+vsf_insert_uwtmp(_Ptr<const struct mystr> p_user_str,
+                 _Ptr<const struct mystr> p_host_str)
 {
   if (sizeof(s_utent.ut_line) < 16)
   {

@@ -24,8 +24,8 @@ static struct hash* s_p_ip_count_hash;
 static struct hash* s_p_pid_ip_hash;
 static unsigned int s_ipaddr_size;
 
-static void handle_sigchld(void*  duff);
-static void handle_sighup(void*  duff);
+static void handle_sigchld(void* duff);
+static void handle_sighup(void* duff);
 static void prepare_child(int sockfd);
 static unsigned int handle_ip_count(void* p_raw_addr);
 static void drop_ip_count(void* p_raw_addr);

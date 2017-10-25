@@ -27,7 +27,7 @@
 #include "ftppolicy.h"
 #include "seccompsandbox.h"
 
-static void one_process_start(void* p_arg);
+static void one_process_start(void* p_arg : itype(_Ptr<struct vsf_session>));
 
 void
 vsf_one_process_start(_Ptr<struct vsf_session> p_sess)
@@ -61,13 +61,8 @@ vsf_one_process_start(_Ptr<struct vsf_session> p_sess)
 }
 
 static void
-one_process_start(void* p_arg)
-{
-  /*  _Ptr<struct vsf_session> p_sess = (_Ptr<struct vsf_session>) p_arg; */
-  /* XXX FIX */
-  die((char *)p_arg);
-  struct vsf_session foo;
-  _Ptr<struct vsf_session> p_sess = &foo;
+one_process_start(void* p_arg : itype(_Ptr<struct vsf_session>)) {
+  _Ptr<struct vsf_session> p_sess = p_arg;
   unsigned int caps = 0;
   if (tunable_chown_uploads)
   {

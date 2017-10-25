@@ -323,8 +323,10 @@ vsf_sysdep_check_auth(struct mystr* p_user_str,
                       const struct mystr* p_remote_host)
 {
   int retval = -1;
+#ifdef PAM_USER
   pam_item_t item;
   const char* pam_user_name = 0;
+#endif
   struct pam_conv the_conv =
   {
     &pam_conv_func,
@@ -1216,7 +1218,11 @@ vsf_insert_uwtmp(const struct mystr* p_user_str,
   setutxent();
   (void) pututxline(&s_utent);
   endutxent();
+#ifdef __APPLE__
+  bug("DOESN'T WORK ON MY MAC");
+#else
   updwtmpx(WTMPX_FILE, &s_utent);
+#endif
 }
 
 void
@@ -1235,7 +1241,11 @@ vsf_remove_uwtmp(void)
   (void) pututxline(&s_utent);
   endutxent();
   s_utent.ut_tv.tv_sec = vsf_sysutil_get_time_sec();
+#ifdef __APPLE__
+  bug("DOESN'T WORK ON MY MAC");
+#else
   updwtmpx(WTMPX_FILE, &s_utent);
+#endif
 }
 
 #endif /* !VSF_SYSDEP_HAVE_UTMPX */

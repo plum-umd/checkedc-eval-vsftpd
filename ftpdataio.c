@@ -31,7 +31,7 @@
 #include "readwrite.h"
 #include "privsock.h"
 
-static void init_data_sock_params(struct vsf_session* p_sess, int sock_fd);
+static void init_data_sock_params(_Ptr<struct vsf_session> p_sess, int sock_fd);
 static filesize_t calc_num_send(int file_fd, filesize_t init_offset);
 static struct vsf_transfer_ret do_file_send_sendfile(
   _Ptr<struct vsf_session> p_sess, int net_fd, int file_fd,
@@ -41,19 +41,19 @@ static struct vsf_transfer_ret do_file_send_rwloop(
 static struct vsf_transfer_ret do_file_recv(
   _Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii);
 static void handle_sigalrm(void* p_private);
-static void start_data_alarm(struct vsf_session* p_sess);
+static void start_data_alarm(_Ptr<struct vsf_session> p_sess);
 static void handle_io(int retval, int fd, void* p_private);
 static int transfer_dir_internal(
-  struct vsf_session* p_sess, int is_control, struct vsf_sysutil_dir* p_dir,
+  _Ptr<struct vsf_session> p_sess, int is_control, struct vsf_sysutil_dir* p_dir,
   _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str,
   _Ptr<const struct mystr> p_filter_str, int is_verbose);
-static int write_dir_list(struct vsf_session* p_sess,
+static int write_dir_list(_Ptr<struct vsf_session> p_sess,
                           _Ptr<struct mystr_list> p_dir_list,
                           enum EVSFRWTarget target);
 static unsigned int get_chunk_size();
 
 int
-vsf_ftpdataio_dispose_transfer_fd(struct vsf_session* p_sess)
+vsf_ftpdataio_dispose_transfer_fd(_Ptr<struct vsf_session> p_sess)
 {
   int dispose_ret = 1;
   int retval;
@@ -107,7 +107,7 @@ vsf_ftpdataio_dispose_transfer_fd(struct vsf_session* p_sess)
 }
 
 int
-vsf_ftpdataio_get_pasv_fd(struct vsf_session* p_sess)
+vsf_ftpdataio_get_pasv_fd(_Ptr<struct vsf_session> p_sess)
 {
   int remote_fd;
   if (tunable_one_process_model)
@@ -135,7 +135,7 @@ vsf_ftpdataio_get_pasv_fd(struct vsf_session* p_sess)
 }
 
 int
-vsf_ftpdataio_get_port_fd(struct vsf_session* p_sess)
+vsf_ftpdataio_get_port_fd(_Ptr<struct vsf_session> p_sess)
 {
   int remote_fd;
   if (tunable_one_process_model || tunable_port_promiscuous)
@@ -157,7 +157,7 @@ vsf_ftpdataio_get_port_fd(struct vsf_session* p_sess)
 }
 
 int
-vsf_ftpdataio_post_mark_connect(struct vsf_session* p_sess)
+vsf_ftpdataio_post_mark_connect(_Ptr<struct vsf_session> p_sess)
 {
   int ret = 0;
   if (!p_sess->data_use_ssl)
@@ -195,7 +195,11 @@ vsf_ftpdataio_post_mark_connect(struct vsf_session* p_sess)
 static void
 handle_sigalrm(void* p_private)
 {
-  struct vsf_session* p_sess = (struct vsf_session*) p_private;
+  /* _Ptr<struct vsf_session> p_sess = (_Ptr<struct vsf_session>) p_private; */
+  /* XXX FIX */
+  die((char *)p_private);
+  struct vsf_session foo;
+  _Ptr<struct vsf_session> p_sess = &foo;
   if (!p_sess->data_progress)
   {
     p_sess->data_timeout = 1;
@@ -211,13 +215,13 @@ handle_sigalrm(void* p_private)
 }
 
 void
-start_data_alarm(struct vsf_session* p_sess)
+start_data_alarm(_Ptr<struct vsf_session> p_sess)
 {
   if (tunable_data_connection_timeout > 0)
   {
     vsf_sysutil_install_sighandler(kVSFSysUtilSigALRM,
                                    handle_sigalrm,
-                                   p_sess,
+                                   (void*)p_sess,
                                    1);
     vsf_sysutil_set_alarm(tunable_data_connection_timeout);
   }
@@ -228,7 +232,7 @@ start_data_alarm(struct vsf_session* p_sess)
 }
 
 static void
-init_data_sock_params(struct vsf_session* p_sess, int sock_fd)
+init_data_sock_params(_Ptr<struct vsf_session> p_sess, int sock_fd)
 {
   if (p_sess->data_fd != -1)
   {
@@ -240,7 +244,7 @@ init_data_sock_params(struct vsf_session* p_sess, int sock_fd)
   /* And in the vague hope it might help... */
   vsf_sysutil_set_iptos_throughput(sock_fd);
   /* Start the timeout monitor */
-  vsf_sysutil_install_io_handler(handle_io, p_sess);
+  vsf_sysutil_install_io_handler(handle_io, (void*)p_sess);
   start_data_alarm(p_sess);
 }
 
@@ -253,7 +257,11 @@ handle_io(int retval, int fd, void* p_private)
   double elapsed;
   double pause_time;
   double rate_ratio;
-  struct vsf_session* p_sess = (struct vsf_session*) p_private;
+  /* _Ptr<struct vsf_session> p_sess = (_Ptr<struct vsf_session>) p_private; */
+  /* XXX FIX */
+  die((char *)p_private);
+  struct vsf_session foo;
+  _Ptr<struct vsf_session> p_sess = &foo;
   if (p_sess->data_fd != fd || vsf_sysutil_retval_is_error(retval) ||
       retval == 0)
   {
@@ -292,7 +300,7 @@ handle_io(int retval, int fd, void* p_private)
 }
 
 int
-vsf_ftpdataio_transfer_dir(struct vsf_session* p_sess, int is_control,
+vsf_ftpdataio_transfer_dir(_Ptr<struct vsf_session> p_sess, int is_control,
                            struct vsf_sysutil_dir* p_dir,
                            _Ptr<const struct mystr> p_base_dir_str,
                            _Ptr<const struct mystr> p_option_str,
@@ -304,7 +312,7 @@ vsf_ftpdataio_transfer_dir(struct vsf_session* p_sess, int is_control,
 }
 
 static int
-transfer_dir_internal(struct vsf_session* p_sess, int is_control,
+transfer_dir_internal(_Ptr<struct vsf_session> p_sess, int is_control,
                       struct vsf_sysutil_dir* p_dir,
                       _Ptr<const struct mystr> p_base_dir_str,
                       _Ptr<const struct mystr> p_option_str,
@@ -314,7 +322,7 @@ transfer_dir_internal(struct vsf_session* p_sess, int is_control,
   struct mystr_list dir_list = INIT_STRLIST;
   struct mystr_list subdir_list = INIT_STRLIST;
   struct mystr dir_prefix_str = INIT_MYSTR;
-  struct mystr_list* p_subdir_list = 0;
+  _Ptr<struct mystr_list> p_subdir_list = 0;
   struct str_locate_result loc_result = str_locate_char(p_option_str, 'R');
   int failed = 0;
   enum EVSFRWTarget target = kVSFRWData;
@@ -403,7 +411,7 @@ transfer_dir_internal(struct vsf_session* p_sess, int is_control,
 
 /* XXX - really, this should be refactored into a "buffered writer" object */
 static int
-write_dir_list(struct vsf_session* p_sess, struct mystr_list* p_dir_list,
+write_dir_list(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr_list> p_dir_list,
                enum EVSFRWTarget target)
 {
   /* This function writes out a list of strings to the client, over the
@@ -438,7 +446,7 @@ write_dir_list(struct vsf_session* p_sess, struct mystr_list* p_dir_list,
 }
 
 struct vsf_transfer_ret
-vsf_ftpdataio_transfer_file(struct vsf_session* p_sess, int remote_fd,
+vsf_ftpdataio_transfer_file(_Ptr<struct vsf_session> p_sess, int remote_fd,
                             int file_fd, int is_recv, int is_ascii)
 {
   if (!is_recv)

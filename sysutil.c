@@ -96,12 +96,12 @@ struct vsf_sysutil_sockaddr
 static void vsf_sysutil_common_sighandler(int signum);
 static void vsf_sysutil_alrm_sighandler(int signum);
 static int vsf_sysutil_translate_sig(const enum EVSFSysUtilSignal sig);
-static void vsf_sysutil_set_sighandler(int sig, _Ptr<void (int )> p_handlefunc);
+static void vsf_sysutil_set_sighandler(int sig, void (*p_handlefunc)(int));
 static int vsf_sysutil_translate_memprot(
   const enum EVSFSysUtilMapPermission perm);
 static int vsf_sysutil_translate_openmode(
   const enum EVSFSysUtilOpenMode mode);
-static void vsf_sysutil_alloc_statbuf(_Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);
+static void vsf_sysutil_alloc_statbuf(struct vsf_sysutil_statbuf** p_ptr);
 void vsf_sysutil_sockaddr_alloc(struct vsf_sysutil_sockaddr** p_sockptr);
 static int lock_internal(int fd, int lock_type);
 
@@ -259,7 +259,7 @@ vsf_sysutil_install_async_sighandler(const enum EVSFSysUtilSignal sig,
 }
 
 static void
-vsf_sysutil_set_sighandler(int sig, _Ptr<void (int )> p_handlefunc)
+vsf_sysutil_set_sighandler(int sig, void (*p_handlefunc)(int))
 {
   int retval;
   struct sigaction sigact;

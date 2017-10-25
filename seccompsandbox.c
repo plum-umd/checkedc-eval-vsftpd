@@ -320,7 +320,7 @@ seccomp_sandbox_init()
 }
 
 void
-seccomp_sandbox_setup_prelogin(const struct vsf_session* p_sess)
+seccomp_sandbox_setup_prelogin(_Ptr<const struct vsf_session> p_sess)
 {
   (void) p_sess;
 
@@ -363,7 +363,7 @@ seccomp_sandbox_setup_prelogin(const struct vsf_session* p_sess)
 }
 
 void
-seccomp_sandbox_setup_postlogin(const struct vsf_session* p_sess)
+seccomp_sandbox_setup_postlogin(_Ptr<const struct vsf_session> p_sess)
 {
   int is_anon = p_sess->is_anonymous;
   int open_flag = kOpenFlags;
@@ -701,13 +701,13 @@ seccomp_sandbox_init()
 }
 
 void
-seccomp_sandbox_setup_prelogin(const struct vsf_session* p_sess)
+seccomp_sandbox_setup_prelogin(_Ptr<const struct vsf_session> p_sess)
 {
   (void) p_sess;
 }
 
 void
-seccomp_sandbox_setup_postlogin(const struct vsf_session* p_sess)
+seccomp_sandbox_setup_postlogin(_Ptr<const struct vsf_session> p_sess)
 {
   (void) p_sess;
 }

@@ -3,7 +3,7 @@
 
 struct vsf_session;
 
-void handle_feat(struct vsf_session* p_sess);
+void handle_feat(_Ptr<struct vsf_session> p_sess);
 
 #endif /* VSF_FEATURES_H */
 

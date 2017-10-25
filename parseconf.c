@@ -23,7 +23,7 @@ static const char* s_p_saved_filename;
 static struct parseconf_bool_setting
 {
   const char* p_setting_name;
-  _Ptr<int> p_variable;
+  int* p_variable;
 }
 parseconf_bool_array[] =
 {
@@ -113,7 +113,7 @@ parseconf_bool_array[] =
 static struct parseconf_uint_setting
 {
   const char* p_setting_name;
-  _Ptr<unsigned int> p_variable;
+  unsigned int* p_variable;
 }
 parseconf_uint_array[] =
 {
@@ -143,7 +143,7 @@ parseconf_uint_array[] =
 static struct parseconf_str_setting
 {
   const char* p_setting_name;
-  _Ptr<const char*> p_variable;
+  const char** p_variable;
 }
 parseconf_str_array[] =
 {
@@ -268,7 +268,7 @@ vsf_parseconf_load_setting(const char* p_setting, int errs_fatal)
       if (str_equal_text(&s_setting_str, p_str_setting->p_setting_name))
       {
         /* Got it */
-        _Ptr<const char*> p_curr_setting =  p_str_setting->p_variable;
+        const char** p_curr_setting = p_str_setting->p_variable;
         if (*p_curr_setting)
         {
           vsf_sysutil_free((char*) *p_curr_setting);

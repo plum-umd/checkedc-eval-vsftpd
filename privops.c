@@ -32,7 +32,7 @@ static enum EVSFPrivopLoginResult handle_login(
   _Ptr<const struct mystr> p_pass_str);
 
 int
-vsf_privop_get_ftp_port_sock(struct vsf_session* p_sess,
+vsf_privop_get_ftp_port_sock(_Ptr<struct vsf_session> p_sess,
                              unsigned short remote_port,
                              int use_port_sockaddr)
 {
@@ -97,7 +97,7 @@ vsf_privop_get_ftp_port_sock(struct vsf_session* p_sess,
 }
 
 void
-vsf_privop_pasv_cleanup(struct vsf_session* p_sess)
+vsf_privop_pasv_cleanup(_Ptr<struct vsf_session> p_sess)
 {
   if (p_sess->pasv_listen_fd != -1)
   {
@@ -107,7 +107,7 @@ vsf_privop_pasv_cleanup(struct vsf_session* p_sess)
 }
 
 int
-vsf_privop_pasv_active(struct vsf_session* p_sess)
+vsf_privop_pasv_active(_Ptr<struct vsf_session> p_sess)
 {
   if (p_sess->pasv_listen_fd != -1)
   {
@@ -117,7 +117,7 @@ vsf_privop_pasv_active(struct vsf_session* p_sess)
 }
 
 unsigned short
-vsf_privop_pasv_listen(struct vsf_session* p_sess)
+vsf_privop_pasv_listen(_Ptr<struct vsf_session> p_sess)
 {
   static struct vsf_sysutil_sockaddr* s_p_sockaddr;
   int bind_retries = 10;
@@ -189,7 +189,7 @@ vsf_privop_pasv_listen(struct vsf_session* p_sess)
 }
 
 int
-vsf_privop_accept_pasv(struct vsf_session* p_sess)
+vsf_privop_accept_pasv(_Ptr<struct vsf_session> p_sess)
 {
   struct vsf_sysutil_sockaddr* p_accept_addr = 0;
   int remote_fd;
@@ -223,7 +223,7 @@ vsf_privop_accept_pasv(struct vsf_session* p_sess)
 }
 
 void
-vsf_privop_do_file_chown(struct vsf_session* p_sess, int fd)
+vsf_privop_do_file_chown(_Ptr<struct vsf_session> p_sess, int fd)
 {
   static struct vsf_sysutil_statbuf* s_p_statbuf;
   vsf_sysutil_fstat(fd, &s_p_statbuf);
@@ -251,7 +251,7 @@ vsf_privop_do_file_chown(struct vsf_session* p_sess, int fd)
 }
 
 enum EVSFPrivopLoginResult
-vsf_privop_do_login(struct vsf_session* p_sess,
+vsf_privop_do_login(_Ptr<struct vsf_session> p_sess,
                     _Ptr<const struct mystr> p_pass_str)
 {
   enum EVSFPrivopLoginResult result =

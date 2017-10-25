@@ -78,7 +78,7 @@ vsf_log_type_is_transfer(enum EVSFLogEntryType type)
 }
 
 void
-vsf_log_start_entry(struct vsf_session* p_sess, enum EVSFLogEntryType what)
+vsf_log_start_entry(_Ptr<struct vsf_session> p_sess, enum EVSFLogEntryType what)
 {
   if (p_sess->log_type != 0)
   {
@@ -97,14 +97,14 @@ vsf_log_start_entry(struct vsf_session* p_sess, enum EVSFLogEntryType what)
 }
 
 void
-vsf_log_line(struct vsf_session* p_sess, enum EVSFLogEntryType what,
+vsf_log_line(_Ptr<struct vsf_session> p_sess, enum EVSFLogEntryType what,
              _Ptr<struct mystr> p_str)
 {
   vsf_log_common(p_sess, 1, what, p_str);
 }
 
 int
-vsf_log_entry_pending(struct vsf_session* p_sess)
+vsf_log_entry_pending(_Ptr<struct vsf_session> p_sess)
 {
   if (p_sess->log_type == 0)
   {
@@ -114,13 +114,13 @@ vsf_log_entry_pending(struct vsf_session* p_sess)
 }
 
 void
-vsf_log_clear_entry(struct vsf_session* p_sess)
+vsf_log_clear_entry(_Ptr<struct vsf_session> p_sess)
 {
   p_sess->log_type = 0;
 }
 
 void
-vsf_log_do_log(struct vsf_session* p_sess, int succeeded)
+vsf_log_do_log(_Ptr<struct vsf_session> p_sess, int succeeded)
 {
   vsf_log_common(p_sess, succeeded, (enum EVSFLogEntryType) p_sess->log_type,
                  &p_sess->log_str);

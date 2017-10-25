@@ -11,7 +11,7 @@ struct vsf_session;
  * PARAMETERS
  * p_sess       - the current session object
  */
-void vsf_one_process_start(struct vsf_session* p_sess);
+void vsf_one_process_start(_Ptr<struct vsf_session> p_sess);
 
 /* vsf_one_process_login()
  * PURPOSE
@@ -21,7 +21,7 @@ void vsf_one_process_start(struct vsf_session* p_sess);
  * p_sess       - the current session object
  * p_pass_str   - the proposed password
  */
-void vsf_one_process_login(struct vsf_session* p_sess,
+void vsf_one_process_login(_Ptr<struct vsf_session> p_sess,
                            const struct mystr* p_pass_str);
 
 /* vsf_one_process_get_priv_data_sock()
@@ -32,7 +32,7 @@ void vsf_one_process_login(struct vsf_session* p_sess,
  * RETURNS
  * The file descriptor of the privileged socket
  */
-int vsf_one_process_get_priv_data_sock(struct vsf_session* p_sess);
+int vsf_one_process_get_priv_data_sock(_Ptr<struct vsf_session> p_sess);
 
 /* vsf_one_process_pasv_cleanup()
  * PURPOSE
@@ -40,7 +40,7 @@ int vsf_one_process_get_priv_data_sock(struct vsf_session* p_sess);
  * PARAMETERS
  * p_sess       - the current session object
  */
-void vsf_one_process_pasv_cleanup(struct vsf_session* p_sess);
+void vsf_one_process_pasv_cleanup(_Ptr<struct vsf_session> p_sess);
 
 /* vsf_one_process_pasv_active()
  * PURPOSE
@@ -50,7 +50,7 @@ void vsf_one_process_pasv_cleanup(struct vsf_session* p_sess);
  * RETURNS
  * 1 if active, 0 if not.
  */
-int vsf_one_process_pasv_active(struct vsf_session* p_sess);
+int vsf_one_process_pasv_active(_Ptr<struct vsf_session> p_sess);
 
 /* vsf_one_process_listen()
  * PURPOSE
@@ -60,7 +60,7 @@ int vsf_one_process_pasv_active(struct vsf_session* p_sess);
  * RETURNS
  * The port we listened on.
  */
-unsigned short vsf_one_process_listen(struct vsf_session* p_sess);
+unsigned short vsf_one_process_listen(_Ptr<struct vsf_session> p_sess);
 
 /* vsf_one_process_get_pasv_fd()
  * PURPOSE
@@ -70,7 +70,7 @@ unsigned short vsf_one_process_listen(struct vsf_session* p_sess);
  * RETURNS
  * The file descriptor for the incoming connection.
  */
-int vsf_one_process_get_pasv_fd(struct vsf_session* p_sess);
+int vsf_one_process_get_pasv_fd(_Ptr<struct vsf_session> p_sess);
 
 /* vsf_one_process_chown_upload()
  * PURPOSE
@@ -79,7 +79,7 @@ int vsf_one_process_get_pasv_fd(struct vsf_session* p_sess);
  * p_sess       - the current session object
  * fd           - the file descriptor to change ownership on
  */
-void vsf_one_process_chown_upload(struct vsf_session* p_sess, int fd);
+void vsf_one_process_chown_upload(_Ptr<struct vsf_session> p_sess, int fd);
 
 #endif /* VSF_ONEPROCESS_H */
 

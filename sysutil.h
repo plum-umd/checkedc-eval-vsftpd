@@ -48,7 +48,7 @@ void vsf_sysutil_install_sighandler(const enum EVSFSysUtilSignal,
                                     int use_alarm);
 void vsf_sysutil_install_async_sighandler(const enum EVSFSysUtilSignal sig,
                                           vsf_async_sighandle_t handler);
-void vsf_sysutil_default_sig(const enum EVSFSysUtilSignal sig);
+void vsf_sysutil_default_sig(const enum EVSFSysUtilSignal p_handlefuncsig);
 void vsf_sysutil_install_io_handler(vsf_context_io_t handler, void* p_private);
 void vsf_sysutil_uninstall_io_handler(void);
 void vsf_sysutil_check_pending_actions(
@@ -177,11 +177,11 @@ struct vsf_sysutil_wait_retval
 struct vsf_sysutil_wait_retval vsf_sysutil_wait(void);
 int vsf_sysutil_wait_reap_one(void);
 int vsf_sysutil_wait_get_retval(
-  const struct vsf_sysutil_wait_retval* p_waitret);
+  _Ptr<const struct vsf_sysutil_wait_retval> p_waitret);
 int vsf_sysutil_wait_exited_normally(
-  const struct vsf_sysutil_wait_retval* p_waitret);
+  _Ptr<const struct vsf_sysutil_wait_retval> p_waitret);
 int vsf_sysutil_wait_get_exitcode(
-  const struct vsf_sysutil_wait_retval* p_waitret);
+  _Ptr<const struct vsf_sysutil_wait_retval> p_waitret);
 
 /* Various string functions */
 unsigned int vsf_sysutil_strlen(const char* p_text);

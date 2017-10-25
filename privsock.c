@@ -21,7 +21,7 @@
 #include "session.h"
 
 void
-priv_sock_init(struct vsf_session* p_sess)
+priv_sock_init(_Ptr<struct vsf_session> p_sess)
 {
   struct vsf_sysutil_socketpair_retval retval;
   if (p_sess->parent_fd != -1)
@@ -38,7 +38,7 @@ priv_sock_init(struct vsf_session* p_sess)
 }
 
 void
-priv_sock_close(struct vsf_session* p_sess)
+priv_sock_close(_Ptr<struct vsf_session> p_sess)
 {
   if (p_sess->parent_fd != -1)
   {
@@ -53,7 +53,7 @@ priv_sock_close(struct vsf_session* p_sess)
 }
 
 void
-priv_sock_set_parent_context(struct vsf_session* p_sess)
+priv_sock_set_parent_context(_Ptr<struct vsf_session> p_sess)
 {
   if (p_sess->child_fd == -1)
   {
@@ -64,7 +64,7 @@ priv_sock_set_parent_context(struct vsf_session* p_sess)
 }
 
 void
-priv_sock_set_child_context(struct vsf_session* p_sess)
+priv_sock_set_child_context(_Ptr<struct vsf_session> p_sess)
 {
   if (p_sess->parent_fd == -1)
   {

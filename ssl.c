@@ -32,17 +32,17 @@
 #include <limits.h>
 
 static char* get_ssl_error();
-static SSL* get_ssl(struct vsf_session* p_sess, int fd);
-static int ssl_session_init(struct vsf_session* p_sess);
+static SSL* get_ssl(_Ptr<struct vsf_session> p_sess, int fd);
+static int ssl_session_init(_Ptr<struct vsf_session> p_sess);
 static void setup_bio_callbacks();
 static long bio_callback(
   BIO* p_bio, int oper, const char* p_arg, int argi, long argl, long retval);
 static int ssl_verify_callback(int verify_ok, X509_STORE_CTX* p_ctx);
 static int ssl_cert_digest(
-  SSL* p_ssl, struct vsf_session* p_sess, struct mystr* p_str);
-static void maybe_log_shutdown_state(struct vsf_session* p_sess);
-static void maybe_log_ssl_error_state(struct vsf_session* p_sess, int ret);
-static int ssl_read_common(struct vsf_session* p_sess,
+  SSL* p_ssl, _Ptr<struct vsf_session> p_sess, struct mystr* p_str);
+static void maybe_log_shutdown_state(_Ptr<struct vsf_session> p_sess);
+static void maybe_log_ssl_error_state(_Ptr<struct vsf_session> p_sess, int ret);
+static int ssl_read_common(_Ptr<struct vsf_session> p_sess,
                            SSL* p_ssl,
                            char* p_buf,
                            unsigned int len,
@@ -52,7 +52,7 @@ static int ssl_inited;
 static struct mystr debug_str;
 
 void
-ssl_init(struct vsf_session* p_sess)
+ssl_init(_Ptr<struct vsf_session> p_sess)
 {
   if (!ssl_inited)
   {
@@ -171,7 +171,7 @@ ssl_init(struct vsf_session* p_sess)
 }
 
 void
-ssl_control_handshake(struct vsf_session* p_sess)
+ssl_control_handshake(_Ptr<struct vsf_session> p_sess)
 {
   if (!ssl_session_init(p_sess))
   {
@@ -186,7 +186,7 @@ ssl_control_handshake(struct vsf_session* p_sess)
 }
 
 void
-handle_auth(struct vsf_session* p_sess)
+handle_auth(_Ptr<struct vsf_session> p_sess)
 {
   str_upper(&p_sess->ftp_arg_str);
   if (str_equal_text(&p_sess->ftp_arg_str, "TLS") ||
@@ -209,7 +209,7 @@ handle_auth(struct vsf_session* p_sess)
 }
 
 void
-handle_pbsz(struct vsf_session* p_sess)
+handle_pbsz(_Ptr<struct vsf_session> p_sess)
 {
   if (!p_sess->control_use_ssl)
   {
@@ -222,7 +222,7 @@ handle_pbsz(struct vsf_session* p_sess)
 }
 
 void
-handle_prot(struct vsf_session* p_sess)
+handle_prot(_Ptr<struct vsf_session> p_sess)
 {
   str_upper(&p_sess->ftp_arg_str);
   if (!p_sess->control_use_ssl)
@@ -251,19 +251,19 @@ handle_prot(struct vsf_session* p_sess)
 }
 
 int
-ssl_read(struct vsf_session* p_sess, void* p_ssl, char* p_buf, unsigned int len)
+ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl, char* p_buf, unsigned int len)
 {
   return ssl_read_common(p_sess, (SSL*) p_ssl, p_buf, len, SSL_read);
 }
 
 int
-ssl_peek(struct vsf_session* p_sess, void* p_ssl, char* p_buf, unsigned int len)
+ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl, char* p_buf, unsigned int len)
 {
   return ssl_read_common(p_sess, (SSL*) p_ssl, p_buf, len, SSL_peek);
 }
 
 static int
-ssl_read_common(struct vsf_session* p_sess,
+ssl_read_common(_Ptr<struct vsf_session> p_sess,
                 SSL* p_void_ssl,
                 char* p_buf,
                 unsigned int len,
@@ -335,7 +335,7 @@ ssl_write_str(void* p_ssl, const struct mystr* p_str)
 }
 
 int
-ssl_read_into_str(struct vsf_session* p_sess, void* p_ssl, struct mystr* p_str)
+ssl_read_into_str(_Ptr<struct vsf_session> p_sess, void* p_ssl, struct mystr* p_str)
 {
   unsigned int len = str_getlen(p_str);
   int ret = ssl_read(p_sess, p_ssl, (char*) str_getbuf(p_str), len);
@@ -351,7 +351,7 @@ ssl_read_into_str(struct vsf_session* p_sess, void* p_ssl, struct mystr* p_str)
 }
 
 static void
-maybe_log_shutdown_state(struct vsf_session* p_sess)
+maybe_log_shutdown_state(_Ptr<struct vsf_session> p_sess)
 {
   if (tunable_debug_ssl)
   {
@@ -378,7 +378,7 @@ maybe_log_shutdown_state(struct vsf_session* p_sess)
 }
 
 static void
-maybe_log_ssl_error_state(struct vsf_session* p_sess, int ret)
+maybe_log_ssl_error_state(_Ptr<struct vsf_session> p_sess, int ret)
 {
   if (tunable_debug_ssl)
   {
@@ -393,7 +393,7 @@ maybe_log_ssl_error_state(struct vsf_session* p_sess, int ret)
 }
 
 int
-ssl_data_close(struct vsf_session* p_sess)
+ssl_data_close(_Ptr<struct vsf_session> p_sess)
 {
   int success = 1;
   SSL* p_ssl = p_sess->p_data_ssl;
@@ -447,7 +447,7 @@ ssl_data_close(struct vsf_session* p_sess)
 }
 
 int
-ssl_accept(struct vsf_session* p_sess, int fd)
+ssl_accept(_Ptr<struct vsf_session> p_sess, int fd)
 {
   /* SECURITY: data SSL connections don't have any auth on them as part of the
    * protocol. If a client sends an unfortunately optional client cert then
@@ -501,7 +501,7 @@ ssl_accept(struct vsf_session* p_sess, int fd)
 }
 
 void
-ssl_comm_channel_init(struct vsf_session* p_sess)
+ssl_comm_channel_init(_Ptr<struct vsf_session> p_sess)
 {
   const struct vsf_sysutil_socketpair_retval retval =
     vsf_sysutil_unix_stream_socketpair();
@@ -518,7 +518,7 @@ ssl_comm_channel_init(struct vsf_session* p_sess)
 }
 
 void
-ssl_comm_channel_set_consumer_context(struct vsf_session* p_sess)
+ssl_comm_channel_set_consumer_context(_Ptr<struct vsf_session> p_sess)
 {
   if (p_sess->ssl_slave_fd == -1)
   {
@@ -529,7 +529,7 @@ ssl_comm_channel_set_consumer_context(struct vsf_session* p_sess)
 }
 
 void
-ssl_comm_channel_set_producer_context(struct vsf_session* p_sess)
+ssl_comm_channel_set_producer_context(_Ptr<struct vsf_session> p_sess)
 {
   if (p_sess->ssl_consumer_fd == -1)
   {
@@ -540,7 +540,7 @@ ssl_comm_channel_set_producer_context(struct vsf_session* p_sess)
 }
 
 static SSL*
-get_ssl(struct vsf_session* p_sess, int fd)
+get_ssl(_Ptr<struct vsf_session> p_sess, int fd)
 {
   SSL* p_ssl = SSL_new(p_sess->p_ssl_ctx);
   if (p_ssl == NULL)
@@ -610,7 +610,7 @@ get_ssl(struct vsf_session* p_sess, int fd)
 }
 
 static int
-ssl_session_init(struct vsf_session* p_sess)
+ssl_session_init(_Ptr<struct vsf_session> p_sess)
 {
   SSL* p_ssl = get_ssl(p_sess, VSFTP_COMMAND_FD);
   if (p_ssl == NULL)
@@ -624,7 +624,7 @@ ssl_session_init(struct vsf_session* p_sess)
 }
 
 static int
-ssl_cert_digest(SSL* p_ssl, struct vsf_session* p_sess, struct mystr* p_str)
+ssl_cert_digest(SSL* p_ssl, _Ptr<struct vsf_session> p_sess, struct mystr* p_str)
 {
   X509* p_cert = SSL_get_peer_certificate(p_ssl);
   unsigned int num_bytes = 0;
@@ -703,7 +703,7 @@ ssl_verify_callback(int verify_ok, X509_STORE_CTX* p_ctx)
 }
 
 void
-ssl_add_entropy(struct vsf_session* p_sess)
+ssl_add_entropy(_Ptr<struct vsf_session> p_sess)
 {
   /* Although each child does seem to have its different pool of entropy, I
    * don't trust the interaction of OpenSSL's opaque RAND API and fork(). So
@@ -728,25 +728,25 @@ ssl_init(_Ptr<struct vsf_session> p_sess)
 }
 
 void
-ssl_control_handshake(struct vsf_session* p_sess)
+ssl_control_handshake(_Ptr<struct vsf_session> p_sess)
 {
   (void) p_sess;
 }
 
 void
-handle_auth(struct vsf_session* p_sess)
+handle_auth(_Ptr<struct vsf_session> p_sess)
 {
   (void) p_sess;
 }
 
 void
-handle_pbsz(struct vsf_session* p_sess)
+handle_pbsz(_Ptr<struct vsf_session> p_sess)
 {
   (void) p_sess;
 }
 
 void
-handle_prot(struct vsf_session* p_sess)
+handle_prot(_Ptr<struct vsf_session> p_sess)
 {
   (void) p_sess;
 }
@@ -762,7 +762,7 @@ ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl, char* p_buf, unsigned int
 }
 
 int
-ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl, _Ptr<char> p_buf, unsigned int len)
+ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl, char* p_buf, unsigned int len)
 {
   (void) p_sess;
   (void) p_ssl;
@@ -789,7 +789,7 @@ ssl_write_str(void* p_ssl, _Ptr<const struct mystr> p_str)
 }
 
 int
-ssl_accept(struct vsf_session* p_sess, int fd)
+ssl_accept(_Ptr<struct vsf_session> p_sess, int fd)
 {
   (void) p_sess;
   (void) fd;
@@ -797,26 +797,26 @@ ssl_accept(struct vsf_session* p_sess, int fd)
 }
 
 int
-ssl_data_close(struct vsf_session* p_sess)
+ssl_data_close(_Ptr<struct vsf_session> p_sess)
 {
   (void) p_sess;
   return 1;
 }
 
 void
-ssl_comm_channel_init(struct vsf_session* p_sess)
+ssl_comm_channel_init(_Ptr<struct vsf_session> p_sess)
 {
   (void) p_sess;
 }
 
 void
-ssl_comm_channel_set_consumer_context(struct vsf_session* p_sess)
+ssl_comm_channel_set_consumer_context(_Ptr<struct vsf_session> p_sess)
 {
   (void) p_sess;
 }
 
 void
-ssl_comm_channel_set_producer_context(struct vsf_session* p_sess)
+ssl_comm_channel_set_producer_context(_Ptr<struct vsf_session> p_sess)
 {
   (void) p_sess;
 }
@@ -828,7 +828,7 @@ ssl_add_entropy(_Ptr<struct vsf_session> p_sess)
 }
 
 int
-ssl_read_into_str(struct vsf_session* p_sess, void* p_ssl, _Ptr<struct mystr> p_str)
+ssl_read_into_str(_Ptr<struct vsf_session> p_sess, void* p_ssl, _Ptr<struct mystr> p_str)
 {
   (void) p_sess;
   (void) p_ssl;

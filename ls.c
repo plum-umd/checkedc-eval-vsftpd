@@ -22,8 +22,8 @@ static void build_dir_line(_Ptr<struct mystr> p_str,
                            long curr_time);
 
 void
-vsf_ls_populate_dir_list(struct mystr_list* p_list,
-                         struct mystr_list* p_subdir_list,
+vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list,
+                         _Ptr<struct mystr_list> p_subdir_list,
                          struct vsf_sysutil_dir* p_dir,
                          _Ptr<const struct mystr> p_base_dir_str,
                          _Ptr<const struct mystr> p_option_str,
@@ -222,7 +222,7 @@ vsf_ls_populate_dir_list(struct mystr_list* p_list,
 int
 vsf_filename_passes_filter(_Ptr<const struct mystr> p_filename_str,
                            _Ptr<const struct mystr> p_filter_str,
-                           _Ptr<unsigned int> iters)
+                           unsigned int* iters)
 {
   /* A simple routine to match a filename against a pattern.
    * This routine is used instead of e.g. fnmatch(3), because we should be

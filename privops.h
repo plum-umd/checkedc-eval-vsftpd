@@ -18,7 +18,7 @@ struct vsf_session;
  * Kills the process / session if the bind() fails.
  * Returns -1 if the bind() worked but the connect() was not possible.
  */
-int vsf_privop_get_ftp_port_sock(struct vsf_session* p_sess,
+int vsf_privop_get_ftp_port_sock(_Ptr<struct vsf_session> p_sess,
                                  unsigned short remote_port,
                                  int use_port_sockaddr);
 
@@ -28,7 +28,7 @@ int vsf_privop_get_ftp_port_sock(struct vsf_session* p_sess,
  * PARAMETERS
  * p_sess       - the current session object
  */
-void vsf_privop_pasv_cleanup(struct vsf_session* p_sess);
+void vsf_privop_pasv_cleanup(_Ptr<struct vsf_session> p_sess);
 
 /* vsf_privop_pasv_listen()
  * PURPOSE
@@ -38,7 +38,7 @@ void vsf_privop_pasv_cleanup(struct vsf_session* p_sess);
  * RETURNS
  * The port we ended up listening on.
  */
-unsigned short vsf_privop_pasv_listen(struct vsf_session* p_sess);
+unsigned short vsf_privop_pasv_listen(_Ptr<struct vsf_session> p_sess);
 
 /* vsf_privop_pasv_active()
  * PURPOSE
@@ -48,7 +48,7 @@ unsigned short vsf_privop_pasv_listen(struct vsf_session* p_sess);
  * RETURNS
  * 1 if active, 0 if not.
  */
-int vsf_privop_pasv_active(struct vsf_session* p_sess);
+int vsf_privop_pasv_active(_Ptr<struct vsf_session> p_sess);
 
 /* vsf_privop_accept_pasv()
  * PURPOSE
@@ -60,7 +60,7 @@ int vsf_privop_pasv_active(struct vsf_session* p_sess);
  * network error occurred or -2 if the incoming connection was from the
  * wrong IP (security issue).
  */
-int vsf_privop_accept_pasv(struct vsf_session* p_sess);
+int vsf_privop_accept_pasv(_Ptr<struct vsf_session> p_sess);
 
 /* vsf_privop_do_file_chown()
  * PURPOSE
@@ -70,7 +70,7 @@ int vsf_privop_accept_pasv(struct vsf_session* p_sess);
  * p_sess       - the current session object
  * fd           - the file descriptor of the regular file
  */
-void vsf_privop_do_file_chown(struct vsf_session* p_sess, int fd);
+void vsf_privop_do_file_chown(_Ptr<struct vsf_session> p_sess, int fd);
 
 enum EVSFPrivopLoginResult
 {
@@ -92,7 +92,7 @@ enum EVSFPrivopLoginResult
  * kVSFLoginReal - real login credentials OK
  */
 enum EVSFPrivopLoginResult vsf_privop_do_login(
-  struct vsf_session* p_sess, const struct mystr* p_pass_str);
+  _Ptr<struct vsf_session> p_sess, _Ptr<const struct mystr> p_pass_str);
 
 #endif /* VSF_PRIVOPS_H */
 

@@ -32,8 +32,8 @@
 static void drop_all_privs(void);
 static void handle_sigchld(void* duff);
 static void handle_sigterm(void* duff);
-static void process_login_req(struct vsf_session* p_sess);
-static void common_do_login(struct vsf_session* p_sess,
+static void process_login_req(_Ptr<struct vsf_session> p_sess);
+static void common_do_login(_Ptr<struct vsf_session> p_sess,
                             _Ptr<const struct mystr> p_user_str, int do_chroot,
                             int anon);
 static void handle_per_user_config(_Ptr<const struct mystr> p_user_str);
@@ -74,7 +74,7 @@ handle_sigterm(void* duff)
 }
 
 void
-vsf_two_process_start(struct vsf_session* p_sess)
+vsf_two_process_start(_Ptr<struct vsf_session> p_sess)
 {
   vsf_sysutil_install_sighandler(kVSFSysUtilSigTERM, handle_sigterm, 0, 1);
   /* Overrides the SIGKILL setting set by the standalone listener. */
@@ -180,7 +180,7 @@ drop_all_privs(void)
 }
 
 void
-vsf_two_process_login(struct vsf_session* p_sess,
+vsf_two_process_login(_Ptr<struct vsf_session> p_sess,
                       _Ptr<const struct mystr> p_pass_str)
 {
   char result;
@@ -218,7 +218,7 @@ vsf_two_process_login(struct vsf_session* p_sess,
 }
 
 int
-vsf_two_process_get_priv_data_sock(struct vsf_session* p_sess)
+vsf_two_process_get_priv_data_sock(_Ptr<struct vsf_session> p_sess)
 {
   char res;
   unsigned short port = vsf_sysutil_sockaddr_get_port(p_sess->p_port_sockaddr);
@@ -237,7 +237,7 @@ vsf_two_process_get_priv_data_sock(struct vsf_session* p_sess)
 }
 
 void
-vsf_two_process_pasv_cleanup(struct vsf_session* p_sess)
+vsf_two_process_pasv_cleanup(_Ptr<struct vsf_session> p_sess)
 {
   char res;
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_PASV_CLEANUP);
@@ -249,21 +249,21 @@ vsf_two_process_pasv_cleanup(struct vsf_session* p_sess)
 }
 
 int
-vsf_two_process_pasv_active(struct vsf_session* p_sess)
+vsf_two_process_pasv_active(_Ptr<struct vsf_session> p_sess)
 {
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_PASV_ACTIVE);
   return priv_sock_get_int(p_sess->child_fd);
 }
 
 unsigned short
-vsf_two_process_listen(struct vsf_session* p_sess)
+vsf_two_process_listen(_Ptr<struct vsf_session> p_sess)
 {
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_PASV_LISTEN);
   return (unsigned short) priv_sock_get_int(p_sess->child_fd);
 }
 
 int
-vsf_two_process_get_pasv_fd(struct vsf_session* p_sess)
+vsf_two_process_get_pasv_fd(_Ptr<struct vsf_session> p_sess)
 {
   char res;
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_PASV_ACCEPT);
@@ -280,7 +280,7 @@ vsf_two_process_get_pasv_fd(struct vsf_session* p_sess)
 }
 
 void
-vsf_two_process_chown_upload(struct vsf_session* p_sess, int fd)
+vsf_two_process_chown_upload(_Ptr<struct vsf_session> p_sess, int fd)
 {
   char res;
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_CHOWN);
@@ -293,7 +293,7 @@ vsf_two_process_chown_upload(struct vsf_session* p_sess, int fd)
 }
 
 static void
-process_login_req(struct vsf_session* p_sess)
+process_login_req(_Ptr<struct vsf_session> p_sess)
 {
   enum EVSFPrivopLoginResult e_login_result = kVSFLoginNull;
   char cmd;
@@ -379,7 +379,7 @@ process_login_req(struct vsf_session* p_sess)
 }
 
 static void
-common_do_login(struct vsf_session* p_sess, _Ptr<const struct mystr> p_user_str,
+common_do_login(_Ptr<struct vsf_session> p_sess, _Ptr<const struct mystr> p_user_str,
                 int do_chroot, int anon)
 {
   int was_anon = anon;

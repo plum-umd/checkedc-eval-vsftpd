@@ -75,14 +75,14 @@
 #endif
 
 static void sanitize_child();
-static int get_action(struct pt_sandbox* p_sandbox);
+static int get_action(_Ptr<struct pt_sandbox> p_sandbox);
 
-static int validate_mmap2(struct pt_sandbox* p_sandbox, void* p_arg);
-static int validate_open_default(struct pt_sandbox* p_sandbox, void* p_arg);
-static int validate_open_readonly(struct pt_sandbox* p_sandbox, void* p_arg);
-static int validate_fcntl(struct pt_sandbox* p_sandbox, void* p_arg);
-static int validate_socketcall(struct pt_sandbox* p_sandbox, void* p_arg);
-static void install_socketcall(struct pt_sandbox* p_sandbox);
+static int validate_mmap2(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
+static int validate_open_default(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
+static int validate_open_readonly(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
+static int validate_fcntl(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
+static int validate_socketcall(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
+static void install_socketcall(_Ptr<struct pt_sandbox> p_sandbox);
 
 #define MAX_SYSCALL 300
 
@@ -125,12 +125,12 @@ handle_sigchld(int sig)
   }
 }
 
-struct pt_sandbox*
-ptrace_sandbox_alloc()
+_Ptr<struct pt_sandbox>
+ptrace_sandbox_alloc(void)
 {
   int i;
   struct sigaction sigact;
-  struct pt_sandbox* ret = malloc(sizeof(struct pt_sandbox));
+  _Ptr<struct pt_sandbox> ret = malloc(sizeof(struct pt_sandbox));
   if (ret == NULL)
   {
     return NULL;
@@ -165,7 +165,7 @@ err_out:
 }
 
 void
-ptrace_sandbox_free(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_free(_Ptr<struct pt_sandbox> p_sandbox)
 {
   if (p_sandbox->pid != -1)
   {
@@ -216,7 +216,7 @@ ptrace_sandbox_attach_point()
 }
 
 int
-ptrace_sandbox_launch_process(struct pt_sandbox* p_sandbox,
+ptrace_sandbox_launch_process(_Ptr<struct pt_sandbox> p_sandbox,
                               void (*p_func)(void*),
                               void* p_arg)
 {
@@ -294,7 +294,7 @@ kill_out:
 }
 
 int
-ptrace_sandbox_continue_process(struct pt_sandbox* p_sandbox, int sig)
+ptrace_sandbox_continue_process(_Ptr<struct pt_sandbox> p_sandbox, int sig)
 {
   long pt_ret = ptrace(PTRACE_SYSCALL, p_sandbox->pid, 0, sig);
   if (pt_ret != 0)
@@ -310,7 +310,7 @@ ptrace_sandbox_continue_process(struct pt_sandbox* p_sandbox, int sig)
 }
 
 int
-ptrace_sandbox_get_event_fd(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_get_event_fd(_Ptr<struct pt_sandbox> p_sandbox)
 {
   /* TODO: allocate pipe fds */
   (void) p_sandbox;
@@ -318,7 +318,7 @@ ptrace_sandbox_get_event_fd(struct pt_sandbox* p_sandbox)
 }
 
 int
-ptrace_sandbox_get_event(struct pt_sandbox* p_sandbox, int* status, int block)
+ptrace_sandbox_get_event(_Ptr<struct pt_sandbox> p_sandbox, int* status, int block)
 {
   pid_t pid;
   int options = 0;
@@ -343,7 +343,7 @@ ptrace_sandbox_get_event(struct pt_sandbox* p_sandbox, int* status, int block)
 }
 
 int
-ptrace_sandbox_handle_event(struct pt_sandbox* p_sandbox, int status)
+ptrace_sandbox_handle_event(_Ptr<struct pt_sandbox> p_sandbox, int status)
 {
   int sig;
   int action;
@@ -393,7 +393,7 @@ ptrace_sandbox_handle_event(struct pt_sandbox* p_sandbox, int status)
 }
 
 int
-ptrace_sandbox_run_processes(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_run_processes(_Ptr<struct pt_sandbox> p_sandbox)
 {
   if (ptrace_sandbox_continue_process(p_sandbox, 0) != 0)
   {
@@ -424,7 +424,7 @@ kill_out:
 }
 
 void
-ptrace_sandbox_kill_processes(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_kill_processes(_Ptr<struct pt_sandbox> p_sandbox)
 {
   long pt_ret;
   struct user_regs_struct regs;
@@ -471,7 +471,7 @@ ptrace_sandbox_kill_processes(struct pt_sandbox* p_sandbox)
 }
 
 int
-ptrace_sandbox_get_arg(struct pt_sandbox* p_sandbox,
+ptrace_sandbox_get_arg(_Ptr<struct pt_sandbox> p_sandbox,
                        int arg,
                        unsigned long* p_out)
 {
@@ -511,7 +511,7 @@ ptrace_sandbox_get_arg(struct pt_sandbox* p_sandbox,
 }
 
 int
-ptrace_sandbox_get_socketcall_arg(struct pt_sandbox* p_sandbox,
+ptrace_sandbox_get_socketcall_arg(_Ptr<struct pt_sandbox> p_sandbox,
                                   int arg,
                                   unsigned long* p_out)
 {
@@ -537,7 +537,7 @@ ptrace_sandbox_get_socketcall_arg(struct pt_sandbox* p_sandbox,
 }
 
 int
-ptrace_sandbox_get_long(struct pt_sandbox* p_sandbox,
+ptrace_sandbox_get_long(_Ptr<struct pt_sandbox> p_sandbox,
                         unsigned long ptr,
                         unsigned long* p_out)
 {
@@ -545,7 +545,7 @@ ptrace_sandbox_get_long(struct pt_sandbox* p_sandbox,
 }
 
 int
-ptrace_sandbox_get_buf(struct pt_sandbox* p_sandbox,
+ptrace_sandbox_get_buf(_Ptr<struct pt_sandbox> p_sandbox,
                        unsigned long ptr,
                        unsigned long len,
                        void* p_buf)
@@ -591,7 +591,7 @@ sanitize_child()
 }
 
 static int
-get_action(struct pt_sandbox* p_sandbox)
+get_action(_Ptr<struct pt_sandbox> p_sandbox)
 {
   int ret;
   int call;
@@ -657,53 +657,53 @@ out:
 }
 
 void
-ptrace_sandbox_permit_exit(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_exit(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_exit] = 1;
   p_sandbox->is_allowed[__NR_exit_group] = 1;
 }
 
 void
-ptrace_sandbox_permit_read(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_read(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_read] = 1;
 }
 
 void
-ptrace_sandbox_permit_write(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_write(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_write] = 1;
 }
 
 void
-ptrace_sandbox_permit_sigaction(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_sigaction(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_sigaction] = 1;
   p_sandbox->is_allowed[__NR_rt_sigaction] = 1;
 }
 
 void
-ptrace_sandbox_permit_alarm(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_alarm(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_alarm] = 1;
 }
 
 void
-ptrace_sandbox_permit_query_time(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_query_time(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_gettimeofday] = 1;
   p_sandbox->is_allowed[__NR_time] = 1;
 }
 
 void
-ptrace_sandbox_permit_mmap(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_mmap(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_mmap2] = 1;
   p_sandbox->validator[__NR_mmap2] = validate_mmap2;
 }
 
 static int
-validate_mmap2(struct pt_sandbox* p_sandbox, void* p_arg)
+validate_mmap2(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   unsigned long arg4;
   int ret = ptrace_sandbox_get_arg(p_sandbox, 3, &arg4);
@@ -720,13 +720,13 @@ validate_mmap2(struct pt_sandbox* p_sandbox, void* p_arg)
 }
 
 void
-ptrace_sandbox_permit_mprotect(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_mprotect(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_mprotect] = 1;
 }
 
 void
-ptrace_sandbox_permit_file_stats(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_file_stats(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_stat] = 1;
   p_sandbox->is_allowed[__NR_stat64] = 1;
@@ -735,32 +735,32 @@ ptrace_sandbox_permit_file_stats(struct pt_sandbox* p_sandbox)
 }
 
 void
-ptrace_sandbox_permit_fd_stats(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_fd_stats(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_fstat] = 1;
   p_sandbox->is_allowed[__NR_fstat64] = 1;
 }
 
 void
-ptrace_sandbox_permit_getcwd(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_getcwd(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_getcwd] = 1;
 }
 
 void
-ptrace_sandbox_permit_chdir(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_chdir(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_chdir] = 1;
 }
 
 void
-ptrace_sandbox_permit_umask(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_umask(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_umask] = 1;
 }
 
 void
-ptrace_sandbox_permit_open(struct pt_sandbox* p_sandbox, int writeable)
+ptrace_sandbox_permit_open(_Ptr<struct pt_sandbox> p_sandbox, int writeable)
 {
   p_sandbox->is_allowed[__NR_open] = 1;
   if (writeable == 1)
@@ -774,7 +774,7 @@ ptrace_sandbox_permit_open(struct pt_sandbox* p_sandbox, int writeable)
 }
 
 static int
-validate_open_default(struct pt_sandbox* p_sandbox, void* p_arg)
+validate_open_default(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   unsigned long arg2;
   int ret = ptrace_sandbox_get_arg(p_sandbox, 1, &arg2);
@@ -791,7 +791,7 @@ validate_open_default(struct pt_sandbox* p_sandbox, void* p_arg)
 }
 
 static int
-validate_open_readonly(struct pt_sandbox* p_sandbox, void* p_arg)
+validate_open_readonly(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   unsigned long arg2;
   int ret = validate_open_default(p_sandbox, p_arg);
@@ -812,20 +812,20 @@ validate_open_readonly(struct pt_sandbox* p_sandbox, void* p_arg)
 }
 
 void
-ptrace_sandbox_permit_close(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_close(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_close] = 1;
 }
 
 void
-ptrace_sandbox_permit_getdents(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_getdents(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_getdents] = 1;
   p_sandbox->is_allowed[__NR_getdents64] = 1;
 }
 
 void
-ptrace_sandbox_permit_fcntl(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_fcntl(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_fcntl] = 1;
   p_sandbox->validator[__NR_fcntl] = validate_fcntl;
@@ -834,7 +834,7 @@ ptrace_sandbox_permit_fcntl(struct pt_sandbox* p_sandbox)
 }
 
 static int
-validate_fcntl(struct pt_sandbox* p_sandbox, void* p_arg)
+validate_fcntl(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   unsigned long arg2;
   unsigned long arg3;
@@ -875,79 +875,79 @@ validate_fcntl(struct pt_sandbox* p_sandbox, void* p_arg)
 }
 
 void
-ptrace_sandbox_permit_sendfile(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_sendfile(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_sendfile] = 1;
   p_sandbox->is_allowed[__NR_sendfile64] = 1;
 }
 
 void
-ptrace_sandbox_permit_seek(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_seek(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_lseek] = 1;
   p_sandbox->is_allowed[__NR__llseek] = 1;
 }
 
 void
-ptrace_sandbox_permit_select(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_select(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_select] = 1;
   p_sandbox->is_allowed[__NR__newselect] = 1;
 }
 
 void
-ptrace_sandbox_permit_unlink(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_unlink(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_unlink] = 1;
 }
 
 void
-ptrace_sandbox_permit_mkdir(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_mkdir(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_mkdir] = 1;
 }
 
 void
-ptrace_sandbox_permit_rmdir(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_rmdir(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_rmdir] = 1;
 }
 
 void
-ptrace_sandbox_permit_rename(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_rename(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_rename] = 1;
 }
 
 void
-ptrace_sandbox_permit_utime(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_utime(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_utime] = 1;
   p_sandbox->is_allowed[__NR_utimes] = 1;
 }
 
 void
-ptrace_sandbox_permit_sigreturn(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_sigreturn(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_sigreturn] = 1;
 }
 
 void
-ptrace_sandbox_permit_recv(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_recv(_Ptr<struct pt_sandbox> p_sandbox)
 {
   install_socketcall(p_sandbox);
   p_sandbox->is_socketcall_allowed[SYS_RECV] = 1;
 }
 
 static void
-install_socketcall(struct pt_sandbox* p_sandbox)
+install_socketcall(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_socketcall] = 1;
   p_sandbox->validator[__NR_socketcall] = validate_socketcall;
 }
 
 static int
-validate_socketcall(struct pt_sandbox* p_sandbox, void* p_arg)
+validate_socketcall(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   unsigned long arg1;
   int ret = ptrace_sandbox_get_arg(p_sandbox, 0, &arg1);
@@ -984,64 +984,64 @@ validate_socketcall(struct pt_sandbox* p_sandbox, void* p_arg)
 }
 
 void
-ptrace_sandbox_permit_readlink(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_readlink(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_readlink] = 1;
 }
 
 void
-ptrace_sandbox_permit_brk(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_brk(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_brk] = 1;
 }
 
 void
-ptrace_sandbox_permit_sleep(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_sleep(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_nanosleep] = 1;
 }
 
 void
-ptrace_sandbox_permit_fchmod(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_fchmod(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_fchmod] = 1;
 }
 
 void
-ptrace_sandbox_permit_chmod(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_chmod(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_chmod] = 1;
 }
 
 void
-ptrace_sandbox_permit_fchown(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_fchown(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_fchown] = 1;
   p_sandbox->is_allowed[__NR_fchown32] = 1;
 }
 
 void
-ptrace_sandbox_permit_mremap(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_mremap(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_mremap] = 1;
 }
 
 void
-ptrace_sandbox_permit_ftruncate(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_ftruncate(_Ptr<struct pt_sandbox> p_sandbox)
 {
   p_sandbox->is_allowed[__NR_ftruncate] = 1;
   p_sandbox->is_allowed[__NR_ftruncate64] = 1;
 }
 
 void
-ptrace_sandbox_permit_socket(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_socket(_Ptr<struct pt_sandbox> p_sandbox)
 {
   install_socketcall(p_sandbox);
   p_sandbox->is_socketcall_allowed[SYS_SOCKET] = 1;
 }
 
 void
-ptrace_sandbox_set_socket_validator(struct pt_sandbox* p_sandbox,
+ptrace_sandbox_set_socket_validator(_Ptr<struct pt_sandbox> p_sandbox,
                                     ptrace_sandbox_validator_t val,
                                     void* p_arg)
 {
@@ -1050,14 +1050,14 @@ ptrace_sandbox_set_socket_validator(struct pt_sandbox* p_sandbox,
 }
 
 void
-ptrace_sandbox_permit_bind(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_bind(_Ptr<struct pt_sandbox> p_sandbox)
 {
   install_socketcall(p_sandbox);
   p_sandbox->is_socketcall_allowed[SYS_BIND] = 1;
 }
 
 void
-ptrace_sandbox_set_bind_validator(struct pt_sandbox* p_sandbox,
+ptrace_sandbox_set_bind_validator(_Ptr<struct pt_sandbox> p_sandbox,
                                   ptrace_sandbox_validator_t val,
                                   void* p_arg)
 {
@@ -1066,14 +1066,14 @@ ptrace_sandbox_set_bind_validator(struct pt_sandbox* p_sandbox,
 }
 
 void
-ptrace_sandbox_permit_connect(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_connect(_Ptr<struct pt_sandbox> p_sandbox)
 {
   install_socketcall(p_sandbox);
   p_sandbox->is_socketcall_allowed[SYS_CONNECT] = 1;
 }
 
 void
-ptrace_sandbox_set_connect_validator(struct pt_sandbox* p_sandbox,
+ptrace_sandbox_set_connect_validator(_Ptr<struct pt_sandbox> p_sandbox,
                                      ptrace_sandbox_validator_t val,
                                      void* p_arg)
 {
@@ -1082,28 +1082,28 @@ ptrace_sandbox_set_connect_validator(struct pt_sandbox* p_sandbox,
 }
 
 void
-ptrace_sandbox_permit_listen(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_listen(_Ptr<struct pt_sandbox> p_sandbox)
 {
   install_socketcall(p_sandbox);
   p_sandbox->is_socketcall_allowed[SYS_LISTEN] = 1;
 }
 
 void
-ptrace_sandbox_permit_accept(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_accept(_Ptr<struct pt_sandbox> p_sandbox)
 {
   install_socketcall(p_sandbox);
   p_sandbox->is_socketcall_allowed[SYS_ACCEPT] = 1;
 }
 
 void
-ptrace_sandbox_permit_setsockopt(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_setsockopt(_Ptr<struct pt_sandbox> p_sandbox)
 {
   install_socketcall(p_sandbox);
   p_sandbox->is_socketcall_allowed[SYS_SETSOCKOPT] = 1;
 }
 
 void
-ptrace_sandbox_set_setsockopt_validator(struct pt_sandbox* p_sandbox,
+ptrace_sandbox_set_setsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox,
                                         ptrace_sandbox_validator_t val,
                                         void* p_arg)
 {
@@ -1112,14 +1112,14 @@ ptrace_sandbox_set_setsockopt_validator(struct pt_sandbox* p_sandbox,
 }
 
 void
-ptrace_sandbox_permit_getsockopt(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_getsockopt(_Ptr<struct pt_sandbox> p_sandbox)
 {
   install_socketcall(p_sandbox);
   p_sandbox->is_socketcall_allowed[SYS_GETSOCKOPT] = 1;
 }
 
 void
-ptrace_sandbox_set_getsockopt_validator(struct pt_sandbox* p_sandbox,
+ptrace_sandbox_set_getsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox,
                                         ptrace_sandbox_validator_t val,
                                         void* p_arg)
 {
@@ -1128,7 +1128,7 @@ ptrace_sandbox_set_getsockopt_validator(struct pt_sandbox* p_sandbox,
 }
 
 void
-ptrace_sandbox_permit_shutdown(struct pt_sandbox* p_sandbox)
+ptrace_sandbox_permit_shutdown(_Ptr<struct pt_sandbox> p_sandbox)
 {
   install_socketcall(p_sandbox);
   p_sandbox->is_socketcall_allowed[SYS_SHUTDOWN] = 1;
@@ -1137,7 +1137,7 @@ ptrace_sandbox_permit_shutdown(struct pt_sandbox* p_sandbox)
 #else /* __linux__ && __i386__ */
 
 _Ptr<struct pt_sandbox> 
-ptrace_sandbox_alloc()
+ptrace_sandbox_alloc(void)
 {
   return 0;
 }

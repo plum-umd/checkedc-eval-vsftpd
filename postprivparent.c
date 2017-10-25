@@ -33,7 +33,7 @@ static void cmd_process_pasv_listen(_Ptr<struct vsf_session> p_sess);
 static void cmd_process_pasv_accept(_Ptr<struct vsf_session> p_sess);
 
 void
-vsf_priv_parent_postlogin(struct vsf_session* p_sess)
+vsf_priv_parent_postlogin(_Ptr<struct vsf_session> p_sess)
 {
   minimize_privilege(p_sess);
   /* We're still here... */
@@ -123,7 +123,7 @@ minimize_privilege(_Ptr<struct vsf_session> p_sess)
 }
 
 static void
-cmd_process_chown(struct vsf_session* p_sess)
+cmd_process_chown(_Ptr<struct vsf_session> p_sess)
 {
   int the_fd = priv_sock_recv_fd(p_sess->parent_fd);
   vsf_privop_do_file_chown(p_sess, the_fd);
@@ -132,7 +132,7 @@ cmd_process_chown(struct vsf_session* p_sess)
 }
 
 static void
-cmd_process_get_data_sock(struct vsf_session* p_sess)
+cmd_process_get_data_sock(_Ptr<struct vsf_session> p_sess)
 {
   unsigned short port = (unsigned short) priv_sock_get_int(p_sess->parent_fd);
   int sock_fd = vsf_privop_get_ftp_port_sock(p_sess, port, 0);
@@ -147,28 +147,28 @@ cmd_process_get_data_sock(struct vsf_session* p_sess)
 }
 
 static void
-cmd_process_pasv_cleanup(struct vsf_session* p_sess)
+cmd_process_pasv_cleanup(_Ptr<struct vsf_session> p_sess)
 {
   vsf_privop_pasv_cleanup(p_sess);
   priv_sock_send_result(p_sess->parent_fd, PRIV_SOCK_RESULT_OK);
 }
 
 static void
-cmd_process_pasv_active(struct vsf_session* p_sess)
+cmd_process_pasv_active(_Ptr<struct vsf_session> p_sess)
 {
   int active = vsf_privop_pasv_active(p_sess);
   priv_sock_send_int(p_sess->parent_fd, active);
 }
 
 static void
-cmd_process_pasv_listen(struct vsf_session* p_sess)
+cmd_process_pasv_listen(_Ptr<struct vsf_session> p_sess)
 {
   unsigned short port = vsf_privop_pasv_listen(p_sess);
   priv_sock_send_int(p_sess->parent_fd, port);
 }
 
 static void
-cmd_process_pasv_accept(struct vsf_session* p_sess)
+cmd_process_pasv_accept(_Ptr<struct vsf_session> p_sess)
 {
   int fd = vsf_privop_accept_pasv(p_sess);
   if (fd < 0)

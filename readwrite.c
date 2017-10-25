@@ -17,20 +17,20 @@
 #include "sysutil.h"
 
 static int plain_peek_adapter(_Ptr<struct vsf_session> p_sess,
-                              _Ptr<char> p_buf,
+                              char* p_buf,
                               unsigned int len);
 static int plain_read_adapter(_Ptr<struct vsf_session> p_sess,
-                              _Ptr<char> p_buf,
+                              char* p_buf,
                               unsigned int len);
 static int ssl_peek_adapter(_Ptr<struct vsf_session> p_sess,
-                            _Ptr<char> p_buf,
+                            char* p_buf,
                             unsigned int len);
 static int ssl_read_adapter(_Ptr<struct vsf_session> p_sess,
-                            _Ptr<char> p_buf,
+                            char* p_buf,
                             unsigned int len);
 
 int
-ftp_write_str(const struct vsf_session* p_sess, _Ptr<const struct mystr> p_str,
+ftp_write_str(_Ptr<const struct vsf_session> p_sess, _Ptr<const struct mystr> p_str,
               enum EVSFRWTarget target)
 {
   if (target == kVSFRWData)
@@ -125,7 +125,7 @@ ftp_write_data(_Ptr<const struct vsf_session> p_sess, const char* p_buf,
 }
 
 int
-ftp_getline(struct vsf_session* p_sess, _Ptr<struct mystr> p_str, char* p_buf)
+ftp_getline(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, char* p_buf)
 {
   if (p_sess->control_use_ssl && p_sess->ssl_slave_active)
   {
@@ -140,8 +140,8 @@ ftp_getline(struct vsf_session* p_sess, _Ptr<struct mystr> p_str, char* p_buf)
   }
   else
   {
-    _Ptr<int (_Ptr<struct vsf_session> , _Ptr<char> , unsigned int )> p_peek =  plain_peek_adapter;
-    _Ptr<int (_Ptr<struct vsf_session> , _Ptr<char> , unsigned int )> p_read =  plain_read_adapter;
+    str_netfd_read_t p_peek =  plain_peek_adapter;
+    str_netfd_read_t p_read =  plain_read_adapter;
     if (p_sess->control_use_ssl)
     {
       p_peek = ssl_peek_adapter;
@@ -172,7 +172,7 @@ plain_read_adapter(_Ptr<struct vsf_session> p_sess, char* p_buf, unsigned int le
 }
 
 static int
-ssl_peek_adapter(_Ptr<struct vsf_session> p_sess, _Ptr<char> p_buf, unsigned int len)
+ssl_peek_adapter(_Ptr<struct vsf_session> p_sess, char* p_buf, unsigned int len)
 {
   return ssl_peek(p_sess, p_sess->p_control_ssl, p_buf, len);
 }

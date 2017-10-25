@@ -24,7 +24,7 @@
 #define VSFTP_MAX_MSGFILE_SIZE 4000
 
 void
-vsf_banner_dir_changed(struct vsf_session* p_sess, int ftpcode)
+vsf_banner_dir_changed(_Ptr<struct vsf_session> p_sess, int ftpcode)
 {
   struct mystr dir_str = INIT_MYSTR;
   /* Do nothing if .message support is off */
@@ -35,7 +35,9 @@ vsf_banner_dir_changed(struct vsf_session* p_sess, int ftpcode)
   if (p_sess->p_visited_dir_list == 0)
   {
     struct mystr_list the_list = INIT_STRLIST;
-    p_sess->p_visited_dir_list = vsf_sysutil_malloc(sizeof(struct mystr_list));
+    p_sess->p_visited_dir_list = 0;
+    /* XXX FIX */
+    /* p_sess->p_visited_dir_list = (_Ptr<struct mystr_list>)vsf_sysutil_malloc(sizeof(struct mystr_list)); */
     *p_sess->p_visited_dir_list = the_list;
   }
   str_getcwd(&dir_str);
@@ -66,7 +68,7 @@ vsf_banner_dir_changed(struct vsf_session* p_sess, int ftpcode)
 }
 
 void
-vsf_banner_write(struct vsf_session* p_sess, _Ptr<struct mystr> p_str, int ftpcode)
+vsf_banner_write(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, int ftpcode)
 {
   struct mystr msg_line_str = INIT_MYSTR;
   unsigned int str_pos = 0;

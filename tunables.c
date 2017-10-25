@@ -143,7 +143,7 @@ const char* tunable_rsa_private_key_file;
 const char* tunable_dsa_private_key_file;
 const char* tunable_ca_certs_file;
 
-static void install_str_setting(_Ptr<const char> p_value, _Ptr<const char*> p_storage);
+static void install_str_setting(const char* p_value, const char** p_storage);
 
 void
 tunables_load_defaults()
@@ -291,7 +291,7 @@ tunables_load_defaults()
 }
 
 void
-install_str_setting(const char* p_value, _Ptr<const char*> p_storage)
+install_str_setting(const char* p_value, const char** p_storage)
 {
   char* p_curr_val = (char*) *p_storage;
   if (p_curr_val != 0)

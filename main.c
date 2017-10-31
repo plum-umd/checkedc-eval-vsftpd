@@ -33,7 +33,7 @@ static void env_init(void);
 static void limits_init(void);
 
 int
-main(int argc, const char* argv[])
+main(int argc, _Array_ptr<const char*> argv : count(argc))
 {
   struct vsf_session the_session =
   {

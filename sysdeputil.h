@@ -42,7 +42,8 @@ int vsf_sysutil_sendfile(const int out_fd, const int in_fd,
  * A useful status monitor. NOTE - we don't guarantee that this call will
  * have any effect.
  */
-void vsf_sysutil_setproctitle_init(int argc, const char* argv[]);
+void vsf_sysutil_setproctitle_init(int argc,
+    _Array_ptr<const char*> argv : count(argc));
 void vsf_sysutil_setproctitle(const char* p_text);
 void vsf_sysutil_setproctitle_str(_Ptr<const struct mystr> p_str);
 void vsf_sysutil_set_proctitle_prefix(_Ptr<const struct mystr> p_str);

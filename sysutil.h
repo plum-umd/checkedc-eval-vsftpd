@@ -186,12 +186,13 @@ int vsf_sysutil_wait_get_exitcode(
 /* Various string functions */
 unsigned int vsf_sysutil_strlen(const char* p_text);
 char* vsf_sysutil_strdup(const char* p_str);
-void vsf_sysutil_memclr(void* p_dest, unsigned int size);
+void vsf_sysutil_memclr(void* p_dest : byte_count(size), unsigned int size);
 void vsf_sysutil_memcpy(void* p_dest, const void* p_src,
                         const unsigned int size);
 void vsf_sysutil_strcpy(char* p_dest, const char* p_src, unsigned int maxsize);
-int vsf_sysutil_memcmp(const void* p_src1, const void* p_src2,
-                       unsigned int size);
+int vsf_sysutil_memcmp(const void* p_src1 : byte_count(size),
+		       const void* p_src2 : byte_count(size),
+		       unsigned int size);
 int vsf_sysutil_strcmp(const char* p_src1, const char* p_src2);
 int vsf_sysutil_atoi(const char* p_str);
 filesize_t vsf_sysutil_a_to_filesize_t(const char* p_str);

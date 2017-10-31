@@ -1036,7 +1036,7 @@ vsf_sysutil_strdup(const char* p_str)
 }
 
 void
-vsf_sysutil_memclr(void* p_dest, unsigned int size)
+vsf_sysutil_memclr(void* p_dest : byte_count(size), unsigned int size)
 {
   /* Safety */
   if (size == 0)
@@ -1074,7 +1074,8 @@ vsf_sysutil_strcpy(char* p_dest, const char* p_src, unsigned int maxsize)
 }
 
 int
-vsf_sysutil_memcmp(const void* p_src1, const void* p_src2, unsigned int size)
+vsf_sysutil_memcmp(const void* p_src1 : byte_count(size),
+		   const void* p_src2 : byte_count(size), unsigned int size)
 {
   /* Safety */
   if (size == 0)
@@ -1254,7 +1255,7 @@ vsf_sysutil_alloc_statbuf(_Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 {
   if (*p_ptr == NULL)
   {
-    *p_ptr =  _Assume_bounds_cast<_Ptr<struct vsf_sysutil_statbuf>>(vsf_sysutil_malloc(sizeof(struct stat)));
+    *p_ptr =  vsf_sysutil_malloc(sizeof(struct stat));
   }
 }
 
@@ -1906,7 +1907,7 @@ void
 vsf_sysutil_sockaddr_alloc(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockptr)
 {
   vsf_sysutil_sockaddr_clear(p_sockptr);
-  *p_sockptr = _Assume_bounds_cast<_Ptr<struct vsf_sysutil_sockaddr>>(vsf_sysutil_malloc(sizeof(**p_sockptr)));
+  *p_sockptr = vsf_sysutil_malloc(sizeof(**p_sockptr));
   vsf_sysutil_memclr((void *)*p_sockptr, sizeof(**p_sockptr));
 }
 

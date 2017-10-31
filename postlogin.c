@@ -974,6 +974,7 @@ handle_port(_Ptr<struct vsf_session> p_sess)
   unsigned short the_port;
   unsigned char vals[6];
   const unsigned char* p_raw;
+  /* _Array_ptr<unsigned char> p_raw : count(sizeof(vals)) = 0; */
   pasv_cleanup(p_sess);
   port_cleanup(p_sess);
   p_raw = vsf_sysutil_parse_uchar_string_sep(&p_sess->ftp_arg_str, ',', vals,

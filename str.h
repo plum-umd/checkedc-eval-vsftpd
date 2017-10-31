@@ -9,7 +9,7 @@
 
 struct mystr
 {
-  char* PRIVATE_HANDS_OFF_p_buf;
+  _Array_ptr<char> PRIVATE_HANDS_OFF_p_buf : count(PRIVATE_HANDS_OFF_alloc_bytes);
   /* Internally, EXCLUDES trailing null */
   unsigned int PRIVATE_HANDS_OFF_len;
   unsigned int PRIVATE_HANDS_OFF_alloc_bytes;
@@ -21,12 +21,16 @@ struct mystr
 #ifdef VSFTP_STRING_HELPER
 #define str_alloc_memchunk private_str_alloc_memchunk
 #endif
-void private_str_alloc_memchunk(_Ptr<struct mystr> p_str, const char* p_src,
+void private_str_alloc_memchunk(_Ptr<struct mystr> p_str,
+				_Array_ptr<const char> p_src : count(len),
 				unsigned int len);
 
 void str_alloc_text(_Ptr<struct mystr> p_str, const char* p_src);
 /* NOTE: String buffer data does NOT include terminating character */
-void str_alloc_alt_term(_Ptr<struct mystr> p_str, const char* p_src, char term);
+void str_alloc_alt_term(_Ptr<struct mystr> p_str,
+			_Array_ptr<const char> p_src : count(maxlen),
+			char term, unsigned int maxlen);
+/* void str_alloc_alt_term(_Ptr<struct mystr> p_str, const char* p_src, char term); */
 void str_alloc_ulong(_Ptr<struct mystr> p_str, unsigned long the_ulong);
 void str_alloc_filesize_t(_Ptr<struct mystr> p_str, filesize_t the_filesize);
 void str_copy(_Ptr<struct mystr> p_dest, _Ptr<const struct mystr> p_src);

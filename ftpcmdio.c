@@ -221,7 +221,7 @@ control_getline(_Ptr<struct mystr> p_str, _Ptr<struct vsf_session> p_sess)
   int ret;
   if (p_sess->p_control_line_buf == 0)
   {
-    vsf_secbuf_alloc(&p_sess->p_control_line_buf, VSFTP_MAX_COMMAND_LINE);
+    vsf_secbuf_alloc((char **)&p_sess->p_control_line_buf, VSFTP_MAX_COMMAND_LINE);
   }
   ret = ftp_getline(p_sess, p_str, p_sess->p_control_line_buf);
   if (ret == 0)

@@ -32,12 +32,12 @@ typedef int (*str_netfd_read_t)(_Ptr<struct vsf_session>
  * Does not return (exits) for a serious socket error.
  */
 int str_netfd_alloc(_Ptr<struct vsf_session> p_sess,
-                    _Ptr<struct mystr> p_str,
-                    char term,
-                    char* p_readbuf,
-                    unsigned int maxlen,
-                    str_netfd_read_t p_peekfunc,
-                    str_netfd_read_t p_readfunc);
+		    _Ptr<struct mystr> p_str,
+		    char term,
+		    _Array_ptr<char> p_readbuf : count(maxlen),
+		    unsigned int maxlen,
+		    str_netfd_read_t p_peekfunc,
+		    str_netfd_read_t p_readfunc);
 
 /* str_netfd_read()
  * PURPOSE

@@ -50,7 +50,9 @@ str_fileread(_Ptr<struct mystr> p_str, const char* p_filename, unsigned int maxs
     {
       die("read size mismatch");
     }
-    str_alloc_memchunk(p_str, p_sec_buf, (unsigned int) size);
+    _Array_ptr<char> p_sec_buf_tmp : count(size) =
+      _Assume_bounds_cast<_Array_ptr<char>>(p_sec_buf, size); 
+    str_alloc_memchunk(p_str, p_sec_buf_tmp, (unsigned int) size);
   }
 free_out:
   vsf_sysutil_free(p_stat);

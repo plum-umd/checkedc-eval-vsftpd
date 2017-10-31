@@ -74,6 +74,7 @@ vsf_sysutil_parse_ipv4(_Ptr<const struct mystr> p_str)
 /* _Array_ptr<unsigned char> */
 /* vsf_sysutil_parse_ipv4(_Ptr<const struct mystr> p_str) : count(4) */
 {
+  /* static unsigned char items checked[4]; */
   static unsigned char items[4];
   return vsf_sysutil_parse_uchar_string_sep(p_str, '.', items, sizeof(items));
 }

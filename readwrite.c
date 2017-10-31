@@ -125,7 +125,7 @@ ftp_write_data(_Ptr<const struct vsf_session> p_sess, const char* p_buf,
 }
 
 int
-ftp_getline(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, char* p_buf)
+ftp_getline(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, _Array_ptr<char> p_buf : count(VSFTP_MAX_COMMAND_LINE))
 {
   if (p_sess->control_use_ssl && p_sess->ssl_slave_active)
   {

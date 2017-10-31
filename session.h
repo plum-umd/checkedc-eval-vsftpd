@@ -1,6 +1,8 @@
 #ifndef VSF_SESSION_H
 #define VSF_SESSION_H
 
+#include "defs.h"
+
 #ifndef VSFTP_STR_H
 #include "str.h"
 #endif
@@ -20,7 +22,7 @@ struct vsf_session
   /* Details of the control connection */
   _Ptr<struct vsf_sysutil_sockaddr> p_local_addr;
   _Ptr<struct vsf_sysutil_sockaddr> p_remote_addr;
-  char* p_control_line_buf;
+  _Array_ptr<char> p_control_line_buf : count(VSFTP_MAX_COMMAND_LINE);
   int idle_timeout;
   int data_timeout;
 

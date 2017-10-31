@@ -23,22 +23,26 @@
 /* File local functions */
 static void str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
                                   const char* p_text, int is_reverse);
-static int str_equal_internal(const char* p_buf1, unsigned int buf1_len,
-                              const char* p_buf2, unsigned int buf2_len);
+static int
+str_equal_internal(_Array_ptr<const char> p_buf1 : count(buf1_len),
+		   unsigned int buf1_len,
+                   _Array_ptr<const char> p_buf2 : count(buf2_len),
+		   unsigned int buf2_len);
 
 /* Private functions */
-static void
-s_setbuf(_Ptr<struct mystr> p_str, char* p_newbuf)
-{
-  if (p_str->p_buf != 0)
-  {
-    bug("p_buf not NULL when setting it");
-  }
-  p_str->p_buf = p_newbuf;
-}
+/* static void */
+/* s_setbuf(_Ptr<struct mystr> p_str, char* p_newbuf) */
+/* { */
+/*   if (p_str->p_buf != 0) */
+/*   { */
+/*     bug("p_buf not NULL when setting it"); */
+/*   } */
+/*   p_str->p_buf = p_newbuf; */
+/* } */
 
 void
-private_str_alloc_memchunk(_Ptr<struct mystr> p_str, const char* p_src,
+private_str_alloc_memchunk(_Ptr<struct mystr> p_str,
+			   _Array_ptr<const char> p_src : count(len),
                            unsigned int len)
 {
   /* Make sure this will fit in the buffer */
@@ -51,7 +55,8 @@ private_str_alloc_memchunk(_Ptr<struct mystr> p_str, const char* p_src,
   if (buf_needed > p_str->alloc_bytes)
   {
     str_free(p_str);
-    s_setbuf(p_str, vsf_sysutil_malloc(buf_needed));
+    /* s_setbuf(p_str, vsf_sysutil_malloc(buf_needed)); */
+    p_str->p_buf = vsf_sysutil_malloc(buf_needed);
     p_str->alloc_bytes = buf_needed;
   }
   vsf_sysutil_memcpy(p_str->p_buf, p_src, len);
@@ -60,7 +65,8 @@ private_str_alloc_memchunk(_Ptr<struct mystr> p_str, const char* p_src,
 }
 
 void
-private_str_append_memchunk(_Ptr<struct mystr> p_str, const char* p_src,
+private_str_append_memchunk(_Ptr<struct mystr> p_str,
+			    _Array_ptr<const char> p_src : count(len),
                             unsigned int len)
 {
   unsigned int buf_needed;
@@ -89,7 +95,9 @@ void
 str_alloc_text(_Ptr<struct mystr> p_str, const char* p_src)
 {
   unsigned int len = vsf_sysutil_strlen(p_src);
-  private_str_alloc_memchunk(p_str, p_src, len);
+  _Array_ptr<const char> p_src_tmp : count(len) =
+    _Assume_bounds_cast<_Array_ptr<const char>>(p_src, len);
+  private_str_alloc_memchunk(p_str, p_src_tmp, len);
 }
 
 void
@@ -105,11 +113,14 @@ str_strdup(_Ptr<const struct mystr> p_str)
 }
 
 void
-str_alloc_alt_term(_Ptr<struct mystr> p_str, const char* p_src, char term)
+str_alloc_alt_term(_Ptr<struct mystr> p_str,
+		   _Array_ptr<const char> p_src : count(maxlen),
+		   char term, unsigned int maxlen)
 {
-  const char* p_search = p_src;
+  _Array_ptr<const char> p_search : count(maxlen) = p_src;
+  _Array_ptr<const char> p_end : count(0) = p_src + maxlen;
   unsigned int len = 0;
-  while (*p_search != term)
+  while (p_search < p_end && *p_search != term)
   {
     p_search++;
     len++;
@@ -204,7 +215,7 @@ str_getbuf(_Ptr<const struct mystr> p_str)
     }
     private_str_alloc_memchunk((struct mystr*)p_str, 0, 0);
   }
-  return p_str->p_buf;
+  return (const char *)p_str->p_buf; /* MWH: should be arrayptr, or zeroterm? */
 }
 
 int
@@ -215,8 +226,10 @@ str_strcmp(_Ptr<const struct mystr> p_str1, _Ptr<const struct mystr> p_str2)
 }
 
 static int
-str_equal_internal(const char* p_buf1, unsigned int buf1_len,
-                   const char* p_buf2, unsigned int buf2_len)
+str_equal_internal(_Array_ptr<const char> p_buf1 : count(buf1_len),
+		   unsigned int buf1_len,
+                   _Array_ptr<const char> p_buf2 : count(buf2_len),
+		   unsigned int buf2_len)
 {
   int retval;
   unsigned int minlen = buf1_len;
@@ -243,7 +256,9 @@ int
 str_equal_text(_Ptr<const struct mystr> p_str, const char* p_text)
 {
   unsigned int cmplen = vsf_sysutil_strlen(p_text);
-  return (str_equal_internal(p_str->p_buf, p_str->len, p_text, cmplen) == 0);
+  _Array_ptr<const char> p_text_tmp : count(cmplen) =
+    _Assume_bounds_cast<_Array_ptr<const char>>(p_text, cmplen);
+  return (str_equal_internal(p_str->p_buf, p_str->len, p_text_tmp, cmplen) == 0);
 }
 
 void
@@ -256,7 +271,9 @@ void
 str_append_text(_Ptr<struct mystr> p_str, const char* p_src)
 {
   unsigned int len = vsf_sysutil_strlen(p_src);
-  private_str_append_memchunk(p_str, p_src, len);
+  _Array_ptr<const char> p_src_tmp : count(len) =
+    _Assume_bounds_cast<_Array_ptr<const char>>(p_src, len);
+  private_str_append_memchunk(p_str, p_src_tmp, len);
 }
 
 void
@@ -649,7 +666,9 @@ str_getline(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_line_str,
   unsigned int start_pos = *p_pos;
   unsigned int curr_pos = start_pos;
   unsigned int buf_len = str_getlen(p_str);
-  const char* p_buf = str_getbuf(p_str);
+  const char* p_buf_tmp = str_getbuf(p_str);
+  _Array_ptr<const char> p_buf : count(buf_len) =
+    _Assume_bounds_cast<_Array_ptr<const char>>(p_buf_tmp, buf_len); 
   unsigned int out_len;
   if (start_pos > buf_len)
   {

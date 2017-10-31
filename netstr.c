@@ -19,7 +19,7 @@ int
 str_netfd_alloc(_Ptr<struct vsf_session> p_sess,
                 _Ptr<struct mystr> p_str,
                 char term,
-                char* p_readbuf,
+                _Array_ptr<char> p_readbuf : count(maxlen),
                 unsigned int maxlen,
                 str_netfd_read_t p_peekfunc,
                 str_netfd_read_t p_readfunc)
@@ -27,7 +27,7 @@ str_netfd_alloc(_Ptr<struct vsf_session> p_sess,
   int retval;
   unsigned int bytes_read;
   unsigned int i;
-  char* p_readpos = p_readbuf;
+  _Array_ptr<char> p_readpos : count(maxlen) = p_readbuf;
   unsigned int left = maxlen;
   str_empty(p_str);
   while (1)
@@ -41,7 +41,7 @@ str_netfd_alloc(_Ptr<struct vsf_session> p_sess,
     {
       return -1;
     }
-    retval = (*p_peekfunc)(p_sess, p_readpos, left);
+    retval = (*p_peekfunc)(p_sess, (char *)p_readpos, left);
     if (vsf_sysutil_retval_is_error(retval))
     {
       die("vsf_sysutil_recv_peek");
@@ -58,7 +58,7 @@ str_netfd_alloc(_Ptr<struct vsf_session> p_sess,
       {
         /* Got it! */
         i++;
-        retval = (*p_readfunc)(p_sess, p_readpos, i);
+        retval = (*p_readfunc)(p_sess, (char *)p_readpos, i);
         if (vsf_sysutil_retval_is_error(retval) ||
             (unsigned int) retval != i)
         {
@@ -68,7 +68,7 @@ str_netfd_alloc(_Ptr<struct vsf_session> p_sess,
         {
           die("missing terminator in str_netfd_alloc");
         }
-        str_alloc_alt_term(p_str, p_readbuf, term);
+        str_alloc_alt_term(p_str, p_readbuf, term, maxlen);
         return (int) i;
       }
     }
@@ -78,7 +78,7 @@ str_netfd_alloc(_Ptr<struct vsf_session> p_sess,
       bug("bytes_read > left in str_netfd_alloc");
     }
     left -= bytes_read;
-    retval = (*p_readfunc)(p_sess, p_readpos, bytes_read);
+    retval = (*p_readfunc)(p_sess, (char *)p_readpos, bytes_read);
     if (vsf_sysutil_retval_is_error(retval) ||
         (unsigned int) retval != bytes_read)
     {

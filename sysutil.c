@@ -1047,7 +1047,9 @@ vsf_sysutil_memclr(void* p_dest : byte_count(size), unsigned int size)
 }
 
 void
-vsf_sysutil_memcpy(void* p_dest, const void* p_src, const unsigned int size)
+vsf_sysutil_memcpy(void* p_dest : byte_count(size),
+		   const void* p_src : byte_count(size),
+		   const unsigned int size)
 {
   /* Safety */
   if (size == 0)

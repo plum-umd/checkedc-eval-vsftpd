@@ -1,0 +1,11 @@
+Find places where programs use char* as buffers that are not necessarily zero-terminated; do those
+
+secbuf
+netstr
+ipsddrparse — use arrayptr
+standalone.c — ip_count 
+
+polymorphism where useful/applicable
+
+make checked version of stat, other standard libraries
+

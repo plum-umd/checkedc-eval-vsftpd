@@ -53,7 +53,7 @@ str_fileread(_Ptr<struct mystr> p_str, const char* p_filename, unsigned int maxs
     str_alloc_memchunk(p_str, p_sec_buf, (unsigned int) size);
   }
 free_out:
-  vsf_sysutil_free((void *)p_stat);
+  vsf_sysutil_free(p_stat);
   vsf_secbuf_free(&p_sec_buf);
   vsf_sysutil_close(fd);
   return retval;

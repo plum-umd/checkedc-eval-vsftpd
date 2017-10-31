@@ -114,7 +114,7 @@ hash_free_entry(_Ptr<struct hash> p_hash, void* p_key)
     p_node->p_next->p_prev = p_node->p_prev;
   }
 
-  vsf_sysutil_free((void *)p_node);
+  vsf_sysutil_free(p_node);
 }
 
 _Ptr<struct hash_node>*

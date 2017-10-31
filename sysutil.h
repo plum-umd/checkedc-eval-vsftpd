@@ -159,9 +159,9 @@ void vsf_sysutil_memprotect(void* p_addr, unsigned int len,
 void vsf_sysutil_memunmap(void* p_start, unsigned int length);
 
 /* Memory allocating/freeing */
-void* vsf_sysutil_malloc(unsigned int size);
-void* vsf_sysutil_realloc(void* p_ptr, unsigned int size);
-void vsf_sysutil_free(void* p_ptr);
+void* vsf_sysutil_malloc(unsigned int size) : byte_count(size);
+void* vsf_sysutil_realloc(void* p_ptr : byte_count(1), unsigned int size) : byte_count(size);
+void vsf_sysutil_free(void* p_ptr : byte_count(1));
 
 /* Process creation/exit/process handling */
 unsigned int vsf_sysutil_getpid(void);

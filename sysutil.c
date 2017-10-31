@@ -497,7 +497,7 @@ vsf_sysutil_lseek_end(const int fd)
 }
 
 void*
-vsf_sysutil_malloc(unsigned int size)
+vsf_sysutil_malloc(unsigned int size) : byte_count(size)
 {
   void* p_ret;
   /* Paranoia - what if we got an integer overflow/underflow? */
@@ -514,7 +514,7 @@ vsf_sysutil_malloc(unsigned int size)
 }
 
 void*
-vsf_sysutil_realloc(void* p_ptr, unsigned int size)
+vsf_sysutil_realloc(void* p_ptr : byte_count(1), unsigned int size) : byte_count(size)
 {
   void* p_ret;
   if (size == 0 || size > INT_MAX)
@@ -530,7 +530,7 @@ vsf_sysutil_realloc(void* p_ptr, unsigned int size)
 }
 
 void
-vsf_sysutil_free(void* p_ptr)
+vsf_sysutil_free(void *p_ptr : byte_count(1))
 {
   if (p_ptr == NULL)
   {
@@ -1897,7 +1897,7 @@ vsf_sysutil_sockaddr_clear(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockptr)
 {
   if (*p_sockptr != NULL)
   {
-    vsf_sysutil_free((void *)*p_sockptr);
+    vsf_sysutil_free(*p_sockptr);
     *p_sockptr = NULL;
   }
 }

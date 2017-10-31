@@ -90,13 +90,13 @@ str_open(_Ptr<const struct mystr> p_str, const enum EVSFSysStrOpenMode mode)
 }
 
 int
-str_stat(_Ptr<const struct mystr> p_str, struct vsf_sysutil_statbuf** p_ptr)
+str_stat(_Ptr<const struct mystr> p_str, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 {
   return vsf_sysutil_stat(str_getbuf(p_str), p_ptr);
 }
 
 int
-str_lstat(_Ptr<const struct mystr> p_str, struct vsf_sysutil_statbuf** p_ptr)
+str_lstat(_Ptr<const struct mystr> p_str, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 {
   return vsf_sysutil_lstat(str_getbuf(p_str), p_ptr);
 }
@@ -126,14 +126,14 @@ str_rename(_Ptr<const struct mystr> p_from_str, _Ptr<const struct mystr> p_to_st
   return vsf_sysutil_rename(str_getbuf(p_from_str), str_getbuf(p_to_str));
 }
 
-struct vsf_sysutil_dir*
+_Ptr<struct vsf_sysutil_dir>
 str_opendir(_Ptr<const struct mystr> p_str)
 {
   return vsf_sysutil_opendir(str_getbuf(p_str));
 }
 
 void
-str_next_dirent(_Ptr<struct mystr> p_filename_str, struct vsf_sysutil_dir* p_dir)
+str_next_dirent(_Ptr<struct mystr> p_filename_str, _Ptr<struct vsf_sysutil_dir> p_dir)
 {
   const char* p_filename = vsf_sysutil_next_dirent(p_dir);
   str_empty(p_filename_str);
@@ -165,7 +165,7 @@ str_readlink(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str)
   return 0;
 }
 
-struct vsf_sysutil_user*
+_Ptr<struct vsf_sysutil_user>
 str_getpwnam(_Ptr<const struct mystr> p_user_str)
 {
   return vsf_sysutil_getpwnam(str_getbuf(p_user_str));

@@ -27,7 +27,7 @@
 #include "ftppolicy.h"
 #include "seccompsandbox.h"
 
-static void one_process_start(void* p_arg : itype(_Ptr<struct vsf_session>));
+static void one_process_start(void* p_arg);
 
 void
 vsf_one_process_start(_Ptr<struct vsf_session> p_sess)
@@ -61,8 +61,8 @@ vsf_one_process_start(_Ptr<struct vsf_session> p_sess)
 }
 
 static void
-one_process_start(void* p_arg : itype(_Ptr<struct vsf_session>)) {
-  _Ptr<struct vsf_session> p_sess = p_arg;
+one_process_start(void* p_arg) {
+  _Ptr<struct vsf_session> p_sess = _Assume_bounds_cast<_Ptr<struct vsf_session>>(p_arg);
   unsigned int caps = 0;
   if (tunable_chown_uploads)
   {
@@ -112,7 +112,7 @@ one_process_start(void* p_arg : itype(_Ptr<struct vsf_session>)) {
 
 void
 vsf_one_process_login(_Ptr<struct vsf_session> p_sess,
-                      _Ptr<const struct mystr> p_pass_str)
+                      const _Ptr<struct mystr> p_pass_str)
 {
   enum EVSFPrivopLoginResult login_result =
     vsf_privop_do_login(p_sess, p_pass_str);

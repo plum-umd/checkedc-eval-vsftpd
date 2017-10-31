@@ -22,7 +22,7 @@ void vsf_one_process_start(_Ptr<struct vsf_session> p_sess);
  * p_pass_str   - the proposed password
  */
 void vsf_one_process_login(_Ptr<struct vsf_session> p_sess,
-                           const struct mystr* p_pass_str);
+                           const _Ptr<struct mystr> p_pass_str);
 
 /* vsf_one_process_get_priv_data_sock()
  * PURPOSE

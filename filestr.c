@@ -23,7 +23,7 @@ str_fileread(_Ptr<struct mystr> p_str, const char* p_filename, unsigned int maxs
   int retval = 0;
   filesize_t size;
   char* p_sec_buf = 0;
-  struct vsf_sysutil_statbuf* p_stat = 0;
+  _Ptr<struct vsf_sysutil_statbuf> p_stat = 0;
   /* In case we fail, make sure we return an empty string */
   str_empty(p_str);
   fd = vsf_sysutil_open_file(p_filename, kVSFSysUtilOpenReadOnly);
@@ -53,7 +53,7 @@ str_fileread(_Ptr<struct mystr> p_str, const char* p_filename, unsigned int maxs
     str_alloc_memchunk(p_str, p_sec_buf, (unsigned int) size);
   }
 free_out:
-  vsf_sysutil_free(p_stat);
+  vsf_sysutil_free((void *)p_stat);
   vsf_secbuf_free(&p_sec_buf);
   vsf_sysutil_close(fd);
   return retval;

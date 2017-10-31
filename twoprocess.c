@@ -166,13 +166,13 @@ drop_all_privs(void)
   }
   /* Be kind: give good error message if the secure dir is missing */
   {
-    struct vsf_sysutil_statbuf* p_statbuf = 0;
+    _Ptr<struct vsf_sysutil_statbuf> p_statbuf = 0;
     if (vsf_sysutil_retval_is_error(str_lstat(&dir_str, &p_statbuf)))
     {
       die2("vsftpd: not found: directory given in 'secure_chroot_dir':",
            tunable_secure_chroot_dir);
     }
-    vsf_sysutil_free(p_statbuf);
+    vsf_sysutil_free((void *)p_statbuf);
   }
   vsf_secutil_change_credentials(&user_str, &dir_str, 0, 0, option);
   str_free(&user_str);
@@ -487,7 +487,7 @@ static void
 handle_per_user_config(_Ptr<const struct mystr> p_user_str)
 {
   struct mystr filename_str = INIT_MYSTR;
-  struct vsf_sysutil_statbuf* p_statbuf = 0;
+  _Ptr<struct vsf_sysutil_statbuf> p_statbuf = 0;
   struct str_locate_result loc_result;
   int retval;
   if (!tunable_user_config_dir)
@@ -514,7 +514,7 @@ handle_per_user_config(_Ptr<const struct mystr> p_user_str)
     die("error opening per-user config file");
   }
   str_free(&filename_str);
-  vsf_sysutil_free(p_statbuf);
+  vsf_sysutil_free((void *)p_statbuf);
 }
 
 static void
@@ -526,7 +526,7 @@ calculate_chdir_dir(int anon_login, _Ptr<struct mystr> p_userdir_str,
 {
   if (!anon_login)
   {
-    const struct vsf_sysutil_user* p_user = str_getpwnam(p_user_str);
+    const _Ptr<struct vsf_sysutil_user> p_user = str_getpwnam(p_user_str);
     if (p_user == 0)
     {
       die2("cannot locate user entry:", str_getbuf(p_user_str));

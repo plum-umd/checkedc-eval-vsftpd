@@ -44,7 +44,7 @@ static void handle_sigalrm(void* p_private);
 static void start_data_alarm(_Ptr<struct vsf_session> p_sess);
 static void handle_io(int retval, int fd, void* p_private);
 static int transfer_dir_internal(
-  _Ptr<struct vsf_session> p_sess, int is_control, struct vsf_sysutil_dir* p_dir,
+  _Ptr<struct vsf_session> p_sess, int is_control, _Ptr<struct vsf_sysutil_dir> p_dir,
   _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str,
   _Ptr<const struct mystr> p_filter_str, int is_verbose);
 static int write_dir_list(_Ptr<struct vsf_session> p_sess,
@@ -301,7 +301,7 @@ handle_io(int retval, int fd, void* p_private)
 
 int
 vsf_ftpdataio_transfer_dir(_Ptr<struct vsf_session> p_sess, int is_control,
-                           struct vsf_sysutil_dir* p_dir,
+                           _Ptr<struct vsf_sysutil_dir> p_dir,
                            _Ptr<const struct mystr> p_base_dir_str,
                            _Ptr<const struct mystr> p_option_str,
                            _Ptr<const struct mystr> p_filter_str,
@@ -313,7 +313,7 @@ vsf_ftpdataio_transfer_dir(_Ptr<struct vsf_session> p_sess, int is_control,
 
 static int
 transfer_dir_internal(_Ptr<struct vsf_session> p_sess, int is_control,
-                      struct vsf_sysutil_dir* p_dir,
+                      _Ptr<struct vsf_sysutil_dir> p_dir,
                       _Ptr<const struct mystr> p_base_dir_str,
                       _Ptr<const struct mystr> p_option_str,
                       _Ptr<const struct mystr> p_filter_str,
@@ -360,7 +360,7 @@ transfer_dir_internal(_Ptr<struct vsf_session> p_sess, int is_control,
     for (subdir_index = 0; subdir_index < num_subdirs; subdir_index++)
     {
       int retval;
-      struct vsf_sysutil_dir* p_subdir;
+      _Ptr<struct vsf_sysutil_dir> p_subdir = 0;
       _Ptr<const struct mystr> p_subdir_str =  
         str_list_get_pstr(&subdir_list, subdir_index);
       if (str_equal_text(p_subdir_str, ".") ||
@@ -573,7 +573,7 @@ do_file_send_sendfile(_Ptr<struct vsf_session> p_sess, int net_fd, int file_fd,
 static filesize_t
 calc_num_send(int file_fd, filesize_t init_offset)
 {
-  static struct vsf_sysutil_statbuf* s_p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf;
   filesize_t bytes_to_send;
   /* Work out how many bytes to send based on file size minus current offset */
   vsf_sysutil_fstat(file_fd, &s_p_statbuf);

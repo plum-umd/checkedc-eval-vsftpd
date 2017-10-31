@@ -92,7 +92,7 @@ struct vsf_transfer_ret vsf_ftpdataio_transfer_file(
  * is_verbose     - set to 0 if NLST used, 1 if LIST used
  */
 int vsf_ftpdataio_transfer_dir(_Ptr<struct vsf_session> p_sess, int is_control,
-                               struct vsf_sysutil_dir* p_dir,
+                               _Ptr<struct vsf_sysutil_dir> p_dir,
                                _Ptr<const struct mystr> p_base_dir_str,
                                _Ptr<const struct mystr> p_option_str,
                                _Ptr<const struct mystr> p_filter_str,

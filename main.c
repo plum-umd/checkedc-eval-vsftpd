@@ -112,24 +112,24 @@ main(int argc, const char* argv[])
   }
   /* Parse default config file if necessary */
   if (!config_loaded) {
-    struct vsf_sysutil_statbuf* p_statbuf = 0;
+    _Ptr<struct vsf_sysutil_statbuf> p_statbuf = 0;
     int retval = vsf_sysutil_stat(VSFTP_DEFAULT_CONFIG, &p_statbuf);
     if (!vsf_sysutil_retval_is_error(retval))
     {
       vsf_parseconf_load_file(VSFTP_DEFAULT_CONFIG, 1);
     }
-    vsf_sysutil_free(p_statbuf);
+    vsf_sysutil_free((void *)p_statbuf);
   }
   /* Resolve pasv_address if required */
   if (tunable_pasv_address && tunable_pasv_addr_resolve)
   {
-    struct vsf_sysutil_sockaddr* p_addr = 0;
+    _Ptr<struct vsf_sysutil_sockaddr> p_addr = 0;
     const char* p_numeric_addr;
     vsf_sysutil_dns_resolve(&p_addr, tunable_pasv_address);
     vsf_sysutil_free((char*) tunable_pasv_address);
     p_numeric_addr = vsf_sysutil_inet_ntop(p_addr);
     tunable_pasv_address = vsf_sysutil_strdup(p_numeric_addr);
-    vsf_sysutil_free(p_addr);
+    vsf_sysutil_free((void *)p_addr);
   }
   if (!tunable_run_as_launching_user)
   {
@@ -269,13 +269,13 @@ static void
 do_sanity_checks(void)
 {
   {
-    struct vsf_sysutil_statbuf* p_statbuf = 0;
+    _Ptr<struct vsf_sysutil_statbuf> p_statbuf = 0;
     vsf_sysutil_fstat(VSFTP_COMMAND_FD, &p_statbuf);
     if (!vsf_sysutil_statbuf_is_socket(p_statbuf))
     {
       die("vsftpd: not configured for standalone, must be started from inetd");
     }
-    vsf_sysutil_free(p_statbuf);
+    vsf_sysutil_free((void *)p_statbuf);
   }
   if (tunable_one_process_model)
   {
@@ -337,7 +337,7 @@ session_init(_Ptr<struct vsf_session> p_sess)
   /* If anonymous mode is active, fetch the uid of the anonymous user */
   if (tunable_anonymous_enable)
   {
-    const struct vsf_sysutil_user* p_user = 0;
+    _Ptr<struct vsf_sysutil_user> p_user = 0;
     if (tunable_ftp_username)
     {
       p_user = vsf_sysutil_getpwnam(tunable_ftp_username);
@@ -351,7 +351,7 @@ session_init(_Ptr<struct vsf_session> p_sess)
   }
   if (tunable_guest_enable)
   {
-    const struct vsf_sysutil_user* p_user = 0;
+    _Ptr<struct vsf_sysutil_user> p_user = 0;
     if (tunable_guest_username)
     {
       p_user = vsf_sysutil_getpwnam(tunable_guest_username);
@@ -365,7 +365,7 @@ session_init(_Ptr<struct vsf_session> p_sess)
   }
   if (tunable_chown_uploads)
   {
-    const struct vsf_sysutil_user* p_user = 0;
+    _Ptr<struct vsf_sysutil_user> p_user = 0;
     if (tunable_chown_username)
     {
       p_user = vsf_sysutil_getpwnam(tunable_chown_username);

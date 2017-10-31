@@ -36,8 +36,8 @@ vsf_privop_get_ftp_port_sock(_Ptr<struct vsf_session> p_sess,
                              unsigned short remote_port,
                              int use_port_sockaddr)
 {
-  static struct vsf_sysutil_sockaddr* p_sockaddr;
-  const struct vsf_sysutil_sockaddr* p_connect_to;
+  static _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr;
+  _Ptr<struct vsf_sysutil_sockaddr> p_connect_to_tmp = 0;
   int retval;
   int i;
   int s = vsf_sysutil_get_ipsock(p_sess->p_local_addr);
@@ -79,13 +79,14 @@ vsf_privop_get_ftp_port_sock(_Ptr<struct vsf_session> p_sess,
   }
   if (use_port_sockaddr)
   {
-    p_connect_to = p_sess->p_port_sockaddr;
+    p_connect_to_tmp = p_sess->p_port_sockaddr;
   }
   else
   {
     vsf_sysutil_sockaddr_set_port(p_sess->p_remote_addr, remote_port);
-    p_connect_to = p_sess->p_remote_addr;
+    p_connect_to_tmp = p_sess->p_remote_addr;
   }
+  const _Ptr<struct vsf_sysutil_sockaddr> p_connect_to = p_connect_to_tmp;
   retval = vsf_sysutil_connect_timeout(s, p_connect_to,
                                        tunable_connect_timeout);
   if (vsf_sysutil_retval_is_error(retval))
@@ -119,7 +120,7 @@ vsf_privop_pasv_active(_Ptr<struct vsf_session> p_sess)
 unsigned short
 vsf_privop_pasv_listen(_Ptr<struct vsf_session> p_sess)
 {
-  static struct vsf_sysutil_sockaddr* s_p_sockaddr;
+  static _Ptr<struct vsf_sysutil_sockaddr> s_p_sockaddr;
   int bind_retries = 10;
   unsigned short the_port;
   /* IPPORT_RESERVED */
@@ -191,7 +192,7 @@ vsf_privop_pasv_listen(_Ptr<struct vsf_session> p_sess)
 int
 vsf_privop_accept_pasv(_Ptr<struct vsf_session> p_sess)
 {
-  struct vsf_sysutil_sockaddr* p_accept_addr = 0;
+  _Ptr<struct vsf_sysutil_sockaddr> p_accept_addr = 0;
   int remote_fd;
   if (p_sess->pasv_listen_fd == -1)
   {
@@ -225,7 +226,7 @@ vsf_privop_accept_pasv(_Ptr<struct vsf_session> p_sess)
 void
 vsf_privop_do_file_chown(_Ptr<struct vsf_session> p_sess, int fd)
 {
-  static struct vsf_sysutil_statbuf* s_p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf;
   vsf_sysutil_fstat(fd, &s_p_statbuf);
   /* Do nothing if it is already owned by the desired user. */
   if (vsf_sysutil_statbuf_get_uid(s_p_statbuf) ==

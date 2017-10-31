@@ -21,7 +21,7 @@ struct vsf_sysutil_dir;
  */
 void vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list,
                               _Ptr<struct mystr_list> p_subdir_list,
-                              struct vsf_sysutil_dir* p_dir,
+                              _Ptr<struct vsf_sysutil_dir> p_dir,
                               _Ptr<const struct mystr> p_base_dir_str,
                               _Ptr<const struct mystr> p_option_str,
                               _Ptr<const struct mystr> p_filter_str,
@@ -42,7 +42,7 @@ void vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list,
  */
 int vsf_filename_passes_filter(_Ptr<const struct mystr> p_filename_str,
                                _Ptr<const struct mystr> p_filter_str,
-                               unsigned int* iters);
+                               _Ptr<unsigned int> iters);
 
 #endif /* VSF_LS_H */
 

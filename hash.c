@@ -15,8 +15,8 @@ struct hash_node
 {
   void* p_key;
   void* p_value;
-  struct hash_node* p_prev;
-  struct hash_node* p_next;
+  _Ptr<struct hash_node> p_prev;
+  _Ptr<struct hash_node> p_next;
 };
 
 struct hash
@@ -25,51 +25,51 @@ struct hash
   unsigned int key_size;
   unsigned int value_size;
   hashfunc_t hash_func;
-  struct hash_node** p_nodes;
+  _Ptr<struct hash_node>* p_nodes;
 };
 
 /* Internal functions */
-struct hash_node** hash_get_bucket(struct hash* p_hash, void* p_key);
-struct hash_node* hash_get_node_by_key(struct hash* p_hash, void* p_key);
+_Ptr<struct hash_node>* hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key);
+_Ptr<struct hash_node> hash_get_node_by_key(_Ptr<struct hash> p_hash, void* p_key);
 
-struct hash*
+_Ptr<struct hash>
 hash_alloc(unsigned int buckets, unsigned int key_size,
            unsigned int value_size, hashfunc_t hash_func)
 {
   unsigned int size;
-  struct hash* p_hash = vsf_sysutil_malloc(sizeof(*p_hash));
+  _Ptr<struct hash> p_hash = _Assume_bounds_cast<_Ptr<struct hash>>(vsf_sysutil_malloc(sizeof(*p_hash)));
   p_hash->buckets = buckets;
   p_hash->key_size = key_size;
   p_hash->value_size = value_size;
   p_hash->hash_func = hash_func;
-  size = (unsigned int) sizeof(struct hash_node*) * buckets;
+  size = (unsigned int) sizeof(_Ptr<struct hash_node>) * buckets;
   p_hash->p_nodes = vsf_sysutil_malloc(size);
   vsf_sysutil_memclr(p_hash->p_nodes, size);
   return p_hash;
 }
 
 void*
-hash_lookup_entry(struct hash* p_hash, void* p_key)
+hash_lookup_entry(_Ptr<struct hash> p_hash, void* p_key)
 {
-  struct hash_node* p_node = hash_get_node_by_key(p_hash, p_key);
+  _Ptr<struct hash_node> p_node = hash_get_node_by_key(p_hash, p_key);
   if (!p_node)
   {
-    return p_node;
+    return 0;
   }
   return p_node->p_value;
 }
 
 void
-hash_add_entry(struct hash* p_hash, void* p_key, void* p_value)
+hash_add_entry(_Ptr<struct hash> p_hash, void* p_key, void* p_value)
 {
-  struct hash_node** p_bucket;
-  struct hash_node* p_new_node;
+  _Ptr<struct hash_node>* p_bucket;
+  _Ptr<struct hash_node> p_new_node = 0;
   if (hash_lookup_entry(p_hash, p_key))
   {
     bug("duplicate hash key");
   }
   p_bucket = hash_get_bucket(p_hash, p_key);
-  p_new_node = vsf_sysutil_malloc(sizeof(*p_new_node));
+  p_new_node = _Assume_bounds_cast<_Ptr<struct hash_node>>(vsf_sysutil_malloc(sizeof(*p_new_node)));
   p_new_node->p_prev = 0;
   p_new_node->p_next = 0;
   p_new_node->p_key = vsf_sysutil_malloc(p_hash->key_size);
@@ -90,9 +90,9 @@ hash_add_entry(struct hash* p_hash, void* p_key, void* p_value)
 }
 
 void
-hash_free_entry(struct hash* p_hash, void* p_key)
+hash_free_entry(_Ptr<struct hash> p_hash, void* p_key)
 {
-  struct hash_node* p_node = hash_get_node_by_key(p_hash, p_key);
+  _Ptr<struct hash_node> p_node = hash_get_node_by_key(p_hash, p_key);
   if (!p_node)
   {
     bug("hash node not found");
@@ -106,7 +106,7 @@ hash_free_entry(struct hash* p_hash, void* p_key)
   }
   else
   {
-    struct hash_node** p_bucket = hash_get_bucket(p_hash, p_key);
+    _Ptr<struct hash_node>* p_bucket = hash_get_bucket(p_hash, p_key);
     *p_bucket = p_node->p_next;
   }
   if (p_node->p_next)
@@ -114,11 +114,11 @@ hash_free_entry(struct hash* p_hash, void* p_key)
     p_node->p_next->p_prev = p_node->p_prev;
   }
 
-  vsf_sysutil_free(p_node);
+  vsf_sysutil_free((void *)p_node);
 }
 
-struct hash_node**
-hash_get_bucket(struct hash* p_hash, void* p_key)
+_Ptr<struct hash_node>*
+hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key)
 {
   unsigned int bucket = (*p_hash->hash_func)(p_hash->buckets, p_key);
   if (bucket >= p_hash->buckets)
@@ -128,11 +128,11 @@ hash_get_bucket(struct hash* p_hash, void* p_key)
   return &(p_hash->p_nodes[bucket]);
 }
 
-struct hash_node*
-hash_get_node_by_key(struct hash* p_hash, void* p_key)
+_Ptr<struct hash_node>
+hash_get_node_by_key(_Ptr<struct hash> p_hash, void* p_key)
 {
-  struct hash_node** p_bucket = hash_get_bucket(p_hash, p_key);
-  struct hash_node* p_node = *p_bucket;
+  _Ptr<struct hash_node>* p_bucket = hash_get_bucket(p_hash, p_key);
+  _Ptr<struct hash_node> p_node = *p_bucket;
   if (!p_node)
   {
     return p_node;

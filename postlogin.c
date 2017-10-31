@@ -570,7 +570,7 @@ handle_pasv(_Ptr<struct vsf_session> p_sess, int is_epsv)
 {
   unsigned short the_port;
   static struct mystr s_pasv_res_str;
-  static struct vsf_sysutil_sockaddr* s_p_sockaddr;
+  static _Ptr<struct vsf_sysutil_sockaddr> s_p_sockaddr;
   int is_ipv6 = vsf_sysutil_sockaddr_is_ipv6(p_sess->p_local_addr);
   if (is_epsv && !str_isempty(&p_sess->ftp_arg_str))
   {
@@ -650,7 +650,7 @@ static void
 handle_retr(_Ptr<struct vsf_session> p_sess, int is_http)
 {
   static struct mystr s_mark_str;
-  static struct vsf_sysutil_statbuf* s_p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf;
   struct vsf_transfer_ret trans_ret;
   int remote_fd;
   int opened_file;
@@ -803,9 +803,9 @@ handle_dir_common(_Ptr<struct vsf_session> p_sess, int full_details, int stat_cm
   static struct mystr s_option_str;
   static struct mystr s_filter_str;
   static struct mystr s_dir_name_str;
-  static struct vsf_sysutil_statbuf* s_p_dirstat;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_dirstat;
   int dir_allow_read = 1;
-  struct vsf_sysutil_dir* p_dir = 0;
+  _Ptr<struct vsf_sysutil_dir> p_dir = 0;
   int retval = 0;
   int use_control = 0;
   str_empty(&s_option_str);
@@ -1015,7 +1015,7 @@ handle_stor(_Ptr<struct vsf_session> p_sess)
 static void
 handle_upload_common(_Ptr<struct vsf_session> p_sess, int is_append, int is_unique)
 {
-  static struct vsf_sysutil_statbuf* s_p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf;
   static struct mystr s_filename;
   _Ptr<struct mystr> p_filename = 0;
   struct vsf_transfer_ret trans_ret;
@@ -1280,7 +1280,7 @@ handle_rest(_Ptr<struct vsf_session> p_sess)
 static void
 handle_rnfr(_Ptr<struct vsf_session> p_sess)
 {
-  static struct vsf_sysutil_statbuf* p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> p_statbuf;
   int retval;
   /* Clear old value */
   str_free(&p_sess->rnfr_filename_str);
@@ -1477,7 +1477,7 @@ handle_size(_Ptr<struct vsf_session> p_sess)
    * version 2.6.1. Proftpd-1.2.0pre fails to do this.
    * I will not do it because it is a potential I/O DoS.
    */
-  static struct vsf_sysutil_statbuf* s_p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf;
   int retval;
   resolve_tilde(&p_sess->ftp_arg_str, p_sess);
   if (!vsf_access_check_file(&p_sess->ftp_arg_str))
@@ -1609,7 +1609,7 @@ static void
 handle_mdtm(_Ptr<struct vsf_session> p_sess)
 {
   static struct mystr s_filename_str;
-  static struct vsf_sysutil_statbuf* s_p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf;
   int do_write = 0;
   long modtime = 0;
   struct str_locate_result loc = str_locate_char(&p_sess->ftp_arg_str, ' ');
@@ -1791,7 +1791,7 @@ get_unique_filename(_Ptr<struct mystr> p_outstr, _Ptr<const struct mystr> p_base
   /* Use silly wu-ftpd algorithm for compatibility. It has races of course, if
    * two sessions are using the same file prefix at the same time.
    */
-  static struct vsf_sysutil_statbuf* s_p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf;
   static struct mystr s_stou_str;
   unsigned int suffix = 1;
   _Ptr<const struct mystr> p_real_base_str =  p_base_str;
@@ -1933,7 +1933,7 @@ resolve_tilde(_Ptr<struct mystr> p_str, _Ptr<struct vsf_session> p_sess)
     else if (tunable_tilde_user_enable && len > 1)
     {
       static struct mystr s_user_str;
-      struct vsf_sysutil_user* p_user;
+      _Ptr<struct vsf_sysutil_user> p_user = 0;
       str_copy(&s_rhs_str, p_str);
       str_split_char(&s_rhs_str, &s_user_str, '~');
       str_split_char(&s_user_str, &s_rhs_str, '/');

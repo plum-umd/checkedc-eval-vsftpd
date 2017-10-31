@@ -18,13 +18,13 @@
 
 static void build_dir_line(_Ptr<struct mystr> p_str,
                            _Ptr<const struct mystr> p_filename_str,
-                           const struct vsf_sysutil_statbuf* p_stat,
+                           const _Ptr<struct vsf_sysutil_statbuf> p_stat,
                            long curr_time);
 
 void
 vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list,
                          _Ptr<struct mystr_list> p_subdir_list,
-                         struct vsf_sysutil_dir* p_dir,
+                         _Ptr<struct vsf_sysutil_dir> p_dir,
                          _Ptr<const struct mystr> p_base_dir_str,
                          _Ptr<const struct mystr> p_option_str,
                          _Ptr<const struct mystr> p_filter_str,
@@ -90,7 +90,7 @@ vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list,
   {
     static struct mystr s_next_filename_str;
     static struct mystr s_next_path_and_filename_str;
-    static struct vsf_sysutil_statbuf* s_p_statbuf;
+    static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf;
     str_next_dirent(&s_next_filename_str, p_dir);
     if (str_isempty(&s_next_filename_str))
     {
@@ -222,7 +222,7 @@ vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list,
 int
 vsf_filename_passes_filter(_Ptr<const struct mystr> p_filename_str,
                            _Ptr<const struct mystr> p_filter_str,
-                           unsigned int* iters)
+                           _Ptr<unsigned int> iters)
 {
   /* A simple routine to match a filename against a pattern.
    * This routine is used instead of e.g. fnmatch(3), because we should be
@@ -370,7 +370,7 @@ out:
 
 static void
 build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str,
-               const struct vsf_sysutil_statbuf* p_stat, long curr_time)
+               const _Ptr<struct vsf_sysutil_statbuf> p_stat, long curr_time)
 {
   static struct mystr s_tmp_str;
   filesize_t size = vsf_sysutil_statbuf_get_size(p_stat);
@@ -390,7 +390,7 @@ build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str
   else
   {
     int uid = vsf_sysutil_statbuf_get_uid(p_stat);
-    struct vsf_sysutil_user* p_user = 0;
+    _Ptr<struct vsf_sysutil_user> p_user = 0;
     if (tunable_text_userdb_names)
     {
       p_user = vsf_sysutil_getpwuid(uid);
@@ -415,7 +415,7 @@ build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str
   else
   {
     int gid = vsf_sysutil_statbuf_get_gid(p_stat);
-    struct vsf_sysutil_group* p_group = 0;
+    _Ptr<struct vsf_sysutil_group> p_group = 0;
     if (tunable_text_userdb_names)
     {
       p_group = vsf_sysutil_getgrgid(gid);

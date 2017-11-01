@@ -110,40 +110,41 @@ unsigned int tunable_delay_successful_login;
 unsigned int tunable_max_login_fails;
 unsigned int tunable_chown_upload_mode;
 
-const char* tunable_secure_chroot_dir;
-const char* tunable_ftp_username;
-const char* tunable_chown_username;
-const char* tunable_xferlog_file;
-const char* tunable_vsftpd_log_file;
-const char* tunable_message_file;
-const char* tunable_nopriv_user;
-const char* tunable_ftpd_banner;
-const char* tunable_banned_email_file;
-const char* tunable_chroot_list_file;
-const char* tunable_pam_service_name;
-const char* tunable_guest_username;
-const char* tunable_userlist_file;
-const char* tunable_anon_root;
-const char* tunable_local_root;
-const char* tunable_banner_file;
-const char* tunable_pasv_address;
-const char* tunable_listen_address;
-const char* tunable_user_config_dir;
-const char* tunable_listen_address6;
-const char* tunable_cmds_allowed;
-const char* tunable_cmds_denied;
-const char* tunable_hide_file;
-const char* tunable_deny_file;
-const char* tunable_user_sub_token;
-const char* tunable_email_password_file;
-const char* tunable_rsa_cert_file;
-const char* tunable_dsa_cert_file;
-const char* tunable_ssl_ciphers;
-const char* tunable_rsa_private_key_file;
-const char* tunable_dsa_private_key_file;
-const char* tunable_ca_certs_file;
+_Nt_array_ptr<const char> tunable_secure_chroot_dir : count(0);
+_Nt_array_ptr<const char> tunable_ftp_username : count(0);
+_Nt_array_ptr<const char> tunable_chown_username : count(0);
+_Nt_array_ptr<const char> tunable_xferlog_file : count(0);
+_Nt_array_ptr<const char> tunable_vsftpd_log_file : count(0);
+_Nt_array_ptr<const char> tunable_message_file : count(0);
+_Nt_array_ptr<const char> tunable_nopriv_user : count(0);
+_Nt_array_ptr<const char> tunable_ftpd_banner : count(0) = 0;
+_Nt_array_ptr<const char> tunable_banned_email_file : count(0);
+_Nt_array_ptr<const char> tunable_chroot_list_file : count(0);
+_Nt_array_ptr<const char> tunable_pam_service_name : count(0);
+_Nt_array_ptr<const char> tunable_guest_username : count(0);
+_Nt_array_ptr<const char> tunable_userlist_file : count(0);
+_Nt_array_ptr<const char> tunable_anon_root : count(0);
+_Nt_array_ptr<const char> tunable_local_root : count(0);
+_Nt_array_ptr<const char> tunable_banner_file : count(0);
+_Nt_array_ptr<const char> tunable_pasv_address : count(0) = 0;
+_Nt_array_ptr<const char> tunable_listen_address : count(0);
+_Nt_array_ptr<const char> tunable_user_config_dir : count(0);
+_Nt_array_ptr<const char> tunable_listen_address6 : count(0);
+_Nt_array_ptr<const char> tunable_cmds_allowed : count(0) = 0;
+_Nt_array_ptr<const char> tunable_cmds_denied : count(0) = 0;
+_Nt_array_ptr<const char> tunable_hide_file : count(0);
+_Nt_array_ptr<const char> tunable_deny_file : count(0);
+_Nt_array_ptr<const char> tunable_user_sub_token : count(0);
+_Nt_array_ptr<const char> tunable_email_password_file : count(0);
+_Nt_array_ptr<const char> tunable_rsa_cert_file : count(0);
+_Nt_array_ptr<const char> tunable_dsa_cert_file : count(0);
+_Nt_array_ptr<const char> tunable_ssl_ciphers : count(0);
+_Nt_array_ptr<const char> tunable_rsa_private_key_file : count(0);
+_Nt_array_ptr<const char> tunable_dsa_private_key_file : count(0);
+_Nt_array_ptr<const char> tunable_ca_certs_file : count(0);
 
-static void install_str_setting(const char* p_value, const char** p_storage);
+static void install_str_setting(_Nt_array_ptr<const char> p_value : count(0),
+				_Ptr<_Nt_array_ptr<const char>> p_storage);
 
 void
 tunables_load_defaults()
@@ -290,13 +291,14 @@ tunables_load_defaults()
   install_str_setting(0, &tunable_ca_certs_file);
 }
 
-void
-install_str_setting(const char* p_value, const char** p_storage)
+static
+void install_str_setting(_Nt_array_ptr<const char> p_value : count(0),
+			 _Ptr<_Nt_array_ptr<const char>> p_storage)
 {
-  char* p_curr_val = (char*) *p_storage;
+  _Nt_array_ptr<char> p_curr_val = (_Nt_array_ptr<char>) *p_storage;
   if (p_curr_val != 0)
   {
-    vsf_sysutil_free(p_curr_val);
+    vsf_sysutil_free((void *)p_curr_val);
   }
   if (p_value != 0)
   {

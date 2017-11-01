@@ -23,7 +23,8 @@
 /* Internal functions */
 static int control_getline(_Ptr<struct mystr> p_str, _Ptr<struct vsf_session> p_sess);
 static void ftp_write_text_common(_Ptr<struct vsf_session> p_sess, int status,
-                                  const char* p_text, char sep);
+				  _Nt_array_ptr<const char> p_text : count(0),
+				  char sep);
 static void ftp_write_str_common(_Ptr<struct vsf_session> p_sess, int status,
                                  char sep, _Ptr<const struct mystr> p_str);
 static void handle_alarm_timeout(void* p_private);
@@ -46,20 +47,22 @@ handle_alarm_timeout(void* p_private)
 }
 
 void
-vsf_cmdio_write(_Ptr<struct vsf_session> p_sess, int status, const char* p_text)
+vsf_cmdio_write(_Ptr<struct vsf_session> p_sess, int status,
+		_Nt_array_ptr<const char> p_text : count(0))
 {
   ftp_write_text_common(p_sess, status, p_text, ' ');
 }
 
 void
 vsf_cmdio_write_hyphen(_Ptr<struct vsf_session> p_sess, int status,
-                       const char* p_text)
+                       _Nt_array_ptr<const char> p_text : count(0))
 {
   ftp_write_text_common(p_sess, status, p_text, '-');
 }
 
 void
-vsf_cmdio_write_raw(_Ptr<struct vsf_session> p_sess, const char* p_text : count(1))
+vsf_cmdio_write_raw(_Ptr<struct vsf_session> p_sess,
+		    _Nt_array_ptr<const char> p_text : count(0))
 {
   static struct mystr s_the_str;
   int retval;
@@ -76,7 +79,8 @@ vsf_cmdio_write_raw(_Ptr<struct vsf_session> p_sess, const char* p_text : count(
 }
 
 void
-vsf_cmdio_write_exit(_Ptr<struct vsf_session> p_sess, int status, const char* p_text,
+vsf_cmdio_write_exit(_Ptr<struct vsf_session> p_sess, int status,
+		     _Nt_array_ptr<const char> p_text : count(0),
                      int exit_val)
 {
   /* Unblock any readers on the dying control channel. This is needed for SSL
@@ -92,7 +96,7 @@ vsf_cmdio_write_exit(_Ptr<struct vsf_session> p_sess, int status, const char* p_
 
 static void
 ftp_write_text_common(_Ptr<struct vsf_session> p_sess, int status,
-                      const char* p_text, char sep)
+                      _Nt_array_ptr<const char> p_text : count(0), char sep)
 {
   /* XXX - could optimize */
   static struct mystr s_the_str;

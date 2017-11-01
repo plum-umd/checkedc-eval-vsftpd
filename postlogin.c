@@ -70,7 +70,7 @@ static void handle_dir_common(_Ptr<struct vsf_session> p_sess, int full_details,
                               int stat_cmd);
 static void prepend_path_to_filename(_Ptr<struct mystr> p_str);
 static int get_remote_transfer_fd(_Ptr<struct vsf_session> p_sess,
-                                  const char* p_status_msg);
+                                  _Nt_array_ptr<const char> p_status_msg : count(0));
 static void check_abor(_Ptr<struct vsf_session> p_sess);
 static void handle_sigurg(void* p_private);
 static void handle_upload_common(_Ptr<struct vsf_session> p_sess, int is_append,
@@ -582,7 +582,7 @@ handle_pasv(_Ptr<struct vsf_session> p_sess, int is_epsv)
       vsf_cmdio_write(p_sess, FTP_EPSVALLOK, "EPSV ALL ok.");
       return;
     }
-    argval = vsf_sysutil_atoi(str_getbuf(&p_sess->ftp_arg_str));
+    argval = vsf_sysutil_atoi((const char *)str_getbuf(&p_sess->ftp_arg_str));
     if (argval < 1 || argval > 2 || (!is_ipv6 && argval == 2))
     {
       vsf_cmdio_write(p_sess, FTP_EPSVBAD, "Bad network protocol.");
@@ -1389,11 +1389,8 @@ handle_sigurg(void* p_private)
   struct mystr async_arg_str = INIT_MYSTR;
   struct mystr real_cmd_str = INIT_MYSTR;
   unsigned int len;
-  /* _Ptr<struct vsf_session> p_sess = (_Ptr<struct vsf_session>) p_private; */
-  /* XXX FIX */
-  die((char *)p_private);
-  struct vsf_session foo;
-  _Ptr<struct vsf_session> p_sess = &foo;
+  _Ptr<struct vsf_session> p_sess =
+    _Assume_bounds_cast<_Ptr<struct vsf_session>>(p_private); 
   /* Did stupid client sent something OOB without a data connection? */
   if (p_sess->data_fd == -1)
   {
@@ -1430,7 +1427,7 @@ handle_sigurg(void* p_private)
 }
 
 static int
-get_remote_transfer_fd(_Ptr<struct vsf_session> p_sess, const char* p_status_msg)
+get_remote_transfer_fd(_Ptr<struct vsf_session> p_sess, _Nt_array_ptr<const char> p_status_msg : count(0))
 {
   int remote_fd;
   if (!pasv_active(p_sess) && !port_active(p_sess))
@@ -1627,7 +1624,7 @@ handle_mdtm(_Ptr<struct vsf_session> p_sess)
   if (do_write != 0)
   {
     str_split_char(&p_sess->ftp_arg_str, &s_filename_str, ' ');
-    modtime = vsf_sysutil_parse_time(str_getbuf(&p_sess->ftp_arg_str));
+    modtime = vsf_sysutil_parse_time((const char *)str_getbuf(&p_sess->ftp_arg_str));
     str_copy(&p_sess->ftp_arg_str, &s_filename_str);
   }
   resolve_tilde(&p_sess->ftp_arg_str, p_sess);
@@ -1648,7 +1645,7 @@ handle_mdtm(_Ptr<struct vsf_session> p_sess)
     else
     {
       retval = vsf_sysutil_setmodtime(
-        str_getbuf(&p_sess->ftp_arg_str), modtime, tunable_use_localtime);
+        (const char*)str_getbuf(&p_sess->ftp_arg_str), modtime, tunable_use_localtime);
       if (retval != 0)
       {
         vsf_cmdio_write(p_sess, FTP_FILEFAIL,

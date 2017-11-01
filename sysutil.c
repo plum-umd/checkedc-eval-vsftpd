@@ -830,43 +830,43 @@ vsf_sysutil_a_to_filesize_t(const char* p_str)
   return result;
 }
 
-const char*
-vsf_sysutil_ulong_to_str(unsigned long the_ulong)
+_Nt_array_ptr<const char>
+vsf_sysutil_ulong_to_str(unsigned long the_ulong) : count(0)
 {
-  static char ulong_buf[32];
-  (void) snprintf(ulong_buf, sizeof(ulong_buf), "%lu", the_ulong);
+  static char ulong_buf _Nt_checked [32];
+  (void) snprintf((char *)ulong_buf, sizeof(ulong_buf), "%lu", the_ulong);
   return ulong_buf;
 }
 
-const char*
-vsf_sysutil_filesize_t_to_str(filesize_t the_filesize)
+_Nt_array_ptr<const char>
+vsf_sysutil_filesize_t_to_str(filesize_t the_filesize) : count(0)
 {
-  static char filesize_buf[32];
+  static char filesize_buf _Nt_checked [32];
   if (sizeof(long) == 8)
   {
     /* Avoid using non-standard %ll if we can */
-    (void) snprintf(filesize_buf, sizeof(filesize_buf), "%ld",
+    (void) snprintf((char *)filesize_buf, sizeof(filesize_buf), "%ld",
                     (long) the_filesize);
   }
   else
   {
-    (void) snprintf(filesize_buf, sizeof(filesize_buf), "%lld", the_filesize);
+    (void) snprintf((char *)filesize_buf, sizeof(filesize_buf), "%lld", the_filesize);
   }
   return filesize_buf;
 }
 
-const char*
-vsf_sysutil_double_to_str(double the_double)
+_Nt_array_ptr<const char>
+vsf_sysutil_double_to_str(double the_double) : count(0)
 {
-  static char double_buf[32];
-  (void) snprintf(double_buf, sizeof(double_buf), "%.2f", the_double);
+  static char double_buf _Nt_checked [32];
+  (void) snprintf((char *)double_buf, sizeof(double_buf), "%.2f", the_double);
   return double_buf;
 }
 
-const char*
-vsf_sysutil_uint_to_octal(unsigned int the_uint)
+_Nt_array_ptr<const char>
+vsf_sysutil_uint_to_octal(unsigned int the_uint) : count(0)
 {
-  static char octal_buf[32];
+  static char octal_buf _Nt_checked [32];
   if (the_uint == 0)
   {
     octal_buf[0] = '0';
@@ -874,7 +874,7 @@ vsf_sysutil_uint_to_octal(unsigned int the_uint)
   }
   else
   {
-    (void) snprintf(octal_buf, sizeof(octal_buf), "0%o", the_uint);
+    (void) snprintf((char *)octal_buf, sizeof(octal_buf), "0%o", the_uint);
   }
   return octal_buf;
 }
@@ -1005,8 +1005,8 @@ vsf_sysutil_closedir(_Ptr<struct vsf_sysutil_dir> p_dir)
   }
 }
 
-const char*
-vsf_sysutil_next_dirent(_Ptr<struct vsf_sysutil_dir> p_dir)
+_Nt_array_ptr<const char>
+vsf_sysutil_next_dirent(_Ptr<struct vsf_sysutil_dir> p_dir) : count(0)
 {
   DIR* p_real_dir = (DIR*) p_dir;
   struct dirent* p_dirent = readdir(p_real_dir);
@@ -1014,7 +1014,7 @@ vsf_sysutil_next_dirent(_Ptr<struct vsf_sysutil_dir> p_dir)
   {
     return NULL;
   }
-  return p_dirent->d_name;
+  return _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_dirent->d_name,0);
 }
 
 unsigned int
@@ -1029,10 +1029,10 @@ vsf_sysutil_strlen(const char* p_text)
   return (unsigned int) ret;
 }
 
-char*
-vsf_sysutil_strdup(const char* p_str)
+_Nt_array_ptr<char>
+vsf_sysutil_strdup(_Nt_array_ptr<const char> p_str : count(0)) : count(0)
 {
-  return strdup(p_str);
+  return _Assume_bounds_cast<_Nt_array_ptr<char>>(strdup((const char *)p_str),0);
 }
 
 void
@@ -1323,10 +1323,10 @@ vsf_sysutil_statbuf_is_dir(const _Ptr<struct vsf_sysutil_statbuf> p_stat)
   return S_ISDIR(p_realstat->st_mode);
 }
 
-const char*
-vsf_sysutil_statbuf_get_perms(const _Ptr<struct vsf_sysutil_statbuf> p_statbuf)
+_Nt_array_ptr<const char>
+vsf_sysutil_statbuf_get_perms(const _Ptr<struct vsf_sysutil_statbuf> p_statbuf) : count(0)
 {
-  static char perms[11];
+  static char perms _Nt_checked [11];
   int i;
   const struct stat* p_stat = (const struct stat*) p_statbuf;
   for (i=0; i<10; i++)
@@ -1361,11 +1361,11 @@ vsf_sysutil_statbuf_get_perms(const _Ptr<struct vsf_sysutil_statbuf> p_statbuf)
   return perms;
 }
 
-const char*
+_Nt_array_ptr<const char>
 vsf_sysutil_statbuf_get_date(const _Ptr<struct vsf_sysutil_statbuf> p_statbuf,
-                             int use_localtime, long curr_time)
+                             int use_localtime, long curr_time) : count(0)
 {
-  static char datebuf[64];
+  static char datebuf _Nt_checked [64];
   int retval;
   struct tm* p_tm;
   const struct stat* p_stat = (const struct stat*) p_statbuf;
@@ -1384,7 +1384,7 @@ vsf_sysutil_statbuf_get_date(const _Ptr<struct vsf_sysutil_statbuf> p_statbuf,
   {
     p_date_format = "%b %d  %Y";
   }
-  retval = strftime(datebuf, sizeof(datebuf), p_date_format, p_tm);
+  retval = strftime((char *)datebuf, sizeof(datebuf), p_date_format, p_tm);
   datebuf[sizeof(datebuf)-1] = '\0';
   if (retval == 0)
   {
@@ -1393,12 +1393,12 @@ vsf_sysutil_statbuf_get_date(const _Ptr<struct vsf_sysutil_statbuf> p_statbuf,
   return datebuf;
 }
 
-const char*
+_Nt_array_ptr<const char>
 vsf_sysutil_statbuf_get_numeric_date(
   const _Ptr<struct vsf_sysutil_statbuf> p_statbuf,
-  int use_localtime)
+  int use_localtime) : count(0)
 {
-  static char datebuf[15];
+  static char datebuf _Nt_checked [15];
   const struct stat* p_stat = (const struct stat*) p_statbuf;
   struct tm* p_tm;
   int retval;
@@ -1410,7 +1410,7 @@ vsf_sysutil_statbuf_get_numeric_date(
   {
     p_tm = localtime(&p_stat->st_mtime);
   }
-  retval = strftime(datebuf, sizeof(datebuf), "%Y%m%d%H%M%S", p_tm);
+  retval = strftime((char *)datebuf, sizeof(datebuf), "%Y%m%d%H%M%S", p_tm);
   if (retval == 0)
   {
     die("strftime");
@@ -1462,17 +1462,17 @@ vsf_sysutil_statbuf_is_readable_other(
   return 0;
 }
 
-const char*
+_Nt_array_ptr<const char>
 vsf_sysutil_statbuf_get_sortkey_mtime(
-  const _Ptr<struct vsf_sysutil_statbuf> p_statbuf)
+  const _Ptr<struct vsf_sysutil_statbuf> p_statbuf) : count(0)
 {
-  static char intbuf[32];
+  static char intbuf _Nt_checked [32];
   const struct stat* p_stat = (const struct stat*) p_statbuf;
   /* This slight hack function must return a character date format such that
    * more recent dates appear later in the alphabet! Most notably, we must
    * make sure we pad to the same length with 0's 
    */
-  snprintf(intbuf, sizeof(intbuf), "%030ld", (long) p_stat->st_mtime);
+  snprintf((char *)intbuf, sizeof(intbuf), "%030ld", (long) p_stat->st_mtime);
   return intbuf;
 }
 
@@ -2202,20 +2202,20 @@ vsf_sysutil_is_port_reserved(unsigned short the_port)
   return 0;
 }
 
-const char*
-vsf_sysutil_inet_ntop(const _Ptr<struct vsf_sysutil_sockaddr> p_sockptr)
+_Nt_array_ptr<const char>
+vsf_sysutil_inet_ntop(const _Ptr<struct vsf_sysutil_sockaddr> p_sockptr) : count(0)
 {
   _Ptr<const struct sockaddr> p_sockaddr =  &p_sockptr->u.u_sockaddr;
   if (p_sockaddr->sa_family == AF_INET)
   {
-    return inet_ntoa(p_sockptr->u.u_sockaddr_in.sin_addr);
+    return _Assume_bounds_cast<_Nt_array_ptr<const char>>(inet_ntoa(p_sockptr->u.u_sockaddr_in.sin_addr),0);
   }
   else if (p_sockaddr->sa_family == AF_INET6)
   {
-    static char inaddr_buf[64];
+    static char inaddr_buf _Nt_checked [64];
     const char* p_ret = inet_ntop(AF_INET6,
                                   &p_sockptr->u.u_sockaddr_in6.sin6_addr,
-                                  inaddr_buf, sizeof(inaddr_buf));
+                                  (char *)inaddr_buf, sizeof(inaddr_buf));
     inaddr_buf[sizeof(inaddr_buf) - 1] = '\0';
     if (p_ret == NULL)
     {
@@ -2230,21 +2230,22 @@ vsf_sysutil_inet_ntop(const _Ptr<struct vsf_sysutil_sockaddr> p_sockptr)
   }
 }
 
-const char*
-vsf_sysutil_inet_ntoa(const void* p_raw_addr)
+_Nt_array_ptr<const char>
+vsf_sysutil_inet_ntoa(const void* p_raw_addr) : count(0)
 {
-  return inet_ntoa(*((struct in_addr*)p_raw_addr));
+  return _Assume_bounds_cast<_Nt_array_ptr<const char>>(inet_ntoa(*((struct in_addr*)p_raw_addr)),0);
 }
 
 int
-vsf_sysutil_inet_aton(const char* p_text, _Ptr<struct vsf_sysutil_sockaddr> p_addr)
+vsf_sysutil_inet_aton(_Nt_array_ptr<const char> p_text : count(0),
+		      _Ptr<struct vsf_sysutil_sockaddr> p_addr)
 {
   struct in_addr sin_addr;
   if (p_addr->u.u_sockaddr.sa_family != AF_INET)
   {
     bug("bad family");
   }
-  if (inet_aton(p_text, &sin_addr))
+  if (inet_aton((char *)p_text, &sin_addr))
   {
     vsf_sysutil_memcpy(&p_addr->u.u_sockaddr_in.sin_addr,
                        &sin_addr, sizeof(p_addr->u.u_sockaddr_in.sin_addr));
@@ -2258,9 +2259,9 @@ vsf_sysutil_inet_aton(const char* p_text, _Ptr<struct vsf_sysutil_sockaddr> p_ad
 
 void
 vsf_sysutil_dns_resolve(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockptr,
-                        const char* p_name)
+                        _Nt_array_ptr<const char> p_name : count(0))
 {
-  struct hostent* hent = gethostbyname(p_name);
+  struct hostent* hent = gethostbyname((char *)p_name);
   if (hent == NULL)
   {
     die2("cannot resolve host:", p_name);
@@ -2310,18 +2311,18 @@ vsf_sysutil_getpwnam(const char* p_user)
   return _Assume_bounds_cast<_Ptr<struct vsf_sysutil_user>>(getpwnam(p_user));
 }
 
-const char*
-vsf_sysutil_user_getname(const _Ptr<struct vsf_sysutil_user> p_user)
+_Nt_array_ptr<const char>
+vsf_sysutil_user_getname(const _Ptr<struct vsf_sysutil_user> p_user) : count(0)
 {
   const struct passwd* p_passwd = (const struct passwd*) p_user;
-  return p_passwd->pw_name;
+  return _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_passwd->pw_name,0);
 }
 
-const char*
-vsf_sysutil_user_get_homedir(const _Ptr<struct vsf_sysutil_user> p_user)
+_Nt_array_ptr<const char>
+vsf_sysutil_user_get_homedir(const _Ptr<struct vsf_sysutil_user> p_user) : count(0)
 {
   const struct passwd* p_passwd = (const struct passwd*) p_user;
-  return p_passwd->pw_dir;
+  return _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_passwd->pw_dir,0);
 }
 
 int
@@ -2348,11 +2349,11 @@ vsf_sysutil_getgrgid(const int gid)
   return _Assume_bounds_cast<_Ptr<struct vsf_sysutil_group>>(getgrgid((unsigned int) gid));
 }
 
-const char*
-vsf_sysutil_group_getname(const _Ptr<struct vsf_sysutil_group> p_group)
+_Nt_array_ptr<const char>
+vsf_sysutil_group_getname(const _Ptr<struct vsf_sysutil_group> p_group) : count(0)
 {
   const struct group* p_grp = (const struct group*) p_group;
-  return p_grp->gr_name;
+  return _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_grp->gr_name,0);
 }
 
 unsigned char
@@ -2618,16 +2619,15 @@ vsf_sysutil_tzset(void)
   }
 }
 
-const char*
-vsf_sysutil_get_current_date(void)
+_Nt_array_ptr<const char> vsf_sysutil_get_current_date(void) : count(0)
 {
-  static char datebuf[64];
+  static char datebuf _Nt_checked [64];
   time_t curr_time;
   const struct tm* p_tm;
   int i = 0;
   curr_time = vsf_sysutil_get_time_sec();
   p_tm = localtime(&curr_time);
-  if (strftime(datebuf, sizeof(datebuf), "%a %b!%d %H:%M:%S %Y", p_tm) == 0)
+  if (strftime((char *)datebuf, sizeof(datebuf), "%a %b!%d %H:%M:%S %Y", p_tm) == 0)
   {
     die("strftime");
   }
@@ -2691,10 +2691,10 @@ vsf_sysutil_sleep(double seconds)
   } while (retval == -1 && saved_errno == EINTR);
 }
 
-char*
-vsf_sysutil_getenv(const char* p_var)
+_Nt_array_ptr<char>
+vsf_sysutil_getenv(const char* p_var) : count(0)
 {
-  return getenv(p_var);
+  return _Assume_bounds_cast<_Nt_array_ptr<char>>(getenv(p_var),0);
 }
 
 void

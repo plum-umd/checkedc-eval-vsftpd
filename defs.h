@@ -1,6 +1,8 @@
 #ifndef VSF_DEFS_H
 #define VSF_DEFS_H
 
+#pragma BOUNDS_CHECKED ON
+
 #define VSFTP_DEFAULT_CONFIG    "/etc/vsftpd.conf"
 
 #define VSFTP_COMMAND_FD        0
@@ -20,6 +22,8 @@
    VSFTP_DATA_BUFSIZE*2 */
 #define VSFTP_PRIVSOCK_MAXSTR   VSFTP_DATA_BUFSIZE * 2
 #define VSFTP_AS_LIMIT          200UL * 1024 * 1024
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_DEFS_H */
 

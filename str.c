@@ -92,12 +92,10 @@ private_str_append_memchunk(_Ptr<struct mystr> p_str,
 
 /* Public functions */
 void
-str_alloc_text(_Ptr<struct mystr> p_str, const char* p_src)
+str_alloc_text(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_src : count(0))
 {
-  unsigned int len = vsf_sysutil_strlen(p_src);
-  _Array_ptr<const char> p_src_tmp : count(len) =
-    _Assume_bounds_cast<_Array_ptr<const char>>(p_src, len);
-  private_str_alloc_memchunk(p_str, p_src_tmp, len);
+  vsf_sysutil_strlen_alt(p_src,s,len);
+  private_str_alloc_memchunk(p_str, s, len);
 }
 
 void
@@ -106,10 +104,10 @@ str_copy(_Ptr<struct mystr> p_dest, _Ptr<const struct mystr> p_src)
   private_str_alloc_memchunk(p_dest, p_src->p_buf, p_src->len);
 }
 
-const char*
-str_strdup(_Ptr<const struct mystr> p_str)
+_Nt_array_ptr<const char>
+str_strdup(_Ptr<const struct mystr> p_str) : count(0)
 {
-  return vsf_sysutil_strdup(str_getbuf(p_str));
+  return vsf_sysutil_strdup(_Assume_bounds_cast<_Nt_array_ptr<const char>>(str_getbuf(p_str),0));
 }
 
 void
@@ -204,8 +202,9 @@ str_getlen(_Ptr<const struct mystr> p_str)
   return p_str->len;
 }
 
-const char*
-str_getbuf(_Ptr<const struct mystr> p_str)
+/* XXX - could make the count equal to the length? */
+_Nt_array_ptr<const char>
+str_getbuf(_Ptr<const struct mystr> p_str) : count(0)
 {
   if (p_str->p_buf == 0)
   {
@@ -215,7 +214,7 @@ str_getbuf(_Ptr<const struct mystr> p_str)
     }
     private_str_alloc_memchunk((struct mystr*)p_str, 0, 0);
   }
-  return (const char *)p_str->p_buf; /* MWH: should be arrayptr, or zeroterm? */
+  return _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_str->p_buf,0); 
 }
 
 int
@@ -268,12 +267,10 @@ str_append_str(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_other)
 }
 
 void
-str_append_text(_Ptr<struct mystr> p_str, const char* p_src)
+str_append_text(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_src : count(0))
 {
-  unsigned int len = vsf_sysutil_strlen(p_src);
-  _Array_ptr<const char> p_src_tmp : count(len) =
-    _Assume_bounds_cast<_Array_ptr<const char>>(p_src, len);
-  private_str_append_memchunk(p_str, p_src_tmp, len);
+  vsf_sysutil_strlen_alt(p_src,s,len);
+  private_str_append_memchunk(p_str, s, len);
 }
 
 void
@@ -358,7 +355,9 @@ str_replace_char(_Ptr<struct mystr> p_str, char from, char to)
 }
 
 void
-str_replace_text(_Ptr<struct mystr> p_str, const char* p_from, const char* p_to)
+str_replace_text(_Ptr<struct mystr> p_str, 
+		 _Nt_array_ptr<const char> p_from : count(0),
+		 _Nt_array_ptr<const char> p_to : count(0))
 {
   static struct mystr s_lhs_chunk_str;
   static struct mystr s_rhs_chunk_str;
@@ -368,7 +367,7 @@ str_replace_text(_Ptr<struct mystr> p_str, const char* p_from, const char* p_to)
   do
   {
     lhs_len = str_getlen(&s_lhs_chunk_str);
-    str_split_text(&s_lhs_chunk_str, &s_rhs_chunk_str, p_from);
+    str_split_text(&s_lhs_chunk_str, &s_rhs_chunk_str, (const char *)p_from);
     /* Copy lhs to destination */
     str_append_str(p_str, &s_lhs_chunk_str);
     /* If this was a 'hit', append the 'to' text */
@@ -450,14 +449,14 @@ str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
 struct str_locate_result
 str_locate_str(_Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_look_str)
 {
-  return str_locate_text(p_str, str_getbuf(p_look_str));
+  return str_locate_text(p_str, (const char *)str_getbuf(p_look_str));
 }
 
 struct str_locate_result
 str_locate_str_reverse(_Ptr<const struct mystr> p_str,
                        _Ptr<const struct mystr> p_look_str)
 {
-  return str_locate_text_reverse(p_str, str_getbuf(p_look_str));
+  return str_locate_text_reverse(p_str, (const char *)str_getbuf(p_look_str));
 }
 
 struct str_locate_result
@@ -644,19 +643,19 @@ str_contains_unprintable(_Ptr<const struct mystr> p_str)
 int
 str_atoi(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_atoi(str_getbuf(p_str));
+  return vsf_sysutil_atoi((const char *)str_getbuf(p_str));
 }
 
 filesize_t
 str_a_to_filesize_t(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_a_to_filesize_t(str_getbuf(p_str));
+  return vsf_sysutil_a_to_filesize_t((const char *)str_getbuf(p_str));
 }
 
 unsigned int
 str_octal_to_uint(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_octal_to_uint(str_getbuf(p_str));
+  return vsf_sysutil_octal_to_uint((const char *)str_getbuf(p_str));
 }
 
 int
@@ -666,7 +665,7 @@ str_getline(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_line_str,
   unsigned int start_pos = *p_pos;
   unsigned int curr_pos = start_pos;
   unsigned int buf_len = str_getlen(p_str);
-  const char* p_buf_tmp = str_getbuf(p_str);
+  _Nt_array_ptr<const char> p_buf_tmp : count(buf_len) = str_getbuf(p_str);
   _Array_ptr<const char> p_buf : count(buf_len) =
     _Assume_bounds_cast<_Array_ptr<const char>>(p_buf_tmp, buf_len); 
   unsigned int out_len;

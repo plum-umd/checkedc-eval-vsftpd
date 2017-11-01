@@ -1,5 +1,9 @@
-Find places where programs use char* as buffers that are not necessarily zero-terminated; do those
+make headers all checked
+make individual functions checked, if need be
 
+hunt for (char *) and (const char *) and start to remove them
+
+netfd, readfunc writefunc stuff
 secbuf
 netstr
 ipsddrparse — use arrayptr
@@ -8,4 +12,7 @@ standalone.c — ip_count
 polymorphism where useful/applicable
 
 make checked version of stat, other standard libraries
+
+finish str.c (fewer assumptions)
+finish tunables.c (other arrays)
 

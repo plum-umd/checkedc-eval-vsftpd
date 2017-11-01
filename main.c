@@ -33,7 +33,7 @@ static void env_init(void);
 static void limits_init(void);
 
 int
-main(int argc, _Array_ptr<const char*> argv : count(argc))
+main(int argc, _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
 {
   struct vsf_session the_session =
   {
@@ -70,6 +70,7 @@ main(int argc, _Array_ptr<const char*> argv : count(argc))
   };
   int config_loaded = 0;
   int i;
+  
   tunables_load_defaults();
   /* This might need to open /dev/zero on systems lacking MAP_ANON. Needs
    * to be done early (i.e. before config file parse, which may use
@@ -88,13 +89,14 @@ main(int argc, _Array_ptr<const char*> argv : count(argc))
   }
   for (i = 1; i < argc; ++i)
   {
-    const char* p_arg = argv[i];
+    _Nt_array_ptr<const char> p_arg : count(0) =
+      _Assume_bounds_cast<_Nt_array_ptr<const char>>(argv[i],0);
     if (p_arg[0] != '-')
     {
       config_loaded = 1;
       vsf_parseconf_load_file(p_arg, 1);
     }
-    else
+    else 
     {
       if (p_arg[1] == 'v')
       {
@@ -102,7 +104,8 @@ main(int argc, _Array_ptr<const char*> argv : count(argc))
       }
       else if (p_arg[1] == 'o')
       {
-        vsf_parseconf_load_setting(&p_arg[2], 1);
+	_Nt_array_ptr<const char> p_arg_tmp : count(0) = p_arg + 2;
+        vsf_parseconf_load_setting(p_arg_tmp, 1);
       }
       else
       {
@@ -124,7 +127,7 @@ main(int argc, _Array_ptr<const char*> argv : count(argc))
   if (tunable_pasv_address && tunable_pasv_addr_resolve)
   {
     _Ptr<struct vsf_sysutil_sockaddr> p_addr = 0;
-    const char* p_numeric_addr;
+    _Nt_array_ptr<const char> p_numeric_addr : count(0) = 0;
     vsf_sysutil_dns_resolve(&p_addr, tunable_pasv_address);
     vsf_sysutil_free((char*) tunable_pasv_address);
     p_numeric_addr = vsf_sysutil_inet_ntop(p_addr);
@@ -160,7 +163,7 @@ main(int argc, _Array_ptr<const char*> argv : count(argc))
     the_session.tcp_wrapper_ok = vsf_tcp_wrapper_ok(VSFTP_COMMAND_FD);
   }
   {
-    const char* p_load_conf = vsf_sysutil_getenv("VSFTPD_LOAD_CONF");
+    _Nt_array_ptr<const char> p_load_conf : count(0) = vsf_sysutil_getenv("VSFTPD_LOAD_CONF");
     if (p_load_conf)
     {
       vsf_parseconf_load_file(p_load_conf, 1);
@@ -340,7 +343,7 @@ session_init(_Ptr<struct vsf_session> p_sess)
     _Ptr<struct vsf_sysutil_user> p_user = 0;
     if (tunable_ftp_username)
     {
-      p_user = vsf_sysutil_getpwnam(tunable_ftp_username);
+      p_user = vsf_sysutil_getpwnam((const char *)tunable_ftp_username);
     }
     if (p_user == 0)
     {
@@ -354,7 +357,7 @@ session_init(_Ptr<struct vsf_session> p_sess)
     _Ptr<struct vsf_sysutil_user> p_user = 0;
     if (tunable_guest_username)
     {
-      p_user = vsf_sysutil_getpwnam(tunable_guest_username);
+      p_user = vsf_sysutil_getpwnam((const char *)tunable_guest_username);
     }
     if (p_user == 0)
     {
@@ -368,7 +371,7 @@ session_init(_Ptr<struct vsf_session> p_sess)
     _Ptr<struct vsf_sysutil_user> p_user = 0;
     if (tunable_chown_username)
     {
-      p_user = vsf_sysutil_getpwnam(tunable_chown_username);
+      p_user = vsf_sysutil_getpwnam((const char *)tunable_chown_username);
     }
     if (p_user == 0)
     {

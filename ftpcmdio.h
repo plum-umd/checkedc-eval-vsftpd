@@ -20,7 +20,7 @@ void vsf_cmdio_sock_setup(void);
  * p_text       - the text to report
  */
 void vsf_cmdio_write(_Ptr<struct vsf_session> p_sess, int status,
-                     const char* p_text);
+		     _Nt_array_ptr<const char> p_text : count(0));
 
 /* vsf_cmdio_write_hyphen()
  * PURPOSE
@@ -32,7 +32,7 @@ void vsf_cmdio_write(_Ptr<struct vsf_session> p_sess, int status,
  * p_text       - the text to report
  */
 void vsf_cmdio_write_hyphen(_Ptr<struct vsf_session> p_sess, int status,
-                            const char* p_text);
+			    _Nt_array_ptr<const char> p_text : count(0));
 
 /* vsf_cmdio_write_raw()
  * PURPOSE
@@ -43,7 +43,8 @@ void vsf_cmdio_write_hyphen(_Ptr<struct vsf_session> p_sess, int status,
  * p_sess       - the current session object
  * p_text       - the text to report
  */
-void vsf_cmdio_write_raw(_Ptr<struct vsf_session> p_sess, const char* p_text);
+void vsf_cmdio_write_raw(_Ptr<struct vsf_session> p_sess,
+			 _Nt_array_ptr<const char> p_text : count(0));
 
 /* vsf_cmdio_write_exit()
  * PURPOSE
@@ -51,7 +52,8 @@ void vsf_cmdio_write_raw(_Ptr<struct vsf_session> p_sess, const char* p_text);
  * write is _guaranteed_ to not block (ditching output if neccessary).
  */
 void vsf_cmdio_write_exit(_Ptr<struct vsf_session> p_sess, int status,
-                          const char* p_text, int exit_val);
+			  _Nt_array_ptr<const char> p_text : count(0),
+			  int exit_val);
 
 /* vsf_cmdio_write_str()
  * PURPOSE

@@ -30,14 +30,14 @@ str_getcwd(_Ptr<struct mystr> p_str)
   p_ret = vsf_sysutil_getcwd(p_getcwd_buf, VSFTP_PATH_MAX);
   if (p_ret != 0)
   {
-    str_alloc_text(p_str, p_getcwd_buf);
+    str_alloc_text(p_str, _Assume_bounds_cast<_Nt_array_ptr<char>>(p_getcwd_buf,0));
   }
 }
 
 int
 str_write_loop(_Ptr<const struct mystr> p_str, const int fd)
 {
-  return vsf_sysutil_write_loop(fd, str_getbuf(p_str), str_getlen(p_str));
+  return vsf_sysutil_write_loop(fd, (void *)str_getbuf(p_str), str_getlen(p_str));
 }
 
 int
@@ -50,25 +50,25 @@ str_read_loop(_Ptr<struct mystr> p_str, const int fd)
 int
 str_mkdir(_Ptr<const struct mystr> p_str, const unsigned int mode)
 {
-  return vsf_sysutil_mkdir(str_getbuf(p_str), mode);
+  return vsf_sysutil_mkdir((const char *)str_getbuf(p_str), mode);
 }
 
 int
 str_rmdir(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_rmdir(str_getbuf(p_str));
+  return vsf_sysutil_rmdir((const char *)str_getbuf(p_str));
 }
 
 int
 str_unlink(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_unlink(str_getbuf(p_str));
+  return vsf_sysutil_unlink((const char *)str_getbuf(p_str));
 }
 
 int
 str_chdir(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_chdir(str_getbuf(p_str));
+  return vsf_sysutil_chdir((const char *)str_getbuf(p_str));
 }
 
 int
@@ -86,56 +86,57 @@ str_open(_Ptr<const struct mystr> p_str, const enum EVSFSysStrOpenMode mode)
       bug("unknown mode value in str_open");
       break;
   }
-  return vsf_sysutil_open_file(str_getbuf(p_str), open_mode);
+  return vsf_sysutil_open_file((const char *)str_getbuf(p_str), open_mode);
 }
 
 int
 str_stat(_Ptr<const struct mystr> p_str, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 {
-  return vsf_sysutil_stat(str_getbuf(p_str), p_ptr);
+  return vsf_sysutil_stat((const char *)str_getbuf(p_str), p_ptr);
 }
 
 int
 str_lstat(_Ptr<const struct mystr> p_str, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 {
-  return vsf_sysutil_lstat(str_getbuf(p_str), p_ptr);
+  return vsf_sysutil_lstat((const char *)str_getbuf(p_str), p_ptr);
 }
 
 int
 str_create_exclusive(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_create_file_exclusive(str_getbuf(p_str));
+  return vsf_sysutil_create_file_exclusive((const char *)str_getbuf(p_str));
 }
 
 int
 str_create(_Ptr<const struct mystr> p_str)
 {
   return vsf_sysutil_create_or_open_file(
-      str_getbuf(p_str), tunable_file_open_mode);
+      (const char *)str_getbuf(p_str), tunable_file_open_mode);
 }
 
 int
 str_chmod(_Ptr<const struct mystr> p_str, unsigned int mode)
 {
-  return vsf_sysutil_chmod(str_getbuf(p_str), mode);
+  return vsf_sysutil_chmod((const char *)str_getbuf(p_str), mode);
 }
 
 int
 str_rename(_Ptr<const struct mystr> p_from_str, _Ptr<const struct mystr> p_to_str)
 {
-  return vsf_sysutil_rename(str_getbuf(p_from_str), str_getbuf(p_to_str));
+  return vsf_sysutil_rename((const char *)str_getbuf(p_from_str),
+			    (const char *)str_getbuf(p_to_str));
 }
 
 _Ptr<struct vsf_sysutil_dir>
 str_opendir(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_opendir(str_getbuf(p_str));
+  return vsf_sysutil_opendir((const char *)str_getbuf(p_str));
 }
 
 void
 str_next_dirent(_Ptr<struct mystr> p_filename_str, _Ptr<struct vsf_sysutil_dir> p_dir)
 {
-  const char* p_filename = vsf_sysutil_next_dirent(p_dir);
+  _Nt_array_ptr<const char> p_filename : count(0) = vsf_sysutil_next_dirent(p_dir);
   str_empty(p_filename_str);
   if (p_filename != 0)
   {
@@ -146,16 +147,17 @@ str_next_dirent(_Ptr<struct mystr> p_filename_str, _Ptr<struct vsf_sysutil_dir> 
 int
 str_readlink(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str)
 {
-  static char* p_readlink_buf;
+  static _Nt_array_ptr<char> p_readlink_buf : count(0);
   int retval;
   if (p_readlink_buf == 0)
   {
-    vsf_secbuf_alloc(&p_readlink_buf, VSFTP_PATH_MAX);
+    vsf_secbuf_alloc((char **)&p_readlink_buf, VSFTP_PATH_MAX);
   }
   /* In case readlink() fails */
   str_empty(p_str);
   /* Note: readlink(2) does not NULL terminate, but our wrapper does */
-  retval = vsf_sysutil_readlink(str_getbuf(p_filename_str), p_readlink_buf,
+  retval = vsf_sysutil_readlink((const char *)str_getbuf(p_filename_str),
+				(char *)p_readlink_buf,
                                 VSFTP_PATH_MAX);
   if (vsf_sysutil_retval_is_error(retval))
   {
@@ -168,12 +170,12 @@ str_readlink(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str)
 _Ptr<struct vsf_sysutil_user>
 str_getpwnam(_Ptr<const struct mystr> p_user_str)
 {
-  return vsf_sysutil_getpwnam(str_getbuf(p_user_str));
+  return vsf_sysutil_getpwnam((const char *)str_getbuf(p_user_str));
 }
 
 void
 str_syslog(_Ptr<const struct mystr> p_str, int severe)
 {
-  vsf_sysutil_syslog(str_getbuf(p_str), severe);
+  vsf_sysutil_syslog((const char *)str_getbuf(p_str), severe);
 }
 

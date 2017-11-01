@@ -93,7 +93,7 @@ ssl_slave(_Ptr<struct vsf_session> p_sess)
       }
       priv_sock_get_str(p_sess->ssl_slave_fd, &data_str);
       ret = ssl_write(p_sess->p_data_ssl,
-                      str_getbuf(&data_str),
+                      (const char *)str_getbuf(&data_str),
                       str_getlen(&data_str));
       priv_sock_send_int(p_sess->ssl_slave_fd, ret);
     }

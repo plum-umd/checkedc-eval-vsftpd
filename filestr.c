@@ -17,7 +17,7 @@
 #include "utility.h"
 
 int
-str_fileread(_Ptr<struct mystr> p_str, const char* p_filename, unsigned int maxsize)
+str_fileread(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_filename : count(0), unsigned int maxsize)
 {
   int fd;
   int retval = 0;
@@ -26,7 +26,7 @@ str_fileread(_Ptr<struct mystr> p_str, const char* p_filename, unsigned int maxs
   _Ptr<struct vsf_sysutil_statbuf> p_stat = 0;
   /* In case we fail, make sure we return an empty string */
   str_empty(p_str);
-  fd = vsf_sysutil_open_file(p_filename, kVSFSysUtilOpenReadOnly);
+  fd = vsf_sysutil_open_file((const char *)p_filename, kVSFSysUtilOpenReadOnly);
   if (vsf_sysutil_retval_is_error(fd))
   {
     return fd;

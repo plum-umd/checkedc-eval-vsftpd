@@ -228,7 +228,7 @@ static int s_zero_fd = -1;
 /* File private functions/variables */
 static int do_sendfile(const int out_fd, const int in_fd,
                        unsigned int num_send, filesize_t start_pos);
-static void vsf_sysutil_setproctitle_internal(const char* p_text);
+static void vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_text : count(0));
 static struct mystr s_proctitle_prefix_str;
 
 /* These two aren't static to avoid OpenBSD build warnings. */
@@ -339,8 +339,8 @@ vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str,
   str_copy(&s_pword_str, p_pass_str);
   if (tunable_pam_service_name)
   {
-    retval = pam_start(tunable_pam_service_name,
-                       str_getbuf(p_user_str), &the_conv, &s_pamh);
+    retval = pam_start((const char *)tunable_pam_service_name,
+                       (const char *)str_getbuf(p_user_str), &the_conv, &s_pamh);
   }
   if (retval != PAM_SUCCESS)
   {
@@ -859,7 +859,7 @@ vsf_sysutil_setproctitle_str(_Ptr<const struct mystr> p_str)
 }
 
 void
-vsf_sysutil_setproctitle(const char* p_text)
+vsf_sysutil_setproctitle(_Nt_array_ptr<const char> p_text : count(0))
 {
   struct mystr proctitle_str = INIT_MYSTR;
   str_copy(&proctitle_str, &s_proctitle_prefix_str);
@@ -875,28 +875,28 @@ vsf_sysutil_setproctitle(const char* p_text)
 #ifdef VSF_SYSDEP_HAVE_SETPROCTITLE
 void
 vsf_sysutil_setproctitle_init(int argc,
-    _Array_ptr<const char*> argv : count(argc))
+    _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
 {
   (void) argc;
   (void) argv;
 }
 
 void
-vsf_sysutil_setproctitle_internal(const char* p_buf)
+vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_buf : count(0))
 {
-  setproctitle("%s", p_buf);
+  setproctitle("%s", (const char *)p_buf);
 }
 #elif defined(VSF_SYSDEP_HAVE_HPUX_SETPROCTITLE)
 void
 vsf_sysutil_setproctitle_init(int argc,
-    _Array_ptr<const char*> argv : count(argc))
+    _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
 {
   (void) argc;
   (void) argv;
 }
 
 void
-vsf_sysutil_setproctitle_internal(const char* p_buf)
+vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_buf : count(0))
 {
   struct mystr proctitle_str = INIT_MYSTR;
   union pstun p;
@@ -909,7 +909,7 @@ vsf_sysutil_setproctitle_internal(const char* p_buf)
 #elif defined(VSF_SYSDEP_TRY_LINUX_SETPROCTITLE_HACK)
 void
 vsf_sysutil_setproctitle_init(int argc,
-    _Array_ptr<const char*> argv : count(argc))
+    _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
 {
   int i;
   char** p_env = environ;
@@ -924,7 +924,9 @@ vsf_sysutil_setproctitle_init(int argc,
   }
   for (i=0; i<argc; i++)
   {
-    s_proctitle_space += vsf_sysutil_strlen(argv[i]) + 1;
+    _Nt_array_ptr<const char> p_arg : count(0) =
+      _Assume_bounds_cast<_Nt_array_ptr<const char>>(argv[i],0);
+    s_proctitle_space += vsf_sysutil_strlen(p_arg) + 1;
     if (i > 0)
     {
       argv[i] = 0;
@@ -942,7 +944,7 @@ vsf_sysutil_setproctitle_init(int argc,
 }
 
 void
-vsf_sysutil_setproctitle_internal(const char* p_buf)
+vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_buf : count(0))
 {
   struct mystr proctitle_str = INIT_MYSTR;
   unsigned int to_copy;
@@ -969,14 +971,14 @@ vsf_sysutil_setproctitle_internal(const char* p_buf)
 #else /* VSF_SYSDEP_HAVE_SETPROCTITLE */
 void
 vsf_sysutil_setproctitle_init(int argc,
-    _Array_ptr<const char*> argv : count(argc))
+    _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
 {
   (void) argc;
   (void) argv;
 }
 
 void
-vsf_sysutil_setproctitle_internal(const char* p_buf)
+vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_buf : count(0))
 {
   (void) p_buf;
 }
@@ -1207,16 +1209,16 @@ vsf_insert_uwtmp(_Ptr<const struct mystr> p_user_str,
       str_free(&line_str);
       return;
     }
-    vsf_sysutil_strcpy(s_utent.ut_line, str_getbuf(&line_str),
+    vsf_sysutil_strcpy(s_utent.ut_line, (const char *)str_getbuf(&line_str),
                        sizeof(s_utent.ut_line));
     str_free(&line_str);
   }
   s_uwtmp_inserted = 1;
   s_utent.ut_type = USER_PROCESS;
   s_utent.ut_pid = vsf_sysutil_getpid();
-  vsf_sysutil_strcpy(s_utent.ut_user, str_getbuf(p_user_str),
+  vsf_sysutil_strcpy(s_utent.ut_user, (const char *)str_getbuf(p_user_str),
                      sizeof(s_utent.ut_user));
-  vsf_sysutil_strcpy(s_utent.ut_host, str_getbuf(p_host_str),
+  vsf_sysutil_strcpy(s_utent.ut_host, (const char *)str_getbuf(p_host_str),
                      sizeof(s_utent.ut_host));
   s_utent.ut_tv.tv_sec = vsf_sysutil_get_time_sec();
   setutxent();

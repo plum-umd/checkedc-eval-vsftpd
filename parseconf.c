@@ -16,7 +16,7 @@
 #include "sysutil.h"
 #include "utility.h"
 
-static const char* s_p_saved_filename;
+static _Nt_array_ptr<const char> s_p_saved_filename : count(0);
 
 /* Tables mapping setting names to runtime variables */
 /* Boolean settings */
@@ -142,48 +142,48 @@ parseconf_uint_array[] =
 
 static struct parseconf_str_setting
 {
-  const char* p_setting_name;
+  _Nt_array_ptr<const char> p_setting_name : count(0);
   const char** p_variable;
 }
 parseconf_str_array[] =
 {
-  { "secure_chroot_dir", &tunable_secure_chroot_dir },
-  { "ftp_username", &tunable_ftp_username },
-  { "chown_username", &tunable_chown_username },
-  { "xferlog_file", &tunable_xferlog_file },
-  { "vsftpd_log_file", &tunable_vsftpd_log_file },
-  { "message_file", &tunable_message_file },
-  { "nopriv_user", &tunable_nopriv_user },
-  { "ftpd_banner", &tunable_ftpd_banner },
-  { "banned_email_file", &tunable_banned_email_file },
-  { "chroot_list_file", &tunable_chroot_list_file },
-  { "pam_service_name", &tunable_pam_service_name },
-  { "guest_username", &tunable_guest_username },
-  { "userlist_file", &tunable_userlist_file },
-  { "anon_root", &tunable_anon_root },
-  { "local_root", &tunable_local_root },
-  { "banner_file", &tunable_banner_file },
-  { "pasv_address", &tunable_pasv_address },
-  { "listen_address", &tunable_listen_address },
-  { "user_config_dir", &tunable_user_config_dir },
-  { "listen_address6", &tunable_listen_address6 },
-  { "cmds_allowed", &tunable_cmds_allowed },
-  { "hide_file", &tunable_hide_file },
-  { "deny_file", &tunable_deny_file },
-  { "user_sub_token", &tunable_user_sub_token },
-  { "email_password_file", &tunable_email_password_file },
-  { "rsa_cert_file", &tunable_rsa_cert_file },
-  { "dsa_cert_file", &tunable_dsa_cert_file },
-  { "ssl_ciphers", &tunable_ssl_ciphers },
-  { "rsa_private_key_file", &tunable_rsa_private_key_file },
-  { "dsa_private_key_file", &tunable_dsa_private_key_file },
-  { "ca_certs_file", &tunable_ca_certs_file },
-  { "cmds_denied", &tunable_cmds_denied },
+  { "secure_chroot_dir", (const char **)&tunable_secure_chroot_dir },
+  { "ftp_username", (const char **)&tunable_ftp_username },
+  { "chown_username", (const char **)&tunable_chown_username },
+  { "xferlog_file", (const char **)&tunable_xferlog_file },
+  { "vsftpd_log_file", (const char **)&tunable_vsftpd_log_file },
+  { "message_file", (const char **)&tunable_message_file },
+  { "nopriv_user", (const char **)&tunable_nopriv_user },
+  { "ftpd_banner", (const char **)&tunable_ftpd_banner },
+  { "banned_email_file", (const char **)&tunable_banned_email_file },
+  { "chroot_list_file", (const char **)&tunable_chroot_list_file },
+  { "pam_service_name", (const char **)&tunable_pam_service_name },
+  { "guest_username", (const char **)&tunable_guest_username },
+  { "userlist_file", (const char **)&tunable_userlist_file },
+  { "anon_root", (const char **)&tunable_anon_root },
+  { "local_root", (const char **)&tunable_local_root },
+  { "banner_file", (const char **)&tunable_banner_file },
+  { "pasv_address", (const char **)&tunable_pasv_address },
+  { "listen_address", (const char **)&tunable_listen_address },
+  { "user_config_dir", (const char **)&tunable_user_config_dir },
+  { "listen_address6", (const char **)&tunable_listen_address6 },
+  { "cmds_allowed", (const char **)&tunable_cmds_allowed },
+  { "hide_file", (const char **)&tunable_hide_file },
+  { "deny_file", (const char **)&tunable_deny_file },
+  { "user_sub_token", (const char **)&tunable_user_sub_token },
+  { "email_password_file", (const char **)&tunable_email_password_file },
+  { "rsa_cert_file", (const char **)&tunable_rsa_cert_file },
+  { "dsa_cert_file", (const char **)&tunable_dsa_cert_file },
+  { "ssl_ciphers", (const char **)&tunable_ssl_ciphers },
+  { "rsa_private_key_file", (const char **)&tunable_rsa_private_key_file },
+  { "dsa_private_key_file", (const char **)&tunable_dsa_private_key_file },
+  { "ca_certs_file", (const char **)&tunable_ca_certs_file },
+  { "cmds_denied", (const char **)&tunable_cmds_denied },
   { 0, 0 }
 };
 
 void
-vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
+vsf_parseconf_load_file(_Nt_array_ptr<const char> p_filename : count(0), int errs_fatal)
 {
   struct mystr config_file_str = INIT_MYSTR;
   struct mystr config_setting_str = INIT_MYSTR;
@@ -221,7 +221,7 @@ vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
   }
   {
     _Ptr<struct vsf_sysutil_statbuf> p_statbuf = 0;
-    retval = vsf_sysutil_stat(p_filename, &p_statbuf);
+    retval = vsf_sysutil_stat((const char *)p_filename, &p_statbuf);
     /* Security: check current user owns the config file. These are sanity
      * checks for the admin, and are NOT designed to be checks safe from
      * race conditions.
@@ -250,7 +250,8 @@ vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
 }
 
 void
-vsf_parseconf_load_setting(const char* p_setting, int errs_fatal)
+vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting : count(0),
+			   int errs_fatal)
 {
   static struct mystr s_setting_str;
   static struct mystr s_value_str;
@@ -265,7 +266,7 @@ vsf_parseconf_load_setting(const char* p_setting, int errs_fatal)
     const struct parseconf_str_setting* p_str_setting = parseconf_str_array;
     while (p_str_setting->p_setting_name != 0)
     {
-      if (str_equal_text(&s_setting_str, p_str_setting->p_setting_name))
+      if (str_equal_text(&s_setting_str, (const char *)p_str_setting->p_setting_name))
       {
         /* Got it */
         const char** p_curr_setting = p_str_setting->p_variable;
@@ -279,7 +280,7 @@ vsf_parseconf_load_setting(const char* p_setting, int errs_fatal)
         }
         else
         {
-          *p_curr_setting = str_strdup(&s_value_str);
+          *p_curr_setting = (const char *)str_strdup(&s_value_str);
         }
         return;
       }

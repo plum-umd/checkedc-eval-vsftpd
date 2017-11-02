@@ -30,7 +30,6 @@ void str_alloc_text(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_src : 
 void str_alloc_alt_term(_Ptr<struct mystr> p_str,
 			_Array_ptr<const char> p_src : count(maxlen),
 			char term, unsigned int maxlen);
-/* void str_alloc_alt_term(_Ptr<struct mystr> p_str, const char* p_src, char term); */
 void str_alloc_ulong(_Ptr<struct mystr> p_str, unsigned long the_ulong);
 void str_alloc_filesize_t(_Ptr<struct mystr> p_str, filesize_t the_filesize);
 void str_copy(_Ptr<struct mystr> p_dest, _Ptr<const struct mystr> p_src);
@@ -46,7 +45,7 @@ _Nt_array_ptr<const char> str_getbuf(_Ptr<const struct mystr> p_str) : count(0);
 
 int str_strcmp(_Ptr<const struct mystr> p_str1, _Ptr<const struct mystr> p_str2);
 int str_equal(_Ptr<const struct mystr> p_str1, _Ptr<const struct mystr> p_str2);
-int str_equal_text(_Ptr<const struct mystr> p_str, const char* p_text);
+int str_equal_text(_Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text : count(0));
 
 void str_append_str(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_other);
 void str_append_text(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_src : count(0));
@@ -66,9 +65,9 @@ void str_replace_text(_Ptr<struct mystr> p_str,
 void str_split_char(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, char c);
 void str_split_char_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, char c);
 void str_split_text(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
-                    const char* p_text);
+                    _Nt_array_ptr<const char> p_text : count(0));
 void str_split_text_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
-                            const char* p_text);
+                            _Nt_array_ptr<const char> p_text : count(0));
 
 struct str_locate_result
 {
@@ -84,9 +83,9 @@ struct str_locate_result str_locate_str(
 struct str_locate_result str_locate_str_reverse(
   _Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_look_str);
 struct str_locate_result str_locate_text(
-  _Ptr<const struct mystr> p_str, const char* p_text);
+  _Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text : count(0));
 struct str_locate_result str_locate_text_reverse(
-  _Ptr<const struct mystr> p_str, const char* p_text);
+  _Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text : count(0));
 struct str_locate_result str_locate_chars(
   _Ptr<const struct mystr> p_str, const char* p_chars);
 

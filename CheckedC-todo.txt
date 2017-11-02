@@ -1,3 +1,7 @@
+Some occasions we want to conver array_ptr to nt_array_ptr (in
+str.c). Also times when we want to convert the other way. How to do
+this? 
+
 make headers all checked
 make individual functions checked, if need be
 

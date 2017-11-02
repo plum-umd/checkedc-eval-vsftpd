@@ -22,7 +22,8 @@
 
 /* File local functions */
 static void str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
-                                  const char* p_text, int is_reverse);
+                                  _Nt_array_ptr<const char> p_text : count(0),
+				  int is_reverse);
 static int
 str_equal_internal(_Array_ptr<const char> p_buf1 : count(buf1_len),
 		   unsigned int buf1_len,
@@ -252,9 +253,9 @@ str_equal(_Ptr<const struct mystr> p_str1, _Ptr<const struct mystr> p_str2)
 }
 
 int
-str_equal_text(_Ptr<const struct mystr> p_str, const char* p_text)
+str_equal_text(_Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text : count(0))
 {
-  unsigned int cmplen = vsf_sysutil_strlen(p_text);
+  unsigned int cmplen = vsf_sysutil_strlen((const char *)p_text);
   _Array_ptr<const char> p_text_tmp : count(cmplen) =
     _Assume_bounds_cast<_Array_ptr<const char>>(p_text, cmplen);
   return (str_equal_internal(p_str->p_buf, p_str->len, p_text_tmp, cmplen) == 0);
@@ -367,7 +368,7 @@ str_replace_text(_Ptr<struct mystr> p_str,
   do
   {
     lhs_len = str_getlen(&s_lhs_chunk_str);
-    str_split_text(&s_lhs_chunk_str, &s_rhs_chunk_str, (const char *)p_from);
+    str_split_text(&s_lhs_chunk_str, &s_rhs_chunk_str, p_from);
     /* Copy lhs to destination */
     str_append_str(p_str, &s_lhs_chunk_str);
     /* If this was a 'hit', append the 'to' text */
@@ -384,7 +385,7 @@ void
 str_split_char(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, char c)
 {
   /* Just use str_split_text */
-  char ministr[2];
+  char ministr _Nt_checked [2];
   ministr[0] = c;
   ministr[1] = '\0';
   str_split_text(p_src, p_rhs, ministr);
@@ -394,39 +395,40 @@ void
 str_split_char_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, char c)
 {
   /* Just use str_split_text_reverse */
-  char ministr[2];
+  char ministr _Nt_checked [2];
   ministr[0] = c;
   ministr[1] = '\0';
   str_split_text_reverse(p_src, p_rhs, ministr);
 }
 
 void
-str_split_text(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, const char* p_text)
+str_split_text(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
+	       _Nt_array_ptr<const char> p_text : count(0))
 {
   str_split_text_common(p_src, p_rhs, p_text, 0);
 }
 
 void
 str_split_text_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
-                       const char* p_text)
+                       _Nt_array_ptr<const char> p_text : count(0))
 {
   str_split_text_common(p_src, p_rhs, p_text, 1);
 }
 
 static void
 str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
-                      const char* p_text, int is_reverse)
+                      _Nt_array_ptr<const char> p_text : count(0), int is_reverse)
 {
   struct str_locate_result locate_result;
   unsigned int indexx;
-  unsigned int search_len = vsf_sysutil_strlen(p_text);
+  unsigned int search_len = vsf_sysutil_strlen((const char *)p_text);
   if (is_reverse)
   {
     locate_result = str_locate_text_reverse(p_src, p_text);
   }
   else
   {
-    locate_result = str_locate_text(p_src, p_text);
+    locate_result = str_locate_text(p_src, _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_text,0));
   }
   /* Not found? */
   if (!locate_result.found)
@@ -449,20 +451,20 @@ str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
 struct str_locate_result
 str_locate_str(_Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_look_str)
 {
-  return str_locate_text(p_str, (const char *)str_getbuf(p_look_str));
+  return str_locate_text(p_str, str_getbuf(p_look_str));
 }
 
 struct str_locate_result
 str_locate_str_reverse(_Ptr<const struct mystr> p_str,
                        _Ptr<const struct mystr> p_look_str)
 {
-  return str_locate_text_reverse(p_str, (const char *)str_getbuf(p_look_str));
+  return str_locate_text_reverse(p_str, str_getbuf(p_look_str));
 }
 
 struct str_locate_result
 str_locate_char(_Ptr<const struct mystr> p_str, char look_char)
 {
-  char look_str[2];
+  char look_str _Nt_checked [2];
   look_str[0] = look_char;
   look_str[1] = '\0';
   return str_locate_text(p_str, look_str);
@@ -496,11 +498,12 @@ str_locate_chars(_Ptr<const struct mystr> p_str, const char* p_chars)
 }
 
 struct str_locate_result
-str_locate_text(_Ptr<const struct mystr> p_str, const char* p_text)
+str_locate_text(_Ptr<const struct mystr> p_str,
+		_Nt_array_ptr<const char> p_text : count(0))
 {
   struct str_locate_result retval;
   unsigned int i;
-  unsigned int text_len = vsf_sysutil_strlen(p_text);
+  unsigned int text_len = vsf_sysutil_strlen((const char *)p_text);
   retval.found = 0;
   retval.char_found = 0;
   retval.index = 0;
@@ -523,11 +526,12 @@ str_locate_text(_Ptr<const struct mystr> p_str, const char* p_text)
 }
 
 struct str_locate_result
-str_locate_text_reverse(_Ptr<const struct mystr> p_str, const char* p_text)
+str_locate_text_reverse(_Ptr<const struct mystr> p_str,
+			_Nt_array_ptr<const char> p_text : count(0))
 {
   struct str_locate_result retval;
   unsigned int i;
-  unsigned int text_len = vsf_sysutil_strlen(p_text);
+  unsigned int text_len = vsf_sysutil_strlen((const char *)p_text);
   retval.found = 0;
   retval.char_found = 0;
   retval.index = 0;

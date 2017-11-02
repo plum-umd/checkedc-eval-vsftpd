@@ -266,7 +266,7 @@ vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting : count(0),
     const struct parseconf_str_setting* p_str_setting = parseconf_str_array;
     while (p_str_setting->p_setting_name != 0)
     {
-      if (str_equal_text(&s_setting_str, (const char *)p_str_setting->p_setting_name))
+      if (str_equal_text(&s_setting_str, p_str_setting->p_setting_name))
       {
         /* Got it */
         const char** p_curr_setting = p_str_setting->p_variable;
@@ -303,7 +303,7 @@ vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting : count(0),
     const struct parseconf_bool_setting* p_bool_setting = parseconf_bool_array;
     while (p_bool_setting->p_setting_name != 0)
     {
-      if (str_equal_text(&s_setting_str, p_bool_setting->p_setting_name))
+      if (str_equal_text(&s_setting_str, _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_bool_setting->p_setting_name,0)))
       {
         /* Got it */
         str_upper(&s_value_str);
@@ -334,7 +334,7 @@ vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting : count(0),
     const struct parseconf_uint_setting* p_uint_setting = parseconf_uint_array;
     while (p_uint_setting->p_setting_name != 0)
     {
-      if (str_equal_text(&s_setting_str, p_uint_setting->p_setting_name))
+      if (str_equal_text(&s_setting_str, _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_uint_setting->p_setting_name,0)))
       {
         /* Got it */
         /* If the value starts with 0, assume it's an octal value */

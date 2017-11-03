@@ -17,7 +17,8 @@
 #include "utility.h"
 
 int
-str_fileread(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_filename : count(0), unsigned int maxsize)
+str_fileread(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_filename,
+	     unsigned int maxsize)
 {
   int fd;
   int retval = 0;

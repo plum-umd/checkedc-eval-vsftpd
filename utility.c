@@ -13,7 +13,7 @@
 #define DIE_DEBUG
 
 void
-die(_Nt_array_ptr<const char> p_text : count(0))
+die(_Nt_array_ptr<const char> p_text)
 {
 #ifdef DIE_DEBUG
   bug(p_text);
@@ -22,14 +22,14 @@ die(_Nt_array_ptr<const char> p_text : count(0))
 }
 
 void
-die2(_Nt_array_ptr<const char> p_text1 : count(0),
-     _Nt_array_ptr<const char> p_text2 : count(0))
+die2(_Nt_array_ptr<const char> p_text1,
+     _Nt_array_ptr<const char> p_text2)
 {
   struct mystr die_str = INIT_MYSTR;
-  str_alloc_text(&die_str, _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_text1,0));
+  str_alloc_text(&die_str, p_text1);
   if (p_text2)
   {
-    str_append_text(&die_str, _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_text2,0));
+    str_append_text(&die_str, p_text2);
   }
   else
   {
@@ -39,7 +39,7 @@ die2(_Nt_array_ptr<const char> p_text1 : count(0),
 }
 
 void
-bug(_Nt_array_ptr<const char> p_text : count(0))
+bug(_Nt_array_ptr<const char> p_text)
 {
   /* Rats. Try and write the reason to the network for diagnostics */
   vsf_sysutil_activate_noblock(VSFTP_COMMAND_FD);
@@ -51,7 +51,7 @@ bug(_Nt_array_ptr<const char> p_text : count(0))
 }
 
 void
-vsf_exit(_Nt_array_ptr<const char> p_text : count(0))
+vsf_exit(_Nt_array_ptr<const char> p_text)
 {
   (void) vsf_sysutil_write_loop(VSFTP_COMMAND_FD, (const char *)p_text,
                                 vsf_sysutil_strlen(p_text));

@@ -19,8 +19,8 @@
 void
 str_getcwd(_Ptr<struct mystr> p_str)
 {
-  static _Nt_array_ptr<char> p_getcwd_buf : count(0);
-  _Nt_array_ptr<char> p_ret : count(0) = 0;
+  static _Nt_array_ptr<char> p_getcwd_buf;
+  _Nt_array_ptr<char> p_ret = 0;
   if (p_getcwd_buf == 0)
   {
     vsf_secbuf_alloc((char **)&p_getcwd_buf, VSFTP_PATH_MAX);
@@ -136,7 +136,7 @@ str_opendir(_Ptr<const struct mystr> p_str)
 void
 str_next_dirent(_Ptr<struct mystr> p_filename_str, _Ptr<struct vsf_sysutil_dir> p_dir)
 {
-  _Nt_array_ptr<const char> p_filename : count(0) = vsf_sysutil_next_dirent(p_dir);
+  _Nt_array_ptr<const char> p_filename = vsf_sysutil_next_dirent(p_dir);
   str_empty(p_filename_str);
   if (p_filename != 0)
   {
@@ -147,7 +147,7 @@ str_next_dirent(_Ptr<struct mystr> p_filename_str, _Ptr<struct vsf_sysutil_dir> 
 int
 str_readlink(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str)
 {
-  static _Nt_array_ptr<char> p_readlink_buf : count(0);
+  static _Nt_array_ptr<char> p_readlink_buf;
   int retval;
   if (p_readlink_buf == 0)
   {

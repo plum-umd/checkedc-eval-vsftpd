@@ -89,8 +89,7 @@ main(int argc, _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
   }
   for (i = 1; i < argc; ++i)
   {
-    _Nt_array_ptr<const char> p_arg : count(0) =
-      _Assume_bounds_cast<_Nt_array_ptr<const char>>(argv[i],0);
+    _Nt_array_ptr<const char> p_arg = argv[i];
     if (p_arg[0] != '-')
     {
       config_loaded = 1;
@@ -104,7 +103,7 @@ main(int argc, _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
       }
       else if (p_arg[1] == 'o')
       {
-	_Nt_array_ptr<const char> p_arg_tmp : count(0) = p_arg + 2;
+	_Nt_array_ptr<const char> p_arg_tmp = p_arg + 2;
         vsf_parseconf_load_setting(p_arg_tmp, 1);
       }
       else
@@ -127,7 +126,7 @@ main(int argc, _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
   if (tunable_pasv_address && tunable_pasv_addr_resolve)
   {
     _Ptr<struct vsf_sysutil_sockaddr> p_addr = 0;
-    _Nt_array_ptr<const char> p_numeric_addr : count(0) = 0;
+    _Nt_array_ptr<const char> p_numeric_addr = 0;
     vsf_sysutil_dns_resolve(&p_addr, tunable_pasv_address);
     vsf_sysutil_free((char*) tunable_pasv_address);
     p_numeric_addr = vsf_sysutil_inet_ntop(p_addr);
@@ -163,7 +162,7 @@ main(int argc, _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
     the_session.tcp_wrapper_ok = vsf_tcp_wrapper_ok(VSFTP_COMMAND_FD);
   }
   {
-    _Nt_array_ptr<const char> p_load_conf : count(0) = vsf_sysutil_getenv("VSFTPD_LOAD_CONF");
+    _Nt_array_ptr<const char> p_load_conf = vsf_sysutil_getenv("VSFTPD_LOAD_CONF");
     if (p_load_conf)
     {
       vsf_parseconf_load_file(p_load_conf, 1);

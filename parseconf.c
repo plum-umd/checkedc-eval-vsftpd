@@ -16,13 +16,13 @@
 #include "sysutil.h"
 #include "utility.h"
 
-static _Nt_array_ptr<const char> s_p_saved_filename : count(0);
+static _Nt_array_ptr<const char> s_p_saved_filename;
 
 /* Tables mapping setting names to runtime variables */
 /* Boolean settings */
 static struct parseconf_bool_setting
 {
-  _Nt_array_ptr<const char> p_setting_name : count(0);
+  _Nt_array_ptr<const char> p_setting_name;
   _Ptr<int> p_variable;
 }
 parseconf_bool_array[] =
@@ -112,7 +112,7 @@ parseconf_bool_array[] =
 
 static struct parseconf_uint_setting
 {
-  _Nt_array_ptr<const char> p_setting_name : count(0);
+  _Nt_array_ptr<const char> p_setting_name;
   _Ptr<unsigned int> p_variable;
 }
 parseconf_uint_array[] =
@@ -142,7 +142,7 @@ parseconf_uint_array[] =
 
 static struct parseconf_str_setting
 {
-  _Nt_array_ptr<const char> p_setting_name : count(0);
+  _Nt_array_ptr<const char> p_setting_name;
   _Ptr<_Nt_array_ptr<const char>> p_variable;
 }
 parseconf_str_array[] =
@@ -183,7 +183,7 @@ parseconf_str_array[] =
 };
 
 void
-vsf_parseconf_load_file(_Nt_array_ptr<const char> p_filename : count(0), int errs_fatal)
+vsf_parseconf_load_file(_Nt_array_ptr<const char> p_filename, int errs_fatal)
 {
   struct mystr config_file_str = INIT_MYSTR;
   struct mystr config_setting_str = INIT_MYSTR;
@@ -250,7 +250,7 @@ vsf_parseconf_load_file(_Nt_array_ptr<const char> p_filename : count(0), int err
 }
 
 void
-vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting : count(0),
+vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting,
 			   int errs_fatal)
 {
   static struct mystr s_setting_str;

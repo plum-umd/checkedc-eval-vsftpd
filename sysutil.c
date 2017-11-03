@@ -794,13 +794,13 @@ vsf_sysutil_recv_peek(const int fd, void* p_buf, unsigned int len)
 }
 
 int
-vsf_sysutil_atoi(_Nt_array_ptr<const char> p_str : count(0))
+vsf_sysutil_atoi(_Nt_array_ptr<const char> p_str)
 {
   return atoi((const char *)p_str);
 }
 
 filesize_t
-vsf_sysutil_a_to_filesize_t(_Nt_array_ptr<const char> p_str_tmp : count(0))
+vsf_sysutil_a_to_filesize_t(_Nt_array_ptr<const char> p_str_tmp)
 {
   /* atoll() is C99 standard - but even modern FreeBSD, OpenBSD don't have
    * it, so we'll supply our own
@@ -831,7 +831,7 @@ vsf_sysutil_a_to_filesize_t(_Nt_array_ptr<const char> p_str_tmp : count(0))
 }
 
 _Nt_array_ptr<const char>
-vsf_sysutil_ulong_to_str(unsigned long the_ulong) : count(0)
+vsf_sysutil_ulong_to_str(unsigned long the_ulong)
 {
   static char ulong_buf _Nt_checked [32];
   (void) snprintf((char *)ulong_buf, sizeof(ulong_buf), "%lu", the_ulong);
@@ -839,7 +839,7 @@ vsf_sysutil_ulong_to_str(unsigned long the_ulong) : count(0)
 }
 
 _Nt_array_ptr<const char>
-vsf_sysutil_filesize_t_to_str(filesize_t the_filesize) : count(0)
+vsf_sysutil_filesize_t_to_str(filesize_t the_filesize)
 {
   static char filesize_buf _Nt_checked [32];
   if (sizeof(long) == 8)
@@ -856,7 +856,7 @@ vsf_sysutil_filesize_t_to_str(filesize_t the_filesize) : count(0)
 }
 
 _Nt_array_ptr<const char>
-vsf_sysutil_double_to_str(double the_double) : count(0)
+vsf_sysutil_double_to_str(double the_double)
 {
   static char double_buf _Nt_checked [32];
   (void) snprintf((char *)double_buf, sizeof(double_buf), "%.2f", the_double);
@@ -864,7 +864,7 @@ vsf_sysutil_double_to_str(double the_double) : count(0)
 }
 
 _Nt_array_ptr<const char>
-vsf_sysutil_uint_to_octal(unsigned int the_uint) : count(0)
+vsf_sysutil_uint_to_octal(unsigned int the_uint)
 {
   static char octal_buf _Nt_checked [32];
   if (the_uint == 0)
@@ -880,7 +880,7 @@ vsf_sysutil_uint_to_octal(unsigned int the_uint) : count(0)
 }
 
 unsigned int
-vsf_sysutil_octal_to_uint(_Nt_array_ptr<const char> p_str : count(0))
+vsf_sysutil_octal_to_uint(_Nt_array_ptr<const char> p_str)
 {
   /* NOTE - avoiding using sscanf() parser */
   unsigned int result = 0;
@@ -953,10 +953,10 @@ vsf_sysutil_isdigit(int the_char)
 }
 
 _Nt_array_ptr<char>
-vsf_sysutil_getcwd(_Nt_array_ptr<char> p_dest : count(0),
-		   const unsigned int buf_size) : count(0)
+vsf_sysutil_getcwd(_Nt_array_ptr<char> p_dest,
+		   const unsigned int buf_size)
 {
-  _Nt_array_ptr<char> p_retval : count(0) = 0;
+  _Nt_array_ptr<char> p_retval = 0;
   if (buf_size == 0) {
     return p_dest;
   }
@@ -966,32 +966,32 @@ vsf_sysutil_getcwd(_Nt_array_ptr<char> p_dest : count(0),
 }
 
 int
-vsf_sysutil_mkdir(_Nt_array_ptr<const char> p_dirname : count(0), const unsigned int mode)
+vsf_sysutil_mkdir(_Nt_array_ptr<const char> p_dirname, const unsigned int mode)
 {
   return mkdir((const char*)p_dirname, mode);
 }
 
 int
-vsf_sysutil_rmdir(_Nt_array_ptr<const char> p_dirname : count(0))
+vsf_sysutil_rmdir(_Nt_array_ptr<const char> p_dirname)
 {
   return rmdir((const char*)p_dirname);
 }
 
 int
-vsf_sysutil_chdir(_Nt_array_ptr<const char> p_dirname : count(0))
+vsf_sysutil_chdir(_Nt_array_ptr<const char> p_dirname)
 {
   return chdir((const char*)p_dirname);
 }
 
 int
-vsf_sysutil_rename(_Nt_array_ptr<const char> p_from : count(0),
-		   _Nt_array_ptr<const char> p_to : count(0))
+vsf_sysutil_rename(_Nt_array_ptr<const char> p_from,
+		   _Nt_array_ptr<const char> p_to)
 {
   return rename((const char*)p_from, (const char*)p_to);
 }
 
 _Ptr<struct vsf_sysutil_dir>
-vsf_sysutil_opendir(_Nt_array_ptr<const char> p_dirname : count(0))
+vsf_sysutil_opendir(_Nt_array_ptr<const char> p_dirname)
 {
   return _Assume_bounds_cast<_Ptr<struct vsf_sysutil_dir>>(opendir((const char*)p_dirname));
 }
@@ -1008,7 +1008,7 @@ vsf_sysutil_closedir(_Ptr<struct vsf_sysutil_dir> p_dir)
 }
 
 _Nt_array_ptr<const char>
-vsf_sysutil_next_dirent(_Ptr<struct vsf_sysutil_dir> p_dir) : count(0)
+vsf_sysutil_next_dirent(_Ptr<struct vsf_sysutil_dir> p_dir)
 {
   DIR* p_real_dir = (DIR*) p_dir;
   struct dirent* p_dirent = readdir(p_real_dir);
@@ -1020,7 +1020,7 @@ vsf_sysutil_next_dirent(_Ptr<struct vsf_sysutil_dir> p_dir) : count(0)
 }
 
 unsigned int
-vsf_sysutil_strlen(_Nt_array_ptr<const char> p_text : count(0))
+vsf_sysutil_strlen(_Nt_array_ptr<const char> p_text)
 {
   size_t ret = strlen((const char*)p_text);
   /* A defense in depth measure. */
@@ -1032,7 +1032,7 @@ vsf_sysutil_strlen(_Nt_array_ptr<const char> p_text : count(0))
 }
 
 _Nt_array_ptr<char>
-vsf_sysutil_strdup(_Nt_array_ptr<const char> p_str : count(0)) : count(0)
+vsf_sysutil_strdup(_Nt_array_ptr<const char> p_str)
 {
   return _Assume_bounds_cast<_Nt_array_ptr<char>>(strdup((const char*)p_str),0);
 }
@@ -1067,8 +1067,8 @@ vsf_sysutil_memcpy(void* p_dest : byte_count(size),
 }
 
 void
-vsf_sysutil_strcpy(_Nt_array_ptr<char> p_dest : count(0),
-		   _Nt_array_ptr<const char> p_src : count(0),
+vsf_sysutil_strcpy(_Nt_array_ptr<char> p_dest,
+		   _Nt_array_ptr<const char> p_src,
 		   unsigned int maxsize)
 {
   if (maxsize == 0)
@@ -1092,7 +1092,7 @@ vsf_sysutil_memcmp(const void* p_src1 : byte_count(size),
 }
 
 int
-vsf_sysutil_strcmp(_Nt_array_ptr<const char> p_src1 : count(0), _Nt_array_ptr<const char> p_src2 : count(0))
+vsf_sysutil_strcmp(_Nt_array_ptr<const char> p_src1, _Nt_array_ptr<const char> p_src2)
 {
   return strcmp((const char*)p_src1, (const char*)p_src2);
 }
@@ -1176,14 +1176,14 @@ vsf_sysutil_translate_openmode(const enum EVSFSysUtilOpenMode mode)
 }
 
 int
-vsf_sysutil_open_file(_Nt_array_ptr<const char> p_filename : count(0),
+vsf_sysutil_open_file(_Nt_array_ptr<const char> p_filename,
                       const enum EVSFSysUtilOpenMode mode)
 {
   return open((const char*)p_filename, vsf_sysutil_translate_openmode(mode) | O_NONBLOCK);
 }
 
 int
-vsf_sysutil_create_file_exclusive(_Nt_array_ptr<const char> p_filename : count(0))
+vsf_sysutil_create_file_exclusive(_Nt_array_ptr<const char> p_filename)
 {
   /* umask() also contributes to end mode */
   return open((const char*)p_filename, O_CREAT | O_EXCL | O_WRONLY | O_APPEND,
@@ -1191,13 +1191,13 @@ vsf_sysutil_create_file_exclusive(_Nt_array_ptr<const char> p_filename : count(0
 }
 
 int
-vsf_sysutil_create_or_open_file(_Nt_array_ptr<const char> p_filename : count(0), unsigned int mode)
+vsf_sysutil_create_or_open_file(_Nt_array_ptr<const char> p_filename, unsigned int mode)
 {
   return open((const char*)p_filename, O_CREAT | O_WRONLY | O_NONBLOCK, mode);
 }
 
 int
-vsf_sysutil_create_or_open_file_append(_Nt_array_ptr<const char> p_filename : count(0),
+vsf_sysutil_create_or_open_file_append(_Nt_array_ptr<const char> p_filename,
                                        unsigned int mode)
 {
   return open((const char*)p_filename, O_CREAT | O_WRONLY | O_NONBLOCK | O_APPEND, mode);
@@ -1244,13 +1244,13 @@ vsf_sysutil_close_failok(int fd)
 }
 
 int
-vsf_sysutil_unlink(_Nt_array_ptr<const char> p_dead : count(0))
+vsf_sysutil_unlink(_Nt_array_ptr<const char> p_dead)
 {
   return unlink((const char*)p_dead);
 }
 
 int
-vsf_sysutil_write_access(_Nt_array_ptr<const char> p_filename : count(0))
+vsf_sysutil_write_access(_Nt_array_ptr<const char> p_filename)
 {
   int retval = access((const char*)p_filename, W_OK);
   return (retval == 0);
@@ -1278,14 +1278,14 @@ vsf_sysutil_fstat(int fd, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 }
 
 int
-vsf_sysutil_stat(_Nt_array_ptr<const char> p_name : count(0), _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
+vsf_sysutil_stat(_Nt_array_ptr<const char> p_name, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 {
   vsf_sysutil_alloc_statbuf(p_ptr);
   return stat((const char*)p_name, (struct stat*) (*p_ptr));
 }
 
 int
-vsf_sysutil_lstat(_Nt_array_ptr<const char> p_name : count(0), _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
+vsf_sysutil_lstat(_Nt_array_ptr<const char> p_name, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 {
   vsf_sysutil_alloc_statbuf(p_ptr);
   return lstat((const char*)p_name, (struct stat*) (*p_ptr));
@@ -1328,7 +1328,7 @@ vsf_sysutil_statbuf_is_dir(const _Ptr<struct vsf_sysutil_statbuf> p_stat)
 }
 
 _Nt_array_ptr<const char>
-vsf_sysutil_statbuf_get_perms(const _Ptr<struct vsf_sysutil_statbuf> p_statbuf) : count(0)
+vsf_sysutil_statbuf_get_perms(const _Ptr<struct vsf_sysutil_statbuf> p_statbuf)
 {
   static char perms _Nt_checked [11];
   int i;
@@ -1367,7 +1367,7 @@ vsf_sysutil_statbuf_get_perms(const _Ptr<struct vsf_sysutil_statbuf> p_statbuf) 
 
 _Nt_array_ptr<const char>
 vsf_sysutil_statbuf_get_date(const _Ptr<struct vsf_sysutil_statbuf> p_statbuf,
-                             int use_localtime, long curr_time) : count(0)
+                             int use_localtime, long curr_time)
 {
   static char datebuf _Nt_checked [64];
   int retval;
@@ -1400,7 +1400,7 @@ vsf_sysutil_statbuf_get_date(const _Ptr<struct vsf_sysutil_statbuf> p_statbuf,
 _Nt_array_ptr<const char>
 vsf_sysutil_statbuf_get_numeric_date(
   const _Ptr<struct vsf_sysutil_statbuf> p_statbuf,
-  int use_localtime) : count(0)
+  int use_localtime)
 {
   static char datebuf _Nt_checked [15];
   const struct stat* p_stat = (const struct stat*) p_statbuf;
@@ -1468,7 +1468,7 @@ vsf_sysutil_statbuf_is_readable_other(
 
 _Nt_array_ptr<const char>
 vsf_sysutil_statbuf_get_sortkey_mtime(
-  const _Ptr<struct vsf_sysutil_statbuf> p_statbuf) : count(0)
+  const _Ptr<struct vsf_sysutil_statbuf> p_statbuf)
 {
   static char intbuf _Nt_checked [32];
   const struct stat* p_stat = (const struct stat*) p_statbuf;
@@ -1500,7 +1500,7 @@ vsf_sysutil_fchmod(const int fd, unsigned int mode)
 }
 
 int
-vsf_sysutil_chmod(_Nt_array_ptr<const char> p_filename : count(0), unsigned int mode)
+vsf_sysutil_chmod(_Nt_array_ptr<const char> p_filename, unsigned int mode)
 {
   /* Safety: mask "mode" to just access permissions, e.g. no suid setting! */
   mode = mode & 0777;
@@ -1558,8 +1558,8 @@ vsf_sysutil_unlock_file(int fd)
 }
 
 int
-vsf_sysutil_readlink(_Nt_array_ptr<const char> p_filename : count(0),
-		     _Nt_array_ptr<char> p_dest : count(0), unsigned int bufsiz)
+vsf_sysutil_readlink(_Nt_array_ptr<const char> p_filename,
+		     _Nt_array_ptr<char> p_dest, unsigned int bufsiz)
 {
   int retval;
   if (bufsiz == 0) {
@@ -2208,7 +2208,7 @@ vsf_sysutil_is_port_reserved(unsigned short the_port)
 }
 
 _Nt_array_ptr<const char>
-vsf_sysutil_inet_ntop(const _Ptr<struct vsf_sysutil_sockaddr> p_sockptr) : count(0)
+vsf_sysutil_inet_ntop(const _Ptr<struct vsf_sysutil_sockaddr> p_sockptr)
 {
   _Ptr<const struct sockaddr> p_sockaddr =  &p_sockptr->u.u_sockaddr;
   if (p_sockaddr->sa_family == AF_INET)
@@ -2236,13 +2236,13 @@ vsf_sysutil_inet_ntop(const _Ptr<struct vsf_sysutil_sockaddr> p_sockptr) : count
 }
 
 _Nt_array_ptr<const char>
-vsf_sysutil_inet_ntoa(const void* p_raw_addr) : count(0)
+vsf_sysutil_inet_ntoa(const void* p_raw_addr)
 {
   return _Assume_bounds_cast<_Nt_array_ptr<const char>>(inet_ntoa(*((struct in_addr*)p_raw_addr)),0);
 }
 
 int
-vsf_sysutil_inet_aton(_Nt_array_ptr<const char> p_text : count(0),
+vsf_sysutil_inet_aton(_Nt_array_ptr<const char> p_text,
 		      _Ptr<struct vsf_sysutil_sockaddr> p_addr)
 {
   struct in_addr sin_addr;
@@ -2264,7 +2264,7 @@ vsf_sysutil_inet_aton(_Nt_array_ptr<const char> p_text : count(0),
 
 void
 vsf_sysutil_dns_resolve(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockptr,
-                        _Nt_array_ptr<const char> p_name : count(0))
+                        _Nt_array_ptr<const char> p_name)
 {
   struct hostent* hent = gethostbyname((char*)p_name);
   if (hent == NULL)
@@ -2311,20 +2311,20 @@ vsf_sysutil_getpwuid(const int uid)
 }
 
 _Ptr<struct vsf_sysutil_user>
-vsf_sysutil_getpwnam(_Nt_array_ptr<const char> p_user : count(0))
+vsf_sysutil_getpwnam(_Nt_array_ptr<const char> p_user)
 {
   return _Assume_bounds_cast<_Ptr<struct vsf_sysutil_user>>(getpwnam((const char*)p_user));
 }
 
 _Nt_array_ptr<const char>
-vsf_sysutil_user_getname(const _Ptr<struct vsf_sysutil_user> p_user) : count(0)
+vsf_sysutil_user_getname(const _Ptr<struct vsf_sysutil_user> p_user)
 {
   const struct passwd* p_passwd = (const struct passwd*) p_user;
   return _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_passwd->pw_name,0);
 }
 
 _Nt_array_ptr<const char>
-vsf_sysutil_user_get_homedir(const _Ptr<struct vsf_sysutil_user> p_user) : count(0)
+vsf_sysutil_user_get_homedir(const _Ptr<struct vsf_sysutil_user> p_user)
 {
   const struct passwd* p_passwd = (const struct passwd*) p_user;
   return _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_passwd->pw_dir,0);
@@ -2355,7 +2355,7 @@ vsf_sysutil_getgrgid(const int gid)
 }
 
 _Nt_array_ptr<const char>
-vsf_sysutil_group_getname(const _Ptr<struct vsf_sysutil_group> p_group) : count(0)
+vsf_sysutil_group_getname(const _Ptr<struct vsf_sysutil_group> p_group)
 {
   const struct group* p_grp = (const struct group*) p_group;
   return _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_grp->gr_name,0);
@@ -2506,7 +2506,7 @@ vsf_sysutil_initgroups(const _Ptr<struct vsf_sysutil_user> p_user)
 }
 
 void
-vsf_sysutil_chroot(_Nt_array_ptr<const char> p_root_path : count(0))
+vsf_sysutil_chroot(_Nt_array_ptr<const char> p_root_path)
 {
   int retval = chroot((const char*)p_root_path);
   if (retval != 0)
@@ -2624,7 +2624,7 @@ vsf_sysutil_tzset(void)
   }
 }
 
-_Nt_array_ptr<const char> vsf_sysutil_get_current_date(void) : count(0)
+_Nt_array_ptr<const char> vsf_sysutil_get_current_date(void)
 {
   static char datebuf _Nt_checked [64];
   time_t curr_time;
@@ -2697,7 +2697,7 @@ vsf_sysutil_sleep(double seconds)
 }
 
 _Nt_array_ptr<char>
-vsf_sysutil_getenv(_Nt_array_ptr<const char> p_var : count(0)) : count(0)
+vsf_sysutil_getenv(_Nt_array_ptr<const char> p_var)
 {
   return _Assume_bounds_cast<_Nt_array_ptr<char>>(getenv((const char*)p_var),0);
 }
@@ -2724,7 +2724,7 @@ vsf_sysutil_closelog(void)
 }
 
 void
-vsf_sysutil_syslog(_Nt_array_ptr<const char> p_text : count(0), int severe)
+vsf_sysutil_syslog(_Nt_array_ptr<const char> p_text, int severe)
 {
   int prio = LOG_INFO;
   if (severe)
@@ -2735,7 +2735,7 @@ vsf_sysutil_syslog(_Nt_array_ptr<const char> p_text : count(0), int severe)
 }
 
 long
-vsf_sysutil_parse_time(_Nt_array_ptr<const char> p_text_alt : count(0))
+vsf_sysutil_parse_time(_Nt_array_ptr<const char> p_text_alt)
 {
   struct tm the_time;
   vsf_sysutil_strlen_alt(p_text_alt,p_text,len);
@@ -2768,7 +2768,7 @@ vsf_sysutil_parse_time(_Nt_array_ptr<const char> p_text_alt : count(0))
 }
 
 int
-vsf_sysutil_setmodtime(_Nt_array_ptr<const char> p_file : count(0),
+vsf_sysutil_setmodtime(_Nt_array_ptr<const char> p_file,
 		       long the_time, int is_localtime)
 {
   struct utimbuf new_times;

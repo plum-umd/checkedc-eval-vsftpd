@@ -1,16 +1,23 @@
+str.c library:  getbuf and getlen: change types. getbuf should always
+  return a NT array?
+
 How to convert NT_array_ptr : count(n) to an array_ptr : count(n) ?
 Useful in several places
+
+Drop count(0) in most places, since it's (now) the default.
 
 Some occasions we want to conver array_ptr to nt_array_ptr (in
 str.c). Also times when we want to convert the other way. How to do
 this? 
 
 change to using checked standard library headers (e.g., stdio_checked)
+
 make headers all checked
 make individual functions checked, if need be
 
 hunt for (char *) and (const char *) and start to remove them
 
+ssl.c
 netfd, readfunc writefunc stuff
 secbuf
 netstr
@@ -21,6 +28,5 @@ polymorphism where useful/applicable
 
 make checked version of stat, other standard libraries
 
-finish str.c (fewer assumptions)
 finish tunables.c (other arrays)
 

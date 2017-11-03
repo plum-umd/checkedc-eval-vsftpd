@@ -33,7 +33,7 @@ void str_alloc_alt_term(_Ptr<struct mystr> p_str,
 void str_alloc_ulong(_Ptr<struct mystr> p_str, unsigned long the_ulong);
 void str_alloc_filesize_t(_Ptr<struct mystr> p_str, filesize_t the_filesize);
 void str_copy(_Ptr<struct mystr> p_dest, _Ptr<const struct mystr> p_src);
-_Nt_array_ptr<const char> str_strdup(_Ptr<const struct mystr> p_str) : count(0);
+_Nt_array_ptr<const char> str_strdup(_Ptr<const struct mystr> p_str);
 void str_empty(_Ptr<struct mystr> p_str);
 void str_free(_Ptr<struct mystr> p_str);
 void str_trunc(_Ptr<struct mystr> p_str, unsigned int trunc_len);
@@ -41,14 +41,14 @@ void str_reserve(_Ptr<struct mystr> p_str, unsigned int res_len);
 
 int str_isempty(_Ptr<const struct mystr> p_str);
 unsigned int str_getlen(_Ptr<const struct mystr> p_str);
-_Nt_array_ptr<const char> str_getbuf(_Ptr<const struct mystr> p_str) : count(0);
+_Nt_array_ptr<const char> str_getbuf(_Ptr<const struct mystr> p_str);
 
 int str_strcmp(_Ptr<const struct mystr> p_str1, _Ptr<const struct mystr> p_str2);
 int str_equal(_Ptr<const struct mystr> p_str1, _Ptr<const struct mystr> p_str2);
-int str_equal_text(_Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text : count(0));
+int str_equal_text(_Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text);
 
 void str_append_str(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_other);
-void str_append_text(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_src : count(0));
+void str_append_text(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_src);
 void str_append_ulong(_Ptr<struct mystr> p_str, unsigned long the_long);
 void str_append_filesize_t(_Ptr<struct mystr> p_str, filesize_t the_filesize);
 void str_append_char(_Ptr<struct mystr> p_str, char the_char);
@@ -59,15 +59,15 @@ void str_rpad(_Ptr<struct mystr> p_str, const unsigned int min_width);
 void str_lpad(_Ptr<struct mystr> p_str, const unsigned int min_width);
 void str_replace_char(_Ptr<struct mystr> p_str, char from, char to);
 void str_replace_text(_Ptr<struct mystr> p_str,
-		      _Nt_array_ptr<const char> p_from : count(0),
-		      _Nt_array_ptr<const char> p_to : count(0));
+		      _Nt_array_ptr<const char> p_from,
+		      _Nt_array_ptr<const char> p_to);
 
 void str_split_char(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, char c);
 void str_split_char_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, char c);
 void str_split_text(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
-                    _Nt_array_ptr<const char> p_text : count(0));
+                    _Nt_array_ptr<const char> p_text);
 void str_split_text_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
-                            _Nt_array_ptr<const char> p_text : count(0));
+                            _Nt_array_ptr<const char> p_text);
 
 struct str_locate_result
 {
@@ -83,11 +83,11 @@ struct str_locate_result str_locate_str(
 struct str_locate_result str_locate_str_reverse(
   _Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_look_str);
 struct str_locate_result str_locate_text(
-  _Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text : count(0));
+  _Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text);
 struct str_locate_result str_locate_text_reverse(
-  _Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text : count(0));
+  _Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text);
 struct str_locate_result str_locate_chars(
-  _Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_chars : count(0));
+  _Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_chars);
 
 void str_left(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_out,
               unsigned int chars);

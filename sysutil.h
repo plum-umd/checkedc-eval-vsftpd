@@ -61,17 +61,17 @@ void vsf_sysutil_set_alarm(const unsigned int trigger_seconds);
 void vsf_sysutil_clear_alarm(void);
 
 /* Directory related things */
-_Nt_array_ptr<char> vsf_sysutil_getcwd(_Nt_array_ptr<char> p_dest : count(0),
-				       const unsigned int buf_size) : count(0);
-int vsf_sysutil_mkdir(_Nt_array_ptr<const char> p_dirname : count(0), const unsigned int mode);
-int vsf_sysutil_rmdir(_Nt_array_ptr<const char> p_dirname : count(0));
-int vsf_sysutil_chdir(_Nt_array_ptr<const char> p_dirname : count(0));
-int vsf_sysutil_rename(_Nt_array_ptr<const char> p_from : count(0), _Nt_array_ptr<const char> p_to : count(0));
+_Nt_array_ptr<char> vsf_sysutil_getcwd(_Nt_array_ptr<char> p_dest,
+				       const unsigned int buf_size);
+int vsf_sysutil_mkdir(_Nt_array_ptr<const char> p_dirname, const unsigned int mode);
+int vsf_sysutil_rmdir(_Nt_array_ptr<const char> p_dirname);
+int vsf_sysutil_chdir(_Nt_array_ptr<const char> p_dirname);
+int vsf_sysutil_rename(_Nt_array_ptr<const char> p_from, _Nt_array_ptr<const char> p_to);
 
 struct vsf_sysutil_dir;
-_Ptr<struct vsf_sysutil_dir> vsf_sysutil_opendir(_Nt_array_ptr<const char> p_dirname : count(0));
+_Ptr<struct vsf_sysutil_dir> vsf_sysutil_opendir(_Nt_array_ptr<const char> p_dirname);
 void vsf_sysutil_closedir(_Ptr<struct vsf_sysutil_dir> p_dir);
-_Nt_array_ptr<const char> vsf_sysutil_next_dirent(_Ptr<struct vsf_sysutil_dir> p_dir) : count(0);
+_Nt_array_ptr<const char> vsf_sysutil_next_dirent(_Ptr<struct vsf_sysutil_dir> p_dir);
 
 /* File create/open/close etc. */
 enum EVSFSysUtilOpenMode
@@ -80,20 +80,20 @@ enum EVSFSysUtilOpenMode
   kVSFSysUtilOpenWriteOnly,
   kVSFSysUtilOpenReadWrite
 };
-int vsf_sysutil_open_file(_Nt_array_ptr<const char> p_filename : count(0),
+int vsf_sysutil_open_file(_Nt_array_ptr<const char> p_filename,
                           const enum EVSFSysUtilOpenMode);
 /* Fails if file already exists */
-int vsf_sysutil_create_file_exclusive(_Nt_array_ptr<const char> p_filename : count(0));
+int vsf_sysutil_create_file_exclusive(_Nt_array_ptr<const char> p_filename);
 /* Creates file or appends if already exists */
-int vsf_sysutil_create_or_open_file_append(_Nt_array_ptr<const char> p_filename : count(0),
+int vsf_sysutil_create_or_open_file_append(_Nt_array_ptr<const char> p_filename,
                                            unsigned int mode);
 /* Creates or appends */
-int vsf_sysutil_create_or_open_file(_Nt_array_ptr<const char> p_filename : count(0), unsigned int mode);
+int vsf_sysutil_create_or_open_file(_Nt_array_ptr<const char> p_filename, unsigned int mode);
 void vsf_sysutil_dupfd2(int old_fd, int new_fd);
 void vsf_sysutil_close(int fd);
 int vsf_sysutil_close_failok(int fd);
-int vsf_sysutil_unlink(_Nt_array_ptr<const char> p_dead : count(0));
-int vsf_sysutil_write_access(_Nt_array_ptr<const char> p_filename : count(0));
+int vsf_sysutil_unlink(_Nt_array_ptr<const char> p_dead);
+int vsf_sysutil_write_access(_Nt_array_ptr<const char> p_filename);
 void vsf_sysutil_ftruncate(int fd);
 
 /* Reading and writing */
@@ -110,8 +110,8 @@ int vsf_sysutil_read_loop(const int fd, void* p_buf, unsigned int size);
 int vsf_sysutil_write_loop(const int fd, const void* p_buf, unsigned int size);
 
 struct vsf_sysutil_statbuf;
-int vsf_sysutil_stat(_Nt_array_ptr<const char> p_name : count(0), _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);
-int vsf_sysutil_lstat(_Nt_array_ptr<const char> p_name : count(0), _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);
+int vsf_sysutil_stat(_Nt_array_ptr<const char> p_name, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);
+int vsf_sysutil_lstat(_Nt_array_ptr<const char> p_name, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);
 void vsf_sysutil_fstat(int fd, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);
 void vsf_sysutil_dir_stat(const _Ptr<struct vsf_sysutil_dir> p_dir,
                           _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);
@@ -122,11 +122,11 @@ int vsf_sysutil_statbuf_is_dir(const _Ptr<struct vsf_sysutil_statbuf> p_stat);
 filesize_t vsf_sysutil_statbuf_get_size(
   const _Ptr<struct vsf_sysutil_statbuf> p_stat);
 _Nt_array_ptr<const char> vsf_sysutil_statbuf_get_perms(
-  const _Ptr<struct vsf_sysutil_statbuf> p_stat) : count(0);
+  const _Ptr<struct vsf_sysutil_statbuf> p_stat);
 _Nt_array_ptr<const char> vsf_sysutil_statbuf_get_date(
-  const _Ptr<struct vsf_sysutil_statbuf> p_stat, int use_localtime, long curr_time) : count(0);
+  const _Ptr<struct vsf_sysutil_statbuf> p_stat, int use_localtime, long curr_time);
 _Nt_array_ptr<const char> vsf_sysutil_statbuf_get_numeric_date(
-  const _Ptr<struct vsf_sysutil_statbuf> p_stat, int use_localtime) : count(0);
+  const _Ptr<struct vsf_sysutil_statbuf> p_stat, int use_localtime);
 unsigned int vsf_sysutil_statbuf_get_links(
   const _Ptr<struct vsf_sysutil_statbuf> p_stat);
 int vsf_sysutil_statbuf_get_uid(const _Ptr<struct vsf_sysutil_statbuf> p_stat);
@@ -134,12 +134,12 @@ int vsf_sysutil_statbuf_get_gid(const _Ptr<struct vsf_sysutil_statbuf> p_stat);
 int vsf_sysutil_statbuf_is_readable_other(
   const _Ptr<struct vsf_sysutil_statbuf> p_stat);
 _Nt_array_ptr<const char> vsf_sysutil_statbuf_get_sortkey_mtime(
-  const _Ptr<struct vsf_sysutil_statbuf> p_stat) : count(0);
+  const _Ptr<struct vsf_sysutil_statbuf> p_stat);
 
-int vsf_sysutil_chmod(_Nt_array_ptr<const char> p_filename : count(0), unsigned int mode);
+int vsf_sysutil_chmod(_Nt_array_ptr<const char> p_filename, unsigned int mode);
 void vsf_sysutil_fchown(const int fd, const int uid, const int gid);
 void vsf_sysutil_fchmod(const int fd, unsigned int mode);
-int vsf_sysutil_readlink(_Nt_array_ptr<const char> p_filename : count(0), _Nt_array_ptr<char> p_dest : count(0),
+int vsf_sysutil_readlink(_Nt_array_ptr<const char> p_filename, _Nt_array_ptr<char> p_dest,
                          unsigned int bufsiz);
 
 /* Get / unget various locks. Lock gets are blocking. Write locks are
@@ -190,27 +190,27 @@ int vsf_sysutil_wait_get_exitcode(
   _Nt_array_ptr<const char> s : count(len) = p; \
   for (; s[len]; len++);
   
-unsigned int vsf_sysutil_strlen(_Nt_array_ptr<const char> p_text : count(0)); 
-_Nt_array_ptr<char> vsf_sysutil_strdup(_Nt_array_ptr<const char> p_str : count(0)) : count(0);
+unsigned int vsf_sysutil_strlen(_Nt_array_ptr<const char> p_text); 
+_Nt_array_ptr<char> vsf_sysutil_strdup(_Nt_array_ptr<const char> p_str);
 void vsf_sysutil_memclr(void* p_dest : byte_count(size), unsigned int size);
 void vsf_sysutil_memcpy(void* p_dest : byte_count(size),
 			const void* p_src : byte_count(size),
                         const unsigned int size);
-void vsf_sysutil_strcpy(_Nt_array_ptr<char> p_dest : count(0),
-			_Nt_array_ptr<const char> p_src : count(0),
+void vsf_sysutil_strcpy(_Nt_array_ptr<char> p_dest,
+			_Nt_array_ptr<const char> p_src,
 			unsigned int maxsize);
 int vsf_sysutil_memcmp(const void* p_src1 : byte_count(size),
 		       const void* p_src2 : byte_count(size),
 		       unsigned int size);
-int vsf_sysutil_strcmp(_Nt_array_ptr<const char> p_src1 : count(0),
-		       _Nt_array_ptr<const char> p_src2 : count(0));
-int vsf_sysutil_atoi(_Nt_array_ptr<const char> p_str : count(0));
-filesize_t vsf_sysutil_a_to_filesize_t(_Nt_array_ptr<const char> p_str : count(0));
-_Nt_array_ptr<const char> vsf_sysutil_ulong_to_str(unsigned long the_ulong) : count(0);
-_Nt_array_ptr<const char> vsf_sysutil_filesize_t_to_str(filesize_t the_filesize) : count(0);
-_Nt_array_ptr<const char> vsf_sysutil_double_to_str(double the_double) : count(0);
-_Nt_array_ptr<const char> vsf_sysutil_uint_to_octal(unsigned int the_uint) : count(0);
-unsigned int vsf_sysutil_octal_to_uint(_Nt_array_ptr<const char> p_str : count(0));
+int vsf_sysutil_strcmp(_Nt_array_ptr<const char> p_src1,
+		       _Nt_array_ptr<const char> p_src2);
+int vsf_sysutil_atoi(_Nt_array_ptr<const char> p_str);
+filesize_t vsf_sysutil_a_to_filesize_t(_Nt_array_ptr<const char> p_str);
+_Nt_array_ptr<const char> vsf_sysutil_ulong_to_str(unsigned long the_ulong);
+_Nt_array_ptr<const char> vsf_sysutil_filesize_t_to_str(filesize_t the_filesize);
+_Nt_array_ptr<const char> vsf_sysutil_double_to_str(double the_double);
+_Nt_array_ptr<const char> vsf_sysutil_uint_to_octal(unsigned int the_uint);
+unsigned int vsf_sysutil_octal_to_uint(_Nt_array_ptr<const char> p_str);
 int vsf_sysutil_toupper(int the_char);
 int vsf_sysutil_isspace(int the_char);
 int vsf_sysutil_isprint(int the_char);
@@ -285,9 +285,9 @@ void vsf_sysutil_shutdown_read_failok(int fd);
 int vsf_sysutil_recv_peek(const int fd, void* p_buf, unsigned int len);
 
 _Nt_array_ptr<const char> vsf_sysutil_inet_ntop(
-  const _Ptr<struct vsf_sysutil_sockaddr> p_sockptr) : count(0);
-_Nt_array_ptr<const char> vsf_sysutil_inet_ntoa(const void* p_raw_addr) : count(0);
-int vsf_sysutil_inet_aton(_Nt_array_ptr<const char> p_text : count(0),
+  const _Ptr<struct vsf_sysutil_sockaddr> p_sockptr);
+_Nt_array_ptr<const char> vsf_sysutil_inet_ntoa(const void* p_raw_addr);
+int vsf_sysutil_inet_aton(_Nt_array_ptr<const char> p_text,
 			  _Ptr<struct vsf_sysutil_sockaddr> p_addr);
 
 /* User database queries etc. */
@@ -295,15 +295,15 @@ struct vsf_sysutil_user;
 struct vsf_sysutil_group;
 
 _Ptr<struct vsf_sysutil_user> vsf_sysutil_getpwuid(const int uid);
-_Ptr<struct vsf_sysutil_user> vsf_sysutil_getpwnam(_Nt_array_ptr<const char> p_user : count(0));
-_Nt_array_ptr<const char> vsf_sysutil_user_getname(const _Ptr<struct vsf_sysutil_user> p_user) : count(0);
+_Ptr<struct vsf_sysutil_user> vsf_sysutil_getpwnam(_Nt_array_ptr<const char> p_user);
+_Nt_array_ptr<const char> vsf_sysutil_user_getname(const _Ptr<struct vsf_sysutil_user> p_user);
 _Nt_array_ptr<const char> vsf_sysutil_user_get_homedir(
-  const _Ptr<struct vsf_sysutil_user> p_user) : count(0);
+  const _Ptr<struct vsf_sysutil_user> p_user);
 int vsf_sysutil_user_getuid(const _Ptr<struct vsf_sysutil_user> p_user);
 int vsf_sysutil_user_getgid(const _Ptr<struct vsf_sysutil_user> p_user);
 
 _Ptr<struct vsf_sysutil_group> vsf_sysutil_getgrgid(const int gid);
-_Nt_array_ptr<const char> vsf_sysutil_group_getname(const _Ptr<struct vsf_sysutil_group> p_group) : count(0);
+_Nt_array_ptr<const char> vsf_sysutil_group_getname(const _Ptr<struct vsf_sysutil_group> p_group);
 
 /* More random things */
 unsigned int vsf_sysutil_getpagesize(void);
@@ -313,18 +313,18 @@ void vsf_sysutil_set_umask(unsigned int umask);
 void vsf_sysutil_make_session_leader(void);
 void vsf_sysutil_reopen_standard_fds(void);
 void vsf_sysutil_tzset(void);
-_Nt_array_ptr<const char> vsf_sysutil_get_current_date(void) : count(0);
+_Nt_array_ptr<const char> vsf_sysutil_get_current_date(void);
 void vsf_sysutil_qsort(void* p_base, unsigned int num_elem,
                        unsigned int elem_size,
                        int (*p_compar)(const void *, const void *));
-_Nt_array_ptr<char> vsf_sysutil_getenv(_Nt_array_ptr<const char> p_var : count(0)) : count(0);
+_Nt_array_ptr<char> vsf_sysutil_getenv(_Nt_array_ptr<const char> p_var);
 typedef void (*exitfunc_t)(void);
 void vsf_sysutil_set_exit_func(exitfunc_t exitfunc);
 int vsf_sysutil_getuid(void);
 
 /* Syslogging (bah) */
 void vsf_sysutil_openlog(int force);
-void vsf_sysutil_syslog(_Nt_array_ptr<const char> p_text : count(0), int severe);
+void vsf_sysutil_syslog(_Nt_array_ptr<const char> p_text, int severe);
 void vsf_sysutil_closelog(void);
 
 /* Credentials handling */
@@ -341,7 +341,7 @@ void vsf_sysutil_seteuid_numeric(int uid);
 void vsf_sysutil_setegid_numeric(int gid);
 void vsf_sysutil_clear_supp_groups(void);
 void vsf_sysutil_initgroups(const _Ptr<struct vsf_sysutil_user> p_user);
-void vsf_sysutil_chroot(_Nt_array_ptr<const char> p_root_path : count(0));
+void vsf_sysutil_chroot(_Nt_array_ptr<const char> p_root_path);
 
 /* Time handling */
 /* Do not call get_time_usec() without calling get_time_sec()
@@ -349,9 +349,9 @@ void vsf_sysutil_chroot(_Nt_array_ptr<const char> p_root_path : count(0));
  */
 long vsf_sysutil_get_time_sec(void);
 long vsf_sysutil_get_time_usec(void);
-long vsf_sysutil_parse_time(_Nt_array_ptr<const char> p_text : count(0));
+long vsf_sysutil_parse_time(_Nt_array_ptr<const char> p_text);
 void vsf_sysutil_sleep(double seconds);
-int vsf_sysutil_setmodtime(_Nt_array_ptr<const char> p_file : count(0),
+int vsf_sysutil_setmodtime(_Nt_array_ptr<const char> p_file,
 			   long the_time, int is_localtime);
 
 /* Limits */

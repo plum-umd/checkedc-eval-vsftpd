@@ -228,7 +228,7 @@ static int s_zero_fd = -1;
 /* File private functions/variables */
 static int do_sendfile(const int out_fd, const int in_fd,
                        unsigned int num_send, filesize_t start_pos);
-static void vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_text : count(0));
+static void vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_text);
 static struct mystr s_proctitle_prefix_str;
 
 /* These two aren't static to avoid OpenBSD build warnings. */
@@ -859,7 +859,7 @@ vsf_sysutil_setproctitle_str(_Ptr<const struct mystr> p_str)
 }
 
 void
-vsf_sysutil_setproctitle(_Nt_array_ptr<const char> p_text : count(0))
+vsf_sysutil_setproctitle(_Nt_array_ptr<const char> p_text)
 {
   struct mystr proctitle_str = INIT_MYSTR;
   str_copy(&proctitle_str, &s_proctitle_prefix_str);
@@ -882,7 +882,7 @@ vsf_sysutil_setproctitle_init(int argc,
 }
 
 void
-vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_buf : count(0))
+vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_buf)
 {
   setproctitle("%s", (const char *)p_buf);
 }
@@ -896,7 +896,7 @@ vsf_sysutil_setproctitle_init(int argc,
 }
 
 void
-vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_buf : count(0))
+vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_buf)
 {
   struct mystr proctitle_str = INIT_MYSTR;
   union pstun p;
@@ -924,8 +924,7 @@ vsf_sysutil_setproctitle_init(int argc,
   }
   for (i=0; i<argc; i++)
   {
-    _Nt_array_ptr<const char> p_arg : count(0) =
-      _Assume_bounds_cast<_Nt_array_ptr<const char>>(argv[i],0);
+    _Nt_array_ptr<const char> p_arg = argv[i];
     s_proctitle_space += vsf_sysutil_strlen(p_arg) + 1;
     if (i > 0)
     {
@@ -944,7 +943,7 @@ vsf_sysutil_setproctitle_init(int argc,
 }
 
 void
-vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_buf : count(0))
+vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_buf)
 {
   struct mystr proctitle_str = INIT_MYSTR;
   unsigned int to_copy;
@@ -978,7 +977,7 @@ vsf_sysutil_setproctitle_init(int argc,
 }
 
 void
-vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_buf : count(0))
+vsf_sysutil_setproctitle_internal(_Nt_array_ptr<const char> p_buf)
 {
   (void) p_buf;
 }

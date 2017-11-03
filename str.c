@@ -22,7 +22,7 @@
 
 /* File local functions */
 static void str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
-                                  _Nt_array_ptr<const char> p_text : count(0),
+                                  _Nt_array_ptr<const char> p_text,
 				  int is_reverse);
 static int
 str_equal_internal(_Array_ptr<const char> p_buf1 : count(buf1_len),
@@ -93,7 +93,7 @@ private_str_append_memchunk(_Ptr<struct mystr> p_str,
 
 /* Public functions */
 void
-str_alloc_text(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_src : count(0))
+str_alloc_text(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_src)
 {
   vsf_sysutil_strlen_alt(p_src,s,len);
   private_str_alloc_memchunk(p_str, s, len);
@@ -106,9 +106,9 @@ str_copy(_Ptr<struct mystr> p_dest, _Ptr<const struct mystr> p_src)
 }
 
 _Nt_array_ptr<const char>
-str_strdup(_Ptr<const struct mystr> p_str) : count(0)
+str_strdup(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_strdup(_Assume_bounds_cast<_Nt_array_ptr<const char>>(str_getbuf(p_str),0));
+  return vsf_sysutil_strdup(str_getbuf(p_str));
 }
 
 void
@@ -117,7 +117,7 @@ str_alloc_alt_term(_Ptr<struct mystr> p_str,
 		   char term, unsigned int maxlen)
 {
   _Array_ptr<const char> p_search : count(maxlen) = p_src;
-  _Array_ptr<const char> p_end : count(0) = p_src + maxlen;
+  _Array_ptr<const char> p_end = p_src + maxlen;
   unsigned int len = 0;
   while (p_search < p_end && *p_search != term)
   {
@@ -205,7 +205,7 @@ str_getlen(_Ptr<const struct mystr> p_str)
 
 /* XXX - could make the count equal to the length? */
 _Nt_array_ptr<const char>
-str_getbuf(_Ptr<const struct mystr> p_str) : count(0)
+str_getbuf(_Ptr<const struct mystr> p_str) 
 {
   if (p_str->p_buf == 0)
   {
@@ -213,7 +213,7 @@ str_getbuf(_Ptr<const struct mystr> p_str) : count(0)
     {
       bug("p_buf NULL and len or alloc_bytes != 0 in str_getbuf");
     }
-    private_str_alloc_memchunk((struct mystr*)p_str, 0, 0);
+    private_str_alloc_memchunk((_Ptr<struct mystr>)p_str, 0, 0);
   }
   return _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_str->p_buf,0); 
 }
@@ -254,7 +254,7 @@ str_equal(_Ptr<const struct mystr> p_str1, _Ptr<const struct mystr> p_str2)
 
 int
 str_equal_text(_Ptr<const struct mystr> p_str,
-	       _Nt_array_ptr<const char> p_text : count(0))
+	       _Nt_array_ptr<const char> p_text)
 {
   vsf_sysutil_strlen_alt(p_text,p_text_tmp,cmplen);
   return (str_equal_internal(p_str->p_buf, p_str->len, p_text_tmp, cmplen) == 0);
@@ -267,7 +267,7 @@ str_append_str(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_other)
 }
 
 void
-str_append_text(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_src : count(0))
+str_append_text(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_src)
 {
   vsf_sysutil_strlen_alt(p_src,s,len);
   private_str_append_memchunk(p_str, s, len);
@@ -356,8 +356,8 @@ str_replace_char(_Ptr<struct mystr> p_str, char from, char to)
 
 void
 str_replace_text(_Ptr<struct mystr> p_str, 
-		 _Nt_array_ptr<const char> p_from : count(0),
-		 _Nt_array_ptr<const char> p_to : count(0))
+		 _Nt_array_ptr<const char> p_from,
+		 _Nt_array_ptr<const char> p_to)
 {
   static struct mystr s_lhs_chunk_str;
   static struct mystr s_rhs_chunk_str;
@@ -402,21 +402,21 @@ str_split_char_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, char 
 
 void
 str_split_text(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
-	       _Nt_array_ptr<const char> p_text : count(0))
+	       _Nt_array_ptr<const char> p_text)
 {
   str_split_text_common(p_src, p_rhs, p_text, 0);
 }
 
 void
 str_split_text_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
-                       _Nt_array_ptr<const char> p_text : count(0))
+                       _Nt_array_ptr<const char> p_text)
 {
   str_split_text_common(p_src, p_rhs, p_text, 1);
 }
 
 static void
 str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
-                      _Nt_array_ptr<const char> p_text_alt : count(0), int is_reverse)
+                      _Nt_array_ptr<const char> p_text_alt, int is_reverse)
 {
   struct str_locate_result locate_result;
   unsigned int indexx;
@@ -427,7 +427,7 @@ str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
   }
   else
   {
-    locate_result = str_locate_text(p_src, _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_text,0));
+    locate_result = str_locate_text(p_src, p_text);
   }
   /* Not found? */
   if (!locate_result.found)
@@ -471,7 +471,7 @@ str_locate_char(_Ptr<const struct mystr> p_str, char look_char)
 
 struct str_locate_result
 str_locate_chars(_Ptr<const struct mystr> p_str,
-		 _Nt_array_ptr<const char> p_chars_alt : count(0))
+		 _Nt_array_ptr<const char> p_chars_alt)
 {
   struct str_locate_result retval;
   vsf_sysutil_strlen_alt(p_chars_alt,p_chars,num_chars);
@@ -499,7 +499,7 @@ str_locate_chars(_Ptr<const struct mystr> p_str,
 
 struct str_locate_result
 str_locate_text(_Ptr<const struct mystr> p_str,
-		_Nt_array_ptr<const char> p_text_alt : count(0))
+		_Nt_array_ptr<const char> p_text_alt)
 {
   struct str_locate_result retval;
   unsigned int i;
@@ -527,7 +527,7 @@ str_locate_text(_Ptr<const struct mystr> p_str,
 
 struct str_locate_result
 str_locate_text_reverse(_Ptr<const struct mystr> p_str,
-			_Nt_array_ptr<const char> p_text_alt : count(0))
+			_Nt_array_ptr<const char> p_text_alt)
 {
   struct str_locate_result retval;
   unsigned int i;
@@ -670,8 +670,8 @@ str_getline(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_line_str,
   unsigned int curr_pos = start_pos;
   unsigned int buf_len = str_getlen(p_str);
   _Nt_array_ptr<const char> p_buf_tmp : count(buf_len) = str_getbuf(p_str);
-  _Array_ptr<const char> p_buf : count(buf_len) =
-    _Assume_bounds_cast<_Array_ptr<const char>>(p_buf_tmp, buf_len); 
+  _Array_ptr<const char> p_buf : count(buf_len) = 
+    _Dynamic_bounds_cast<_Array_ptr<const char>>(p_buf_tmp, buf_len); 
   unsigned int out_len;
   if (start_pos > buf_len)
   {

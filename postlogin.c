@@ -70,7 +70,7 @@ static void handle_dir_common(_Ptr<struct vsf_session> p_sess, int full_details,
                               int stat_cmd);
 static void prepend_path_to_filename(_Ptr<struct mystr> p_str);
 static int get_remote_transfer_fd(_Ptr<struct vsf_session> p_sess,
-                                  _Nt_array_ptr<const char> p_status_msg : count(0));
+                                  _Nt_array_ptr<const char> p_status_msg);
 static void check_abor(_Ptr<struct vsf_session> p_sess);
 static void handle_sigurg(void* p_private);
 static void handle_upload_common(_Ptr<struct vsf_session> p_sess, int is_append,
@@ -1427,7 +1427,7 @@ handle_sigurg(void* p_private)
 }
 
 static int
-get_remote_transfer_fd(_Ptr<struct vsf_session> p_sess, _Nt_array_ptr<const char> p_status_msg : count(0))
+get_remote_transfer_fd(_Ptr<struct vsf_session> p_sess, _Nt_array_ptr<const char> p_status_msg)
 {
   int remote_fd;
   if (!pasv_active(p_sess) && !port_active(p_sess))

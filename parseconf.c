@@ -22,8 +22,8 @@ static _Nt_array_ptr<const char> s_p_saved_filename : count(0);
 /* Boolean settings */
 static struct parseconf_bool_setting
 {
-  const char* p_setting_name;
-  int* p_variable;
+  _Nt_array_ptr<const char> p_setting_name : count(0);
+  _Ptr<int> p_variable;
 }
 parseconf_bool_array[] =
 {
@@ -112,8 +112,8 @@ parseconf_bool_array[] =
 
 static struct parseconf_uint_setting
 {
-  const char* p_setting_name;
-  unsigned int* p_variable;
+  _Nt_array_ptr<const char> p_setting_name : count(0);
+  _Ptr<unsigned int> p_variable;
 }
 parseconf_uint_array[] =
 {
@@ -143,42 +143,42 @@ parseconf_uint_array[] =
 static struct parseconf_str_setting
 {
   _Nt_array_ptr<const char> p_setting_name : count(0);
-  const char** p_variable;
+  _Ptr<_Nt_array_ptr<const char>> p_variable;
 }
 parseconf_str_array[] =
 {
-  { "secure_chroot_dir", (const char **)&tunable_secure_chroot_dir },
-  { "ftp_username", (const char **)&tunable_ftp_username },
-  { "chown_username", (const char **)&tunable_chown_username },
-  { "xferlog_file", (const char **)&tunable_xferlog_file },
-  { "vsftpd_log_file", (const char **)&tunable_vsftpd_log_file },
-  { "message_file", (const char **)&tunable_message_file },
-  { "nopriv_user", (const char **)&tunable_nopriv_user },
-  { "ftpd_banner", (const char **)&tunable_ftpd_banner },
-  { "banned_email_file", (const char **)&tunable_banned_email_file },
-  { "chroot_list_file", (const char **)&tunable_chroot_list_file },
-  { "pam_service_name", (const char **)&tunable_pam_service_name },
-  { "guest_username", (const char **)&tunable_guest_username },
-  { "userlist_file", (const char **)&tunable_userlist_file },
-  { "anon_root", (const char **)&tunable_anon_root },
-  { "local_root", (const char **)&tunable_local_root },
-  { "banner_file", (const char **)&tunable_banner_file },
-  { "pasv_address", (const char **)&tunable_pasv_address },
-  { "listen_address", (const char **)&tunable_listen_address },
-  { "user_config_dir", (const char **)&tunable_user_config_dir },
-  { "listen_address6", (const char **)&tunable_listen_address6 },
-  { "cmds_allowed", (const char **)&tunable_cmds_allowed },
-  { "hide_file", (const char **)&tunable_hide_file },
-  { "deny_file", (const char **)&tunable_deny_file },
-  { "user_sub_token", (const char **)&tunable_user_sub_token },
-  { "email_password_file", (const char **)&tunable_email_password_file },
-  { "rsa_cert_file", (const char **)&tunable_rsa_cert_file },
-  { "dsa_cert_file", (const char **)&tunable_dsa_cert_file },
-  { "ssl_ciphers", (const char **)&tunable_ssl_ciphers },
-  { "rsa_private_key_file", (const char **)&tunable_rsa_private_key_file },
-  { "dsa_private_key_file", (const char **)&tunable_dsa_private_key_file },
-  { "ca_certs_file", (const char **)&tunable_ca_certs_file },
-  { "cmds_denied", (const char **)&tunable_cmds_denied },
+  { "secure_chroot_dir", &tunable_secure_chroot_dir },
+  { "ftp_username", &tunable_ftp_username },
+  { "chown_username", &tunable_chown_username },
+  { "xferlog_file", &tunable_xferlog_file },
+  { "vsftpd_log_file", &tunable_vsftpd_log_file },
+  { "message_file", &tunable_message_file },
+  { "nopriv_user", &tunable_nopriv_user },
+  { "ftpd_banner", &tunable_ftpd_banner },
+  { "banned_email_file", &tunable_banned_email_file },
+  { "chroot_list_file", &tunable_chroot_list_file },
+  { "pam_service_name", &tunable_pam_service_name },
+  { "guest_username", &tunable_guest_username },
+  { "userlist_file", &tunable_userlist_file },
+  { "anon_root", &tunable_anon_root },
+  { "local_root", &tunable_local_root },
+  { "banner_file", &tunable_banner_file },
+  { "pasv_address", &tunable_pasv_address },
+  { "listen_address", &tunable_listen_address },
+  { "user_config_dir", &tunable_user_config_dir },
+  { "listen_address6", &tunable_listen_address6 },
+  { "cmds_allowed", &tunable_cmds_allowed },
+  { "hide_file", &tunable_hide_file },
+  { "deny_file", &tunable_deny_file },
+  { "user_sub_token", &tunable_user_sub_token },
+  { "email_password_file", &tunable_email_password_file },
+  { "rsa_cert_file", &tunable_rsa_cert_file },
+  { "dsa_cert_file", &tunable_dsa_cert_file },
+  { "ssl_ciphers", &tunable_ssl_ciphers },
+  { "rsa_private_key_file", &tunable_rsa_private_key_file },
+  { "dsa_private_key_file", &tunable_dsa_private_key_file },
+  { "ca_certs_file", &tunable_ca_certs_file },
+  { "cmds_denied", &tunable_cmds_denied },
   { 0, 0 }
 };
 
@@ -263,13 +263,14 @@ vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting : count(0),
   str_split_char(&s_setting_str, &s_value_str, '=');
   /* Is it a string setting? */
   {
-    const struct parseconf_str_setting* p_str_setting = parseconf_str_array;
+    unsigned int sz = sizeof(parseconf_str_array);
+    _Array_ptr<const struct parseconf_str_setting> p_str_setting : count(sz) = parseconf_str_array;
     while (p_str_setting->p_setting_name != 0)
     {
       if (str_equal_text(&s_setting_str, p_str_setting->p_setting_name))
       {
         /* Got it */
-        const char** p_curr_setting = p_str_setting->p_variable;
+        _Ptr<_Nt_array_ptr<const char>> p_curr_setting = p_str_setting->p_variable;
         if (*p_curr_setting)
         {
           vsf_sysutil_free((char*) *p_curr_setting);
@@ -280,7 +281,7 @@ vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting : count(0),
         }
         else
         {
-          *p_curr_setting = (const char *)str_strdup(&s_value_str);
+          *p_curr_setting = str_strdup(&s_value_str);
         }
         return;
       }
@@ -300,10 +301,12 @@ vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting : count(0),
   }
   /* Is it a boolean value? */
   {
-    const struct parseconf_bool_setting* p_bool_setting = parseconf_bool_array;
+    unsigned int bool_array_sz = sizeof(parseconf_bool_array);
+    _Array_ptr<const struct parseconf_bool_setting> p_bool_setting : count(bool_array_sz) =
+      parseconf_bool_array;
     while (p_bool_setting->p_setting_name != 0)
     {
-      if (str_equal_text(&s_setting_str, _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_bool_setting->p_setting_name,0)))
+      if (str_equal_text(&s_setting_str, p_bool_setting->p_setting_name))
       {
         /* Got it */
         str_upper(&s_value_str);
@@ -331,10 +334,11 @@ vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting : count(0),
   }
   /* Is it an unsigned integer setting? */
   {
-    const struct parseconf_uint_setting* p_uint_setting = parseconf_uint_array;
+    _Array_ptr<const struct parseconf_uint_setting> p_uint_setting : count(sizeof(parseconf_uint_array)) =
+	parseconf_uint_array;
     while (p_uint_setting->p_setting_name != 0)
     {
-      if (str_equal_text(&s_setting_str, _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_uint_setting->p_setting_name,0)))
+      if (str_equal_text(&s_setting_str, p_uint_setting->p_setting_name))
       {
         /* Got it */
         /* If the value starts with 0, assume it's an octal value */

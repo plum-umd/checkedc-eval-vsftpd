@@ -253,11 +253,10 @@ str_equal(_Ptr<const struct mystr> p_str1, _Ptr<const struct mystr> p_str2)
 }
 
 int
-str_equal_text(_Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text : count(0))
+str_equal_text(_Ptr<const struct mystr> p_str,
+	       _Nt_array_ptr<const char> p_text : count(0))
 {
-  unsigned int cmplen = vsf_sysutil_strlen((const char *)p_text);
-  _Array_ptr<const char> p_text_tmp : count(cmplen) =
-    _Assume_bounds_cast<_Array_ptr<const char>>(p_text, cmplen);
+  vsf_sysutil_strlen_alt(p_text,p_text_tmp,cmplen);
   return (str_equal_internal(p_str->p_buf, p_str->len, p_text_tmp, cmplen) == 0);
 }
 
@@ -421,7 +420,7 @@ str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
 {
   struct str_locate_result locate_result;
   unsigned int indexx;
-  unsigned int search_len = vsf_sysutil_strlen((const char *)p_text);
+  unsigned int search_len = vsf_sysutil_strlen(p_text);
   if (is_reverse)
   {
     locate_result = str_locate_text_reverse(p_src, p_text);
@@ -471,7 +470,8 @@ str_locate_char(_Ptr<const struct mystr> p_str, char look_char)
 }
 
 struct str_locate_result
-str_locate_chars(_Ptr<const struct mystr> p_str, const char* p_chars)
+str_locate_chars(_Ptr<const struct mystr> p_str,
+		 _Nt_array_ptr<const char> p_chars : count(0))
 {
   struct str_locate_result retval;
   unsigned int num_chars = vsf_sysutil_strlen(p_chars);
@@ -503,7 +503,7 @@ str_locate_text(_Ptr<const struct mystr> p_str,
 {
   struct str_locate_result retval;
   unsigned int i;
-  unsigned int text_len = vsf_sysutil_strlen((const char *)p_text);
+  unsigned int text_len = vsf_sysutil_strlen(p_text);
   retval.found = 0;
   retval.char_found = 0;
   retval.index = 0;
@@ -531,7 +531,7 @@ str_locate_text_reverse(_Ptr<const struct mystr> p_str,
 {
   struct str_locate_result retval;
   unsigned int i;
-  unsigned int text_len = vsf_sysutil_strlen((const char *)p_text);
+  unsigned int text_len = vsf_sysutil_strlen(p_text);
   retval.found = 0;
   retval.char_found = 0;
   retval.index = 0;
@@ -647,19 +647,19 @@ str_contains_unprintable(_Ptr<const struct mystr> p_str)
 int
 str_atoi(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_atoi((const char *)str_getbuf(p_str));
+  return vsf_sysutil_atoi(str_getbuf(p_str));
 }
 
 filesize_t
 str_a_to_filesize_t(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_a_to_filesize_t((const char *)str_getbuf(p_str));
+  return vsf_sysutil_a_to_filesize_t(str_getbuf(p_str));
 }
 
 unsigned int
 str_octal_to_uint(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_octal_to_uint((const char *)str_getbuf(p_str));
+  return vsf_sysutil_octal_to_uint(str_getbuf(p_str));
 }
 
 int

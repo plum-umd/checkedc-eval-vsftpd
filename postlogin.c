@@ -582,7 +582,7 @@ handle_pasv(_Ptr<struct vsf_session> p_sess, int is_epsv)
       vsf_cmdio_write(p_sess, FTP_EPSVALLOK, "EPSV ALL ok.");
       return;
     }
-    argval = vsf_sysutil_atoi((const char *)str_getbuf(&p_sess->ftp_arg_str));
+    argval = vsf_sysutil_atoi(str_getbuf(&p_sess->ftp_arg_str));
     if (argval < 1 || argval > 2 || (!is_ipv6 && argval == 2))
     {
       vsf_cmdio_write(p_sess, FTP_EPSVBAD, "Bad network protocol.");
@@ -1624,7 +1624,7 @@ handle_mdtm(_Ptr<struct vsf_session> p_sess)
   if (do_write != 0)
   {
     str_split_char(&p_sess->ftp_arg_str, &s_filename_str, ' ');
-    modtime = vsf_sysutil_parse_time((const char *)str_getbuf(&p_sess->ftp_arg_str));
+    modtime = vsf_sysutil_parse_time(str_getbuf(&p_sess->ftp_arg_str));
     str_copy(&p_sess->ftp_arg_str, &s_filename_str);
   }
   resolve_tilde(&p_sess->ftp_arg_str, p_sess);
@@ -1645,7 +1645,7 @@ handle_mdtm(_Ptr<struct vsf_session> p_sess)
     else
     {
       retval = vsf_sysutil_setmodtime(
-        (const char*)str_getbuf(&p_sess->ftp_arg_str), modtime, tunable_use_localtime);
+        str_getbuf(&p_sess->ftp_arg_str), modtime, tunable_use_localtime);
       if (retval != 0)
       {
         vsf_cmdio_write(p_sess, FTP_FILEFAIL,

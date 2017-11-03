@@ -343,7 +343,7 @@ session_init(_Ptr<struct vsf_session> p_sess)
     _Ptr<struct vsf_sysutil_user> p_user = 0;
     if (tunable_ftp_username)
     {
-      p_user = vsf_sysutil_getpwnam((const char *)tunable_ftp_username);
+      p_user = vsf_sysutil_getpwnam(tunable_ftp_username);
     }
     if (p_user == 0)
     {
@@ -357,7 +357,7 @@ session_init(_Ptr<struct vsf_session> p_sess)
     _Ptr<struct vsf_sysutil_user> p_user = 0;
     if (tunable_guest_username)
     {
-      p_user = vsf_sysutil_getpwnam((const char *)tunable_guest_username);
+      p_user = vsf_sysutil_getpwnam(tunable_guest_username);
     }
     if (p_user == 0)
     {
@@ -371,7 +371,7 @@ session_init(_Ptr<struct vsf_session> p_sess)
     _Ptr<struct vsf_sysutil_user> p_user = 0;
     if (tunable_chown_username)
     {
-      p_user = vsf_sysutil_getpwnam((const char *)tunable_chown_username);
+      p_user = vsf_sysutil_getpwnam(tunable_chown_username);
     }
     if (p_user == 0)
     {

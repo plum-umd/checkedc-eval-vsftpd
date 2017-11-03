@@ -221,7 +221,7 @@ vsf_parseconf_load_file(_Nt_array_ptr<const char> p_filename : count(0), int err
   }
   {
     _Ptr<struct vsf_sysutil_statbuf> p_statbuf = 0;
-    retval = vsf_sysutil_stat((const char *)p_filename, &p_statbuf);
+    retval = vsf_sysutil_stat(p_filename, &p_statbuf);
     /* Security: check current user owns the config file. These are sanity
      * checks for the admin, and are NOT designed to be checks safe from
      * race conditions.

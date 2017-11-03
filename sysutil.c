@@ -794,20 +794,20 @@ vsf_sysutil_recv_peek(const int fd, void* p_buf, unsigned int len)
 }
 
 int
-vsf_sysutil_atoi(const char* p_str)
+vsf_sysutil_atoi(_Nt_array_ptr<const char> p_str : count(0))
 {
-  return atoi(p_str);
+  return atoi((const char *)p_str);
 }
 
 filesize_t
-vsf_sysutil_a_to_filesize_t(const char* p_str)
+vsf_sysutil_a_to_filesize_t(_Nt_array_ptr<const char> p_str_tmp : count(0))
 {
   /* atoll() is C99 standard - but even modern FreeBSD, OpenBSD don't have
    * it, so we'll supply our own
    */
   filesize_t result = 0;
   filesize_t mult = 1;
-  unsigned int len = vsf_sysutil_strlen(p_str);
+  vsf_sysutil_strlen_alt(p_str_tmp,p_str,len);
   unsigned int i;
   /* Bail if the number is excessively big (petabytes!) */
   if (len > 15)
@@ -880,7 +880,7 @@ vsf_sysutil_uint_to_octal(unsigned int the_uint) : count(0)
 }
 
 unsigned int
-vsf_sysutil_octal_to_uint(const char* p_str)
+vsf_sysutil_octal_to_uint(_Nt_array_ptr<const char> p_str : count(0))
 {
   /* NOTE - avoiding using sscanf() parser */
   unsigned int result = 0;
@@ -952,46 +952,48 @@ vsf_sysutil_isdigit(int the_char)
   return isdigit((unsigned char) the_char);
 }
 
-char*
-vsf_sysutil_getcwd(char* p_dest, const unsigned int buf_size)
+_Nt_array_ptr<char>
+vsf_sysutil_getcwd(_Nt_array_ptr<char> p_dest : count(0),
+		   const unsigned int buf_size) : count(0)
 {
-  char* p_retval;
+  _Nt_array_ptr<char> p_retval : count(0) = 0;
   if (buf_size == 0) {
     return p_dest;
   }
-  p_retval = getcwd(p_dest, buf_size);
+  p_retval = _Assume_bounds_cast<_Nt_array_ptr<char>>(getcwd((char*)p_dest, buf_size),0);
   p_dest[buf_size - 1] = '\0';
   return p_retval;
 }
 
 int
-vsf_sysutil_mkdir(const char* p_dirname, const unsigned int mode)
+vsf_sysutil_mkdir(_Nt_array_ptr<const char> p_dirname : count(0), const unsigned int mode)
 {
-  return mkdir(p_dirname, mode);
+  return mkdir((const char*)p_dirname, mode);
 }
 
 int
-vsf_sysutil_rmdir(const char* p_dirname)
+vsf_sysutil_rmdir(_Nt_array_ptr<const char> p_dirname : count(0))
 {
-  return rmdir(p_dirname);
+  return rmdir((const char*)p_dirname);
 }
 
 int
-vsf_sysutil_chdir(const char* p_dirname)
+vsf_sysutil_chdir(_Nt_array_ptr<const char> p_dirname : count(0))
 {
-  return chdir(p_dirname);
+  return chdir((const char*)p_dirname);
 }
 
 int
-vsf_sysutil_rename(const char* p_from, const char* p_to)
+vsf_sysutil_rename(_Nt_array_ptr<const char> p_from : count(0),
+		   _Nt_array_ptr<const char> p_to : count(0))
 {
-  return rename(p_from, p_to);
+  return rename((const char*)p_from, (const char*)p_to);
 }
 
 _Ptr<struct vsf_sysutil_dir>
-vsf_sysutil_opendir(const char* p_dirname)
+vsf_sysutil_opendir(_Nt_array_ptr<const char> p_dirname : count(0))
 {
-  return _Assume_bounds_cast<_Ptr<struct vsf_sysutil_dir>>(opendir(p_dirname));
+  return _Assume_bounds_cast<_Ptr<struct vsf_sysutil_dir>>(opendir((const char*)p_dirname));
 }
 
 void
@@ -1018,9 +1020,9 @@ vsf_sysutil_next_dirent(_Ptr<struct vsf_sysutil_dir> p_dir) : count(0)
 }
 
 unsigned int
-vsf_sysutil_strlen(const char* p_text)
+vsf_sysutil_strlen(_Nt_array_ptr<const char> p_text : count(0))
 {
-  size_t ret = strlen(p_text);
+  size_t ret = strlen((const char*)p_text);
   /* A defense in depth measure. */
   if (ret > INT_MAX / 8)
   {
@@ -1032,7 +1034,7 @@ vsf_sysutil_strlen(const char* p_text)
 _Nt_array_ptr<char>
 vsf_sysutil_strdup(_Nt_array_ptr<const char> p_str : count(0)) : count(0)
 {
-  return _Assume_bounds_cast<_Nt_array_ptr<char>>(strdup((const char *)p_str),0);
+  return _Assume_bounds_cast<_Nt_array_ptr<char>>(strdup((const char*)p_str),0);
 }
 
 void
@@ -1065,13 +1067,15 @@ vsf_sysutil_memcpy(void* p_dest : byte_count(size),
 }
 
 void
-vsf_sysutil_strcpy(char* p_dest, const char* p_src, unsigned int maxsize)
+vsf_sysutil_strcpy(_Nt_array_ptr<char> p_dest : count(0),
+		   _Nt_array_ptr<const char> p_src : count(0),
+		   unsigned int maxsize)
 {
   if (maxsize == 0)
   {
     return;
   }
-  strncpy(p_dest, p_src, maxsize);
+  strncpy((char*)p_dest, (const char*)p_src, maxsize);
   p_dest[maxsize - 1] = '\0';
 }
 
@@ -1088,9 +1092,9 @@ vsf_sysutil_memcmp(const void* p_src1 : byte_count(size),
 }
 
 int
-vsf_sysutil_strcmp(const char* p_src1, const char* p_src2)
+vsf_sysutil_strcmp(_Nt_array_ptr<const char> p_src1 : count(0), _Nt_array_ptr<const char> p_src2 : count(0))
 {
-  return strcmp(p_src1, p_src2);
+  return strcmp((const char*)p_src1, (const char*)p_src2);
 }
 
 unsigned int
@@ -1172,31 +1176,31 @@ vsf_sysutil_translate_openmode(const enum EVSFSysUtilOpenMode mode)
 }
 
 int
-vsf_sysutil_open_file(const char* p_filename,
+vsf_sysutil_open_file(_Nt_array_ptr<const char> p_filename : count(0),
                       const enum EVSFSysUtilOpenMode mode)
 {
-  return open(p_filename, vsf_sysutil_translate_openmode(mode) | O_NONBLOCK);
+  return open((const char*)p_filename, vsf_sysutil_translate_openmode(mode) | O_NONBLOCK);
 }
 
 int
-vsf_sysutil_create_file_exclusive(const char* p_filename)
+vsf_sysutil_create_file_exclusive(_Nt_array_ptr<const char> p_filename : count(0))
 {
   /* umask() also contributes to end mode */
-  return open(p_filename, O_CREAT | O_EXCL | O_WRONLY | O_APPEND,
+  return open((const char*)p_filename, O_CREAT | O_EXCL | O_WRONLY | O_APPEND,
               tunable_file_open_mode);
 }
 
 int
-vsf_sysutil_create_or_open_file(const char* p_filename, unsigned int mode)
+vsf_sysutil_create_or_open_file(_Nt_array_ptr<const char> p_filename : count(0), unsigned int mode)
 {
-  return open(p_filename, O_CREAT | O_WRONLY | O_NONBLOCK, mode);
+  return open((const char*)p_filename, O_CREAT | O_WRONLY | O_NONBLOCK, mode);
 }
 
 int
-vsf_sysutil_create_or_open_file_append(const char* p_filename,
+vsf_sysutil_create_or_open_file_append(_Nt_array_ptr<const char> p_filename : count(0),
                                        unsigned int mode)
 {
-  return open(p_filename, O_CREAT | O_WRONLY | O_NONBLOCK | O_APPEND, mode);
+  return open((const char*)p_filename, O_CREAT | O_WRONLY | O_NONBLOCK | O_APPEND, mode);
 }
 
 void
@@ -1240,15 +1244,15 @@ vsf_sysutil_close_failok(int fd)
 }
 
 int
-vsf_sysutil_unlink(const char* p_dead)
+vsf_sysutil_unlink(_Nt_array_ptr<const char> p_dead : count(0))
 {
-  return unlink(p_dead);
+  return unlink((const char*)p_dead);
 }
 
 int
-vsf_sysutil_write_access(const char* p_filename)
+vsf_sysutil_write_access(_Nt_array_ptr<const char> p_filename : count(0))
 {
-  int retval = access(p_filename, W_OK);
+  int retval = access((const char*)p_filename, W_OK);
   return (retval == 0);
 }
 
@@ -1274,17 +1278,17 @@ vsf_sysutil_fstat(int fd, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 }
 
 int
-vsf_sysutil_stat(const char* p_name, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
+vsf_sysutil_stat(_Nt_array_ptr<const char> p_name : count(0), _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 {
   vsf_sysutil_alloc_statbuf(p_ptr);
-  return stat(p_name, (struct stat*) (*p_ptr));
+  return stat((const char*)p_name, (struct stat*) (*p_ptr));
 }
 
 int
-vsf_sysutil_lstat(const char* p_name, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
+vsf_sysutil_lstat(_Nt_array_ptr<const char> p_name : count(0), _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 {
   vsf_sysutil_alloc_statbuf(p_ptr);
-  return lstat(p_name, (struct stat*) (*p_ptr));
+  return lstat((const char*)p_name, (struct stat*) (*p_ptr));
 }
 
 void
@@ -1384,7 +1388,7 @@ vsf_sysutil_statbuf_get_date(const _Ptr<struct vsf_sysutil_statbuf> p_statbuf,
   {
     p_date_format = "%b %d  %Y";
   }
-  retval = strftime((char *)datebuf, sizeof(datebuf), p_date_format, p_tm);
+  retval = strftime((char*)datebuf, sizeof(datebuf), p_date_format, p_tm);
   datebuf[sizeof(datebuf)-1] = '\0';
   if (retval == 0)
   {
@@ -1410,7 +1414,7 @@ vsf_sysutil_statbuf_get_numeric_date(
   {
     p_tm = localtime(&p_stat->st_mtime);
   }
-  retval = strftime((char *)datebuf, sizeof(datebuf), "%Y%m%d%H%M%S", p_tm);
+  retval = strftime((char*)datebuf, sizeof(datebuf), "%Y%m%d%H%M%S", p_tm);
   if (retval == 0)
   {
     die("strftime");
@@ -1472,7 +1476,7 @@ vsf_sysutil_statbuf_get_sortkey_mtime(
    * more recent dates appear later in the alphabet! Most notably, we must
    * make sure we pad to the same length with 0's 
    */
-  snprintf((char *)intbuf, sizeof(intbuf), "%030ld", (long) p_stat->st_mtime);
+  snprintf((char*)intbuf, sizeof(intbuf), "%030ld", (long) p_stat->st_mtime);
   return intbuf;
 }
 
@@ -1496,11 +1500,11 @@ vsf_sysutil_fchmod(const int fd, unsigned int mode)
 }
 
 int
-vsf_sysutil_chmod(const char* p_filename, unsigned int mode)
+vsf_sysutil_chmod(_Nt_array_ptr<const char> p_filename : count(0), unsigned int mode)
 {
   /* Safety: mask "mode" to just access permissions, e.g. no suid setting! */
   mode = mode & 0777;
-  return chmod(p_filename, mode);
+  return chmod((const char*)p_filename, mode);
 }
 
 int
@@ -1554,13 +1558,14 @@ vsf_sysutil_unlock_file(int fd)
 }
 
 int
-vsf_sysutil_readlink(const char* p_filename, char* p_dest, unsigned int bufsiz)
+vsf_sysutil_readlink(_Nt_array_ptr<const char> p_filename : count(0),
+		     _Nt_array_ptr<char> p_dest : count(0), unsigned int bufsiz)
 {
   int retval;
   if (bufsiz == 0) {
     return -1;
   }
-  retval = readlink(p_filename, p_dest, bufsiz - 1);
+  retval = readlink((const char*)p_filename, (char*)p_dest, bufsiz - 1);
   if (retval < 0)
   {
     return retval;
@@ -2215,7 +2220,7 @@ vsf_sysutil_inet_ntop(const _Ptr<struct vsf_sysutil_sockaddr> p_sockptr) : count
     static char inaddr_buf _Nt_checked [64];
     const char* p_ret = inet_ntop(AF_INET6,
                                   &p_sockptr->u.u_sockaddr_in6.sin6_addr,
-                                  (char *)inaddr_buf, sizeof(inaddr_buf));
+                                  (char*)inaddr_buf, sizeof(inaddr_buf));
     inaddr_buf[sizeof(inaddr_buf) - 1] = '\0';
     if (p_ret == NULL)
     {
@@ -2245,7 +2250,7 @@ vsf_sysutil_inet_aton(_Nt_array_ptr<const char> p_text : count(0),
   {
     bug("bad family");
   }
-  if (inet_aton((char *)p_text, &sin_addr))
+  if (inet_aton((char*)p_text, &sin_addr))
   {
     vsf_sysutil_memcpy(&p_addr->u.u_sockaddr_in.sin_addr,
                        &sin_addr, sizeof(p_addr->u.u_sockaddr_in.sin_addr));
@@ -2261,7 +2266,7 @@ void
 vsf_sysutil_dns_resolve(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockptr,
                         _Nt_array_ptr<const char> p_name : count(0))
 {
-  struct hostent* hent = gethostbyname((char *)p_name);
+  struct hostent* hent = gethostbyname((char*)p_name);
   if (hent == NULL)
   {
     die2("cannot resolve host:", p_name);
@@ -2306,9 +2311,9 @@ vsf_sysutil_getpwuid(const int uid)
 }
 
 _Ptr<struct vsf_sysutil_user>
-vsf_sysutil_getpwnam(const char* p_user)
+vsf_sysutil_getpwnam(_Nt_array_ptr<const char> p_user : count(0))
 {
-  return _Assume_bounds_cast<_Ptr<struct vsf_sysutil_user>>(getpwnam(p_user));
+  return _Assume_bounds_cast<_Ptr<struct vsf_sysutil_user>>(getpwnam((const char*)p_user));
 }
 
 _Nt_array_ptr<const char>
@@ -2501,9 +2506,9 @@ vsf_sysutil_initgroups(const _Ptr<struct vsf_sysutil_user> p_user)
 }
 
 void
-vsf_sysutil_chroot(const char* p_root_path)
+vsf_sysutil_chroot(_Nt_array_ptr<const char> p_root_path : count(0))
 {
-  int retval = chroot(p_root_path);
+  int retval = chroot((const char*)p_root_path);
   if (retval != 0)
   {
     die("chroot");
@@ -2627,7 +2632,7 @@ _Nt_array_ptr<const char> vsf_sysutil_get_current_date(void) : count(0)
   int i = 0;
   curr_time = vsf_sysutil_get_time_sec();
   p_tm = localtime(&curr_time);
-  if (strftime((char *)datebuf, sizeof(datebuf), "%a %b!%d %H:%M:%S %Y", p_tm) == 0)
+  if (strftime((char*)datebuf, sizeof(datebuf), "%a %b!%d %H:%M:%S %Y", p_tm) == 0)
   {
     die("strftime");
   }
@@ -2692,9 +2697,9 @@ vsf_sysutil_sleep(double seconds)
 }
 
 _Nt_array_ptr<char>
-vsf_sysutil_getenv(const char* p_var) : count(0)
+vsf_sysutil_getenv(_Nt_array_ptr<const char> p_var : count(0)) : count(0)
 {
-  return _Assume_bounds_cast<_Nt_array_ptr<char>>(getenv(p_var),0);
+  return _Assume_bounds_cast<_Nt_array_ptr<char>>(getenv((const char*)p_var),0);
 }
 
 void
@@ -2719,27 +2724,27 @@ vsf_sysutil_closelog(void)
 }
 
 void
-vsf_sysutil_syslog(const char* p_text, int severe)
+vsf_sysutil_syslog(_Nt_array_ptr<const char> p_text : count(0), int severe)
 {
   int prio = LOG_INFO;
   if (severe)
   {
     prio = LOG_WARNING;
   }
-  syslog(prio, "%s", p_text);
+  syslog(prio, "%s", (const char*)p_text);
 }
 
 long
-vsf_sysutil_parse_time(const char* p_text)
+vsf_sysutil_parse_time(_Nt_array_ptr<const char> p_text : count(0))
 {
   struct tm the_time;
   unsigned int len = vsf_sysutil_strlen(p_text);
   vsf_sysutil_memclr(&the_time, sizeof(the_time));
   if (len >= 8)
   {
-    char yr[5];
-    char mon[3];
-    char day[3];
+    char yr _Nt_checked [5];
+    char mon _Nt_checked [3];
+    char day _Nt_checked [3];
     vsf_sysutil_strcpy(yr, p_text, 5);
     vsf_sysutil_strcpy(mon, p_text + 4, 3);
     vsf_sysutil_strcpy(day, p_text + 6, 3);
@@ -2749,9 +2754,9 @@ vsf_sysutil_parse_time(const char* p_text)
   }
   if (len >= 14)
   {
-    char hr[3];
-    char mins[3];
-    char sec[3];
+    char hr _Nt_checked [3];
+    char mins _Nt_checked [3];
+    char sec _Nt_checked [3];
     vsf_sysutil_strcpy(hr, p_text + 8, 3);
     vsf_sysutil_strcpy(mins, p_text + 10, 3);
     vsf_sysutil_strcpy(sec, p_text + 12, 3);
@@ -2763,7 +2768,8 @@ vsf_sysutil_parse_time(const char* p_text)
 }
 
 int
-vsf_sysutil_setmodtime(const char* p_file, long the_time, int is_localtime)
+vsf_sysutil_setmodtime(_Nt_array_ptr<const char> p_file : count(0),
+		       long the_time, int is_localtime)
 {
   struct utimbuf new_times;
   if (!is_localtime)
@@ -2773,7 +2779,7 @@ vsf_sysutil_setmodtime(const char* p_file, long the_time, int is_localtime)
   vsf_sysutil_memclr(&new_times, sizeof(new_times));
   new_times.actime = the_time;
   new_times.modtime = the_time;
-  return utime(p_file, &new_times);
+  return utime((const char*)p_file, &new_times);
 }
 
 void

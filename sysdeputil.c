@@ -1209,16 +1209,16 @@ vsf_insert_uwtmp(_Ptr<const struct mystr> p_user_str,
       str_free(&line_str);
       return;
     }
-    vsf_sysutil_strcpy(s_utent.ut_line, (const char *)str_getbuf(&line_str),
+    vsf_sysutil_strcpy(_Assume_bounds_cast<_Nt_array_ptr<char>>(s_utent.ut_line,0), str_getbuf(&line_str),
                        sizeof(s_utent.ut_line));
     str_free(&line_str);
   }
   s_uwtmp_inserted = 1;
   s_utent.ut_type = USER_PROCESS;
   s_utent.ut_pid = vsf_sysutil_getpid();
-  vsf_sysutil_strcpy(s_utent.ut_user, (const char *)str_getbuf(p_user_str),
+  vsf_sysutil_strcpy(_Assume_bounds_cast<_Nt_array_ptr<char>>(s_utent.ut_user,0), str_getbuf(p_user_str),
                      sizeof(s_utent.ut_user));
-  vsf_sysutil_strcpy(s_utent.ut_host, (const char *)str_getbuf(p_host_str),
+  vsf_sysutil_strcpy(_Assume_bounds_cast<_Nt_array_ptr<char>>(s_utent.ut_host,0), str_getbuf(p_host_str),
                      sizeof(s_utent.ut_host));
   s_utent.ut_tv.tv_sec = vsf_sysutil_get_time_sec();
   setutxent();

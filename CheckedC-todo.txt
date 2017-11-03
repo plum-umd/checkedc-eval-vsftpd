@@ -1,3 +1,6 @@
+Find all occasions of vsf_sysutil_strlen and adjust to use a strlen
+that expands the NT_array bounds, when needed
+
 Some occasions we want to conver array_ptr to nt_array_ptr (in
 str.c). Also times when we want to convert the other way. How to do
 this? 

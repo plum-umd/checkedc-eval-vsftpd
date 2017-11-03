@@ -87,7 +87,7 @@ struct str_locate_result str_locate_text(
 struct str_locate_result str_locate_text_reverse(
   _Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text : count(0));
 struct str_locate_result str_locate_chars(
-  _Ptr<const struct mystr> p_str, const char* p_chars);
+  _Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_chars : count(0));
 
 void str_left(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_out,
               unsigned int chars);

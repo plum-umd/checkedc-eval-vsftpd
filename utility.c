@@ -45,7 +45,7 @@ bug(_Nt_array_ptr<const char> p_text : count(0))
   vsf_sysutil_activate_noblock(VSFTP_COMMAND_FD);
   (void) vsf_sysutil_write_loop(VSFTP_COMMAND_FD, "500 OOPS: ", 10);
   (void) vsf_sysutil_write_loop(VSFTP_COMMAND_FD, (const char *)p_text,
-                                vsf_sysutil_strlen((const char *)p_text));
+                                vsf_sysutil_strlen(p_text));
   (void) vsf_sysutil_write_loop(VSFTP_COMMAND_FD, "\r\n", 2);
   vsf_sysutil_exit(2);
 }
@@ -54,7 +54,7 @@ void
 vsf_exit(_Nt_array_ptr<const char> p_text : count(0))
 {
   (void) vsf_sysutil_write_loop(VSFTP_COMMAND_FD, (const char *)p_text,
-                                vsf_sysutil_strlen((const char *)p_text));
+                                vsf_sysutil_strlen(p_text));
   vsf_sysutil_exit(0);
 }
 

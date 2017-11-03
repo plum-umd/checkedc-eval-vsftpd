@@ -2735,10 +2735,10 @@ vsf_sysutil_syslog(_Nt_array_ptr<const char> p_text : count(0), int severe)
 }
 
 long
-vsf_sysutil_parse_time(_Nt_array_ptr<const char> p_text : count(0))
+vsf_sysutil_parse_time(_Nt_array_ptr<const char> p_text_alt : count(0))
 {
   struct tm the_time;
-  unsigned int len = vsf_sysutil_strlen(p_text);
+  vsf_sysutil_strlen_alt(p_text_alt,p_text,len);
   vsf_sysutil_memclr(&the_time, sizeof(the_time));
   if (len >= 8)
   {

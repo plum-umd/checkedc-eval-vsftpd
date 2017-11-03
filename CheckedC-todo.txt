@@ -1,10 +1,11 @@
-Find all occasions of vsf_sysutil_strlen and adjust to use a strlen
-that expands the NT_array bounds, when needed
+How to convert NT_array_ptr : count(n) to an array_ptr : count(n) ?
+Useful in several places
 
 Some occasions we want to conver array_ptr to nt_array_ptr (in
 str.c). Also times when we want to convert the other way. How to do
 this? 
 
+change to using checked standard library headers (e.g., stdio_checked)
 make headers all checked
 make individual functions checked, if need be
 

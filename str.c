@@ -416,11 +416,11 @@ str_split_text_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
 
 static void
 str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs,
-                      _Nt_array_ptr<const char> p_text : count(0), int is_reverse)
+                      _Nt_array_ptr<const char> p_text_alt : count(0), int is_reverse)
 {
   struct str_locate_result locate_result;
   unsigned int indexx;
-  unsigned int search_len = vsf_sysutil_strlen(p_text);
+  vsf_sysutil_strlen_alt(p_text_alt,p_text,search_len);
   if (is_reverse)
   {
     locate_result = str_locate_text_reverse(p_src, p_text);
@@ -471,10 +471,10 @@ str_locate_char(_Ptr<const struct mystr> p_str, char look_char)
 
 struct str_locate_result
 str_locate_chars(_Ptr<const struct mystr> p_str,
-		 _Nt_array_ptr<const char> p_chars : count(0))
+		 _Nt_array_ptr<const char> p_chars_alt : count(0))
 {
   struct str_locate_result retval;
-  unsigned int num_chars = vsf_sysutil_strlen(p_chars);
+  vsf_sysutil_strlen_alt(p_chars_alt,p_chars,num_chars);
   unsigned int i = 0;
   retval.found = 0;
   retval.char_found = 0;
@@ -499,11 +499,11 @@ str_locate_chars(_Ptr<const struct mystr> p_str,
 
 struct str_locate_result
 str_locate_text(_Ptr<const struct mystr> p_str,
-		_Nt_array_ptr<const char> p_text : count(0))
+		_Nt_array_ptr<const char> p_text_alt : count(0))
 {
   struct str_locate_result retval;
   unsigned int i;
-  unsigned int text_len = vsf_sysutil_strlen(p_text);
+  vsf_sysutil_strlen_alt(p_text_alt,p_text,text_len);
   retval.found = 0;
   retval.char_found = 0;
   retval.index = 0;
@@ -527,11 +527,11 @@ str_locate_text(_Ptr<const struct mystr> p_str,
 
 struct str_locate_result
 str_locate_text_reverse(_Ptr<const struct mystr> p_str,
-			_Nt_array_ptr<const char> p_text : count(0))
+			_Nt_array_ptr<const char> p_text_alt : count(0))
 {
   struct str_locate_result retval;
   unsigned int i;
-  unsigned int text_len = vsf_sysutil_strlen(p_text);
+  vsf_sysutil_strlen_alt(p_text_alt,p_text,text_len);
   retval.found = 0;
   retval.char_found = 0;
   retval.index = 0;

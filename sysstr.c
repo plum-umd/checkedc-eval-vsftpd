@@ -37,14 +37,19 @@ str_getcwd(_Ptr<struct mystr> p_str)
 int
 str_write_loop(_Ptr<const struct mystr> p_str, const int fd)
 {
-  return vsf_sysutil_write_loop(fd, (void *)str_getbuf(p_str), str_getlen(p_str));
+  unsigned int len = str_getlen(p_str);
+  _Array_ptr<char> p_str_buf : count(len) =
+    _Assume_bounds_cast<_Array_ptr<char>>(str_getbuf(p_str),len);
+  return vsf_sysutil_write_loop(fd, p_str_buf, len);
 }
 
 int
 str_read_loop(_Ptr<struct mystr> p_str, const int fd)
 {
-  return vsf_sysutil_read_loop(
-    fd, (char*) str_getbuf(p_str), str_getlen(p_str));
+  unsigned int len = str_getlen(p_str);
+  _Array_ptr<char> p_str_buf : count(len) =
+    _Assume_bounds_cast<_Array_ptr<char>>(str_getbuf(p_str),len);
+  return vsf_sysutil_read_loop(fd, p_str_buf, len);
 }
 
 int

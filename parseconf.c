@@ -16,6 +16,8 @@
 #include "sysutil.h"
 #include "utility.h"
 
+#pragma BOUNDS_CHECKED ON
+
 static _Nt_array_ptr<const char> s_p_saved_filename;
 
 /* Tables mapping setting names to runtime variables */
@@ -24,8 +26,7 @@ static struct parseconf_bool_setting
 {
   _Nt_array_ptr<const char> p_setting_name;
   _Ptr<int> p_variable;
-}
-parseconf_bool_array[] =
+} parseconf_bool_array _Checked [81] =
 {
   { "anonymous_enable", &tunable_anonymous_enable },
   { "local_enable", &tunable_local_enable },
@@ -115,7 +116,7 @@ static struct parseconf_uint_setting
   _Nt_array_ptr<const char> p_setting_name;
   _Ptr<unsigned int> p_variable;
 }
-parseconf_uint_array[] =
+parseconf_uint_array _Checked [21] =
 {
   { "accept_timeout", &tunable_accept_timeout },
   { "connect_timeout", &tunable_connect_timeout },
@@ -145,7 +146,7 @@ static struct parseconf_str_setting
   _Nt_array_ptr<const char> p_setting_name;
   _Ptr<_Nt_array_ptr<const char>> p_variable;
 }
-parseconf_str_array[] =
+parseconf_str_array _Checked [33] =
 {
   { "secure_chroot_dir", &tunable_secure_chroot_dir },
   { "ftp_username", &tunable_ftp_username },
@@ -198,7 +199,7 @@ vsf_parseconf_load_file(_Nt_array_ptr<const char> p_filename, int errs_fatal)
   {
     if (s_p_saved_filename)
     {
-      vsf_sysutil_free((char*)s_p_saved_filename);
+      vsf_sysutil_free(s_p_saved_filename);
     }
     s_p_saved_filename = vsf_sysutil_strdup(p_filename);
   }
@@ -273,7 +274,7 @@ vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting,
         _Ptr<_Nt_array_ptr<const char>> p_curr_setting = p_str_setting->p_variable;
         if (*p_curr_setting)
         {
-          vsf_sysutil_free((char*) *p_curr_setting);
+          vsf_sysutil_free(*p_curr_setting);
         }
         if (str_isempty(&s_value_str))
         {

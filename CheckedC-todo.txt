@@ -1,5 +1,5 @@
-How to convert NT_array_ptr : count(n) to an array_ptr : count(n) ?
-Useful in several places
+Not sure that NT_array --> array is working with off-by-one
+errors. See die2 in utility.c. Make counterexample.
 
 change to using checked standard library headers (e.g., stdio_checked)
 

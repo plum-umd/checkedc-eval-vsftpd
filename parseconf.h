@@ -1,6 +1,8 @@
 #ifndef VSF_PARSECONF_H
 #define VSF_PARSECONF_H
 
+#pragma BOUNDS_CHECKED ON
+
 /* vsf_parseconf_load_file()
  * PURPOSE
  * Parse the given file as a vsftpd config file. If the file cannot be
@@ -26,6 +28,8 @@ void vsf_parseconf_load_file(_Nt_array_ptr<const char> p_filename, int errs_fata
  * errs_fatal    - errors will cause the calling process to exit if not 0
  */
 void vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting, int errs_fatal);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_PARSECONF_H */
 

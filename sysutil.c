@@ -530,13 +530,13 @@ vsf_sysutil_realloc(void* p_ptr : byte_count(1), unsigned int size) : byte_count
 }
 
 void
-vsf_sysutil_free(void *p_ptr : byte_count(1))
+vsf_sysutil_free(const void *p_ptr : byte_count(1))
 {
   if (p_ptr == NULL)
   {
     bug("vsf_sysutil_free got a null pointer");
   }
-  free(p_ptr);
+  free((void *)p_ptr);
 }
 
 unsigned int

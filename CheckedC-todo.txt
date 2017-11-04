@@ -8,6 +8,7 @@ Files to focus on
   netstr.h : checked function pointer type
   strlist.h : the nodes field is a normal pointer; should be an array?
   sysutil.h : at least get checked prototypes (e.g., with iface)
+  postlogin.c : sighandlers, void*
   
 Not sure that NT_array --> array is working with off-by-one
 errors. See die2 in utility.c. Make counterexample.

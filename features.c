@@ -12,6 +12,8 @@
 #include "ftpcmdio.h"
 #include "tunables.h"
 
+#pragma BOUNDS_CHECKED ON
+
 void
 handle_feat(_Ptr<struct vsf_session> p_sess)
 {

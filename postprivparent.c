@@ -23,6 +23,8 @@
 #include "sysdeputil.h"
 #include "seccompsandbox.h"
 
+#pragma BOUNDS_CHECKED ON
+
 static void minimize_privilege(_Ptr<struct vsf_session> p_sess);
 static void process_post_login_req(_Ptr<struct vsf_session> p_sess);
 static void cmd_process_chown(_Ptr<struct vsf_session> p_sess);

@@ -25,6 +25,8 @@
 #include "defs.h"
 #include "opts.h"
 
+#pragma BOUNDS_CHECKED ON
+
 /* Functions used */
 static void check_limits(_Ptr<struct vsf_session> p_sess);
 static void emit_greeting(_Ptr<struct vsf_session> p_sess);
@@ -32,7 +34,7 @@ static void parse_username_password(_Ptr<struct vsf_session> p_sess);
 static void handle_user_command(_Ptr<struct vsf_session> p_sess);
 static void handle_pass_command(_Ptr<struct vsf_session> p_sess);
 static void handle_get(_Ptr<struct vsf_session> p_sess);
-static void check_login_delay();
+static void check_login_delay(void);
 static void check_login_fails(_Ptr<struct vsf_session> p_sess);
 
 void
@@ -285,7 +287,7 @@ handle_pass_command(_Ptr<struct vsf_session> p_sess)
   /* FALLTHRU if login fails */
 }
 
-static void check_login_delay()
+static void check_login_delay(void)
 {
   if (tunable_delay_failed_login)
   {

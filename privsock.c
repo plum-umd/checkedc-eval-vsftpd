@@ -20,6 +20,8 @@
 #include "sysdeputil.h"
 #include "session.h"
 
+#pragma BOUNDS_CHECKED ON
+
 void
 priv_sock_init(_Ptr<struct vsf_session> p_sess)
 {

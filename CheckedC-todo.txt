@@ -1,10 +1,5 @@
-str.c library:  getbuf and getlen: change types. getbuf should always
-  return a NT array?
-
 How to convert NT_array_ptr : count(n) to an array_ptr : count(n) ?
 Useful in several places
-
-How to convert array_ptr to nt_array_ptr ?
 
 change to using checked standard library headers (e.g., stdio_checked)
 
@@ -16,7 +11,6 @@ hunt for (char *) and (const char *) and start to remove them
 ssl.c
 netfd, readfunc writefunc stuff
 secbuf
-netstr
 ipsddrparse — use arrayptr
 standalone.c — ip_count 
 

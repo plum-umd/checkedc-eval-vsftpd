@@ -1,6 +1,8 @@
 #ifndef VSF_UTILITY_H
 #define VSF_UTILITY_H
 
+#pragma BOUNDS_CHECKED ON
+
 struct mystr;
 
 /* die()
@@ -40,6 +42,8 @@ void bug(_Nt_array_ptr<const char> p_text);
  * p_text       - text string describing why the process is exiting
  */
 void vsf_exit(_Nt_array_ptr<const char> p_text);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif
 

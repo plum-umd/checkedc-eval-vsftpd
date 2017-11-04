@@ -106,8 +106,8 @@ int vsf_sysutil_write(const int fd, _Array_ptr<const char> p_buf : byte_count(si
 /* Reading and writing, with handling of interrupted system calls and partial
  * reads/writes. Slightly more usable than the standard UNIX API!
  */
-int vsf_sysutil_read_loop(const int fd, void* p_buf : byte_count(size), unsigned int size);
-int vsf_sysutil_write_loop(const int fd, const void* p_buf : byte_count(size), unsigned int size);
+int vsf_sysutil_read_loop(const int fd, _Array_ptr<void> p_buf : byte_count(size), unsigned int size);
+int vsf_sysutil_write_loop(const int fd, _Array_ptr<const void> p_buf : byte_count(size), unsigned int size);
 
 struct vsf_sysutil_statbuf;
 int vsf_sysutil_stat(_Nt_array_ptr<const char> p_name, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);

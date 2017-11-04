@@ -389,7 +389,7 @@ vsf_sysutil_write(const int fd, _Array_ptr<const char> p_buf : byte_count(size),
 }
 
 int
-vsf_sysutil_read_loop(const int fd, void* p_buf : byte_count(size), unsigned int size)
+vsf_sysutil_read_loop(const int fd, _Array_ptr<void> p_buf : byte_count(size), unsigned int size)
 {
   int retval;
   int num_read = 0;
@@ -424,7 +424,7 @@ vsf_sysutil_read_loop(const int fd, void* p_buf : byte_count(size), unsigned int
 }
 
 int
-vsf_sysutil_write_loop(const int fd, const void* p_buf : byte_count(size), unsigned int size)
+vsf_sysutil_write_loop(const int fd, _Array_ptr<const void> p_buf : byte_count(size), unsigned int size)
 {
   int retval;
   int num_written = 0;

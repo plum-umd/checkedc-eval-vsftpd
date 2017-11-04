@@ -12,6 +12,8 @@
 #include "tunables.h"
 #include "str.h"
 
+#pragma BOUNDS_CHECKED ON
+
 int
 vsf_access_check_file(_Ptr<const struct mystr> p_filename_str)
 {

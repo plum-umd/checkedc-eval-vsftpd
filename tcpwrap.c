@@ -13,12 +13,10 @@
 #include "sysutil.h"
 
 #ifdef VSF_BUILD_TCPWRAPPERS
-  #include <tcpd.h>
-#endif
-
-#ifdef VSF_BUILD_TCPWRAPPERS
-
+#include <tcpd.h>
 #include <sys/syslog.h>
+
+#pragma BOUNDS_CHECKED ON
 
 int deny_severity = LOG_WARNING;
 int allow_severity = LOG_INFO;
@@ -40,6 +38,8 @@ vsf_tcp_wrapper_ok(int remote_fd)
 }
 
 #else /* VSF_BUILD_TCPWRAPPERS */
+
+#pragma BOUNDS_CHECKED ON
 
 int
 vsf_tcp_wrapper_ok(int remote_fd)

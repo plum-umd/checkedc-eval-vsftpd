@@ -12,6 +12,8 @@
 #include "utility.h"
 #include "sysdeputil.h"
 
+#pragma BOUNDS_CHECKED ON
+
 void
 vsf_secutil_change_credentials(_Ptr<const struct mystr> p_user_str,
                                _Ptr<const struct mystr> p_dir_str,

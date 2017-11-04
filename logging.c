@@ -14,6 +14,8 @@
 #include "sysstr.h"
 #include "session.h"
 
+#pragma BOUNDS_CHECKED ON
+
 /* File local functions */
 static int vsf_log_type_is_transfer(enum EVSFLogEntryType type);
 static void vsf_log_common(_Ptr<struct vsf_session> p_sess, int succeeded,

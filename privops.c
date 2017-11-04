@@ -19,6 +19,8 @@
 #include "defs.h"
 #include "logging.h"
 
+#pragma BOUNDS_CHECKED ON
+
 /* File private functions */
 static enum EVSFPrivopLoginResult handle_anonymous_login(
   _Ptr<struct vsf_session> p_sess, _Ptr<const struct mystr> p_pass_str);

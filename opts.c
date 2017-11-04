@@ -11,6 +11,8 @@
 #include "ftpcmdio.h"
 #include "session.h"
 
+#pragma BOUNDS_CHECKED ON
+
 void
 handle_opts(_Ptr<struct vsf_session> p_sess)
 {

@@ -16,6 +16,8 @@
 #include "secbuf.h"
 #include "utility.h"
 
+#pragma BOUNDS_CHECKED ON
+
 int
 str_fileread(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_filename,
 	     unsigned int maxsize)
@@ -51,9 +53,7 @@ str_fileread(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_filename,
     {
       die("read size mismatch");
     }
-    _Array_ptr<char> p_sec_buf_tmp : count(size) =
-      _Assume_bounds_cast<_Array_ptr<char>>(p_sec_buf, size); 
-    str_alloc_memchunk(p_str, p_sec_buf_tmp, (unsigned int) size);
+    str_alloc_memchunk(p_str, p_sec_buf, (unsigned int) size);
   }
 free_out:
   vsf_sysutil_free(p_stat);

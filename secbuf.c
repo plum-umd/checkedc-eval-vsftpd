@@ -14,8 +14,8 @@
 #include "sysutil.h"
 #include "sysdeputil.h"
 
-void
-vsf_secbuf_alloc(_Ptr<char*> p_ptr, unsigned int size)
+_Nt_array_ptr<char>
+vsf_secbuf_alloc(_Array_ptr<char> ptr, unsigned int size) : count(size)
 {
   unsigned int page_offset;
   unsigned int round_up;
@@ -24,7 +24,7 @@ vsf_secbuf_alloc(_Ptr<char*> p_ptr, unsigned int size)
   unsigned int page_size = vsf_sysutil_getpagesize();
 
   /* Free any previous buffer */
-  vsf_secbuf_free(p_ptr);
+  vsf_secbuf_free(ptr);
   /* Round up to next page size */
   page_offset = size % page_size;
   if (page_offset)
@@ -58,15 +58,16 @@ vsf_secbuf_alloc(_Ptr<char*> p_ptr, unsigned int size)
   {
     p_mmap += (page_size - page_offset);
   }
-  *p_ptr = p_mmap;
+  p_mmap[size-1] = '\0'; /* MWH - force zero termination */
+  return _Assume_bounds_cast<_Nt_array_ptr<char>>(p_mmap,size);
 }
 
 void
-vsf_secbuf_free(_Ptr<char*> p_ptr)
+vsf_secbuf_free(_Array_ptr<char> ptr)
 {
   unsigned int map_size;
   unsigned long page_offset;
-  char* p_mmap = *p_ptr;
+  _Array_ptr<char> p_mmap = ptr;
   unsigned int page_size = vsf_sysutil_getpagesize();
   if (p_mmap == 0)
   {
@@ -80,10 +81,10 @@ vsf_secbuf_free(_Ptr<char*> p_ptr)
   }
   p_mmap -= page_size;
   /* First make the first page readable so we can get the size */
-  vsf_sysutil_memprotect(p_mmap, page_size, kVSFSysUtilMapProtReadOnly);
+  vsf_sysutil_memprotect((void *)p_mmap, page_size, kVSFSysUtilMapProtReadOnly);
   /* Extract the mapping size */
   map_size = *((unsigned int*)p_mmap);
   /* Lose the mapping */
-  vsf_sysutil_memunmap(p_mmap, map_size);
+  vsf_sysutil_memunmap((void *)p_mmap, map_size);
 }
 

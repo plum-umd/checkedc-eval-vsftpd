@@ -61,8 +61,8 @@ void vsf_sysutil_set_alarm(const unsigned int trigger_seconds);
 void vsf_sysutil_clear_alarm(void);
 
 /* Directory related things */
-_Nt_array_ptr<char> vsf_sysutil_getcwd(_Nt_array_ptr<char> p_dest,
-				       const unsigned int buf_size);
+_Nt_array_ptr<char> vsf_sysutil_getcwd(_Array_ptr<char> p_dest : count(buf_size),
+				       const unsigned int buf_size) : count(buf_size);
 int vsf_sysutil_mkdir(_Nt_array_ptr<const char> p_dirname, const unsigned int mode);
 int vsf_sysutil_rmdir(_Nt_array_ptr<const char> p_dirname);
 int vsf_sysutil_chdir(_Nt_array_ptr<const char> p_dirname);

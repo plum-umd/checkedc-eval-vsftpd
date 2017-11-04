@@ -23,7 +23,7 @@ str_fileread(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_filename,
   int fd;
   int retval = 0;
   filesize_t size;
-  char* p_sec_buf = 0;
+  _Array_ptr<char> p_sec_buf : count(0) = 0;
   _Ptr<struct vsf_sysutil_statbuf> p_stat = 0;
   /* In case we fail, make sure we return an empty string */
   str_empty(p_str);
@@ -40,7 +40,7 @@ str_fileread(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_filename,
     {
       size = maxsize;
     }
-    vsf_secbuf_alloc(&p_sec_buf, (unsigned int) size);
+    p_sec_buf = vsf_secbuf_alloc(p_sec_buf, (unsigned int) size);
 
     retval = vsf_sysutil_read_loop(fd, p_sec_buf, (unsigned int) size);
     if (vsf_sysutil_retval_is_error(retval))
@@ -57,7 +57,7 @@ str_fileread(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_filename,
   }
 free_out:
   vsf_sysutil_free(p_stat);
-  vsf_secbuf_free(&p_sec_buf);
+  vsf_secbuf_free(p_sec_buf);
   vsf_sysutil_close(fd);
   return retval;
 }

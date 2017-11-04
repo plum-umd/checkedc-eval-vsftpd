@@ -19,11 +19,11 @@
 void
 str_getcwd(_Ptr<struct mystr> p_str)
 {
-  static _Nt_array_ptr<char> p_getcwd_buf;
+  static _Nt_array_ptr<char> p_getcwd_buf : count(VSFTP_PATH_MAX);
   _Nt_array_ptr<char> p_ret = 0;
   if (p_getcwd_buf == 0)
   {
-    vsf_secbuf_alloc((char **)&p_getcwd_buf, VSFTP_PATH_MAX);
+    p_getcwd_buf = vsf_secbuf_alloc(p_getcwd_buf, VSFTP_PATH_MAX);
   }
   /* In case getcwd() fails */
   str_empty(p_str);
@@ -151,7 +151,7 @@ str_readlink(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str)
   int retval;
   if (p_readlink_buf == 0)
   {
-    vsf_secbuf_alloc((char **)&p_readlink_buf, VSFTP_PATH_MAX);
+    p_readlink_buf = vsf_secbuf_alloc(p_readlink_buf, VSFTP_PATH_MAX);
   }
   /* In case readlink() fails */
   str_empty(p_str);

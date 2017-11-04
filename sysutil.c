@@ -953,14 +953,14 @@ vsf_sysutil_isdigit(int the_char)
 }
 
 _Nt_array_ptr<char>
-vsf_sysutil_getcwd(_Nt_array_ptr<char> p_dest,
-		   const unsigned int buf_size)
+vsf_sysutil_getcwd(_Array_ptr<char> p_dest : count(buf_size),
+		   const unsigned int buf_size) : count(buf_size)
 {
   _Nt_array_ptr<char> p_retval = 0;
   if (buf_size == 0) {
-    return p_dest;
+    return 0;
   }
-  p_retval = _Assume_bounds_cast<_Nt_array_ptr<char>>(getcwd((char*)p_dest, buf_size),0);
+  p_retval = _Assume_bounds_cast<_Nt_array_ptr<char>>(getcwd((char*)p_dest, buf_size),buf_size);
   p_dest[buf_size - 1] = '\0';
   return p_retval;
 }

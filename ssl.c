@@ -31,7 +31,7 @@
 #include <errno.h>
 #include <limits.h>
 
-static char* get_ssl_error();
+static _Nt_array_ptr<char> get_ssl_error();
 static SSL* get_ssl(_Ptr<struct vsf_session> p_sess, int fd);
 static int ssl_session_init(_Ptr<struct vsf_session> p_sess);
 static void setup_bio_callbacks();
@@ -81,7 +81,7 @@ ssl_init(_Ptr<struct vsf_session> p_sess)
     SSL_CTX_set_options(p_ctx, options);
     if (tunable_rsa_cert_file)
     {
-      const char* p_key = tunable_rsa_private_key_file;
+      _Nt_array_ptr<const char> p_key = tunable_rsa_private_key_file;
       if (!p_key)
       {
         p_key = tunable_rsa_cert_file;
@@ -97,7 +97,7 @@ ssl_init(_Ptr<struct vsf_session> p_sess)
     }
     if (tunable_dsa_cert_file)
     {
-      const char* p_key = tunable_dsa_private_key_file;
+      _Nt_array_ptr<const char> p_key = tunable_dsa_private_key_file;
       if (!p_key)
       {
         p_key = tunable_dsa_cert_file;
@@ -156,7 +156,7 @@ ssl_init(_Ptr<struct vsf_session> p_sess)
       }
     }
     {
-      static const char* p_ctx_id = "vsftpd";
+      static _Nt_array_ptr<const char> p_ctx_id = "vsftpd";
       SSL_CTX_set_session_id_context(p_ctx, (void*) p_ctx_id,
                                      vsf_sysutil_strlen(p_ctx_id));
     }
@@ -251,13 +251,15 @@ handle_prot(_Ptr<struct vsf_session> p_sess)
 }
 
 int
-ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl, char* p_buf, unsigned int len)
+ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl, _Array_ptr<char> p_buf : count(len),
+	 unsigned int len)
 {
   return ssl_read_common(p_sess, (SSL*) p_ssl, p_buf, len, SSL_read);
 }
 
 int
-ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl, char* p_buf, unsigned int len)
+ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl, _Array_ptr<char> p_buf : count(len),
+	 unsigned int len)
 {
   return ssl_read_common(p_sess, (SSL*) p_ssl, p_buf, len, SSL_peek);
 }
@@ -265,7 +267,7 @@ ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl, char* p_buf, unsigned int
 static int
 ssl_read_common(_Ptr<struct vsf_session> p_sess,
                 SSL* p_void_ssl,
-                char* p_buf,
+                _Array_ptr<char> p_buf : count(len),
                 unsigned int len,
                 int (*p_ssl_func)(SSL*, void*, int))
 {
@@ -308,7 +310,7 @@ ssl_read_common(_Ptr<struct vsf_session> p_sess,
 }
 
 int
-ssl_write(void* p_ssl, const char* p_buf, unsigned int len)
+ssl_write(void* p_ssl, _Array_ptr<const char> p_buf : count(len), unsigned int len)
 {
   int retval;
   int err;
@@ -338,7 +340,7 @@ int
 ssl_read_into_str(_Ptr<struct vsf_session> p_sess, void* p_ssl, struct mystr* p_str)
 {
   unsigned int len = str_getlen(p_str);
-  int ret = ssl_read(p_sess, p_ssl, (char*) str_getbuf(p_str), len);
+  int ret = ssl_read(p_sess, p_ssl, str_getbuf(p_str), len);
   if (ret >= 0)
   {
     str_trunc(p_str, (unsigned int) ret);
@@ -564,7 +566,7 @@ get_ssl(_Ptr<struct vsf_session> p_sess, int fd)
   }
   if (SSL_accept(p_ssl) != 1)
   {
-    const char* p_err = get_ssl_error();
+    _Nt_array_ptr<const char> p_err = get_ssl_error();
     if (tunable_debug_ssl)
     {
       str_alloc_text(&debug_str, "SSL_accept failed: ");
@@ -578,9 +580,9 @@ get_ssl(_Ptr<struct vsf_session> p_sess, int fd)
   }
   if (tunable_debug_ssl)
   {
-    const char* p_ssl_version = SSL_get_cipher_version(p_ssl);
+    _Nt_array_ptr<const char> p_ssl_version = SSL_get_cipher_version(p_ssl);
     const SSL_CIPHER* p_ssl_cipher = SSL_get_current_cipher(p_ssl);
-    const char* p_cipher_name = SSL_CIPHER_get_name(p_ssl_cipher);
+    _Nt_array_ptr<const char> p_cipher_name = SSL_CIPHER_get_name(p_ssl_cipher);
     X509* p_ssl_cert = SSL_get_peer_certificate(p_ssl);
     int reused = SSL_session_reused(p_ssl);
     str_alloc_text(&debug_str, "SSL version: ");
@@ -624,7 +626,7 @@ ssl_session_init(_Ptr<struct vsf_session> p_sess)
 }
 
 static int
-ssl_cert_digest(SSL* p_ssl, _Ptr<struct vsf_session> p_sess, struct mystr* p_str)
+ssl_cert_digest(SSL* p_ssl, _Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str)
 {
   X509* p_cert = SSL_get_peer_certificate(p_ssl);
   unsigned int num_bytes = 0;
@@ -657,11 +659,11 @@ ssl_cert_digest(SSL* p_ssl, _Ptr<struct vsf_session> p_sess, struct mystr* p_str
   return 1;
 }
 
-static char*
+static _Nt_array_ptr<char>
 get_ssl_error()
 {
   SSL_load_error_strings();
-  return ERR_error_string(ERR_get_error(), NULL);
+  return _Assume_bounds_cast<_Nt_array_ptr<char>>(ERR_error_string(ERR_get_error(), NULL),0);
 }
 
 static void setup_bio_callbacks(SSL* p_ssl)
@@ -752,7 +754,8 @@ handle_prot(_Ptr<struct vsf_session> p_sess)
 }
 
 int
-ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl, char* p_buf, unsigned int len)
+ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl,
+	 _Array_ptr<char> p_buf : count(len), unsigned int len)
 {
   (void) p_sess;
   (void) p_ssl;
@@ -762,7 +765,8 @@ ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl, char* p_buf, unsigned int
 }
 
 int
-ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl, char* p_buf, unsigned int len)
+ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl,
+	 _Array_ptr<char> p_buf : count(len), unsigned int len)
 {
   (void) p_sess;
   (void) p_ssl;
@@ -772,7 +776,7 @@ ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl, char* p_buf, unsigned int
 }
 
 int
-ssl_write(void* p_ssl, const char* p_buf, unsigned int len)
+ssl_write(void* p_ssl, _Array_ptr<const char> p_buf : count(len), unsigned int len)
 {
   (void) p_ssl;
   (void) p_buf;

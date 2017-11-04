@@ -92,9 +92,11 @@ ssl_slave(_Ptr<struct vsf_session> p_sess)
         bug("invalid state");
       }
       priv_sock_get_str(p_sess->ssl_slave_fd, &data_str);
+      unsigned int _len = str_getlen(&data_str);
+      _Nt_array_ptr<const char> _buf = str_getbuf(&data_str);
       ret = ssl_write(p_sess->p_data_ssl,
-                      (const char *)str_getbuf(&data_str),
-                      str_getlen(&data_str));
+                      _Assume_bounds_cast<_Array_ptr<const char>>(_buf,_len),
+                      _len);
       priv_sock_send_int(p_sess->ssl_slave_fd, ret);
     }
     else if (cmd == PRIV_SOCK_DO_SSL_CLOSE)

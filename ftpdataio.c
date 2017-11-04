@@ -466,15 +466,16 @@ vsf_ftpdataio_transfer_file(_Ptr<struct vsf_session> p_sess, int remote_fd,
 static struct vsf_transfer_ret
 do_file_send_rwloop(_Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii)
 {
-  static char* p_readbuf;
-  static char* p_asciibuf;
+  static _Array_ptr<char> p_readbuf : count(VSFTP_DATA_BUFSIZE);
+  static _Array_ptr<char> p_asciibuf : count(VSFTP_DATA_BUFSIZE * 2);
   struct vsf_transfer_ret ret_struct = { 0, 0 };
   unsigned int chunk_size = get_chunk_size();
-  char* p_writefrom_buf;
+  _Array_ptr<char> p_writefrom_buf : count(VSFTP_DATA_BUFSIZE) = 0;
+  /* XXX - this is probably not right; below, this could be either readbuf or asciibuf, which have different sizes */
   int prev_cr = 0;
   if (p_readbuf == 0)
   {
-    vsf_secbuf_alloc(&p_readbuf, VSFTP_DATA_BUFSIZE);
+    vsf_secbuf_alloc((_Ptr<char*>)&p_readbuf, VSFTP_DATA_BUFSIZE);
   }
   if (is_ascii)
   {
@@ -483,7 +484,7 @@ do_file_send_rwloop(_Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii)
       /* NOTE!! * 2 factor because we can double the data by doing our ASCII
        * linefeed mangling
        */
-      vsf_secbuf_alloc(&p_asciibuf, VSFTP_DATA_BUFSIZE * 2);
+      vsf_secbuf_alloc((_Ptr<char*>)&p_asciibuf, VSFTP_DATA_BUFSIZE * 2);
     }
     p_writefrom_buf = p_asciibuf;
   }
@@ -509,7 +510,7 @@ do_file_send_rwloop(_Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii)
     {
       struct bin_to_ascii_ret ret =
           vsf_ascii_bin_to_ascii(p_readbuf,
-                                 p_asciibuf,
+                                 (char *)p_asciibuf,
                                  (unsigned int) retval,
                                  prev_cr);
       num_to_write = ret.stored;
@@ -591,7 +592,7 @@ calc_num_send(int file_fd, filesize_t init_offset)
 static struct vsf_transfer_ret
 do_file_recv(_Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii)
 {
-  static char* p_recvbuf;
+  static _Array_ptr<char> p_recvbuf : count(VSFTP_DATA_BUFSIZE + 1) = 0;
   unsigned int num_to_write;
   struct vsf_transfer_ret ret_struct = { 0, 0 };
   unsigned int chunk_size = get_chunk_size();
@@ -603,11 +604,11 @@ do_file_recv(_Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii)
      * last buffer fragment eneded in a '\r' and the current buffer fragment
      * does not start with a '\n'.
      */
-    vsf_secbuf_alloc(&p_recvbuf, VSFTP_DATA_BUFSIZE + 1);
+    vsf_secbuf_alloc((_Ptr<char*>)&p_recvbuf, VSFTP_DATA_BUFSIZE + 1);
   }
   while (1)
   {
-    const char* p_writebuf = p_recvbuf + 1;
+    _Array_ptr<const char> p_writebuf : count(VSFTP_DATA_BUFSIZE) = p_recvbuf + 1;
     int retval = ftp_read_data(p_sess, p_recvbuf + 1, chunk_size);
     if (vsf_sysutil_retval_is_error(retval))
     {

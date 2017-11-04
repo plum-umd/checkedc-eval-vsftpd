@@ -10,7 +10,7 @@
 #include "ascii.h"
 
 struct ascii_to_bin_ret
-vsf_ascii_ascii_to_bin(char* p_buf, unsigned int in_len, int prev_cr)
+vsf_ascii_ascii_to_bin(_Array_ptr<char> p_buf : count(in_len), unsigned int in_len, int prev_cr)
 {
   /* Task: translate all \r\n into plain \n. A plain \r not followed by \n must
    * not be removed.
@@ -18,7 +18,7 @@ vsf_ascii_ascii_to_bin(char* p_buf, unsigned int in_len, int prev_cr)
   struct ascii_to_bin_ret ret;
   unsigned int indexx = 0;
   unsigned int written = 0;
-  char* p_out = p_buf + 1;
+  _Array_ptr<char> p_out : count(in_len-1) = p_buf + 1;
   ret.last_was_cr = 0;
   if (prev_cr && (!in_len || p_out[0] != '\n'))
   {
@@ -54,7 +54,7 @@ vsf_ascii_ascii_to_bin(char* p_buf, unsigned int in_len, int prev_cr)
 }
 
 struct bin_to_ascii_ret
-vsf_ascii_bin_to_ascii(const char* p_in,
+vsf_ascii_bin_to_ascii(_Array_ptr<const char> p_in : count(in_len),
                        char* p_out,
                        unsigned int in_len,
                        int prev_cr)

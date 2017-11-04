@@ -96,7 +96,7 @@ priv_sock_send_str(int fd, _Ptr<const struct mystr> p_str)
 }
 
 void
-priv_sock_send_buf(int fd, const char* p_buf, unsigned int len)
+priv_sock_send_buf(int fd, _Array_ptr<const char> p_buf : count(len), unsigned int len)
 {
   priv_sock_send_int(fd, (int) len);
   if (len > 0)
@@ -109,7 +109,7 @@ priv_sock_send_buf(int fd, const char* p_buf, unsigned int len)
 }
 
 void
-priv_sock_recv_buf(int fd, char* p_buf, unsigned int len)
+priv_sock_recv_buf(int fd, _Array_ptr<char> p_buf : count(len), unsigned int len)
 {
   unsigned int recv_len = (unsigned int) priv_sock_get_int(fd);
   if (recv_len > len)

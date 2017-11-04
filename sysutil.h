@@ -100,14 +100,14 @@ void vsf_sysutil_ftruncate(int fd);
 void vsf_sysutil_lseek_to(const int fd, filesize_t seek_pos);
 void vsf_sysutil_lseek_end(const int fd);
 filesize_t vsf_sysutil_get_file_offset(const int file_fd);
-int vsf_sysutil_read(const int fd, void* p_buf, const unsigned int size);
-int vsf_sysutil_write(const int fd, const void* p_buf,
+int vsf_sysutil_read(const int fd, _Array_ptr<char> p_buf : byte_count(size), const unsigned int size);
+int vsf_sysutil_write(const int fd, _Array_ptr<const char> p_buf : byte_count(size),
                       const unsigned int size);
 /* Reading and writing, with handling of interrupted system calls and partial
  * reads/writes. Slightly more usable than the standard UNIX API!
  */
-int vsf_sysutil_read_loop(const int fd, void* p_buf, unsigned int size);
-int vsf_sysutil_write_loop(const int fd, const void* p_buf, unsigned int size);
+int vsf_sysutil_read_loop(const int fd, void* p_buf : byte_count(size), unsigned int size);
+int vsf_sysutil_write_loop(const int fd, const void* p_buf : byte_count(size), unsigned int size);
 
 struct vsf_sysutil_statbuf;
 int vsf_sysutil_stat(_Nt_array_ptr<const char> p_name, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);
@@ -282,7 +282,7 @@ void vsf_sysutil_deactivate_noblock(int fd);
 void vsf_sysutil_shutdown_failok(int fd);
 /* And this does SHUT_RD */
 void vsf_sysutil_shutdown_read_failok(int fd);
-int vsf_sysutil_recv_peek(const int fd, void* p_buf, unsigned int len);
+int vsf_sysutil_recv_peek(const int fd, void* p_buf : byte_count(len), unsigned int len);
 
 _Nt_array_ptr<const char> vsf_sysutil_inet_ntop(
   const _Ptr<struct vsf_sysutil_sockaddr> p_sockptr);

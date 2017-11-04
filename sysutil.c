@@ -357,11 +357,11 @@ vsf_sysutil_clear_alarm(void)
 }
 
 int
-vsf_sysutil_read(const int fd, void* p_buf, const unsigned int size)
+vsf_sysutil_read(const int fd, _Array_ptr<char> p_buf : byte_count(size), const unsigned int size)
 {
   while (1)
   {
-    int retval = read(fd, p_buf, size);
+    int retval = read(fd, (void*)p_buf, size);
     int saved_errno = errno;
     vsf_sysutil_check_pending_actions(kVSFSysUtilIO, retval, fd);
     if (retval < 0 && saved_errno == EINTR)
@@ -373,11 +373,11 @@ vsf_sysutil_read(const int fd, void* p_buf, const unsigned int size)
 }
 
 int
-vsf_sysutil_write(const int fd, const void* p_buf, const unsigned int size)
+vsf_sysutil_write(const int fd, _Array_ptr<const char> p_buf : byte_count(size), const unsigned int size)
 {
   while (1)
   {
-    int retval = write(fd, p_buf, size);
+    int retval = write(fd, (void*)p_buf, size);
     int saved_errno = errno;
     vsf_sysutil_check_pending_actions(kVSFSysUtilIO, retval, fd);
     if (retval < 0 && saved_errno == EINTR)
@@ -389,7 +389,7 @@ vsf_sysutil_write(const int fd, const void* p_buf, const unsigned int size)
 }
 
 int
-vsf_sysutil_read_loop(const int fd, void* p_buf, unsigned int size)
+vsf_sysutil_read_loop(const int fd, void* p_buf : byte_count(size), unsigned int size)
 {
   int retval;
   int num_read = 0;
@@ -424,7 +424,7 @@ vsf_sysutil_read_loop(const int fd, void* p_buf, unsigned int size)
 }
 
 int
-vsf_sysutil_write_loop(const int fd, const void* p_buf, unsigned int size)
+vsf_sysutil_write_loop(const int fd, const void* p_buf : byte_count(size), unsigned int size)
 {
   int retval;
   int num_written = 0;

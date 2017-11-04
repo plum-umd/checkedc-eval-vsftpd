@@ -4,11 +4,7 @@ str.c library:  getbuf and getlen: change types. getbuf should always
 How to convert NT_array_ptr : count(n) to an array_ptr : count(n) ?
 Useful in several places
 
-Drop count(0) in most places, since it's (now) the default.
-
-Some occasions we want to conver array_ptr to nt_array_ptr (in
-str.c). Also times when we want to convert the other way. How to do
-this? 
+How to convert array_ptr to nt_array_ptr ?
 
 change to using checked standard library headers (e.g., stdio_checked)
 

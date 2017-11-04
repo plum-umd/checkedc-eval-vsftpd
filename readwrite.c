@@ -17,16 +17,16 @@
 #include "sysutil.h"
 
 static int plain_peek_adapter(_Ptr<struct vsf_session> p_sess,
-                              char* p_buf,
+                              _Array_ptr<char> p_buf : count(len),
                               unsigned int len);
 static int plain_read_adapter(_Ptr<struct vsf_session> p_sess,
-                              char* p_buf,
+                              _Array_ptr<char> p_buf : count(len),
                               unsigned int len);
 static int ssl_peek_adapter(_Ptr<struct vsf_session> p_sess,
-                            char* p_buf,
+                            _Array_ptr<char> p_buf : count(len),
                             unsigned int len);
 static int ssl_read_adapter(_Ptr<struct vsf_session> p_sess,
-                            char* p_buf,
+                            _Array_ptr<char> p_buf : count(len),
                             unsigned int len);
 
 int
@@ -77,7 +77,8 @@ ftp_write_str(_Ptr<const struct vsf_session> p_sess, _Ptr<const struct mystr> p_
 }
 
 int
-ftp_read_data(_Ptr<struct vsf_session> p_sess, char* p_buf, unsigned int len)
+ftp_read_data(_Ptr<struct vsf_session> p_sess,
+	      _Array_ptr<char> p_buf : count(len), unsigned int len)
 {
   if (p_sess->data_use_ssl && p_sess->ssl_slave_active)
   {
@@ -101,8 +102,8 @@ ftp_read_data(_Ptr<struct vsf_session> p_sess, char* p_buf, unsigned int len)
 }
 
 int
-ftp_write_data(_Ptr<const struct vsf_session> p_sess, const char* p_buf,
-               unsigned int len)
+ftp_write_data(_Ptr<const struct vsf_session> p_sess,
+	       _Array_ptr<const char> p_buf : count(len), unsigned int len)
 {
   if (p_sess->data_use_ssl && p_sess->ssl_slave_active)
   {
@@ -158,27 +159,31 @@ ftp_getline(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, _Array_pt
 }
 
 static int
-plain_peek_adapter(_Ptr<struct vsf_session> p_sess, char* p_buf, unsigned int len)
+plain_peek_adapter(_Ptr<struct vsf_session> p_sess,
+		   _Array_ptr<char> p_buf : count(len), unsigned int len)
 {
   (void) p_sess;
   return vsf_sysutil_recv_peek(VSFTP_COMMAND_FD, p_buf, len);
 }
 
 static int
-plain_read_adapter(_Ptr<struct vsf_session> p_sess, char* p_buf, unsigned int len)
+plain_read_adapter(_Ptr<struct vsf_session> p_sess,
+		   _Array_ptr<char> p_buf : count(len), unsigned int len)
 {
   (void) p_sess;
   return vsf_sysutil_read_loop(VSFTP_COMMAND_FD, p_buf, len);
 }
 
 static int
-ssl_peek_adapter(_Ptr<struct vsf_session> p_sess, char* p_buf, unsigned int len)
+ssl_peek_adapter(_Ptr<struct vsf_session> p_sess,
+		 _Array_ptr<char> p_buf : count(len), unsigned int len)
 {
   return ssl_peek(p_sess, p_sess->p_control_ssl, p_buf, len);
 }
 
 static int
-ssl_read_adapter(_Ptr<struct vsf_session> p_sess, char* p_buf, unsigned int len)
+ssl_read_adapter(_Ptr<struct vsf_session> p_sess,
+		 _Array_ptr<char> p_buf : count(len), unsigned int len)
 {
   return ssl_read(p_sess, p_sess->p_control_ssl, p_buf, len);
 }

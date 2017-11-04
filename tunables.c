@@ -8,6 +8,8 @@
 #include "tunables.h"
 #include "sysutil.h"
 
+#pragma BOUNDS_CHECKED ON
+
 int tunable_anonymous_enable;
 int tunable_local_enable;
 int tunable_pasv_enable;
@@ -147,7 +149,7 @@ static void install_str_setting(_Nt_array_ptr<const char> p_value,
 				_Ptr<_Nt_array_ptr<const char>> p_storage);
 
 void
-tunables_load_defaults()
+tunables_load_defaults(void)
 {
   tunable_anonymous_enable = 1;
   tunable_local_enable = 0;
@@ -298,7 +300,7 @@ void install_str_setting(_Nt_array_ptr<const char> p_value,
   _Nt_array_ptr<char> p_curr_val = (_Nt_array_ptr<char>) *p_storage;
   if (p_curr_val != 0)
   {
-    vsf_sysutil_free((void *)p_curr_val);
+    vsf_sysutil_free(p_curr_val);
   }
   if (p_value != 0)
   {

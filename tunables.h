@@ -1,11 +1,13 @@
 #ifndef VSF_TUNABLES_H
 #define VSF_TUNABLES_H
 
+#pragma BOUNDS_CHECKED ON
+
 /* tunables_load_defaults()
  * PURPOSE
  * Load the default values into the global settings variables.
  */
-void tunables_load_defaults();
+void tunables_load_defaults(void);
 
 /* Configurable preferences */
 /* Booleans */
@@ -145,6 +147,8 @@ extern _Nt_array_ptr<const char> tunable_rsa_private_key_file;
 extern _Nt_array_ptr<const char> tunable_dsa_private_key_file;
 extern _Nt_array_ptr<const char> tunable_ca_certs_file;
 extern _Nt_array_ptr<const char> tunable_cmds_denied;
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_TUNABLES_H */
 

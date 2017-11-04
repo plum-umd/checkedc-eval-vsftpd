@@ -1,6 +1,8 @@
 #ifndef VSF_LOGGING_H
 #define VSF_LOGGING_H
 
+#pragma BOUNDS_CHECKED ON
+
 /* Forward delcarations */
 struct mystr;
 struct vsf_session;
@@ -79,6 +81,8 @@ void vsf_log_do_log(_Ptr<struct vsf_session> p_sess, int succeeded);
  */
 void vsf_log_line(_Ptr<struct vsf_session> p_sess, enum EVSFLogEntryType what,
                   _Ptr<struct mystr> p_str);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_LOGGING_H */
 

@@ -3,6 +3,8 @@
 
 #include "filesize.h"
 
+#pragma BOUNDS_CHECKED ON
+
 struct mystr;
 struct vsf_sysutil_sockaddr;
 struct vsf_sysutil_dir;
@@ -97,6 +99,8 @@ int vsf_ftpdataio_transfer_dir(_Ptr<struct vsf_session> p_sess, int is_control,
                                _Ptr<const struct mystr> p_option_str,
                                _Ptr<const struct mystr> p_filter_str,
                                int is_verbose);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_FTPDATAIO_H */
 

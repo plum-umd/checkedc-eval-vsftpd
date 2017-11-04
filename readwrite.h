@@ -3,6 +3,8 @@
 
 #include "defs.h"
 
+#pragma BOUNDS_CHECKED ON
+
 struct vsf_session;
 struct mystr;
 
@@ -20,6 +22,7 @@ int ftp_write_data(_Ptr<const struct vsf_session> p_sess,
 		   _Array_ptr<const char> p_buf : count(len), unsigned int len);
 int ftp_getline(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, _Array_ptr<char> p_buf : count(VSFTP_MAX_COMMAND_LINE));
 
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_READWRITE_H */
 

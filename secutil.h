@@ -1,6 +1,8 @@
 #ifndef VSF_SECUTIL_H
 #define VSF_SECUTIL_H
 
+#pragma BOUNDS_CHECKED ON
+
 struct mystr;
 
 /* vsf_secutil_change_credentials()
@@ -39,5 +41,8 @@ void vsf_secutil_change_credentials(_Ptr<const struct mystr> p_user_str,
                                     _Ptr<const struct mystr> p_dir_str,
                                     _Ptr<const struct mystr> p_ext_dir_str,
                                     unsigned int caps, unsigned int options);
+
+#pragma BOUNDS_CHECKED OFF
+
 #endif /* VSF_SECUTIL_H */
 

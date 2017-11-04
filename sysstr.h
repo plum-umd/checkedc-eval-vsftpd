@@ -1,6 +1,8 @@
 #ifndef VSF_SYSSTR_H
 #define VSF_SYSSTR_H
 
+#pragma BOUNDS_CHECKED ON
+
 /* Forward declarations */
 struct mystr;
 struct vsf_sysutil_statbuf;
@@ -34,6 +36,8 @@ void str_next_dirent(_Ptr<struct mystr> p_filename_str,
 _Ptr<struct vsf_sysutil_user> str_getpwnam(_Ptr<const struct mystr> p_user_str);
 
 void str_syslog(_Ptr<const struct mystr> p_str, int severe);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_SYSSTR_H */
 

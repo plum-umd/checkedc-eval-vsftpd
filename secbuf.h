@@ -1,6 +1,8 @@
 #ifndef VSF_SECBUF_H
 #define VSF_SECBUF_H
 
+#pragma BOUNDS_CHECKED ON
+
 /* vsf_secbuf_alloc()
  * PURPOSE
  * Allocate a "secure buffer". A secure buffer is one which will attempt to
@@ -22,6 +24,8 @@ _Nt_array_ptr<char> vsf_secbuf_alloc(_Array_ptr<char> ptr, unsigned int size) : 
  *                buffer pointer is nullified by this call.
  */
 void vsf_secbuf_free(_Array_ptr<char> p_ptr);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_SECBUF_H */
 

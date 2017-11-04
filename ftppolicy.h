@@ -1,6 +1,8 @@
 #ifndef VSF_FTPPOLICY_H
 #define VSF_FTPPOLICY_H
 
+#pragma BOUNDS_CHECKED ON
+
 /* Forward delcarations */
 struct pt_sandbox;
 struct vsf_session;
@@ -14,5 +16,7 @@ struct vsf_session;
  */
 void policy_setup(_Ptr<struct pt_sandbox> p_sandbox,
                   _Ptr<const struct vsf_session> p_sess);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_FTPPOLICY_H */

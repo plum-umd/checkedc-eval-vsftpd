@@ -1,6 +1,8 @@
 #ifndef VSF_LS_H
 #define VSF_LS_H
 
+#pragma BOUNDS_CHECKED ON
+
 struct mystr;
 struct mystr_list;
 struct vsf_sysutil_dir;
@@ -43,6 +45,8 @@ void vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list,
 int vsf_filename_passes_filter(_Ptr<const struct mystr> p_filename_str,
                                _Ptr<const struct mystr> p_filter_str,
                                _Ptr<unsigned int> iters);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_LS_H */
 

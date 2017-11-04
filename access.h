@@ -1,6 +1,8 @@
 #ifndef VSF_ACCESS_H
 #define VSF_ACCESS_H
 
+#pragma BOUNDS_CHECKED ON
+
 struct mystr;
 
 /* vsf_access_check_file()
@@ -24,6 +26,8 @@ int vsf_access_check_file(_Ptr<const struct mystr> p_filename_str);
  * Returns 1 if the file should be visible, otherwise 0.
  */
 int vsf_access_check_file_visible(_Ptr<const struct mystr> p_filename_str);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_ACCESS_H */
 

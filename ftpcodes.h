@@ -1,6 +1,8 @@
 #ifndef VSF_FTPCODES_H
 #define VSF_FTPCODES_H
 
+#pragma BOUNDS_CHECKED ON
+
 #define FTP_DATACONN          150
 
 #define FTP_NOOPOK            200
@@ -73,5 +75,7 @@
 #define FTP_FILEFAIL          550
 #define FTP_NOPERM            550
 #define FTP_UPLOADFAIL        553
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_FTPCODES_H */

@@ -7,6 +7,8 @@
 #include "filesize.h"
 #endif
 
+#pragma BOUNDS_CHECKED ON
+
 struct mystr
 {
   _Array_ptr<char> PRIVATE_HANDS_OFF_p_buf : count(PRIVATE_HANDS_OFF_alloc_bytes);
@@ -16,7 +18,7 @@ struct mystr
 };
 
 #define INIT_MYSTR \
-  { (void*)0, 0, 0 }
+  { 0, 0, 0 }
 
 #ifdef VSFTP_STRING_HELPER
 #define str_alloc_memchunk private_str_alloc_memchunk
@@ -124,6 +126,8 @@ int str_getline(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_line_str,
  */
 int str_contains_line(_Ptr<const struct mystr> p_str,
                       _Ptr<const struct mystr> p_line_str);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSFTP_STR_H */
 

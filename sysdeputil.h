@@ -5,6 +5,8 @@
 #include "filesize.h"
 #endif
 
+#pragma BOUNDS_CHECKED ON
+
 /* VSF_SYSDEPUTIL_H:
  * Support for highly system dependent features, and querying for support
  * or lack thereof
@@ -50,28 +52,30 @@ void vsf_sysutil_set_proctitle_prefix(_Ptr<const struct mystr> p_str);
 
 /* For now, maps read/write private pages. API to be extended.. */
 void vsf_sysutil_map_anon_pages_init(void);
-void* vsf_sysutil_map_anon_pages(unsigned int length);
+_Unchecked void* vsf_sysutil_map_anon_pages(unsigned int length);
 
 /* File descriptor passing/receiving */
 void vsf_sysutil_send_fd(int sock_fd, int send_fd);
 int vsf_sysutil_recv_fd(int sock_fd);
 
 /* If supported, arrange for current process to die when parent dies. */
-void vsf_set_die_if_parent_dies();
+void vsf_set_die_if_parent_dies(void);
 /* Or a softer version delivering SIGTERM. */
-void vsf_set_term_if_parent_dies();
+void vsf_set_term_if_parent_dies(void);
 
 /* If supported, the ability to fork into different secure namespaces (PID
  * and IPC. Fails back to normal fork() */
-int vsf_sysutil_fork_isolate_failok();
+int vsf_sysutil_fork_isolate_failok(void);
 /* Same as above, but in addition tries to fork into an empty network
  * namespace. Falls back to vsf_sysutil_fork_isolate_failok then normal fork().
  */
-int vsf_sysutil_fork_isolate_all_failok();
+int vsf_sysutil_fork_isolate_all_failok(void);
 /* If supported, the ability to fork into an empty network namespace.
  * Fails back to normal fork() */
-int vsf_sysutil_fork_newnet();
-int vsf_sysutil_getpid_nocache();
+int vsf_sysutil_fork_newnet(void);
+int vsf_sysutil_getpid_nocache(void);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_SYSDEPUTIL_H */
 

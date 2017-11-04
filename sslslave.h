@@ -1,6 +1,8 @@
 #ifndef VSF_SSLSLAVE_H
 #define VSF_SSLSLAVE_H
 
+#pragma BOUNDS_CHECKED ON
+
 struct vsf_session;
 
 /* ssl_slave()
@@ -12,6 +14,8 @@ struct vsf_session;
  * p_sess       - the session object
  */
 void ssl_slave(_Ptr<struct vsf_session> p_sess);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_SSLSLAVE_H */
 

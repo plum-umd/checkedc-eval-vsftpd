@@ -13,7 +13,7 @@ struct mystr_list
 };
 
 #define INIT_STRLIST \
-  { 0, 0, (void*)0 }
+  { 0, 0, 0 }
 
 void str_list_free(_Ptr<struct mystr_list> p_list);
 

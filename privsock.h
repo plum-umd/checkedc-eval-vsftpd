@@ -1,6 +1,8 @@
 #ifndef VSF_PRIVSOCK_H
 #define VSF_PRIVSOCK_H
 
+#pragma BOUNDS_CHECKED ON
+
 struct mystr;
 struct vsf_session;
 
@@ -172,6 +174,8 @@ int priv_sock_get_int(int fd);
 
 #define PRIV_SOCK_RESULT_OK         1
 #define PRIV_SOCK_RESULT_BAD        2
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_PRIVSOCK_H */
 

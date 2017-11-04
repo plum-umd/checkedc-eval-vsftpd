@@ -1,6 +1,8 @@
 #ifndef VSF_BANNER_H
 #define VSF_BANNER_H
 
+#pragma BOUNDS_CHECKED ON
+
 struct vsf_session;
 struct mystr;
 
@@ -28,6 +30,8 @@ void vsf_banner_dir_changed(_Ptr<struct vsf_session> p_sess, int ftpcode);
  */
 void vsf_banner_write(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str,
                       int ftpcode);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_BANNER_H */
 

@@ -1256,7 +1256,7 @@ vsf_remove_uwtmp(void)
 #endif /* !VSF_SYSDEP_HAVE_UTMPX */
 
 void
-vsf_set_die_if_parent_dies()
+vsf_set_die_if_parent_dies(void)
 {
 #ifdef VSF_SYSDEP_HAVE_SETPDEATHSIG
   if (prctl(PR_SET_PDEATHSIG, SIGKILL, 0, 0, 0) != 0)
@@ -1267,7 +1267,7 @@ vsf_set_die_if_parent_dies()
 }
 
 void
-vsf_set_term_if_parent_dies()
+vsf_set_term_if_parent_dies(void)
 {
 #ifdef VSF_SYSDEP_HAVE_SETPDEATHSIG
   if (prctl(PR_SET_PDEATHSIG, SIGTERM, 0, 0, 0) != 0)
@@ -1278,7 +1278,7 @@ vsf_set_term_if_parent_dies()
 }
 
 int
-vsf_sysutil_fork_isolate_all_failok()
+vsf_sysutil_fork_isolate_all_failok(void)
 {
 #ifdef VSF_SYSDEP_HAVE_LINUX_CLONE
   static int cloneflags_work = 1;
@@ -1302,7 +1302,7 @@ vsf_sysutil_fork_isolate_all_failok()
 }
 
 int
-vsf_sysutil_fork_isolate_failok()
+vsf_sysutil_fork_isolate_failok(void)
 {
 #ifdef VSF_SYSDEP_HAVE_LINUX_CLONE
   static int cloneflags_work = 1;
@@ -1324,7 +1324,7 @@ vsf_sysutil_fork_isolate_failok()
 }
 
 int
-vsf_sysutil_fork_newnet()
+vsf_sysutil_fork_newnet(void)
 {
 #ifdef VSF_SYSDEP_HAVE_LINUX_CLONE
   static int cloneflags_work = 1;

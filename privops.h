@@ -1,6 +1,8 @@
 #ifndef VSF_PRIVOPS_H
 #define VSF_PRIVOPS_H
 
+#pragma BOUNDS_CHECKED ON
+
 struct mystr;
 struct vsf_session;
 
@@ -93,6 +95,8 @@ enum EVSFPrivopLoginResult
  */
 enum EVSFPrivopLoginResult vsf_privop_do_login(
   _Ptr<struct vsf_session> p_sess, _Ptr<const struct mystr> p_pass_str);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_PRIVOPS_H */
 

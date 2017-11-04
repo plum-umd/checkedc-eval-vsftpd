@@ -1,6 +1,8 @@
 #ifndef VSF_ONEPROCESS_H
 #define VSF_ONEPROCESS_H
 
+#pragma BOUNDS_CHECKED ON
+
 struct mystr;
 struct vsf_session;
 
@@ -80,6 +82,8 @@ int vsf_one_process_get_pasv_fd(_Ptr<struct vsf_session> p_sess);
  * fd           - the file descriptor to change ownership on
  */
 void vsf_one_process_chown_upload(_Ptr<struct vsf_session> p_sess, int fd);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_ONEPROCESS_H */
 

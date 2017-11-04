@@ -1,6 +1,8 @@
 #ifndef VSF_FILESTR_H
 #define VSF_FILESTR_H
 
+#pragma BOUNDS_CHECKED ON
+
 /* Forward declares */
 struct mystr;
 
@@ -21,6 +23,8 @@ struct mystr;
  */
 int str_fileread(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_filename,
                  unsigned int maxsize);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_FILESTR_H */
 

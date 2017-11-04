@@ -1,6 +1,8 @@
 #ifndef VSF_STANDALONE_H
 #define VSF_STANDALONE_H
 
+#pragma BOUNDS_CHECKED ON
+
 struct vsf_client_launch
 {
   unsigned int num_children;
@@ -18,6 +20,8 @@ struct vsf_client_launch
  * instances for this IP addresss.
  */
 struct vsf_client_launch vsf_standalone_main(void);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_STANDALONE_H */
 

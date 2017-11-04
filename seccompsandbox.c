@@ -311,7 +311,7 @@ seccomp_sandbox_setup_base()
 }
 
 void
-seccomp_sandbox_init()
+seccomp_sandbox_init(void)
 {
   if (s_syscall_index != 0)
   {
@@ -495,7 +495,7 @@ seccomp_sandbox_setup_postlogin(_Ptr<const struct vsf_session> p_sess)
 }
 
 void
-seccomp_sandbox_setup_postlogin_broker()
+seccomp_sandbox_setup_postlogin_broker(void)
 {
   seccomp_sandbox_setup_base();
   seccomp_sandbox_setup_data_connections();
@@ -503,7 +503,7 @@ seccomp_sandbox_setup_postlogin_broker()
 }
 
 void
-seccomp_sandbox_lockdown()
+seccomp_sandbox_lockdown(void)
 {
   size_t len = (s_syscall_index * 2) +
                (s_1_arg_validations * 3) +
@@ -696,7 +696,7 @@ seccomp_sandbox_lockdown()
 #else /* __linux__ && __x86_64__ */
 
 void
-seccomp_sandbox_init()
+seccomp_sandbox_init(void)
 {
 }
 
@@ -713,12 +713,12 @@ seccomp_sandbox_setup_postlogin(_Ptr<const struct vsf_session> p_sess)
 }
 
 void
-seccomp_sandbox_setup_postlogin_broker()
+seccomp_sandbox_setup_postlogin_broker(void)
 {
 }
 
 void
-seccomp_sandbox_lockdown()
+seccomp_sandbox_lockdown(void)
 {
 }
 

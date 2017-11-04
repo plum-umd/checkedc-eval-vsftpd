@@ -1,9 +1,13 @@
 #ifndef VSF_BUILDDEFS_H
 #define VSF_BUILDDEFS_H
 
+#pragma BOUNDS_CHECKED ON
+
 #undef VSF_BUILD_TCPWRAPPERS
 #define VSF_BUILD_PAM
 #undef VSF_BUILD_SSL
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_BUILDDEFS_H */
 

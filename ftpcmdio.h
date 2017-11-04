@@ -1,6 +1,8 @@
 #ifndef VSF_FTPCMDIO_H
 #define VSF_FTPCMDIO_H
 
+#pragma BOUNDS_CHECKED ON
+
 struct mystr;
 struct vsf_session;
 
@@ -94,6 +96,8 @@ void vsf_cmdio_set_alarm(_Ptr<struct vsf_session> p_sess);
 void vsf_cmdio_get_cmd_and_arg(_Ptr<struct vsf_session> p_sess,
                                _Ptr<struct mystr> p_cmd_str,
                                _Ptr<struct mystr> p_arg_str, int set_alarm);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_FTPCMDIO_H */
 

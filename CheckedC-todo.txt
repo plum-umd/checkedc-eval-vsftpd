@@ -1,3 +1,14 @@
+Files to focus on
+  ascii.c (returned buf; arrayptr vs nt_arrayptr)
+  hash.c (void*)
+  ipaddrparse.c (buffer checked, NT vs. not)
+  ptracesandbox (header at least)
+  session.h : the SSL state has void* --- how to fix this?
+  ssl.h : same issue with void*
+  netstr.h : checked function pointer type
+  strlist.h : the nodes field is a normal pointer; should be an array?
+  sysutil.h : at least get checked prototypes (e.g., with iface)
+  
 Not sure that NT_array --> array is working with off-by-one
 errors. See die2 in utility.c. Make counterexample.
 
@@ -10,11 +21,7 @@ hunt for (char *) and (const char *) and start to remove them
 
 ssl.c
 netfd, readfunc writefunc stuff
-secbuf
-ipsddrparse — use arrayptr
 standalone.c — ip_count 
-
-polymorphism where useful/applicable
 
 make checked version of stat, other standard libraries
 

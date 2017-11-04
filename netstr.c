@@ -15,6 +15,8 @@
 #include "utility.h"
 #include "sysutil.h"
 
+#pragma BOUNDS_CHECKED ON
+
 int
 str_netfd_alloc(_Ptr<struct vsf_session> p_sess,
                 _Ptr<struct mystr> p_str,
@@ -41,7 +43,7 @@ str_netfd_alloc(_Ptr<struct vsf_session> p_sess,
     {
       return -1;
     }
-    retval = (*p_peekfunc)(p_sess, (char *)p_readpos, left);
+    retval = (*p_peekfunc)(p_sess, p_readpos, left);
     if (vsf_sysutil_retval_is_error(retval))
     {
       die("vsf_sysutil_recv_peek");
@@ -58,7 +60,7 @@ str_netfd_alloc(_Ptr<struct vsf_session> p_sess,
       {
         /* Got it! */
         i++;
-        retval = (*p_readfunc)(p_sess, (char *)p_readpos, i);
+        retval = (*p_readfunc)(p_sess, p_readpos, i);
         if (vsf_sysutil_retval_is_error(retval) ||
             (unsigned int) retval != i)
         {
@@ -78,7 +80,7 @@ str_netfd_alloc(_Ptr<struct vsf_session> p_sess,
       bug("bytes_read > left in str_netfd_alloc");
     }
     left -= bytes_read;
-    retval = (*p_readfunc)(p_sess, (char *)p_readpos, bytes_read);
+    retval = (*p_readfunc)(p_sess, p_readpos, bytes_read);
     if (vsf_sysutil_retval_is_error(retval) ||
         (unsigned int) retval != bytes_read)
     {

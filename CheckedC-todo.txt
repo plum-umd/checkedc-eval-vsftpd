@@ -5,20 +5,15 @@ Files to focus on
   ptracesandbox (header at least)
   session.h : the SSL state has void* --- how to fix this?
   ssl.h : same issue with void*
-  netstr.h : checked function pointer type
   strlist.h : the nodes field is a normal pointer; should be an array?
   sysutil.h : at least get checked prototypes (e.g., with iface)
   postlogin.c : sighandlers, void*
   
-Not sure that NT_array --> array is working with off-by-one
-errors. See die2 in utility.c. Make counterexample.
-
 change to using checked standard library headers (e.g., stdio_checked)
 
 make headers all checked
+- Fix calls to functions listed in these headers to drop casts on args
 make individual functions checked, if need be
-
-hunt for (char *) and (const char *) and start to remove them
 
 ssl.c
 netfd, readfunc writefunc stuff
@@ -26,5 +21,25 @@ standalone.c — ip_count
 
 make checked version of stat, other standard libraries
 
-finish tunables.c (other arrays)
+===
 
+NT notes:
+
+Nt_array_ptr<char> buf : count(size) means that buf[size] == '\0’
+
+array_ptr<T> p : bounds(lower, upper) :-  lower <= p' < upper // for all reads and writes via any pointer p’ based off p
+array_ptr<T> p : count(n) :- p <= p’ < p + n // for all reads and writes via any pointer p’ based off p
+
+nt_array_ptr<T> s : bounds(lower, upper) :- lower <= s’ < upper // for all writes via any pointer s’ based off s
+nt_array_ptr<T> s : bounds(lower, upper) :- lower <= s’ <= upper // for all reads via any pointer s’ based off s
+nt_array_ptr<T> s : count(n) :- s <= s’ < s + n // for all reads via any pointer s’ based off s.
+nt_array_ptr<T> s : count(n) :- s <= s’ <= s + n // for all writes via any pointer s’ based off s.
+
+Checked headers:
+
+_builtin_stdio_checked.h	stdchecked.h
+_builtin_string_checked.h	stdio_checked.h
+fenv_checked.h			stdlib_checked.h
+inttypes_checked.h		string_checked.h
+math_checked.h			threads_checked.h
+signal_checked.h		time_checked.h

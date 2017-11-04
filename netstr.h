@@ -1,12 +1,19 @@
 #ifndef VSFTP_NETSTR_H
 #define VSFTP_NETSTR_H
 
+#pragma BOUNDS_CHECKED ON
+
 struct mystr;
 struct vsf_session;
 
-typedef int (*str_netfd_read_t)(_Ptr<struct vsf_session> p_sess,
-				_Array_ptr<char> p_buf : count(len),
-                                unsigned int len);
+typedef _Ptr<int (_Ptr<struct vsf_session> p_sess,
+		  _Array_ptr<char> p_buf : count(len),
+		  unsigned int len)> str_netfd_read_t;
+
+/* typedef int (*str_netfd_read_t)(_Ptr<struct vsf_session> p_sess, */
+/* 				_Array_ptr<char> p_buf : count(len), */
+/*                                 unsigned int len); */
+
 
 /* str_netfd_alloc()
  * PURPOSE
@@ -65,6 +72,8 @@ int str_netfd_read(_Ptr<struct mystr> p_str, int fd, unsigned int len);
  * unless the full string buffer object is written.
  */
 int str_netfd_write(_Ptr<const struct mystr> p_str, int fd);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSFTP_NETSTR_H */
 

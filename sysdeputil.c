@@ -36,7 +36,7 @@
 #include <sys/uio.h>
 
 #include <sys/prctl.h>
-#include <signal.h>
+#include <signal_checked.h>
 
 /* Configuration.. here are the possibilities */
 #undef VSF_SYSDEP_HAVE_CAPABILITIES

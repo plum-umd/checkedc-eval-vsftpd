@@ -72,7 +72,7 @@ static void prepend_path_to_filename(_Ptr<struct mystr> p_str);
 static int get_remote_transfer_fd(_Ptr<struct vsf_session> p_sess,
                                   _Nt_array_ptr<const char> p_status_msg);
 static void check_abor(_Ptr<struct vsf_session> p_sess);
-static void handle_sigurg(void* p_private);
+static void handle_sigurg(_Ptr<void> p_private);
 static void handle_upload_common(_Ptr<struct vsf_session> p_sess, int is_append,
                                  int is_unique);
 static void get_unique_filename(_Ptr<struct mystr> p_outstr,
@@ -106,7 +106,7 @@ process_post_login(_Ptr<struct vsf_session> p_sess)
    */
   if (tunable_async_abor_enable && !p_sess->control_use_ssl)
   {
-    vsf_sysutil_install_sighandler(kVSFSysUtilSigURG, handle_sigurg, (void *)p_sess, 0);
+    vsf_sysutil_install_sighandler(kVSFSysUtilSigURG, handle_sigurg, p_sess, 0);
     vsf_sysutil_activate_sigurg(VSFTP_COMMAND_FD);
   }
   /* Handle any login message */
@@ -1383,7 +1383,7 @@ prepend_path_to_filename(_Ptr<struct mystr> p_str)
 
 
 static void
-handle_sigurg(void* p_private)
+handle_sigurg(_Ptr<void> p_private)
 {
   struct mystr async_cmd_str = INIT_MYSTR;
   struct mystr async_arg_str = INIT_MYSTR;

@@ -27,7 +27,7 @@ static void ftp_write_text_common(_Ptr<struct vsf_session> p_sess, int status,
 				  char sep);
 static void ftp_write_str_common(_Ptr<struct vsf_session> p_sess, int status,
                                  char sep, _Ptr<const struct mystr> p_str);
-static void handle_alarm_timeout(void* p_private);
+static void handle_alarm_timeout(_Ptr<void> p_private);
 
 void
 vsf_cmdio_sock_setup(void)
@@ -38,9 +38,9 @@ vsf_cmdio_sock_setup(void)
 }
 
 static void
-handle_alarm_timeout(void* p_private)
+handle_alarm_timeout(_Ptr<void> p_private)
 {
-  struct vsf_session* p_sess = (struct vsf_session*) p_private;
+  _Ptr<struct vsf_session> p_sess = (_Ptr<struct vsf_session>) p_private;
   p_sess->idle_timeout = 1;
   vsf_sysutil_activate_noblock(VSFTP_COMMAND_FD);
   vsf_sysutil_shutdown_read_failok(VSFTP_COMMAND_FD);
@@ -157,7 +157,7 @@ vsf_cmdio_set_alarm(_Ptr<struct vsf_session> p_sess)
   {
     vsf_sysutil_install_sighandler(kVSFSysUtilSigALRM,
                                    handle_alarm_timeout,
-                                   (void*)p_sess,
+                                   p_sess,
                                    1);
     vsf_sysutil_set_alarm(tunable_idle_session_timeout);
   }

@@ -8,7 +8,7 @@ Files to focus on
   strlist.h : the nodes field is a normal pointer; should be an array?
   sysutil.h : at least get checked prototypes (e.g., with iface)
   postlogin.c : sighandlers, void*
-  
+
 change to using checked standard library headers (e.g., stdio_checked)
 
 make headers all checked
@@ -19,7 +19,9 @@ ssl.c
 netfd, readfunc writefunc stuff
 standalone.c — ip_count 
 
-make checked version of stat, other standard libraries
+make checked version of sys/stat, fix signal_checked to define
+sa_handler so I don't have to do
+     sigact.sa_handler = (void (*)(int))p_handlefunc;
 
 ===
 

@@ -37,19 +37,22 @@ enum EVSFSysUtilInterruptContext
   kVSFSysUtilUnknown,
   kVSFSysUtilIO
 };
-typedef void (*vsf_sighandle_t)(void*);
-typedef void (*vsf_async_sighandle_t)(int);
-typedef void (*vsf_context_io_t)(int, int, void*);
+/* typedef void (*vsf_sighandle_t)(void*); */
+/* typedef void (*vsf_async_sighandle_t)(int); */
+/* typedef void (*vsf_context_io_t)(int, int, void*); */
+typedef _Ptr<void (_Ptr<void>)> vsf_sighandle_t;
+typedef _Ptr<void (int)> vsf_async_sighandle_t;
+typedef _Ptr<void (int, int, _Ptr<void>)> vsf_context_io_t;
 
 void vsf_sysutil_install_null_sighandler(const enum EVSFSysUtilSignal sig);
 void vsf_sysutil_install_sighandler(const enum EVSFSysUtilSignal,
                                     vsf_sighandle_t handler,
-                                    void* p_private,
+                                    _Ptr<void> p_private,
                                     int use_alarm);
 void vsf_sysutil_install_async_sighandler(const enum EVSFSysUtilSignal sig,
                                           vsf_async_sighandle_t handler);
 void vsf_sysutil_default_sig(const enum EVSFSysUtilSignal p_handlefuncsig);
-void vsf_sysutil_install_io_handler(vsf_context_io_t handler, void* p_private);
+void vsf_sysutil_install_io_handler(vsf_context_io_t handler, _Ptr<void> p_private);
 void vsf_sysutil_uninstall_io_handler(void);
 void vsf_sysutil_check_pending_actions(
   const enum EVSFSysUtilInterruptContext context, int retval, int fd);

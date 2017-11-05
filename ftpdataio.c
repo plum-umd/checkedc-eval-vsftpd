@@ -40,9 +40,9 @@ static struct vsf_transfer_ret do_file_send_rwloop(
   _Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii);
 static struct vsf_transfer_ret do_file_recv(
   _Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii);
-static void handle_sigalrm(void* p_private);
+static void handle_sigalrm(_Ptr<void> p_private);
 static void start_data_alarm(_Ptr<struct vsf_session> p_sess);
-static void handle_io(int retval, int fd, void* p_private);
+static void handle_io(int retval, int fd, _Ptr<void> p_private);
 static int transfer_dir_internal(
   _Ptr<struct vsf_session> p_sess, int is_control, _Ptr<struct vsf_sysutil_dir> p_dir,
   _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str,
@@ -193,7 +193,7 @@ vsf_ftpdataio_post_mark_connect(_Ptr<struct vsf_session> p_sess)
 }
 
 static void
-handle_sigalrm(void* p_private)
+handle_sigalrm(_Ptr<void> p_private)
 {
   _Ptr<struct vsf_session> p_sess =
     _Assume_bounds_cast<_Ptr<struct vsf_session>>(p_private);
@@ -218,7 +218,7 @@ start_data_alarm(_Ptr<struct vsf_session> p_sess)
   {
     vsf_sysutil_install_sighandler(kVSFSysUtilSigALRM,
                                    handle_sigalrm,
-                                   (void*)p_sess,
+                                   p_sess,
                                    1);
     vsf_sysutil_set_alarm(tunable_data_connection_timeout);
   }
@@ -241,12 +241,12 @@ init_data_sock_params(_Ptr<struct vsf_session> p_sess, int sock_fd)
   /* And in the vague hope it might help... */
   vsf_sysutil_set_iptos_throughput(sock_fd);
   /* Start the timeout monitor */
-  vsf_sysutil_install_io_handler(handle_io, (void*)p_sess);
+  vsf_sysutil_install_io_handler(handle_io, p_sess);
   start_data_alarm(p_sess);
 }
 
 static void
-handle_io(int retval, int fd, void* p_private)
+handle_io(int retval, int fd, _Ptr<void> p_private)
 {
   long curr_sec;
   long curr_usec;

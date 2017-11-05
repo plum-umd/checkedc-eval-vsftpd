@@ -11,10 +11,12 @@
 #include "sysutil.h"
 #include "utility.h"
 
+#pragma BOUNDS_CHECKED ON
+
 struct hash_node
 {
-  void* p_key;
-  void* p_value;
+  _Ptr<void> p_key;
+  _Ptr<void> p_value;
   _Ptr<struct hash_node> p_prev;
   _Ptr<struct hash_node> p_next;
 };
@@ -29,8 +31,8 @@ struct hash
 };
 
 /* Internal functions */
-_Ptr<_Ptr<struct hash_node>> hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key);
-_Ptr<struct hash_node> hash_get_node_by_key(_Ptr<struct hash> p_hash, void* p_key);
+_Ptr<_Ptr<struct hash_node>> hash_get_bucket(_Ptr<struct hash> p_hash, _Ptr<void> p_key);
+_Ptr<struct hash_node> hash_get_node_by_key(_Ptr<struct hash> p_hash, _Ptr<void> p_key);
 
 _Ptr<struct hash>
 hash_alloc(unsigned int buckets, unsigned int key_size,
@@ -48,8 +50,8 @@ hash_alloc(unsigned int buckets, unsigned int key_size,
   return p_hash;
 }
 
-void*
-hash_lookup_entry(_Ptr<struct hash> p_hash, void* p_key)
+_Ptr<void>
+hash_lookup_entry(_Ptr<struct hash> p_hash, _Ptr<void> p_key)
 {
   _Ptr<struct hash_node> p_node = hash_get_node_by_key(p_hash, p_key);
   if (!p_node)
@@ -60,7 +62,7 @@ hash_lookup_entry(_Ptr<struct hash> p_hash, void* p_key)
 }
 
 void
-hash_add_entry(_Ptr<struct hash> p_hash, void* p_key, void* p_value)
+hash_add_entry(_Ptr<struct hash> p_hash, _Ptr<void> p_key, _Ptr<void> p_value)
 {
   _Ptr<_Ptr<struct hash_node>> p_bucket = 0;
   _Ptr<struct hash_node> p_new_node = 0;
@@ -90,7 +92,7 @@ hash_add_entry(_Ptr<struct hash> p_hash, void* p_key, void* p_value)
 }
 
 void
-hash_free_entry(_Ptr<struct hash> p_hash, void* p_key)
+hash_free_entry(_Ptr<struct hash> p_hash, _Ptr<void> p_key)
 {
   _Ptr<struct hash_node> p_node = hash_get_node_by_key(p_hash, p_key);
   if (!p_node)
@@ -118,7 +120,7 @@ hash_free_entry(_Ptr<struct hash> p_hash, void* p_key)
 }
 
 _Ptr<_Ptr<struct hash_node>>
-hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key)
+hash_get_bucket(_Ptr<struct hash> p_hash, _Ptr<void> p_key)
 {
   unsigned int bucket = (*p_hash->hash_func)(p_hash->buckets, p_key);
   if (bucket >= p_hash->buckets)
@@ -129,7 +131,7 @@ hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key)
 }
 
 _Ptr<struct hash_node>
-hash_get_node_by_key(_Ptr<struct hash> p_hash, void* p_key)
+hash_get_node_by_key(_Ptr<struct hash> p_hash, _Ptr<void> p_key)
 {
   _Ptr<_Ptr<struct hash_node>> p_bucket = hash_get_bucket(p_hash, p_key);
   _Ptr<struct hash_node> p_node = *p_bucket;

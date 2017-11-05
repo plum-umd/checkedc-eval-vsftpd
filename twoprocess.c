@@ -30,8 +30,8 @@
 #include "seccompsandbox.h"
 
 static void drop_all_privs(void);
-static void handle_sigchld(void* duff);
-static void handle_sigterm(void* duff);
+static void handle_sigchld(_Ptr<void> duff);
+static void handle_sigterm(_Ptr<void> duff);
 static void process_login_req(_Ptr<struct vsf_session> p_sess);
 static void common_do_login(_Ptr<struct vsf_session> p_sess,
                             _Ptr<const struct mystr> p_user_str, int do_chroot,
@@ -44,7 +44,7 @@ static void calculate_chdir_dir(int anon, _Ptr<struct mystr> p_userdir_str,
                                 _Ptr<const struct mystr> p_orig_user_str);
 
 static void
-handle_sigchld(void* duff)
+handle_sigchld(_Ptr<void> duff)
 {
 
   struct vsf_sysutil_wait_retval wait_retval = vsf_sysutil_wait();
@@ -64,7 +64,7 @@ handle_sigchld(void* duff)
 }
 
 static void
-handle_sigterm(void* duff)
+handle_sigterm(_Ptr<void> duff)
 {
   (void) duff;
   /* Blow away the connection to make sure no process lingers. */

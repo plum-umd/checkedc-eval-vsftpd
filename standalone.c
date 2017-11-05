@@ -24,14 +24,14 @@ static _Ptr<struct hash> s_p_ip_count_hash;
 static _Ptr<struct hash> s_p_pid_ip_hash;
 static unsigned int s_ipaddr_size;
 
-static void handle_sigchld(void* duff);
-static void handle_sighup(void* duff);
+static void handle_sigchld(_Ptr<void> duff);
+static void handle_sighup(_Ptr<void> duff);
 static void prepare_child(int sockfd);
-static unsigned int handle_ip_count(void* p_raw_addr);
-static void drop_ip_count(void* p_raw_addr);
+static unsigned int handle_ip_count(_Ptr<void> p_raw_addr);
+static void drop_ip_count(_Ptr<void> p_raw_addr);
 
-static unsigned int hash_ip(unsigned int buckets, void* p_key);
-static unsigned int hash_pid(unsigned int buckets, void* p_key);
+static unsigned int hash_ip(unsigned int buckets, _Ptr<void> p_key);
+static unsigned int hash_pid(unsigned int buckets, _Ptr<void> p_key);
 
 struct vsf_client_launch
 vsf_standalone_main(void)
@@ -139,7 +139,7 @@ vsf_standalone_main(void)
   while (1)
   {
     struct vsf_client_launch child_info;
-    void* p_raw_addr;
+    _Ptr<void> p_raw_addr = 0;
     int new_child;
     int new_client_sock;
     new_client_sock = vsf_sysutil_accept_timeout(
@@ -151,7 +151,7 @@ vsf_standalone_main(void)
     ++s_children;
     child_info.num_children = s_children;
     child_info.num_this_ip = 0;
-    p_raw_addr = vsf_sysutil_sockaddr_get_raw_addr(p_accept_addr);
+    p_raw_addr = _Assume_bounds_cast<_Ptr<void>>(vsf_sysutil_sockaddr_get_raw_addr(p_accept_addr));
     child_info.num_this_ip = handle_ip_count(p_raw_addr);
     if (tunable_isolate)
     {
@@ -174,7 +174,7 @@ vsf_standalone_main(void)
       vsf_sysutil_close(new_client_sock);
       if (new_child > 0)
       {
-        hash_add_entry(s_p_pid_ip_hash, (void*)&new_child, p_raw_addr);
+        hash_add_entry(s_p_pid_ip_hash, &new_child, p_raw_addr);
       }
       else
       {
@@ -212,7 +212,7 @@ prepare_child(int new_client_sock)
 }
 
 static void
-drop_ip_count(void* p_raw_addr)
+drop_ip_count(_Ptr<void> p_raw_addr)
 {
   unsigned int count;
   unsigned int* p_count =
@@ -235,7 +235,7 @@ drop_ip_count(void* p_raw_addr)
 }
 
 static void
-handle_sigchld(void* duff)
+handle_sigchld(_Ptr<void> duff)
 {
   unsigned int reap_one = 1;
   (void) duff;
@@ -244,20 +244,19 @@ handle_sigchld(void* duff)
     reap_one = (unsigned int)vsf_sysutil_wait_reap_one();
     if (reap_one)
     {
-      struct vsf_sysutil_ipaddr* p_ip;
+      _Ptr<void> p_ip = 0;
       /* Account total number of instances */
       --s_children;
       /* Account per-IP limit */
-      p_ip = (struct vsf_sysutil_ipaddr*)
-        hash_lookup_entry(s_p_pid_ip_hash, (void*)&reap_one);
+      p_ip = hash_lookup_entry(s_p_pid_ip_hash, &reap_one);
       drop_ip_count(p_ip);      
-      hash_free_entry(s_p_pid_ip_hash, (void*)&reap_one);
+      hash_free_entry(s_p_pid_ip_hash, &reap_one);
     }
   }
 }
 
 static void
-handle_sighup(void* duff)
+handle_sighup(_Ptr<void> duff)
 {
   (void) duff;
   /* We don't crash the out the listener if an invalid config was added */
@@ -266,7 +265,7 @@ handle_sighup(void* duff)
 }
 
 static unsigned int
-hash_ip(unsigned int buckets, void* p_key)
+hash_ip(unsigned int buckets, _Ptr<void> p_key)
 {
   const unsigned char* p_raw_ip = (const unsigned char*)p_key;
   unsigned int val = 0;
@@ -285,14 +284,14 @@ hash_ip(unsigned int buckets, void* p_key)
 }
 
 static unsigned int
-hash_pid(unsigned int buckets, void* p_key)
+hash_pid(unsigned int buckets, _Ptr<void> p_key)
 {
   unsigned int* p_pid = (unsigned int*)p_key;
   return (*p_pid) % buckets;
 }
 
 static unsigned int
-handle_ip_count(void* p_ipaddr)
+handle_ip_count(_Ptr<void> p_ipaddr)
 {
   unsigned int* p_count =
     (unsigned int*)hash_lookup_entry(s_p_ip_count_hash, p_ipaddr);
@@ -300,7 +299,7 @@ handle_ip_count(void* p_ipaddr)
   if (!p_count)
   {
     count = 1;
-    hash_add_entry(s_p_ip_count_hash, p_ipaddr, (void*)&count);
+    hash_add_entry(s_p_ip_count_hash, p_ipaddr, (_Ptr<void>)&count);
   }
   else
   {

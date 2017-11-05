@@ -72,14 +72,14 @@ static long s_timezone;
 static struct vsf_sysutil_sig_details
 {
   vsf_sighandle_t sync_sig_handler;
-  void* p_private;
+  _Ptr<void> p_private;
   volatile sig_atomic_t pending;
   int running;
   int use_alarm;
 } s_sig_details[NSIG];
 
 static vsf_context_io_t s_io_handler;
-static void* s_p_io_handler_private;
+static _Ptr<void> s_p_io_handler_private;
 static int s_io_handler_running;
 
 struct vsf_sysutil_sockaddr
@@ -96,7 +96,7 @@ struct vsf_sysutil_sockaddr
 static void vsf_sysutil_common_sighandler(int signum);
 static void vsf_sysutil_alrm_sighandler(int signum);
 static int vsf_sysutil_translate_sig(const enum EVSFSysUtilSignal sig);
-static void vsf_sysutil_set_sighandler(int sig, void (*p_handlefunc)(int));
+static void vsf_sysutil_set_sighandler(int sig, _Ptr<void (int)>);
 static int vsf_sysutil_translate_memprot(
   const enum EVSFSysUtilMapPermission perm);
 static int vsf_sysutil_translate_openmode(
@@ -215,7 +215,7 @@ vsf_sysutil_translate_sig(const enum EVSFSysUtilSignal sig)
 void
 vsf_sysutil_install_sighandler(const enum EVSFSysUtilSignal sig,
                                vsf_sighandle_t handler,
-                               void* p_private,
+                               _Ptr<void> p_private,
                                int use_alarm)
 {
   int realsig = vsf_sysutil_translate_sig(sig);
@@ -259,12 +259,12 @@ vsf_sysutil_install_async_sighandler(const enum EVSFSysUtilSignal sig,
 }
 
 static void
-vsf_sysutil_set_sighandler(int sig, void (*p_handlefunc)(int))
+vsf_sysutil_set_sighandler(int sig, _Ptr<void (int)> p_handlefunc)
 {
   int retval;
   struct sigaction sigact;
   vsf_sysutil_memclr(&sigact, sizeof(sigact));
-  sigact.sa_handler = p_handlefunc;
+  sigact.sa_handler = (void (*)(int))p_handlefunc;
   retval = sigfillset(&sigact.sa_mask);
   if (retval != 0)
   {
@@ -323,7 +323,7 @@ vsf_sysutil_unblock_sig(const enum EVSFSysUtilSignal sig)
   }
 }
 void
-vsf_sysutil_install_io_handler(vsf_context_io_t handler, void* p_private)
+vsf_sysutil_install_io_handler(vsf_context_io_t handler, _Ptr<void> p_private)
 {
   if (s_io_handler != NULL)
   {

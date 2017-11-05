@@ -266,16 +266,14 @@ handle_sighup(_Ptr<void> duff)
   vsf_parseconf_load_file(0, 0);
 }
 
-static unsigned int
+_Unchecked static unsigned int
 hash_ip(unsigned int buckets, _Ptr<void> p_key)
 {
-  _Array_ptr<const unsigned char> p_raw_ip : count(s_ipaddr_size) = 0;
+  const unsigned char* p_raw_ip;
   unsigned int val = 0;
   int shift = 24;
   unsigned int i;
-  /* XXX FIX */
-  (void)p_key;
-  /* _Unchecked { p_raw_ip = _Assume_bounds_cast<_Array_ptr<const unsigned char>>(p_key,s_ipaddr_size); } */
+  p_raw_ip = (const unsigned char*)p_key;
   for (i = 0; i < s_ipaddr_size; ++i)
   {
     val = val ^ (unsigned int) (p_raw_ip[i] << shift);

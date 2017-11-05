@@ -115,7 +115,7 @@ vsf_standalone_main(void)
     else
     {
       struct mystr addr_str = INIT_MYSTR;
-      _Nt_array_ptr<const unsigned char> p_raw_addr = 0;
+      _Array_ptr<const unsigned char> p_raw_addr : count(16) = 0;
       str_alloc_text(&addr_str, tunable_listen_address6);
       p_raw_addr = vsf_sysutil_parse_ipv6(&addr_str);
       str_free(&addr_str);

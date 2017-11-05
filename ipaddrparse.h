@@ -10,7 +10,7 @@ struct mystr;
  * and safety.
  */
 
-_Nt_array_ptr<const unsigned char> vsf_sysutil_parse_ipv6(_Ptr<const struct mystr> p_str);
+_Array_ptr<const unsigned char> vsf_sysutil_parse_ipv6(_Ptr<const struct mystr> p_str) : count(16);
 
 _Array_ptr<const unsigned char> vsf_sysutil_parse_ipv4(_Ptr<const struct mystr> p_str) : count(4);
 

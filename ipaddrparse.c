@@ -21,8 +21,8 @@ static int ipv6_parse_hex(_Ptr<struct mystr> p_out_str,
 static int ipv4_parse_dotquad(_Ptr<struct mystr> p_out_str,
                               _Ptr<const struct mystr> p_in_str);
 
-_Nt_array_ptr<const unsigned char>
-vsf_sysutil_parse_ipv6(_Ptr<const struct mystr> p_str)
+_Array_ptr<const unsigned char>
+vsf_sysutil_parse_ipv6(_Ptr<const struct mystr> p_str) : count(16)
 {
   static struct mystr s_ret;
   static struct mystr s_rhs_ret;
@@ -57,7 +57,13 @@ vsf_sysutil_parse_ipv6(_Ptr<const struct mystr> p_str)
     }
     str_append_str(&s_ret, &s_rhs_ret);
   }
-  return (_Nt_array_ptr<const unsigned char>) str_getbuf(&s_ret);
+  _Unchecked {
+    unsigned int len = str_getlen(&s_ret);
+    _Dynamic_check(len >= 16);
+    _Array_ptr<const unsigned char> ret : count(16) =
+      _Assume_bounds_cast<_Array_ptr<const unsigned char>>(str_getbuf(&s_ret),16);
+    return ret;
+  }
 }
 
 _Array_ptr<const unsigned char>

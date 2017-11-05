@@ -2024,8 +2024,9 @@ vsf_sysutil_sockaddr_is_ipv6(const _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr)
 
 void
 vsf_sysutil_sockaddr_set_ipv4addr(_Ptr<struct vsf_sysutil_sockaddr> p_sockptr,
-                                  const unsigned char* p_raw)
+                                  _Array_ptr<const unsigned char> p_raw : count(4))
 {
+  _Dynamic_check(sizeof(p_sockptr->u.u_sockaddr_in.sin_addr) == 4);
   if (p_sockptr->u.u_sockaddr.sa_family == AF_INET)
   {
     vsf_sysutil_memcpy(&p_sockptr->u.u_sockaddr_in.sin_addr, p_raw,
@@ -2049,8 +2050,9 @@ vsf_sysutil_sockaddr_set_ipv4addr(_Ptr<struct vsf_sysutil_sockaddr> p_sockptr,
 
 void
 vsf_sysutil_sockaddr_set_ipv6addr(_Ptr<struct vsf_sysutil_sockaddr> p_sockptr,
-                                  _Nt_array_ptr<const unsigned char> p_raw)
+                                  _Array_ptr<const unsigned char> p_raw : count(16))
 {
+  _Dynamic_check(sizeof(p_sockptr->u.u_sockaddr_in6.sin6_addr) == 16);
   if (p_sockptr->u.u_sockaddr.sa_family == AF_INET6)
   {
     vsf_sysutil_memcpy(&p_sockptr->u.u_sockaddr_in6.sin6_addr, p_raw,

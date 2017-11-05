@@ -972,9 +972,8 @@ static void
 handle_port(_Ptr<struct vsf_session> p_sess)
 {
   unsigned short the_port;
-  unsigned char vals[6];
-  const unsigned char* p_raw;
-  /* _Array_ptr<unsigned char> p_raw : count(sizeof(vals)) = 0; */
+  unsigned char vals _Checked [6];
+  _Array_ptr<const unsigned char> p_raw : count(sizeof(vals)) = 0;
   pasv_cleanup(p_sess);
   port_cleanup(p_sess);
   p_raw = vsf_sysutil_parse_uchar_string_sep(&p_sess->ftp_arg_str, ',', vals,
@@ -1707,11 +1706,11 @@ handle_eprt(_Ptr<struct vsf_session> p_sess)
   if (proto == 2)
   {
     str_split_char(&s_part1_str, &s_scopeid_str, '%');
-    p_raw_addr = vsf_sysutil_parse_ipv6(&s_part1_str);
+    p_raw_addr = (const unsigned char*)vsf_sysutil_parse_ipv6(&s_part1_str);
   }
   else
   {
-    p_raw_addr = vsf_sysutil_parse_ipv4(&s_part1_str);
+    p_raw_addr = (const unsigned char*)vsf_sysutil_parse_ipv4(&s_part1_str);
   }
   if (!p_raw_addr)
   {
@@ -1731,11 +1730,13 @@ handle_eprt(_Ptr<struct vsf_session> p_sess)
   vsf_sysutil_sockaddr_clone(&p_sess->p_port_sockaddr, p_sess->p_local_addr);
   if (proto == 2)
   {
-    vsf_sysutil_sockaddr_set_ipv6addr(p_sess->p_port_sockaddr, p_raw_addr);
+    vsf_sysutil_sockaddr_set_ipv6addr(p_sess->p_port_sockaddr,
+				      _Assume_bounds_cast<_Array_ptr<const unsigned char>>(p_raw_addr,16));
   }
   else
   {
-    vsf_sysutil_sockaddr_set_ipv4addr(p_sess->p_port_sockaddr, p_raw_addr);
+    vsf_sysutil_sockaddr_set_ipv4addr(p_sess->p_port_sockaddr,
+				      _Assume_bounds_cast<_Array_ptr<const unsigned char>>(p_raw_addr,4));
   }
   vsf_sysutil_sockaddr_set_port(p_sess->p_port_sockaddr, (unsigned short) port);
   /* SECURITY:

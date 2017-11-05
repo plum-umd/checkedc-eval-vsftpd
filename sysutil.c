@@ -2672,10 +2672,12 @@ vsf_sysutil_get_time_usec(void)
 }
 
 void
-vsf_sysutil_qsort(void* p_base, unsigned int num_elem, unsigned int elem_size,
-                  int (*p_compar)(const void *, const void *))
+vsf_sysutil_qsort(_Array_ptr<void> p_base /* : count(num_elem) */,
+		  unsigned int num_elem,
+		  unsigned int elem_size,
+		  _Ptr<int (_Ptr<const void>, _Ptr<const void>)> p_compar)
 {
-  qsort(p_base, num_elem, elem_size, p_compar);
+  qsort((void *)p_base, num_elem, elem_size, p_compar);
 }
 
 void

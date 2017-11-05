@@ -1,33 +1,22 @@
 Files to focus on
   ascii.c (returned buf; arrayptr vs nt_arrayptr)
-  hash.c (void*)
-  ipaddrparse.c (buffer checked, NT vs. not)
   ptracesandbox (header at least)
-  session.h : the SSL state has void* --- how to fix this?
-  ssl.h : same issue with void*
   strlist.h : the nodes field is a normal pointer; should be an array?
   sysutil.h : at least get checked prototypes (e.g., with iface)
-  postlogin.c : sighandlers, void*
+  postlogin.c : sighandlers, void*, ipv6 vs. v4 addr handling needs to
+    be refactored
 
 change str.c to make getlen and getbuf into macros so we can track
 length relationships
 
-the ipv6 address returned from parsing should be a fixed size. It
-comes from sizeof(p_sockptr->u.u_sockaddr_in6.sin6_addr)
--- This comes up in postlogin.c for eprt handling. Maybe it should be
-
-change to using checked standard library headers (e.g., stdio_checked)
-
 make headers all checked
-- Fix calls to functions listed in these headers to drop casts on args
-make individual functions checked, if need be
+- ascii.h
+- ptracesandbox.h
+- sysutil.h
 
-ssl.c
-netfd, readfunc writefunc stuff
-standalone.c — ip_count 
-
+ipaddrparse.c (squirrely cast in unchecked code)
 make checked version of sys/stat, fix signal_checked to define
-sa_handler so I don't have to do
+ sa_handler so I don't have to do
      sigact.sa_handler = (void (*)(int))p_handlefunc;
 
 ===

@@ -1,6 +1,8 @@
 #ifndef VSF_STRLIST_H
 #define VSF_STRLIST_H
 
+#pragma BOUNDS_CHECKED ON
+
 /* Forward declarations */
 struct mystr;
 struct mystr_list_node;
@@ -9,7 +11,7 @@ struct mystr_list
 {
   unsigned int PRIVATE_HANDS_OFF_alloc_len;
   unsigned int PRIVATE_HANDS_OFF_list_len;
-  struct mystr_list_node* PRIVATE_HANDS_OFF_p_nodes;
+  _Array_ptr<struct mystr_list_node> PRIVATE_HANDS_OFF_p_nodes : count(PRIVATE_HANDS_OFF_alloc_len);
 };
 
 #define INIT_STRLIST \
@@ -27,6 +29,8 @@ int str_list_contains_str(_Ptr<const struct mystr_list> p_list,
 
 _Ptr<const struct mystr> str_list_get_pstr(_Ptr<const struct mystr_list> p_list,
                                       unsigned int indexx);
+
+#pragma BOUNDS_CHECKED OFF
 
 #endif /* VSF_STRLIST_H */
 

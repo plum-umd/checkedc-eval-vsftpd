@@ -15,6 +15,8 @@
 #include "utility.h"
 #include "sysutil.h"
 
+#pragma BOUNDS_CHECKED ON
+
 struct mystr_list_node
 {
   struct mystr str;
@@ -26,14 +28,15 @@ static const unsigned int kMaxStrlist = 10 * 1000 * 1000;
 
 static struct mystr s_null_str;
 
-static int sort_compare_func(const void* p1, const void* p2);
-static int sort_compare_func_reverse(const void* p1, const void* p2);
-static int sort_compare_common(const void* p1, const void* p2, int reverse);
+static int sort_compare_func(_Ptr<const void> p1, _Ptr<const void> p2);
+static int sort_compare_func_reverse(_Ptr<const void> p1, _Ptr<const void> p2);
+static int sort_compare_common(_Ptr<const void> p1, _Ptr<const void> p2, int reverse);
 
 void
 str_list_free(_Ptr<struct mystr_list> p_list)
 {
   unsigned int i;
+  _Dynamic_check(p_list->list_len <= p_list->alloc_len);
   for (i=0; i < p_list->list_len; ++i)
   {
     str_free(&p_list->p_nodes[i].str);
@@ -59,6 +62,7 @@ str_list_contains_str(_Ptr<const struct mystr_list> p_list,
                       _Ptr<const struct mystr> p_str)
 {
   unsigned int i;
+  _Dynamic_check(p_list->list_len <= p_list->alloc_len);
   for (i=0; i < p_list->list_len; ++i)
   {
     if (str_equal(p_str, &p_list->p_nodes[i].str))
@@ -73,7 +77,7 @@ void
 str_list_add(_Ptr<struct mystr_list> p_list, _Ptr<const struct mystr> p_str,
              _Ptr<const struct mystr> p_sort_key_str)
 {
-  struct mystr_list_node* p_node = 0;
+  _Ptr<struct mystr_list_node> p_node = 0;
   /* Expand the node allocation if we have to */
   if (p_list->list_len == p_list->alloc_len)
   {
@@ -123,24 +127,24 @@ str_list_sort(_Ptr<struct mystr_list> p_list, int reverse)
 }
 
 static int
-sort_compare_func(const void* p1, const void* p2)
+sort_compare_func(_Ptr<const void> p1, _Ptr<const void> p2)
 {
   return sort_compare_common(p1, p2, 0);
 }
 
 static int
-sort_compare_func_reverse(const void* p1, const void* p2)
+sort_compare_func_reverse(_Ptr<const void> p1, _Ptr<const void> p2)
 {
   return sort_compare_common(p1, p2, 1);
 }
 
 static int
-sort_compare_common(const void* p1, const void* p2, int reverse)
+sort_compare_common(_Ptr<const void> p1, _Ptr<const void> p2, int reverse)
 {
   _Ptr<const struct mystr> p_cmp1 = 0;
   _Ptr<const struct mystr> p_cmp2 = 0;
-  const struct mystr_list_node* p_node1 = (const struct mystr_list_node*) p1;
-  const struct mystr_list_node* p_node2 = (const struct mystr_list_node*) p2;
+  _Ptr<const struct mystr_list_node> p_node1 = (_Ptr<const struct mystr_list_node>) p1;
+  _Ptr<const struct mystr_list_node> p_node2 = (_Ptr<const struct mystr_list_node>) p2;
   if (!str_isempty(&p_node1->sort_key_str))
   {
     p_cmp1 = &p_node1->sort_key_str;

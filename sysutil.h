@@ -240,7 +240,7 @@ int vsf_sysutil_sockaddr_is_ipv6(
 void vsf_sysutil_sockaddr_set_ipv4addr(_Ptr<struct vsf_sysutil_sockaddr> p_sockptr,
                                        const unsigned char* p_raw);
 void vsf_sysutil_sockaddr_set_ipv6addr(_Ptr<struct vsf_sysutil_sockaddr> p_sockptr,
-                                       const unsigned char* p_raw);
+                                       _Nt_array_ptr<const unsigned char> p_raw);
 void vsf_sysutil_sockaddr_set_any(_Ptr<struct vsf_sysutil_sockaddr> p_sockaddr);
 unsigned short vsf_sysutil_sockaddr_get_port(
     const _Ptr<struct vsf_sysutil_sockaddr> p_sockptr);
@@ -249,7 +249,7 @@ void vsf_sysutil_sockaddr_set_port(_Ptr<struct vsf_sysutil_sockaddr> p_sockptr,
 int vsf_sysutil_is_port_reserved(unsigned short port);
 int vsf_sysutil_get_ipsock(const _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr);
 unsigned int vsf_sysutil_get_ipaddr_size(void);
-void* vsf_sysutil_sockaddr_get_raw_addr(
+_Ptr<void> vsf_sysutil_sockaddr_get_raw_addr(
   _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr);
 const void* vsf_sysutil_sockaddr_ipv6_v4(
   const _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr);

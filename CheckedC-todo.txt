@@ -9,6 +9,9 @@ Files to focus on
   sysutil.h : at least get checked prototypes (e.g., with iface)
   postlogin.c : sighandlers, void*
 
+the ipv6 address returned from parsing should be a fixed size. It
+comes from sizeof(p_sockptr->u.u_sockaddr_in6.sin6_addr)
+
 change to using checked standard library headers (e.g., stdio_checked)
 
 make headers all checked

@@ -12,16 +12,7 @@
 #include "sysutil.h"
 #include "str.h"
 
-/* MWH porting note:
-   There are commented out prototypes for the parsing routines here.
-   These should ideally use and produce arrayptrs. The size of the
-   arrayptr is clear for the Ipv4 case, but is somehow less clear
-   in the Ipv6 case. Probably should go look at where the address
-   is actually used, cite the bounds to be expected size from there,
-   and do a dynamic check here to make sure it's good. However, since
-   the str library is being used, that requires a clear bound
-   on strs. Not there yet.
-*/
+#pragma BOUNDS_CHECKED ON
 
 static int ipv6_parse_main(_Ptr<struct mystr> p_out_str,
                            _Ptr<const struct mystr> p_in_str);
@@ -30,7 +21,7 @@ static int ipv6_parse_hex(_Ptr<struct mystr> p_out_str,
 static int ipv4_parse_dotquad(_Ptr<struct mystr> p_out_str,
                               _Ptr<const struct mystr> p_in_str);
 
-const unsigned char*
+_Nt_array_ptr<const unsigned char>
 vsf_sysutil_parse_ipv6(_Ptr<const struct mystr> p_str)
 {
   static struct mystr s_ret;
@@ -66,27 +57,20 @@ vsf_sysutil_parse_ipv6(_Ptr<const struct mystr> p_str)
     }
     str_append_str(&s_ret, &s_rhs_ret);
   }
-  return (const unsigned char*) str_getbuf(&s_ret);
+  return (_Nt_array_ptr<const unsigned char>) str_getbuf(&s_ret);
 }
 
-const unsigned char*
-vsf_sysutil_parse_ipv4(_Ptr<const struct mystr> p_str)
-/* _Array_ptr<unsigned char> */
-/* vsf_sysutil_parse_ipv4(_Ptr<const struct mystr> p_str) : count(4) */
+_Array_ptr<const unsigned char>
+vsf_sysutil_parse_ipv4(_Ptr<const struct mystr> p_str) : count(4)
 {
-  /* static unsigned char items checked[4]; */
-  static unsigned char items[4];
+  static unsigned char items _Checked [4];
   return vsf_sysutil_parse_uchar_string_sep(p_str, '.', items, sizeof(items));
 }
 
-const unsigned char*
-vsf_sysutil_parse_uchar_string_sep(
-  _Ptr<const struct mystr> p_str, char sep, unsigned char* p_items,
-  unsigned int items)
-/* _Array_ptr<unsigned char> */
-/* vsf_sysutil_parse_uchar_string_sep(_Ptr<const struct mystr> p_str, */
-/*   char sep, _Array_ptr<unsigned char> p_items : count(items), */
-/*   unsigned int items) : count(items) */
+_Array_ptr<const unsigned char>
+vsf_sysutil_parse_uchar_string_sep(_Ptr<const struct mystr> p_str, char sep,
+				   _Array_ptr<unsigned char> p_items : count(items),
+				   unsigned int items) : count(items)
 {
   static struct mystr s_tmp_str;
   unsigned int i;

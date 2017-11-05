@@ -2049,7 +2049,7 @@ vsf_sysutil_sockaddr_set_ipv4addr(_Ptr<struct vsf_sysutil_sockaddr> p_sockptr,
 
 void
 vsf_sysutil_sockaddr_set_ipv6addr(_Ptr<struct vsf_sysutil_sockaddr> p_sockptr,
-                                  const unsigned char* p_raw)
+                                  _Nt_array_ptr<const unsigned char> p_raw)
 {
   if (p_sockptr->u.u_sockaddr.sa_family == AF_INET6)
   {
@@ -2092,7 +2092,7 @@ vsf_sysutil_sockaddr_ipv4_v6(const _Ptr<struct vsf_sysutil_sockaddr> p_addr)
   return ret;
 }
 
-void*
+_Ptr<void>
 vsf_sysutil_sockaddr_get_raw_addr(_Ptr<struct vsf_sysutil_sockaddr> p_sockptr)
 {
   if (p_sockptr->u.u_sockaddr.sa_family == AF_INET)

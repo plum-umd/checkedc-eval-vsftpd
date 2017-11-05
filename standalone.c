@@ -19,6 +19,8 @@
 #include "str.h"
 #include "ipaddrparse.h"
 
+#pragma BOUNDS_CHECKED ON
+
 static unsigned int s_children;
 static _Ptr<struct hash> s_p_ip_count_hash;
 static _Ptr<struct hash> s_p_pid_ip_hash;
@@ -113,7 +115,7 @@ vsf_standalone_main(void)
     else
     {
       struct mystr addr_str = INIT_MYSTR;
-      const unsigned char* p_raw_addr;
+      _Nt_array_ptr<const unsigned char> p_raw_addr = 0;
       str_alloc_text(&addr_str, tunable_listen_address6);
       p_raw_addr = vsf_sysutil_parse_ipv6(&addr_str);
       str_free(&addr_str);
@@ -151,7 +153,7 @@ vsf_standalone_main(void)
     ++s_children;
     child_info.num_children = s_children;
     child_info.num_this_ip = 0;
-    p_raw_addr = _Assume_bounds_cast<_Ptr<void>>(vsf_sysutil_sockaddr_get_raw_addr(p_accept_addr));
+    p_raw_addr = vsf_sysutil_sockaddr_get_raw_addr(p_accept_addr);
     child_info.num_this_ip = handle_ip_count(p_raw_addr);
     if (tunable_isolate)
     {
@@ -215,8 +217,8 @@ static void
 drop_ip_count(_Ptr<void> p_raw_addr)
 {
   unsigned int count;
-  unsigned int* p_count =
-    (unsigned int*)hash_lookup_entry(s_p_ip_count_hash, p_raw_addr);
+  _Ptr<unsigned int> p_count =
+    (_Ptr<unsigned int>)hash_lookup_entry(s_p_ip_count_hash, p_raw_addr);
   if (!p_count)
   {
     bug("IP address missing from hash");
@@ -267,10 +269,13 @@ handle_sighup(_Ptr<void> duff)
 static unsigned int
 hash_ip(unsigned int buckets, _Ptr<void> p_key)
 {
-  const unsigned char* p_raw_ip = (const unsigned char*)p_key;
+  _Array_ptr<const unsigned char> p_raw_ip : count(s_ipaddr_size) = 0;
   unsigned int val = 0;
   int shift = 24;
   unsigned int i;
+  /* XXX FIX */
+  (void)p_key;
+  /* _Unchecked { p_raw_ip = _Assume_bounds_cast<_Array_ptr<const unsigned char>>(p_key,s_ipaddr_size); } */
   for (i = 0; i < s_ipaddr_size; ++i)
   {
     val = val ^ (unsigned int) (p_raw_ip[i] << shift);
@@ -286,15 +291,15 @@ hash_ip(unsigned int buckets, _Ptr<void> p_key)
 static unsigned int
 hash_pid(unsigned int buckets, _Ptr<void> p_key)
 {
-  unsigned int* p_pid = (unsigned int*)p_key;
+  _Ptr<unsigned int> p_pid = (_Ptr<unsigned int>)p_key;
   return (*p_pid) % buckets;
 }
 
 static unsigned int
 handle_ip_count(_Ptr<void> p_ipaddr)
 {
-  unsigned int* p_count =
-    (unsigned int*)hash_lookup_entry(s_p_ip_count_hash, p_ipaddr);
+  _Ptr<unsigned int> p_count =
+    (_Ptr<unsigned int>)hash_lookup_entry(s_p_ip_count_hash, p_ipaddr);
   unsigned int count;
   if (!p_count)
   {

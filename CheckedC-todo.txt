@@ -1,23 +1,38 @@
-Files to focus on
-  ascii.c (returned buf; arrayptr vs nt_arrayptr)
-  ptracesandbox (header at least)
-  strlist.h : the nodes field is a normal pointer; should be an array?
-  sysutil.h : at least get checked prototypes (e.g., with iface)
-  postlogin.c : sighandlers, void*, ipv6 vs. v4 addr handling needs to
-    be refactored
-
-change str.c to make getlen and getbuf into macros so we can track
-length relationships
-
 make headers all checked
 - ascii.h
 - ptracesandbox.h
-- sysutil.h
+- sysutil.h (may need to use iface)
 
-ipaddrparse.c (squirrely cast in unchecked code)
-make checked version of sys/stat, fix signal_checked to define
- sa_handler so I don't have to do
+make C files all checked
+- ascii.c (returned buf; arrayptr vs nt_arrayptr)
+- banner.c
+- ftpcmdio.c
+- ftpdataio.c
+- ftppolicy.c
+- ls.c
+- oneprocess.c
+- postlogin.c:  sighandlers, void*, ipv6 vs. v4 addr handling needs to
+    be refactored
+- ptracesandbox.c
+- readwrite.c
+- secbuf.c
+- seccompsandbox.c
+- ssl.c
+- sslslave.c
+- str.c: make getlen and getbuf into macros so we can track length
+relationships. In str.h, refer to p_str and p_len (without the
+PRIVATE_... part) in the macros
+- sysdeputil.c
+- sysstr.c
+- sysutil.c
+- twoprocess.c
+
+Cleanup some checked files
+- ipaddrparse.c (squirrely cast in unchecked code)
+- make checked version of sys/stat, fix signal_checked to define
+- sa_handler so I don't have to do
      sigact.sa_handler = (void (*)(int))p_handlefunc;
+- when _Ptr<void> cast issue fixed, need to update hash.c and other files
 
 ===
 

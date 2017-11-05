@@ -23,6 +23,8 @@
 #include "vsftpver.h"
 #include "ssl.h"
 
+#pragma BOUNDS_CHECKED ON
+
 /*
  * Forward decls of helper functions
  */
@@ -128,7 +130,7 @@ main(int argc, _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
     _Ptr<struct vsf_sysutil_sockaddr> p_addr = 0;
     _Nt_array_ptr<const char> p_numeric_addr = 0;
     vsf_sysutil_dns_resolve(&p_addr, tunable_pasv_address);
-    vsf_sysutil_free((char*) tunable_pasv_address);
+    vsf_sysutil_free(tunable_pasv_address);
     p_numeric_addr = vsf_sysutil_inet_ntop(p_addr);
     tunable_pasv_address = vsf_sysutil_strdup(p_numeric_addr);
     vsf_sysutil_free(p_addr);

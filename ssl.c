@@ -251,14 +251,14 @@ handle_prot(_Ptr<struct vsf_session> p_sess)
 }
 
 int
-ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl, _Array_ptr<char> p_buf : count(len),
+ssl_read(_Ptr<struct vsf_session> p_sess, _Ptr<void> p_ssl, _Array_ptr<char> p_buf : count(len),
 	 unsigned int len)
 {
   return ssl_read_common(p_sess, (SSL*) p_ssl, p_buf, len, SSL_read);
 }
 
 int
-ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl, _Array_ptr<char> p_buf : count(len),
+ssl_peek(_Ptr<struct vsf_session> p_sess, _Ptr<void> p_ssl, _Array_ptr<char> p_buf : count(len),
 	 unsigned int len)
 {
   return ssl_read_common(p_sess, (SSL*) p_ssl, p_buf, len, SSL_peek);
@@ -310,7 +310,7 @@ ssl_read_common(_Ptr<struct vsf_session> p_sess,
 }
 
 int
-ssl_write(void* p_ssl, _Array_ptr<const char> p_buf : count(len), unsigned int len)
+ssl_write(_Ptr<void> p_ssl, _Array_ptr<const char> p_buf : count(len), unsigned int len)
 {
   int retval;
   int err;
@@ -325,7 +325,7 @@ ssl_write(void* p_ssl, _Array_ptr<const char> p_buf : count(len), unsigned int l
 }
 
 int
-ssl_write_str(void* p_ssl, const struct mystr* p_str)
+ssl_write_str(_Ptr<void> p_ssl, const struct mystr* p_str)
 {
   unsigned int len = str_getlen(p_str);
   int ret = SSL_write((SSL*) p_ssl, str_getbuf(p_str), len);
@@ -337,7 +337,7 @@ ssl_write_str(void* p_ssl, const struct mystr* p_str)
 }
 
 int
-ssl_read_into_str(_Ptr<struct vsf_session> p_sess, void* p_ssl, struct mystr* p_str)
+ssl_read_into_str(_Ptr<struct vsf_session> p_sess, _Ptr<void> p_ssl, struct mystr* p_str)
 {
   unsigned int len = str_getlen(p_str);
   int ret = ssl_read(p_sess, p_ssl, str_getbuf(p_str), len);
@@ -754,7 +754,7 @@ handle_prot(_Ptr<struct vsf_session> p_sess)
 }
 
 int
-ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl,
+ssl_read(_Ptr<struct vsf_session> p_sess, _Ptr<void> p_ssl,
 	 _Array_ptr<char> p_buf : count(len), unsigned int len)
 {
   (void) p_sess;
@@ -765,7 +765,7 @@ ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl,
 }
 
 int
-ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl,
+ssl_peek(_Ptr<struct vsf_session> p_sess, _Ptr<void> p_ssl,
 	 _Array_ptr<char> p_buf : count(len), unsigned int len)
 {
   (void) p_sess;
@@ -776,7 +776,7 @@ ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl,
 }
 
 int
-ssl_write(void* p_ssl, _Array_ptr<const char> p_buf : count(len), unsigned int len)
+ssl_write(_Ptr<void> p_ssl, _Array_ptr<const char> p_buf : count(len), unsigned int len)
 {
   (void) p_ssl;
   (void) p_buf;
@@ -785,7 +785,7 @@ ssl_write(void* p_ssl, _Array_ptr<const char> p_buf : count(len), unsigned int l
 }
 
 int
-ssl_write_str(void* p_ssl, _Ptr<const struct mystr> p_str)
+ssl_write_str(_Ptr<void> p_ssl, _Ptr<const struct mystr> p_str)
 {
   (void) p_ssl;
   (void) p_str;
@@ -832,7 +832,7 @@ ssl_add_entropy(_Ptr<struct vsf_session> p_sess)
 }
 
 int
-ssl_read_into_str(_Ptr<struct vsf_session> p_sess, void* p_ssl, _Ptr<struct mystr> p_str)
+ssl_read_into_str(_Ptr<struct vsf_session> p_sess, _Ptr<void> p_ssl, _Ptr<struct mystr> p_str)
 {
   (void) p_sess;
   (void) p_ssl;

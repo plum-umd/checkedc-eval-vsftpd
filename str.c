@@ -56,8 +56,9 @@ private_str_alloc_memchunk(_Ptr<struct mystr> p_str,
   if (buf_needed > p_str->alloc_bytes)
   {
     str_free(p_str);
-    /* s_setbuf(p_str, vsf_sysutil_malloc(buf_needed)); */
-    p_str->p_buf = vsf_sysutil_malloc(buf_needed);
+    /* XXX hacky workaround */
+    _Array_ptr<char> p : count(buf_needed) = vsf_sysutil_malloc(buf_needed);
+    p_str->p_buf = _Assume_bounds_cast<_Nt_array_ptr<char>>(p,buf_needed-1);
     p_str->alloc_bytes = buf_needed;
   }
   vsf_sysutil_memcpy(p_str->p_buf, p_src, len);
@@ -83,7 +84,9 @@ private_str_append_memchunk(_Ptr<struct mystr> p_str,
   buf_needed++;
   if (buf_needed > p_str->alloc_bytes)
   {
-    p_str->p_buf = vsf_sysutil_realloc(p_str->p_buf, buf_needed);
+    _Array_ptr<char> p : count(buf_needed) =
+      vsf_sysutil_realloc(p_str->p_buf,buf_needed);
+    p_str->p_buf = _Assume_bounds_cast<_Nt_array_ptr<char>>(p,buf_needed-1);    
     p_str->alloc_bytes = buf_needed;
   }
   vsf_sysutil_memcpy(p_str->p_buf + p_str->len, p_src, len);
@@ -185,7 +188,9 @@ str_reserve(_Ptr<struct mystr> p_str, unsigned int res_len)
   }
   if (res_len > p_str->alloc_bytes)
   {
-    p_str->p_buf = vsf_sysutil_realloc(p_str->p_buf, res_len);
+    _Array_ptr<char> p : count(res_len) =
+      vsf_sysutil_realloc(p_str->p_buf,res_len);
+    p_str->p_buf = _Assume_bounds_cast<_Nt_array_ptr<char>>(p,res_len-1);    
     p_str->alloc_bytes = res_len;
   }
   p_str->p_buf[res_len - 1] = '\0';

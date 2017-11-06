@@ -11,7 +11,7 @@
 
 struct mystr
 {
-  _Array_ptr<char> PRIVATE_HANDS_OFF_p_buf : count(PRIVATE_HANDS_OFF_alloc_bytes);
+  _Nt_array_ptr<char> PRIVATE_HANDS_OFF_p_buf : count(PRIVATE_HANDS_OFF_alloc_bytes-1);
   /* Internally, EXCLUDES trailing null */
   unsigned int PRIVATE_HANDS_OFF_len; /* MWH: len <= bytes */
   unsigned int PRIVATE_HANDS_OFF_alloc_bytes;
@@ -44,6 +44,20 @@ void str_reserve(_Ptr<struct mystr> p_str, unsigned int res_len);
 int str_isempty(_Ptr<const struct mystr> p_str);
 unsigned int str_getlen(_Ptr<const struct mystr> p_str);
 _Nt_array_ptr<const char> str_getbuf(_Ptr<const struct mystr> p_str);
+/* MWH: Making these macros so that we preserve the length information */
+/* #define str_getlen(_p_str) return (_p_str)->PRIVATE_HANDS_OFF_len */
+/* #define str_getbuf(_p_str) \ */
+/* ({ \ */
+/* if ((_p_str)->PRIVATE_HANDS_OFF_p_buf == 0)			\ */
+/*   { \ */
+/*     if ((_p_str)->PRIVATE_HANDS_OFF_len != 0 || (_p_str)->PRIVATE_HANDS_OFF_alloc_bytes != 0) \ */
+/*       { \ */
+/* 	bug("p_buf NULL and len or alloc_bytes != 0 in str_getbuf"); \ */
+/*       } \ */
+/*     private_str_alloc_memchunk((_p_str), 0, 0);	\ */
+/*   } \ */
+/*   (_p_str)->PRIVATE_HANDS_OFF_p_buf;				\ */
+/* }) */
 
 int str_strcmp(_Ptr<const struct mystr> p_str1, _Ptr<const struct mystr> p_str2);
 int str_equal(_Ptr<const struct mystr> p_str1, _Ptr<const struct mystr> p_str2);

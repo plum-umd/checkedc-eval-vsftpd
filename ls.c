@@ -16,6 +16,8 @@
 #include "sysutil.h"
 #include "tunables.h"
 
+#pragma BOUNDS_CHECKED ON
+
 static void build_dir_line(_Ptr<struct mystr> p_str,
                            _Ptr<const struct mystr> p_filename_str,
                            const _Ptr<struct vsf_sysutil_statbuf> p_stat,

@@ -28,6 +28,8 @@
 #include "vsftpver.h"
 #include "opts.h"
 
+#pragma BOUNDS_CHECKED ON
+
 /* Private local functions */
 static void handle_pwd(_Ptr<struct vsf_session> p_sess);
 static void handle_cwd(_Ptr<struct vsf_session> p_sess);
@@ -627,7 +629,7 @@ handle_pasv(_Ptr<struct vsf_session> p_sess, int is_epsv)
   }
   else
   {
-    const void* p_v4addr = vsf_sysutil_sockaddr_ipv6_v4(s_p_sockaddr);
+    _Ptr<const void> p_v4addr = vsf_sysutil_sockaddr_ipv6_v4(s_p_sockaddr);
     if (p_v4addr)
     {
       str_append_text(&s_pasv_res_str, vsf_sysutil_inet_ntoa(p_v4addr));
@@ -1388,8 +1390,7 @@ handle_sigurg(_Ptr<void> p_private)
   struct mystr async_arg_str = INIT_MYSTR;
   struct mystr real_cmd_str = INIT_MYSTR;
   unsigned int len;
-  _Ptr<struct vsf_session> p_sess =
-    _Assume_bounds_cast<_Ptr<struct vsf_session>>(p_private); 
+  _Ptr<struct vsf_session> p_sess = (_Ptr<struct vsf_session>)p_private; 
   /* Did stupid client sent something OOB without a data connection? */
   if (p_sess->data_fd == -1)
   {
@@ -1675,7 +1676,7 @@ handle_mdtm(_Ptr<struct vsf_session> p_sess)
   }
 }
 
-static void
+_Unchecked static void
 handle_eprt(_Ptr<struct vsf_session> p_sess)
 {
   static struct mystr s_part1_str;

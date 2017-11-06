@@ -19,6 +19,8 @@
 #include "session.h"
 #include "sysutil.h"
 
+#pragma BOUNDS_CHECKED ON
+
 /* Definitions */
 #define VSFTP_MAX_VISIT_REMEMBER 100
 #define VSFTP_MAX_MSGFILE_SIZE 4000
@@ -35,9 +37,8 @@ vsf_banner_dir_changed(_Ptr<struct vsf_session> p_sess, int ftpcode)
   if (p_sess->p_visited_dir_list == 0)
   {
     struct mystr_list the_list = INIT_STRLIST;
-    p_sess->p_visited_dir_list = 0;
-    /* XXX FIX */
-    /* p_sess->p_visited_dir_list = (_Ptr<struct mystr_list>)vsf_sysutil_malloc(sizeof(struct mystr_list)); */
+    p_sess->p_visited_dir_list =
+      (_Ptr<struct mystr_list>)vsf_sysutil_malloc(sizeof(struct mystr_list)); 
     *p_sess->p_visited_dir_list = the_list;
   }
   str_getcwd(&dir_str);

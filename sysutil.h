@@ -251,9 +251,9 @@ int vsf_sysutil_get_ipsock(const _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr);
 unsigned int vsf_sysutil_get_ipaddr_size(void);
 _Ptr<void> vsf_sysutil_sockaddr_get_raw_addr(
   _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr);
-const void* vsf_sysutil_sockaddr_ipv6_v4(
+_Ptr<const void> vsf_sysutil_sockaddr_ipv6_v4(
   const _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr);
-const void* vsf_sysutil_sockaddr_ipv4_v6(
+_Ptr<const void> vsf_sysutil_sockaddr_ipv4_v6(
   const _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr);
 int vsf_sysutil_get_ipv4_sock(void);
 int vsf_sysutil_get_ipv6_sock(void);
@@ -289,7 +289,8 @@ int vsf_sysutil_recv_peek(const int fd, void* p_buf : byte_count(len), unsigned 
 
 _Nt_array_ptr<const char> vsf_sysutil_inet_ntop(
   const _Ptr<struct vsf_sysutil_sockaddr> p_sockptr);
-_Nt_array_ptr<const char> vsf_sysutil_inet_ntoa(const void* p_raw_addr);
+_Nt_array_ptr<const char>
+vsf_sysutil_inet_ntoa(const void* p_raw_addr : itype(_Ptr<const void>));
 int vsf_sysutil_inet_aton(_Nt_array_ptr<const char> p_text,
 			  _Ptr<struct vsf_sysutil_sockaddr> p_addr);
 

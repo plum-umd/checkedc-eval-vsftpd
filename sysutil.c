@@ -1971,7 +1971,7 @@ vsf_sysutil_sockaddr_addr_equal(const _Ptr<struct vsf_sysutil_sockaddr> p1,
   {
     if (family1 == AF_INET && family2 == AF_INET6)
     {
-      const void* p_ipv4_addr = vsf_sysutil_sockaddr_ipv6_v4(p2);
+      _Ptr<const void> p_ipv4_addr = vsf_sysutil_sockaddr_ipv6_v4(p2);
       if (p_ipv4_addr &&
           !vsf_sysutil_memcmp(p_ipv4_addr, &p1->u.u_sockaddr_in.sin_addr,
                               sizeof(p1->u.u_sockaddr_in.sin_addr)))
@@ -1981,7 +1981,7 @@ vsf_sysutil_sockaddr_addr_equal(const _Ptr<struct vsf_sysutil_sockaddr> p1,
     }
     else if (family1 == AF_INET6 && family2 == AF_INET)
     {
-      const void* p_ipv4_addr = vsf_sysutil_sockaddr_ipv6_v4(p1);
+      _Ptr<const void> p_ipv4_addr = vsf_sysutil_sockaddr_ipv6_v4(p1);
       if (p_ipv4_addr &&
           !vsf_sysutil_memcmp(p_ipv4_addr, &p2->u.u_sockaddr_in.sin_addr,
                               sizeof(p2->u.u_sockaddr_in.sin_addr)))
@@ -2064,7 +2064,7 @@ vsf_sysutil_sockaddr_set_ipv6addr(_Ptr<struct vsf_sysutil_sockaddr> p_sockptr,
   }
 }
 
-const void*
+_Ptr<const void>
 vsf_sysutil_sockaddr_ipv6_v4(const _Ptr<struct vsf_sysutil_sockaddr> p_addr)
 {
   static unsigned char pattern[12] =
@@ -2079,10 +2079,10 @@ vsf_sysutil_sockaddr_ipv6_v4(const _Ptr<struct vsf_sysutil_sockaddr> p_addr)
     return 0;
   }
   p_addr_start = (const unsigned char*)&p_addr->u.u_sockaddr_in6.sin6_addr;
-  return &p_addr_start[12];
+  return _Assume_bounds_cast<_Ptr<const void>>(&p_addr_start[12]);
 }
 
-const void*
+_Ptr<const void>
 vsf_sysutil_sockaddr_ipv4_v6(const _Ptr<struct vsf_sysutil_sockaddr> p_addr)
 {
   static unsigned char ret[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF };
@@ -2091,7 +2091,7 @@ vsf_sysutil_sockaddr_ipv4_v6(const _Ptr<struct vsf_sysutil_sockaddr> p_addr)
     return 0;
   }
   vsf_sysutil_memcpy(&ret[12], &p_addr->u.u_sockaddr_in.sin_addr, 4);
-  return ret;
+  return (_Ptr<const void>)ret;
 }
 
 _Ptr<void>
@@ -2238,7 +2238,7 @@ vsf_sysutil_inet_ntop(const _Ptr<struct vsf_sysutil_sockaddr> p_sockptr)
 }
 
 _Nt_array_ptr<const char>
-vsf_sysutil_inet_ntoa(const void* p_raw_addr)
+vsf_sysutil_inet_ntoa(const void* p_raw_addr : itype(_Ptr<const void>))
 {
   return _Assume_bounds_cast<_Nt_array_ptr<const char>>(inet_ntoa(*((struct in_addr*)p_raw_addr)),0);
 }

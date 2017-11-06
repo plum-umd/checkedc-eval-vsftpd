@@ -9,19 +9,13 @@ make C files all checked
 - ftpcmdio.c
 - ftpdataio.c
 - ftppolicy.c
-- ls.c
 - oneprocess.c
-- postlogin.c:  sighandlers, void*, ipv6 vs. v4 addr handling needs to
-    be refactored
 - ptracesandbox.c
 - readwrite.c
-- secbuf.c
 - seccompsandbox.c
 - ssl.c
 - sslslave.c
-- str.c: make getlen and getbuf into macros so we can track length
-relationships. In str.h, refer to p_str and p_len (without the
-PRIVATE_... part) in the macros
+- str.c: make getlen and getbuf into macros so we can track length relationships
 - sysdeputil.c
 - sysstr.c
 - sysutil.c
@@ -33,6 +27,10 @@ Cleanup some checked files
 - sa_handler so I don't have to do
      sigact.sa_handler = (void (*)(int))p_handlefunc;
 - when _Ptr<void> cast issue fixed, need to update hash.c and other files
+- handle_eprt in postlogin.c is _Unchecked
+
+Unlikely to make checked
+- secbuf.c
 
 ===
 

@@ -72,12 +72,13 @@ main(int argc, _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
   };
   int config_loaded = 0;
   int i;
-  
+
   tunables_load_defaults();
   /* This might need to open /dev/zero on systems lacking MAP_ANON. Needs
    * to be done early (i.e. before config file parse, which may use
    * anonymous pages
    */
+
   vsf_sysutil_map_anon_pages_init();
   /* Argument parsing. Any argument not starting with "-" is a config file,
    * loaded in the order encountered. -o opt=value options are loading in the
@@ -114,16 +115,19 @@ main(int argc, _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
       }
     }
   }
+  
   /* Parse default config file if necessary */
   if (!config_loaded) {
     _Ptr<struct vsf_sysutil_statbuf> p_statbuf = 0;
     int retval = vsf_sysutil_stat(VSFTP_DEFAULT_CONFIG, &p_statbuf);
     if (!vsf_sysutil_retval_is_error(retval))
     {
+  _Unchecked { printf("HERE\n"); }
       vsf_parseconf_load_file(VSFTP_DEFAULT_CONFIG, 1);
     }
     vsf_sysutil_free(p_statbuf);
   }
+
   /* Resolve pasv_address if required */
   if (tunable_pasv_address && tunable_pasv_addr_resolve)
   {

@@ -34,6 +34,24 @@ Unlikely to make checked
 
 ===
 
+Build notes:
+
+/home/awruef/checkedc-llvm/projects/checkedc-wrapper/checkedc/include
+
+To mess with them, edit them there, then do a ‘ninja install’ from this directory: 
+
+/home/awruef/checkedc-llvm.obj
+
+To run it:
+
+$ sudo ./vsftpd & 
+$ lftp localhost
+lftp localhost:~> ls
+-rw-r--r--    1 0        0               0 Nov 06 20:27 booblah
+lftp localhost:/> exit
+
+The files that vsftpd reads are in /var/ftp (you’ll probably need to sudo to put new files there). 
+
 NT notes:
 
 Nt_array_ptr<char> buf : count(size) means that buf[size] == '\0’

@@ -212,10 +212,11 @@ int capset(cap_user_header_t header, const cap_user_data_t data)
 #endif
 
 #ifdef VSF_SYSDEP_TRY_LINUX_SETPROCTITLE_HACK
+/* extern _Nt_array_ptr<_Nt_array_ptr<char>> environ; */
 extern char** environ;
 static unsigned int s_proctitle_space = 0;
 static int s_proctitle_inited = 0;
-static char* s_p_proctitle = 0;
+static _Nt_array_ptr<char> s_p_proctitle = 0;
 #endif
 
 #ifndef VSF_SYSDEP_HAVE_MAP_ANON
@@ -242,8 +243,8 @@ vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str,
                       _Ptr<const struct mystr> p_pass_str,
                       _Ptr<const struct mystr> p_remote_host)
 {
-  const char* p_crypted;
-  const struct passwd* p_pwd = getpwnam(str_getbuf(p_user_str));
+  _Nt_array_ptr<const char> p_crypted : count(0) = 0;
+  _Ptr<const struct passwd> p_pwd = _Assume_bounds_cast<_Ptr<const struct passwd>>(getpwnam((const char *)str_getbuf(p_user_str)));
   (void) p_remote_host;
   if (p_pwd == NULL)
   {
@@ -252,13 +253,14 @@ vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str,
   #ifdef VSF_SYSDEP_HAVE_USERSHELL
   if (tunable_check_shell)
   {
-    const char* p_shell;
-    while ((p_shell = getusershell()) != NULL)
+    _Nt_array_ptr<const char> p_shell = _Assume_bounds_cast<_Nt_array_ptr<const char>>(getusershell(),0);
+    while (p_shell != NULL)
     {
-      if (!vsf_sysutil_strcmp(p_shell, p_pwd->pw_shell))
+      if (!vsf_sysutil_strcmp(p_shell, _Assume_bounds_cast<_Nt_array_ptr<char>>(p_pwd->pw_shell,0)))
       {
         break;
       }
+      p_shell = _Assume_bounds_cast<_Nt_array_ptr<const char>>(getusershell(),0);
     }
     endusershell();
     if (p_shell == NULL)
@@ -269,7 +271,7 @@ vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str,
   #endif
   #ifdef VSF_SYSDEP_HAVE_SHADOW
   {
-    const struct spwd* p_spwd = getspnam(str_getbuf(p_user_str));
+    _Ptr<const struct spwd> p_spwd = _Assume_bounds_cast<_Ptr<const struct spwd>>(getspnam((const char *)str_getbuf(p_user_str)));
     if (p_spwd != NULL)
     {
       long curr_time = vsf_sysutil_get_time_sec();
@@ -284,16 +286,16 @@ vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str,
       {
         return 0;
       }
-      p_crypted = crypt(str_getbuf(p_pass_str), p_spwd->sp_pwdp);
-      if (!vsf_sysutil_strcmp(p_crypted, p_spwd->sp_pwdp))
+      p_crypted = _Assume_bounds_cast<_Nt_array_ptr<const char>>(crypt((const char *)str_getbuf(p_pass_str), p_spwd->sp_pwdp),0);
+      if (!vsf_sysutil_strcmp(p_crypted, _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_spwd->sp_pwdp,0)))
       {
         return 1;
       }
     }
   }
   #endif /* VSF_SYSDEP_HAVE_SHADOW */
-  p_crypted = crypt(str_getbuf(p_pass_str), p_pwd->pw_passwd);
-  if (!vsf_sysutil_strcmp(p_crypted, p_pwd->pw_passwd))
+  p_crypted = _Assume_bounds_cast<_Nt_array_ptr<const char>>(crypt((const char *)str_getbuf(p_pass_str), p_pwd->pw_passwd),0);
+  if (!vsf_sysutil_strcmp(p_crypted, _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_pwd->pw_passwd,0)))
   {
     return 1;
   }
@@ -912,7 +914,8 @@ vsf_sysutil_setproctitle_init(int argc,
     _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
 {
   int i;
-  char** p_env = environ;
+  /* _Nt_array_ptr<_Nt_array_ptr<char>> p_env = environ; */
+  char **p_env = environ;
   if (s_proctitle_inited)
   {
     bug("vsf_sysutil_setproctitle_init called twice");
@@ -933,12 +936,12 @@ vsf_sysutil_setproctitle_init(int argc,
   }
   while (*p_env != 0)
   {
-    s_proctitle_space += vsf_sysutil_strlen(*p_env) + 1;
+    s_proctitle_space += vsf_sysutil_strlen(_Assume_bounds_cast<_Nt_array_ptr<char>>(*p_env,0)) + 1;
     p_env++;
   }
   /* Oops :-) */
   environ = 0;
-  s_p_proctitle = (char*) argv[0];
+  s_p_proctitle = (_Nt_array_ptr<char>)argv[0];
   vsf_sysutil_memclr(s_p_proctitle, s_proctitle_space);
 }
 

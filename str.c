@@ -53,15 +53,20 @@ private_str_alloc_memchunk(_Ptr<struct mystr> p_str,
     bug("integer overflow");
   }
   buf_needed = len + 1;
+  _Unchecked { printf("HEREMC\n"); }
   if (buf_needed > p_str->alloc_bytes)
   {
+  _Unchecked { printf("HEREMC2\n"); }
     str_free(p_str);
+  _Unchecked { printf("HEREMC3\n"); }
     /* XXX hacky workaround */
     _Array_ptr<char> p : count(buf_needed) = vsf_sysutil_malloc(buf_needed);
     p_str->p_buf = _Assume_bounds_cast<_Nt_array_ptr<char>>(p,buf_needed-1);
     p_str->alloc_bytes = buf_needed;
+  _Unchecked { printf("HEREMC4\n"); }
   }
   vsf_sysutil_memcpy(p_str->p_buf, p_src, len);
+  _Unchecked { printf("HEREMC5\n"); }
   p_str->p_buf[len] = '\0';
   p_str->len = len;
 }
@@ -212,12 +217,16 @@ str_getlen(_Ptr<const struct mystr> p_str)
 _Nt_array_ptr<const char>
 str_getbuf(_Ptr<const struct mystr> p_str) 
 {
+  _Unchecked { printf("HEREGB1\n"); }
   if (p_str->p_buf == 0)
   {
+  _Unchecked { printf("HEREGB2\n"); }
     if (p_str->len != 0 || p_str->alloc_bytes != 0)
     {
+  _Unchecked { printf("HEREGB3\n"); }
       bug("p_buf NULL and len or alloc_bytes != 0 in str_getbuf");
     }
+  _Unchecked { printf("HEREGB4\n"); }
     private_str_alloc_memchunk((_Ptr<struct mystr>)p_str, 0, 0);
   }
   return _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_str->p_buf,0); 

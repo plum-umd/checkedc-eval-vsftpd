@@ -28,16 +28,13 @@ str_fileread(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_filename,
   _Array_ptr<char> p_sec_buf : count(0) = 0;
   _Ptr<struct vsf_sysutil_statbuf> p_stat = 0;
   /* In case we fail, make sure we return an empty string */
-  _Unchecked { printf("HERE1\n"); }
   str_empty(p_str);
-  _Unchecked { printf("HERE1a\n"); }
   fd = vsf_sysutil_open_file(p_filename, kVSFSysUtilOpenReadOnly);
   if (vsf_sysutil_retval_is_error(fd))
   {
     return fd;
   }
   vsf_sysutil_fstat(fd, &p_stat);
-  _Unchecked { printf("HERE2\n"); }
   if (vsf_sysutil_statbuf_is_regfile(p_stat))
   {
     size = vsf_sysutil_statbuf_get_size(p_stat);
@@ -46,7 +43,6 @@ str_fileread(_Ptr<struct mystr> p_str, _Nt_array_ptr<const char> p_filename,
       size = maxsize;
     }
     p_sec_buf = vsf_secbuf_alloc(p_sec_buf, (unsigned int) size);
-  _Unchecked { printf("HERE3\n"); }
 
     retval = vsf_sysutil_read_loop(fd, p_sec_buf, (unsigned int) size);
     if (vsf_sysutil_retval_is_error(retval))

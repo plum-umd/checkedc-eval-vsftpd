@@ -122,7 +122,6 @@ main(int argc, _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
     int retval = vsf_sysutil_stat(VSFTP_DEFAULT_CONFIG, &p_statbuf);
     if (!vsf_sysutil_retval_is_error(retval))
     {
-  _Unchecked { printf("HERE\n"); }
       vsf_parseconf_load_file(VSFTP_DEFAULT_CONFIG, 1);
     }
     vsf_sysutil_free(p_statbuf);

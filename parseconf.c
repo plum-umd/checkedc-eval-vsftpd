@@ -191,7 +191,6 @@ vsf_parseconf_load_file(_Nt_array_ptr<const char> p_filename, int errs_fatal)
   struct mystr config_value_str = INIT_MYSTR;
   unsigned int str_pos = 0;
   int retval;
-  _Unchecked { printf("HERE (in parseconf) %s\n",p_filename); }
 
   if (!p_filename)
   {
@@ -209,10 +208,7 @@ vsf_parseconf_load_file(_Nt_array_ptr<const char> p_filename, int errs_fatal)
   {
     bug("null filename in vsf_parseconf_load_file");
   }
-  _Unchecked { printf("HERE (about to read)\n"); }
-  _Unchecked { printf("HERE (about to read2)\n"); }
   retval = str_fileread(&config_file_str, p_filename, VSFTP_CONF_FILE_MAX);
-  _Unchecked { printf("HERE (finished read)\n"); }
   if (vsf_sysutil_retval_is_error(retval))
   {
     if (errs_fatal)

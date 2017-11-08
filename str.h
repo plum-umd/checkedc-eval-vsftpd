@@ -20,6 +20,9 @@ struct mystr
 #define INIT_MYSTR \
   { 0, 0, 0 }
 
+/* XXX Hack for unreasonable bounds check */
+#define NT(p,i) ((char *)p)[i] = '\0'
+
 #ifdef VSFTP_STRING_HELPER
 #define str_alloc_memchunk private_str_alloc_memchunk
 #endif

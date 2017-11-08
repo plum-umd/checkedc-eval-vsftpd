@@ -41,6 +41,8 @@ str_equal_internal(_Array_ptr<const char> p_buf1 : count(buf1_len),
 /*   p_str->p_buf = p_newbuf; */
 /* } */
 
+/* XXX HACK for NT check */
+
 void
 private_str_alloc_memchunk(_Ptr<struct mystr> p_str,
 			   _Array_ptr<const char> p_src : count(len),
@@ -56,14 +58,14 @@ private_str_alloc_memchunk(_Ptr<struct mystr> p_str,
   if (buf_needed > p_str->alloc_bytes)
   {
     str_free(p_str);
-    /* XXX hacky workaround */
     _Array_ptr<char> p : count(buf_needed) = vsf_sysutil_malloc(buf_needed);
+    p[buf_needed-1] = '\0';
     p_str->alloc_bytes = buf_needed;
     p_str->p_buf =
       _Assume_bounds_cast<_Nt_array_ptr<char>>(p,p_str->alloc_bytes-1);
   }
   vsf_sysutil_memcpy(p_str->p_buf, p_src, len);
-  p_str->p_buf[len] = '\0'; /* XXX FAILS BOUNDS CHECK */
+  NT(p_str->p_buf,len);
   p_str->len = len;
 }
 
@@ -91,7 +93,7 @@ private_str_append_memchunk(_Ptr<struct mystr> p_str,
     p_str->alloc_bytes = buf_needed;
   }
   vsf_sysutil_memcpy(p_str->p_buf + p_str->len, p_src, len);
-  p_str->p_buf[p_str->len + len] = '\0';
+  NT(p_str->p_buf,p_str->len + len);
   p_str->len += len;
 }
 
@@ -175,7 +177,7 @@ str_trunc(_Ptr<struct mystr> p_str, unsigned int trunc_len)
     bug("trunc_len not smaller than alloc_bytes in str_trunc");
   }
   p_str->len = trunc_len;
-  p_str->p_buf[p_str->len] = '\0';
+  NT(p_str->p_buf,p_str->len);
 }
 
 void
@@ -194,7 +196,7 @@ str_reserve(_Ptr<struct mystr> p_str, unsigned int res_len)
     p_str->p_buf = _Assume_bounds_cast<_Nt_array_ptr<char>>(p,res_len-1);    
     p_str->alloc_bytes = res_len;
   }
-  p_str->p_buf[res_len - 1] = '\0';
+  NT(p_str->p_buf,res_len - 1);
 }
 
 int
@@ -392,7 +394,7 @@ str_split_char(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, char c)
   /* Just use str_split_text */
   char ministr _Nt_checked [2];
   ministr[0] = c;
-  ministr[1] = '\0';
+  NT(ministr,1);
   str_split_text(p_src, p_rhs, ministr);
 }
 
@@ -402,7 +404,7 @@ str_split_char_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, char 
   /* Just use str_split_text_reverse */
   char ministr _Nt_checked [2];
   ministr[0] = c;
-  ministr[1] = '\0';
+  NT(ministr,1);
   str_split_text_reverse(p_src, p_rhs, ministr);
 }
 

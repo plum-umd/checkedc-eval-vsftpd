@@ -17,6 +17,9 @@
 #include "tunables.h"
 #include "sysdeputil.h"
 
+/* XXX Hack for unreasonable bounds check */
+#define NT(p,i) ((char *)p)[i] = '\0'
+
 /* Activate 64-bit file support on Linux/32bit plus others */
 #define _FILE_OFFSET_BITS 64
 #define _LARGEFILE_SOURCE 1
@@ -2638,7 +2641,7 @@ _Nt_array_ptr<const char> vsf_sysutil_get_current_date(void)
   {
     die("strftime");
   }
-  datebuf[sizeof(datebuf) - 1] = '\0';
+  NT(datebuf,sizeof(datebuf) - 1);
   /* This hack is because %e in strftime() isn't so portable */
   while (datebuf[i] != '!' && datebuf[i] != '\0')
   {

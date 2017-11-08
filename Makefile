@@ -9,7 +9,7 @@ CFLAGS = -g
 	#-pedantic -Wconversion
 
 LIBS	=	`./vsf_findlibs.sh`
-LINK	=	-Wl,-s
+#LINK	=	-Wl,-s
 #LDFLAGS	=	-fPIE -pie -Wl,-z,relro -Wl,-z,now
 
 OBJS	=	main.o utility.o prelogin.o ftpcmdio.o postlogin.o privsock.o \

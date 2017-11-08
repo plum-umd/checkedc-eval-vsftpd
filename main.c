@@ -92,21 +92,24 @@ main(int argc, _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
   }
   for (i = 1; i < argc; ++i)
   {
-    _Nt_array_ptr<const char> p_arg = argv[i];
-    if (p_arg[0] != '-')
+    unsigned int cnt = 0;
+    _Nt_array_ptr<const char> p_arg : count(cnt) = argv[i];
+    if (p_arg[cnt] != '-')
     {
       config_loaded = 1;
       vsf_parseconf_load_file(p_arg, 1);
     }
     else 
     {
+      cnt++;
       if (p_arg[1] == 'v')
       {
         vsf_exit("vsftpd: version " VSF_VERSION "\n");
       }
       else if (p_arg[1] == 'o')
       {
-	_Nt_array_ptr<const char> p_arg_tmp = p_arg + 2;
+	cnt++;
+	_Nt_array_ptr<const char> p_arg_tmp : count(cnt-2) = p_arg + 2;
         vsf_parseconf_load_setting(p_arg_tmp, 1);
       }
       else

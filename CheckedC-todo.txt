@@ -1,3 +1,16 @@
+DEBUGGING
+
+Directory listing is not working.
+- in gdb, do:
+break session_init
+set follow-fork-mode child
+run vsftpd.conf
+- from command line do
+lftp localhost
+ls
+
+PORTING
+
 make headers all checked
 - ascii.h
 - ptracesandbox.h

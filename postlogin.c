@@ -1390,7 +1390,8 @@ handle_sigurg(_Ptr<void> p_private)
   struct mystr async_arg_str = INIT_MYSTR;
   struct mystr real_cmd_str = INIT_MYSTR;
   unsigned int len;
-  _Ptr<struct vsf_session> p_sess = (_Ptr<struct vsf_session>)p_private; 
+  _Ptr<struct vsf_session> p_sess = 0;
+  _Unchecked { p_sess = _Assume_bounds_cast<_Ptr<struct vsf_session>>(p_private); }
   /* Did stupid client sent something OOB without a data connection? */
   if (p_sess->data_fd == -1)
   {

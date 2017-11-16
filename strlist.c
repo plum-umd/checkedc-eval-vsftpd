@@ -143,9 +143,13 @@ sort_compare_common(_Ptr<const void> p1, _Ptr<const void> p2, int reverse)
 {
   _Ptr<const struct mystr> p_cmp1 = 0;
   _Ptr<const struct mystr> p_cmp2 = 0;
-  _Ptr<const struct mystr_list_node> p_node1 = (_Ptr<const struct mystr_list_node>) p1;
-  _Ptr<const struct mystr_list_node> p_node2 = (_Ptr<const struct mystr_list_node>) p2;
-  if (!str_isempty(&p_node1->sort_key_str))
+  _Ptr<const struct mystr_list_node> p_node1 = 0;
+  _Ptr<const struct mystr_list_node> p_node2 = 0;
+  _Unchecked {
+    p_node1 = _Assume_bounds_cast<_Ptr<const struct mystr_list_node>>(p1);
+    p_node2 = _Assume_bounds_cast<_Ptr<const struct mystr_list_node>>(p2);
+  }
+ if (!str_isempty(&p_node1->sort_key_str))
   {
     p_cmp1 = &p_node1->sort_key_str;
   }

@@ -165,7 +165,9 @@ void vsf_sysutil_memunmap(void* p_start, unsigned int length);
 /* Memory allocating/freeing */
 void* vsf_sysutil_malloc(unsigned int size) : byte_count(size);
 void* vsf_sysutil_realloc(void* p_ptr : byte_count(1), unsigned int size) : byte_count(size);
-void vsf_sysutil_free(const void* p_ptr : byte_count(1));
+/* void vsf_sysutil_free(const void* p_ptr : byte_count(1)); */
+void _vsf_sysutil_free(const void* p_ptr);
+#define vsf_sysutil_free(p) _Unchecked { _vsf_sysutil_free((const void *)p); }
 
 /* Process creation/exit/process handling */
 unsigned int vsf_sysutil_getpid(void);
@@ -188,10 +190,10 @@ int vsf_sysutil_wait_get_exitcode(
   _Ptr<const struct vsf_sysutil_wait_retval> p_waitret);
 
 /* Various string functions */
-#define vsf_sysutil_strlen_alt(p,s,len) \
-  unsigned int len = 0; \
-  _Nt_array_ptr<const char> s : count(len) = p; \
-  for (; s[len]; len++);
+#define vsf_sysutil_strlen_alt(_p,_s,_len) \
+  unsigned int _len = 0; \
+  _Nt_array_ptr<const char> _s : count(_len) = _p; \
+  for (; _s[_len]; _len++);
   
 unsigned int vsf_sysutil_strlen(_Nt_array_ptr<const char> p_text); 
 _Nt_array_ptr<char> vsf_sysutil_strdup(_Nt_array_ptr<const char> p_str);
@@ -251,10 +253,10 @@ int vsf_sysutil_get_ipsock(const _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr);
 unsigned int vsf_sysutil_get_ipaddr_size(void);
 _Ptr<void> vsf_sysutil_sockaddr_get_raw_addr(
   _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr);
-_Ptr<const void> vsf_sysutil_sockaddr_ipv6_v4(
-  const _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr);
-_Ptr<const void> vsf_sysutil_sockaddr_ipv4_v6(
-  const _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr);
+_Array_ptr<const unsigned char> vsf_sysutil_sockaddr_ipv6_v4(
+  const _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr) : count(4);
+_Array_ptr<const unsigned char> vsf_sysutil_sockaddr_ipv4_v6(
+  const _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr) : count(16);
 int vsf_sysutil_get_ipv4_sock(void);
 int vsf_sysutil_get_ipv6_sock(void);
 struct vsf_sysutil_socketpair_retval

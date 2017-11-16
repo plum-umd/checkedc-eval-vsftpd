@@ -200,7 +200,7 @@ vsf_parseconf_load_file(_Nt_array_ptr<const char> p_filename, int errs_fatal)
   {
     if (s_p_saved_filename)
     {
-      vsf_sysutil_free(s_p_saved_filename);
+      vsf_sysutil_free(s_p_saved_filename); 
     }
     s_p_saved_filename = vsf_sysutil_strdup(p_filename);
   }
@@ -265,8 +265,7 @@ vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting,
   str_split_char(&s_setting_str, &s_value_str, '=');
   /* Is it a string setting? */
   {
-    unsigned int sz = sizeof(parseconf_str_array);
-    _Array_ptr<const struct parseconf_str_setting> p_str_setting : count(sz) = parseconf_str_array;
+    _Array_ptr<const struct parseconf_str_setting> p_str_setting : count(33) = parseconf_str_array;
     while (p_str_setting->p_setting_name != 0)
     {
       if (str_equal_text(&s_setting_str, p_str_setting->p_setting_name))
@@ -303,8 +302,7 @@ vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting,
   }
   /* Is it a boolean value? */
   {
-    unsigned int bool_array_sz = sizeof(parseconf_bool_array);
-    _Array_ptr<const struct parseconf_bool_setting> p_bool_setting : count(bool_array_sz) =
+    _Array_ptr<const struct parseconf_bool_setting> p_bool_setting : count(81) =
       parseconf_bool_array;
     while (p_bool_setting->p_setting_name != 0)
     {
@@ -336,7 +334,7 @@ vsf_parseconf_load_setting(_Nt_array_ptr<const char> p_setting,
   }
   /* Is it an unsigned integer setting? */
   {
-    _Array_ptr<const struct parseconf_uint_setting> p_uint_setting : count(sizeof(parseconf_uint_array)) =
+    _Array_ptr<const struct parseconf_uint_setting> p_uint_setting : count(21) =
 	parseconf_uint_array;
     while (p_uint_setting->p_setting_name != 0)
     {

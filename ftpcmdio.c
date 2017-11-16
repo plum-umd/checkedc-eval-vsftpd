@@ -40,7 +40,8 @@ vsf_cmdio_sock_setup(void)
 static void
 handle_alarm_timeout(_Ptr<void> p_private)
 {
-  _Ptr<struct vsf_session> p_sess = (_Ptr<struct vsf_session>) p_private;
+  _Ptr<struct vsf_session> p_sess = 0;
+  _Unchecked { p_sess = _Assume_bounds_cast<_Ptr<struct vsf_session>>(p_private); }
   p_sess->idle_timeout = 1;
   vsf_sysutil_activate_noblock(VSFTP_COMMAND_FD);
   vsf_sysutil_shutdown_read_failok(VSFTP_COMMAND_FD);

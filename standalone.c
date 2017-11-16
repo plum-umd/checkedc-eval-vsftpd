@@ -289,7 +289,8 @@ hash_ip(unsigned int buckets, _Ptr<void> p_key)
 static unsigned int
 hash_pid(unsigned int buckets, _Ptr<void> p_key)
 {
-  _Ptr<unsigned int> p_pid = (_Ptr<unsigned int>)p_key;
+  _Ptr<unsigned int> p_pid = 0;
+  _Unchecked { p_pid = _Assume_bounds_cast<_Ptr<unsigned int>>(p_key); }
   return (*p_pid) % buckets;
 }
 

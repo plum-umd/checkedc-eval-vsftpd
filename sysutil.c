@@ -533,7 +533,7 @@ vsf_sysutil_realloc(void* p_ptr : byte_count(1), unsigned int size) : byte_count
 }
 
 void
-vsf_sysutil_free(const void *p_ptr : byte_count(1))
+_vsf_sysutil_free(const void *p_ptr)
 {
   if (p_ptr == NULL)
   {
@@ -1974,7 +1974,8 @@ vsf_sysutil_sockaddr_addr_equal(const _Ptr<struct vsf_sysutil_sockaddr> p1,
   {
     if (family1 == AF_INET && family2 == AF_INET6)
     {
-      _Ptr<const void> p_ipv4_addr = vsf_sysutil_sockaddr_ipv6_v4(p2);
+      _Array_ptr<const unsigned char> p_ipv4_addr : count(4) =
+	vsf_sysutil_sockaddr_ipv6_v4(p2);
       if (p_ipv4_addr &&
           !vsf_sysutil_memcmp(p_ipv4_addr, &p1->u.u_sockaddr_in.sin_addr,
                               sizeof(p1->u.u_sockaddr_in.sin_addr)))
@@ -1984,7 +1985,8 @@ vsf_sysutil_sockaddr_addr_equal(const _Ptr<struct vsf_sysutil_sockaddr> p1,
     }
     else if (family1 == AF_INET6 && family2 == AF_INET)
     {
-      _Ptr<const void> p_ipv4_addr = vsf_sysutil_sockaddr_ipv6_v4(p1);
+      _Array_ptr<const unsigned char> p_ipv4_addr : count(4) =
+	vsf_sysutil_sockaddr_ipv6_v4(p1);
       if (p_ipv4_addr &&
           !vsf_sysutil_memcmp(p_ipv4_addr, &p2->u.u_sockaddr_in.sin_addr,
                               sizeof(p2->u.u_sockaddr_in.sin_addr)))
@@ -2067,8 +2069,8 @@ vsf_sysutil_sockaddr_set_ipv6addr(_Ptr<struct vsf_sysutil_sockaddr> p_sockptr,
   }
 }
 
-_Ptr<const void>
-vsf_sysutil_sockaddr_ipv6_v4(const _Ptr<struct vsf_sysutil_sockaddr> p_addr)
+_Array_ptr<const unsigned char>
+vsf_sysutil_sockaddr_ipv6_v4(const _Ptr<struct vsf_sysutil_sockaddr> p_addr) : count(4)
 {
   static unsigned char pattern[12] =
       { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF };
@@ -2082,11 +2084,11 @@ vsf_sysutil_sockaddr_ipv6_v4(const _Ptr<struct vsf_sysutil_sockaddr> p_addr)
     return 0;
   }
   p_addr_start = (const unsigned char*)&p_addr->u.u_sockaddr_in6.sin6_addr;
-  return _Assume_bounds_cast<_Ptr<const void>>(&p_addr_start[12]);
+  return _Assume_bounds_cast<_Array_ptr<const unsigned char>>(&p_addr_start[12],4);
 }
 
-_Ptr<const void>
-vsf_sysutil_sockaddr_ipv4_v6(const _Ptr<struct vsf_sysutil_sockaddr> p_addr)
+_Array_ptr<const unsigned char>
+vsf_sysutil_sockaddr_ipv4_v6(const _Ptr<struct vsf_sysutil_sockaddr> p_addr) : count(16)
 {
   static unsigned char ret[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF };
   if (p_addr->u.u_sockaddr.sa_family != AF_INET)
@@ -2094,7 +2096,7 @@ vsf_sysutil_sockaddr_ipv4_v6(const _Ptr<struct vsf_sysutil_sockaddr> p_addr)
     return 0;
   }
   vsf_sysutil_memcpy(&ret[12], &p_addr->u.u_sockaddr_in.sin_addr, 4);
-  return (_Ptr<const void>)ret;
+  return ret;
 }
 
 _Ptr<void>

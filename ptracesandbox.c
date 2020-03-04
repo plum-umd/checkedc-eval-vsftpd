@@ -25,12 +25,12 @@
 #include <sys/user.h>
 #include <sys/wait.h>
 #include <err.h>
-#include <errno.h>
+#include <errno_checked.h>
 #include <fcntl.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#include <signal_checked.h>
+#include <stdlib_checked.h>
+#include <string_checked.h>
+#include <unistd_checked.h>
 #include <syslog.h>
 
 #include <asm/unistd.h>

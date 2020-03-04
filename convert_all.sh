@@ -2,10 +2,11 @@ CCONV=/Users/mwhicks/research/projects/checkedc/checkedc-clang/llvm/cmake-build-
 INCLUDES=/Users/mwhicks/research/projects/checkedc/checkedc/include
 BASEDIR=.
 
+# -dump-stats \
+# -dump-intermediate \
+
 CPATH=$INCLUDES $CCONV \
--dump-stats \
 -output-postfix=checked \
--dump-intermediate \
 -extra-arg-before=-D_FORTIFY_SOURCE=2 \
 -extra-arg-before=-w \
 -base-dir="$BASEDIR" \

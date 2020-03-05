@@ -7,6 +7,7 @@ BASEDIR=.
 
 CPATH=$INCLUDES $CCONV \
 -output-postfix=checked \
+-mergefds \
 -extra-arg-before=-D_FORTIFY_SOURCE=2 \
 -extra-arg-before=-w \
 -base-dir="$BASEDIR" \

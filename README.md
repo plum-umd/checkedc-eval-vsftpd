@@ -18,6 +18,8 @@ edit it first to change the paths:
 * Update `CCONV` to contain the path of the `CConvertStandalone` executable
 * Update `INCLUDES` to contain the path of the `include` directory containing the [Checked C versions of the standard C headers](https://github.com/microsoft/checkedc/tree/master/include). 
 * You might also wish to change the command-line flags to `CConvertStandalone`
++ Update `replace.py` and `update_database.py` to ensure the #!'s point to your python interpreter
++ Run `update_database.py`, this will change the entries in `compile_commands.json` to point to the correct directory
 
 ## Updating the files, running the compiler
 

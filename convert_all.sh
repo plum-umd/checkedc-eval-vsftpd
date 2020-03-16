@@ -1,13 +1,13 @@
-CCONV=/Users/mwhicks/research/projects/checkedc/checkedc-clang/llvm/cmake-build-debug/bin/CConvertStandalone
-INCLUDES=/Users/mwhicks/research/projects/checkedc/checkedc/include
+CCONV=/Users/mwh/checkedc/checkedc-clang/llvm/cmake-build-debug/bin/CConvertStandalone
+INCLUDES=/Users/mwh/checkedc/checkedc/include
 BASEDIR=.
+SYSROOT="-- /Users/mwh/checkedc/checkedc-clang/llvm/cmake-build-debug/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
 
 # -dump-stats \
 # -dump-intermediate \
 
 CPATH=$INCLUDES $CCONV \
 -output-postfix=checked \
--mergefds \
 -extra-arg-before=-D_FORTIFY_SOURCE=2 \
 -extra-arg-before=-w \
 -base-dir="$BASEDIR" \
@@ -49,4 +49,4 @@ $BASEDIR/ftppolicy.c \
 $BASEDIR/main.c \
 $BASEDIR/parseconf.c \
 $BASEDIR/sysdeputil.c \
-$BASEDIR/tcpwrap.c
+$BASEDIR/tcpwrap.c $SYSROOT

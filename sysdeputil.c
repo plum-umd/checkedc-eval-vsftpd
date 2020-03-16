@@ -35,7 +35,10 @@
 #include <sys/param.h>
 #include <sys/uio.h>
 
+#ifndef __APPLE__
+/* Doesn't work on my MAC */
 #include <sys/prctl.h>
+#endif
 #include <signal_checked.h>
 
 /* Configuration.. here are the possibilities */
@@ -135,6 +138,11 @@
   #define VSF_SYSDEP_HAVE_MAP_ANON
 #endif
 
+#ifdef __APPLE__
+/* Hack, so it compiles */
+  #undef VSF_SYSDEP_HAVE_LIBCAP
+#endif
+
 #ifdef __sgi
   #undef VSF_SYSDEP_HAVE_USERSHELL
   #undef VSF_SYSDEP_HAVE_LIBCAP
@@ -178,7 +186,9 @@
 #endif
 
 /* Prefer libcap based capabilities over raw syscall capabilities */
+#ifdef VSF_SYSDEP_HAVE_LIBCAP
 #include <sys/capability.h>
+#endif
 
 #if defined(VSF_SYSDEP_HAVE_CAPABILITIES) && !defined(VSF_SYSDEP_HAVE_LIBCAP)
 #include <linux/unistd.h>

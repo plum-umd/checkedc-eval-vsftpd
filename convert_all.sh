@@ -1,7 +1,6 @@
 CCONV=/Users/mwh/checkedc/checkedc-clang/llvm/cmake-build-debug/bin/CConvertStandalone
 INCLUDES=/Users/mwh/checkedc/checkedc/include
 BASEDIR=.
-SYSROOT="-- /Users/mwh/checkedc/checkedc-clang/llvm/cmake-build-debug/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
 
 # -dump-stats \
 # -dump-intermediate \
@@ -49,4 +48,4 @@ $BASEDIR/ftppolicy.c \
 $BASEDIR/main.c \
 $BASEDIR/parseconf.c \
 $BASEDIR/sysdeputil.c \
-$BASEDIR/tcpwrap.c $SYSROOT
+$BASEDIR/tcpwrap.c

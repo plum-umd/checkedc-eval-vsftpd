@@ -20,7 +20,7 @@
 #include <sys/prctl.h>
 #include <sys/ptrace.h>
 /* For AF_MAX (NPROTO is defined to this) */
-#include <sys/socket.h>
+#include <sys/socket_checked.h>
 #include <sys/types.h>
 #include <sys/user.h>
 #include <sys/wait.h>

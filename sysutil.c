@@ -31,7 +31,7 @@
 #include <stdlib_checked.h>
 #include <unistd_checked.h>
 #include <sys/types.h>
-#include <sys/socket.h>
+#include <sys/socket_checked.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>

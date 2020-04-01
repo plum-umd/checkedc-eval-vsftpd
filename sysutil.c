@@ -1178,13 +1178,13 @@ void vsf_sysutil_fstat(int fd, _Ptr<struct vsf_sysutil_statbuf*> p_ptr)
   }
 }
 
-int vsf_sysutil_stat(const char *p_name : itype(_Ptr<const char> ), _Ptr<struct vsf_sysutil_statbuf*> p_ptr)
+int vsf_sysutil_stat(const char *p_name, _Ptr<struct vsf_sysutil_statbuf*> p_ptr)
 {
   vsf_sysutil_alloc_statbuf(p_ptr);
   return stat(p_name, (struct stat*) (*p_ptr));
 }
 
-int vsf_sysutil_lstat(const char *p_name : itype(_Ptr<const char> ), _Ptr<struct vsf_sysutil_statbuf*> p_ptr)
+int vsf_sysutil_lstat(const char *p_name, _Ptr<struct vsf_sysutil_statbuf*> p_ptr)
 {
   vsf_sysutil_alloc_statbuf(p_ptr);
   return lstat(p_name, (struct stat*) (*p_ptr));
@@ -1435,7 +1435,7 @@ int vsf_sysutil_readlink(const char *p_filename : itype(_Ptr<const char> ), char
   if (bufsiz == 0) {
     return -1;
   }
-  retval = readlink(p_filename, p_dest, bufsiz - 1);
+  retval = readlink(((const char *)p_filename), p_dest, bufsiz - 1);
   if (retval < 0)
   {
     return retval;
@@ -2140,7 +2140,7 @@ struct vsf_sysutil_user * vsf_sysutil_getpwuid(const int uid)
   return (struct vsf_sysutil_user*) getpwuid((unsigned int) uid);
 }
 
-struct vsf_sysutil_user * vsf_sysutil_getpwnam(const char *p_user : itype(_Ptr<const char> ))
+struct vsf_sysutil_user * vsf_sysutil_getpwnam(const char *p_user)
 {
   return (struct vsf_sysutil_user*) getpwnam(p_user);
 }
@@ -2538,7 +2538,7 @@ void vsf_sysutil_syslog(const char *p_text : itype(_Ptr<const char> ), int sever
   {
     prio = LOG_WARNING;
   }
-  syslog(prio, ((const char *)"%s"), p_text);
+  syslog(prio, "%s", p_text);
 }
 
 long vsf_sysutil_parse_time(const char *p_text)

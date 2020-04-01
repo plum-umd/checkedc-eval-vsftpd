@@ -101,8 +101,8 @@ int vsf_sysutil_read_loop(const int fd, void *p_buf, unsigned int size);
 int vsf_sysutil_write_loop(const int fd, const void *p_buf, unsigned int size);
 
 struct vsf_sysutil_statbuf;
-int vsf_sysutil_stat(const char *p_name : itype(_Ptr<const char> ), _Ptr<struct vsf_sysutil_statbuf*> p_ptr);
-int vsf_sysutil_lstat(const char *p_name : itype(_Ptr<const char> ), _Ptr<struct vsf_sysutil_statbuf*> p_ptr);
+int vsf_sysutil_stat(const char *p_name, _Ptr<struct vsf_sysutil_statbuf*> p_ptr);
+int vsf_sysutil_lstat(const char *p_name, _Ptr<struct vsf_sysutil_statbuf*> p_ptr);
 void vsf_sysutil_fstat(int fd, _Ptr<struct vsf_sysutil_statbuf*> p_ptr);
 void vsf_sysutil_dir_stat(const struct vsf_sysutil_dir *p_dir, _Ptr<struct vsf_sysutil_statbuf*> p_ptr);
 int vsf_sysutil_statbuf_is_regfile(const struct vsf_sysutil_statbuf *p_stat);
@@ -245,7 +245,7 @@ struct vsf_sysutil_user;
 struct vsf_sysutil_group;
 
 struct vsf_sysutil_user * vsf_sysutil_getpwuid(const int uid);
-struct vsf_sysutil_user * vsf_sysutil_getpwnam(const char *p_user : itype(_Ptr<const char> ));
+struct vsf_sysutil_user * vsf_sysutil_getpwnam(const char *p_user);
 const char *vsf_sysutil_user_getname(const struct vsf_sysutil_user *p_user) : itype(_Ptr<const char> ) ;
 const char *vsf_sysutil_user_get_homedir(const struct vsf_sysutil_user *p_user) : itype(_Ptr<const char> ) ;
 int vsf_sysutil_user_getuid(const struct vsf_sysutil_user *p_user);

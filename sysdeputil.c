@@ -195,7 +195,7 @@
 #include <linux/capability.h>
 #include <errno_checked.h>
 #include <syscall.h>
-int capset(cap_user_header_t header, const cap_user_data_t data)
+int capset(_Ptr<struct __user_cap_header_struct> header, const _Ptr<struct __user_cap_data_struct> data)
 {
   return syscall(__NR_capset, header, data);
 }
@@ -245,10 +245,7 @@ void vsf_insert_uwtmp(_Ptr<const struct mystr> p_user_str, _Ptr<const struct mys
 void vsf_remove_uwtmp(void);
 
 #ifndef VSF_SYSDEP_HAVE_PAM
-int
-vsf_sysdep_check_auth(struct mystr* p_user_str,
-                      const struct mystr* p_pass_str,
-                      const struct mystr* p_remote_host)
+int vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str, _Ptr<const struct mystr> p_pass_str, const struct mystr *p_remote_host)
 {
   const char* p_crypted;
   const struct passwd* p_pwd = getpwnam(str_getbuf(p_user_str));
@@ -321,10 +318,14 @@ typedef lo_const void* pam_item_t;
 
 static pam_handle_t* s_pamh;
 static struct mystr s_pword_str;
-static int pam_conv_func(int nmsg, const struct pam_message **p_msg, _Ptr<struct pam_response*> p_reply, void *p_addata);
+static int pam_conv_func(int nmsg, const struct pam_message** p_msg,
+                         struct pam_response** p_reply, void* p_addata);
 static void vsf_auth_shutdown(void);
 
-int vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str, _Ptr<const struct mystr> p_pass_str, _Ptr<const struct mystr> p_remote_host)
+int
+vsf_sysdep_check_auth(struct mystr* p_user_str,
+                      const struct mystr* p_pass_str,
+                      const struct mystr* p_remote_host)
 {
   int retval = -1;
 #ifdef PAM_USER
@@ -338,7 +339,7 @@ int vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str, _Ptr<const struct mystr
   };
   if (s_pamh != 0)
   {
-    bug(((const char *)"vsf_sysdep_check_auth"));
+    bug("vsf_sysdep_check_auth");
   }
   str_copy(&s_pword_str, p_pass_str);
   if (tunable_pam_service_name)
@@ -441,7 +442,7 @@ vsf_auth_shutdown(void)
 {
   if (s_pamh == 0)
   {
-    bug(((const char *)"vsf_auth_shutdown"));
+    bug("vsf_auth_shutdown");
   }
   (void) pam_close_session(s_pamh, 0);
   (void) pam_setcred(s_pamh, PAM_DELETE_CRED);
@@ -450,14 +451,16 @@ vsf_auth_shutdown(void)
   vsf_remove_uwtmp();
 }
 
-static int pam_conv_func(int nmsg, const struct pam_message **p_msg, _Ptr<struct pam_response*> p_reply, void *p_addata)
+static int
+pam_conv_func(int nmsg, const struct pam_message** p_msg,
+              struct pam_response** p_reply, void* p_addata)
 {
   int i;
   struct pam_response* p_resps = 0;
   (void) p_addata;
   if (nmsg < 0)
   {
-    bug(((const char *)"dodgy nmsg in pam_conv_func"));
+    bug("dodgy nmsg in pam_conv_func");
   }
   p_resps = vsf_sysutil_malloc(sizeof(struct pam_response) * nmsg);
   for (i=0; i<nmsg; i++)
@@ -499,7 +502,7 @@ vsf_sysdep_keep_capabilities(void)
     int retval = prctl(PR_SET_KEEPCAPS, 1);
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die("prctl");
+      die(((const char *)"prctl"));
     }
   }
 #endif /* VSF_SYSDEP_HAVE_SETKEEPCAPS */
@@ -518,10 +521,11 @@ vsf_sysdep_has_capabilities_as_non_root(void)
   return 0;
 }
 
-void vsf_sysdep_adopt_capabilities(unsigned int caps)
+void
+vsf_sysdep_adopt_capabilities(unsigned int caps)
 {
   (void) caps;
-  bug(((const char *)"asked to adopt capabilities, but no support exists"));
+  bug("asked to adopt capabilities, but no support exists");
 }
 
 #else /* VSF_SYSDEP_HAVE_CAPABILITIES || VSF_SYSDEP_HAVE_LIBCAP */
@@ -577,8 +581,7 @@ do_checkcap(void)
   return 0;
 }
 
-void
-vsf_sysdep_adopt_capabilities(unsigned int caps)
+void vsf_sysdep_adopt_capabilities(unsigned int caps)
 {
   /* n.b. yes I know I should be using libcap!! */
   int retval;
@@ -587,7 +590,7 @@ vsf_sysdep_adopt_capabilities(unsigned int caps)
   __u32 cap_mask = 0;
   if (!caps)
   {
-    bug("asked to adopt no capabilities");
+    bug(((const char *)"asked to adopt no capabilities"));
   }
   vsf_sysutil_memclr(&cap_head, sizeof(cap_head));
   vsf_sysutil_memclr(&cap_data, sizeof(cap_data));
@@ -606,7 +609,7 @@ vsf_sysdep_adopt_capabilities(unsigned int caps)
   retval = capset(&cap_head, &cap_data);
   if (retval != 0)
   {
-    die("capset");
+    die(((const char *)"capset"));
   }
 }
 
@@ -899,19 +902,18 @@ vsf_sysutil_setproctitle_internal(const char* p_buf)
   str_free(&proctitle_str);
 }
 #elif defined(VSF_SYSDEP_TRY_LINUX_SETPROCTITLE_HACK)
-void
-vsf_sysutil_setproctitle_init(int argc, const char* argv[])
+void vsf_sysutil_setproctitle_init(int argc, const char *argv[])
 {
   int i;
   char** p_env = environ;
   if (s_proctitle_inited)
   {
-    bug("vsf_sysutil_setproctitle_init called twice");
+    bug(((const char *)"vsf_sysutil_setproctitle_init called twice"));
   }
   s_proctitle_inited = 1;
   if (argv[0] == 0)
   {
-    die("no argv[0] in vsf_sysutil_setproctitle_init");
+    die(((const char *)"no argv[0] in vsf_sysutil_setproctitle_init"));
   }
   for (i=0; i<argc; i++)
   {
@@ -932,21 +934,20 @@ vsf_sysutil_setproctitle_init(int argc, const char* argv[])
   vsf_sysutil_memclr(s_p_proctitle, s_proctitle_space);
 }
 
-void
-vsf_sysutil_setproctitle_internal(const char* p_buf)
+void vsf_sysutil_setproctitle_internal(const char *p_buf)
 {
   struct mystr proctitle_str = INIT_MYSTR;
   unsigned int to_copy;
   if (!s_proctitle_inited)
   {
-    bug("vsf_sysutil_setproctitle: not initialized");
+    bug(((const char *)"vsf_sysutil_setproctitle: not initialized"));
   }
   vsf_sysutil_memclr(s_p_proctitle, s_proctitle_space);
   if (s_proctitle_space < 32)
   {
     return;
   }
-  str_alloc_text(&proctitle_str, "vsftpd: ");
+  str_alloc_text(&proctitle_str, ((const char *)"vsftpd: "));
   str_append_text(&proctitle_str, p_buf);
   to_copy = str_getlen(&proctitle_str);
   if (to_copy > s_proctitle_space - 1)
@@ -958,13 +959,15 @@ vsf_sysutil_setproctitle_internal(const char* p_buf)
   s_p_proctitle[to_copy] = '\0';
 }
 #else /* VSF_SYSDEP_HAVE_SETPROCTITLE */
-void vsf_sysutil_setproctitle_init(int argc, const char *argv[])
+void
+vsf_sysutil_setproctitle_init(int argc, const char* argv[])
 {
   (void) argc;
   (void) argv;
 }
 
-void vsf_sysutil_setproctitle_internal(const char *p_buf)
+void
+vsf_sysutil_setproctitle_internal(const char* p_buf)
 {
   (void) p_buf;
 }
@@ -1020,7 +1023,7 @@ void vsf_sysutil_send_fd(int sock_fd, int send_fd)
 {
   int retval;
   struct msghdr msg;
-  struct cmsghdr* p_cmsg;
+  _Ptr<struct cmsghdr> p_cmsg = ((void *)0);
   struct iovec vec;
   char cmsgbuf[CMSG_SPACE(sizeof(send_fd))];
   int* p_fds;
@@ -1059,7 +1062,7 @@ int vsf_sysutil_recv_fd(const int sock_fd)
   struct iovec vec;
   int recv_fd;
   char cmsgbuf[CMSG_SPACE(sizeof(recv_fd))];
-  struct cmsghdr* p_cmsg;
+  _Ptr<struct cmsghdr> p_cmsg = ((void *)0);
   int* p_fd;
   vec.iov_base = &recvchar;
   vec.iov_len = sizeof(recvchar);
@@ -1206,7 +1209,7 @@ void vsf_insert_uwtmp(_Ptr<const struct mystr> p_user_str, _Ptr<const struct mys
   (void) pututxline(&s_utent);
   endutxent();
 #ifdef __APPLE__
-  bug(((const char *)"DOESN'T WORK ON MY MAC"));
+  bug("DOESN'T WORK ON MY MAC");
 #else
   updwtmpx(WTMPX_FILE, &s_utent);
 #endif
@@ -1229,7 +1232,7 @@ vsf_remove_uwtmp(void)
   endutxent();
   s_utent.ut_tv.tv_sec = vsf_sysutil_get_time_sec();
 #ifdef __APPLE__
-  bug(((const char *)"DOESN'T WORK ON MY MAC"));
+  bug("DOESN'T WORK ON MY MAC");
 #else
   updwtmpx(WTMPX_FILE, &s_utent);
 #endif
@@ -1243,7 +1246,7 @@ vsf_set_die_if_parent_dies()
 #ifdef VSF_SYSDEP_HAVE_SETPDEATHSIG
   if (prctl(PR_SET_PDEATHSIG, SIGKILL, 0, 0, 0) != 0)
   {
-    die("prctl");
+    die(((const char *)"prctl"));
   }
 #endif
 }
@@ -1254,7 +1257,7 @@ vsf_set_term_if_parent_dies()
 #ifdef VSF_SYSDEP_HAVE_SETPDEATHSIG
   if (prctl(PR_SET_PDEATHSIG, SIGTERM, 0, 0, 0) != 0)
   {
-    die("prctl");
+    die(((const char *)"prctl"));
   }
 #endif
 }

@@ -15,7 +15,7 @@ struct mystr;
 
 /* Authentication of local users */
 /* Return 0 for fail, 1 for success */
-int vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str, _Ptr<const struct mystr> p_pass_str, _Ptr<const struct mystr> p_remote_host);
+int vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str, _Ptr<const struct mystr> p_pass_str, const struct mystr *p_remote_host);
 
 /* Support for fine grained privilege (capabilities) */
 int vsf_sysdep_has_capabilities(void);

@@ -88,54 +88,51 @@ static int s_vals_2[kMaxSyscalls];
 static int s_args_3[kMaxSyscalls];
 static int s_vals_3[kMaxSyscalls];
 
-static void
-allow_nr(int nr)
+static void allow_nr(int nr)
 {
   if (s_syscall_index >= kMaxSyscalls)
   {
-    bug("out of syscall space");
+    bug(((const char *)"out of syscall space"));
   }
   if (nr < 0)
   {
-    bug("negative syscall");
+    bug(((const char *)"negative syscall"));
   }
   s_errnos[s_syscall_index] = 0;
   s_syscalls[s_syscall_index++] = nr;
 }
 
-static void
-reject_nr(int nr, int errcode)
+static void reject_nr(int nr, int errcode)
 {
   if (s_syscall_index >= kMaxSyscalls)
   {
-    bug("out of syscall space");
+    bug(((const char *)"out of syscall space"));
   }
   if (nr < 0)
   {
-    bug("negative syscall");
+    bug(((const char *)"negative syscall"));
   }
   if (errcode < 0 || errcode > 255)
   {
-    bug("bad errcode");
+    bug(((const char *)"bad errcode"));
   }
   s_errnos[s_syscall_index] = errcode;
   s_syscalls[s_syscall_index++] = nr;
 }
 
-static void
-allow_nr_1_arg_match(int nr, int arg, int val)
+static void allow_nr_1_arg_match(int nr, int arg, int val)
 {
   if (s_syscall_index >= kMaxSyscalls)
   {
-    bug("out of syscall space");
+    bug(((const char *)"out of syscall space"));
   }
   if (nr < 0)
   {
-    bug("negative syscall");
+    bug(((const char *)"negative syscall"));
   }
   if (arg < 1 || arg > 6)
   {
-    bug("arg out of range");
+    bug(((const char *)"arg out of range"));
   }
   s_args_1[s_syscall_index] = arg;
   s_vals_1[s_syscall_index] = val;
@@ -144,20 +141,19 @@ allow_nr_1_arg_match(int nr, int arg, int val)
   s_1_arg_validations++;
 }
 
-static void
-allow_nr_1_arg_mask(int nr, int arg, int val)
+static void allow_nr_1_arg_mask(int nr, int arg, int val)
 {
   if (s_syscall_index >= kMaxSyscalls)
   {
-    bug("out of syscall space");
+    bug(((const char *)"out of syscall space"));
   }
   if (nr < 0)
   {
-    bug("negative syscall");
+    bug(((const char *)"negative syscall"));
   }
   if (arg < 1 || arg > 6)
   {
-    bug("arg out of range");
+    bug(((const char *)"arg out of range"));
   }
   s_args_1[s_syscall_index] = 100 + arg;
   s_vals_1[s_syscall_index] = val;
@@ -166,24 +162,23 @@ allow_nr_1_arg_mask(int nr, int arg, int val)
   s_1_arg_validations++;
 }
 
-static void
-allow_nr_2_arg_match(int nr, int arg1, int val1, int arg2, int val2)
+static void allow_nr_2_arg_match(int nr, int arg1, int val1, int arg2, int val2)
 {
   if (s_syscall_index >= kMaxSyscalls)
   {
-    bug("out of syscall space");
+    bug(((const char *)"out of syscall space"));
   }
   if (nr < 0)
   {
-    bug("negative syscall");
+    bug(((const char *)"negative syscall"));
   }
   if (arg1 < 1 || arg1 > 6)
   {
-    bug("arg1 out of range");
+    bug(((const char *)"arg1 out of range"));
   }
   if (arg2 < 1 || arg2 > 6)
   {
-    bug("arg2 out of range");
+    bug(((const char *)"arg2 out of range"));
   }
   s_args_1[s_syscall_index] = arg1;
   s_vals_1[s_syscall_index] = val1;
@@ -194,24 +189,23 @@ allow_nr_2_arg_match(int nr, int arg1, int val1, int arg2, int val2)
   s_2_arg_validations++;
 }
 
-static void
-allow_nr_2_arg_mask_match(int nr, int arg1, int val1, int arg2, int val2)
+static void allow_nr_2_arg_mask_match(int nr, int arg1, int val1, int arg2, int val2)
 {
   if (s_syscall_index >= kMaxSyscalls)
   {
-    bug("out of syscall space");
+    bug(((const char *)"out of syscall space"));
   }
   if (nr < 0)
   {
-    bug("negative syscall");
+    bug(((const char *)"negative syscall"));
   }
   if (arg1 < 1 || arg1 > 6)
   {
-    bug("arg1 out of range");
+    bug(((const char *)"arg1 out of range"));
   }
   if (arg2 < 1 || arg2 > 6)
   {
-    bug("arg2 out of range");
+    bug(((const char *)"arg2 out of range"));
   }
   s_args_1[s_syscall_index] = 100 + arg1;
   s_vals_1[s_syscall_index] = val1;
@@ -222,29 +216,27 @@ allow_nr_2_arg_mask_match(int nr, int arg1, int val1, int arg2, int val2)
   s_2_arg_validations++;
 }
 
-static void
-allow_nr_3_arg_match(int nr, int arg1, int val1, int arg2, int val2, int arg3,
-                     int val3)
+static void allow_nr_3_arg_match(int nr, int arg1, int val1, int arg2, int val2, int arg3, int val3)
 {
   if (s_syscall_index >= kMaxSyscalls)
   {
-    bug("out of syscall space");
+    bug(((const char *)"out of syscall space"));
   }
   if (nr < 0)
   {
-    bug("negative syscall");
+    bug(((const char *)"negative syscall"));
   }
   if (arg1 < 1 || arg1 > 6)
   {
-    bug("arg1 out of range");
+    bug(((const char *)"arg1 out of range"));
   }
   if (arg2 < 1 || arg2 > 6)
   {
-    bug("arg2 out of range");
+    bug(((const char *)"arg2 out of range"));
   }
   if (arg3 < 1 || arg3 > 6)
   {
-    bug("arg3 out of range");
+    bug(((const char *)"arg3 out of range"));
   }
   s_args_1[s_syscall_index] = arg1;
   s_vals_1[s_syscall_index] = val1;
@@ -315,12 +307,11 @@ seccomp_sandbox_init()
 {
   if (s_syscall_index != 0)
   {
-    bug("bad state in seccomp_sandbox_init");
+    bug(((const char *)"bad state in seccomp_sandbox_init"));
   }
 }
 
-void
-seccomp_sandbox_setup_prelogin(const struct vsf_session* p_sess)
+void seccomp_sandbox_setup_prelogin(const struct vsf_session *p_sess)
 {
   (void) p_sess;
 
@@ -362,8 +353,7 @@ seccomp_sandbox_setup_prelogin(const struct vsf_session* p_sess)
   }
 }
 
-void
-seccomp_sandbox_setup_postlogin(const struct vsf_session* p_sess)
+void seccomp_sandbox_setup_postlogin(const struct vsf_session *p_sess)
 {
   int is_anon = p_sess->is_anonymous;
   int open_flag = kOpenFlags;
@@ -664,7 +654,7 @@ seccomp_sandbox_lockdown()
       /* Kernel isn't good enough. */
       return;
     }
-    die("prctl PR_SET_NO_NEW_PRIVS");
+    die(((const char *)"prctl PR_SET_NO_NEW_PRIVS"));
   }
 
   if (!tunable_seccomp_sandbox)
@@ -689,7 +679,7 @@ seccomp_sandbox_lockdown()
       /* Kernel isn't good enough. */
       return;
     }
-    die("prctl PR_SET_SECCOMP failed");
+    die(((const char *)"prctl PR_SET_SECCOMP failed"));
   }
 }
 
@@ -700,12 +690,14 @@ seccomp_sandbox_init()
 {
 }
 
-void seccomp_sandbox_setup_prelogin(const struct vsf_session *p_sess)
+void
+seccomp_sandbox_setup_prelogin(const struct vsf_session* p_sess)
 {
   (void) p_sess;
 }
 
-void seccomp_sandbox_setup_postlogin(const struct vsf_session *p_sess)
+void
+seccomp_sandbox_setup_postlogin(const struct vsf_session* p_sess)
 {
   (void) p_sess;
 }

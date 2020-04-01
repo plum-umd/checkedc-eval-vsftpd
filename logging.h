@@ -29,7 +29,7 @@ enum EVSFLogEntryType
  * PARAMETERS
  * p_sess       - the current session object
  */
-void vsf_log_init(struct vsf_session* p_sess);
+void vsf_log_init(_Ptr<struct vsf_session> p_sess);
 
 /* vsf_log_start_entry()
  * PURPOSE
@@ -39,8 +39,7 @@ void vsf_log_init(struct vsf_session* p_sess);
  * p_sess       - the current session object
  * what         - the type of operation which just started
  */
-void vsf_log_start_entry(struct vsf_session* p_sess,
-                         enum EVSFLogEntryType what);
+void vsf_log_start_entry(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session> ), enum EVSFLogEntryType what);
 
 /* vsf_log_entry_pending()
  * PURPOSE
@@ -48,13 +47,13 @@ void vsf_log_start_entry(struct vsf_session* p_sess,
  * RETURNS
  * 0 if no log entry is pending; 1 if one is.
  */
-int vsf_log_entry_pending(struct vsf_session* p_sess);
+int vsf_log_entry_pending(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session> ));
 
 /* vsf_log_clear_entry()
  * PURPOSE
  * Clears any pending log entry.
  */
-void vsf_log_clear_entry(struct vsf_session* p_sess);
+void vsf_log_clear_entry(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session> ));
 
 /* vsf_log_do_log()
  * PURPOSE
@@ -64,7 +63,7 @@ void vsf_log_clear_entry(struct vsf_session* p_sess);
  * p_sess       - the current session object
  * succeeded    - 0 for a failed operation, 1 for a successful operation
  */
-void vsf_log_do_log(struct vsf_session* p_sess, int succeeded);
+void vsf_log_do_log(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session> ), int succeeded);
 
 /* vsf_log_line()
  * PURPOSE
@@ -77,8 +76,7 @@ void vsf_log_do_log(struct vsf_session* p_sess, int succeeded);
  * what         - the type of operation to log
  * p_str        - the string to log
  */
-void vsf_log_line(struct vsf_session* p_sess, enum EVSFLogEntryType what,
-                  struct mystr* p_str);
+void vsf_log_line(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session> ), enum EVSFLogEntryType what, _Ptr<struct mystr> p_str);
 
 #endif /* VSF_LOGGING_H */
 

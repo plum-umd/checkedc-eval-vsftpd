@@ -14,8 +14,7 @@
 #include "sysutil.h"
 #include "sysdeputil.h"
 
-void
-vsf_secbuf_alloc(char** p_ptr, unsigned int size)
+void vsf_secbuf_alloc(_Ptr<char*> p_ptr, unsigned int size)
 {
   unsigned int page_offset;
   unsigned int round_up;
@@ -61,8 +60,7 @@ vsf_secbuf_alloc(char** p_ptr, unsigned int size)
   *p_ptr = p_mmap;
 }
 
-void
-vsf_secbuf_free(char** p_ptr)
+void vsf_secbuf_free(_Ptr<char*> p_ptr)
 {
   unsigned int map_size;
   unsigned long page_offset;

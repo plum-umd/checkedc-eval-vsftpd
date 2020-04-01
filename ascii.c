@@ -9,8 +9,7 @@
 
 #include "ascii.h"
 
-struct ascii_to_bin_ret
-vsf_ascii_ascii_to_bin(char* p_buf, unsigned int in_len, int prev_cr)
+struct ascii_to_bin_ret vsf_ascii_ascii_to_bin(char *p_buf, unsigned int in_len, int prev_cr)
 {
   /* Task: translate all \r\n into plain \n. A plain \r not followed by \n must
    * not be removed.
@@ -53,11 +52,7 @@ vsf_ascii_ascii_to_bin(char* p_buf, unsigned int in_len, int prev_cr)
   return ret;
 }
 
-struct bin_to_ascii_ret
-vsf_ascii_bin_to_ascii(const char* p_in,
-                       char* p_out,
-                       unsigned int in_len,
-                       int prev_cr)
+struct bin_to_ascii_ret vsf_ascii_bin_to_ascii(const char *p_in, char *p_out, unsigned int in_len, int prev_cr)
 {
   /* Task: translate all \n not preceeded by \r into \r\n.
    * Note that \r\n stays as \r\n. We used to map it to \r\r\n like wu-ftpd

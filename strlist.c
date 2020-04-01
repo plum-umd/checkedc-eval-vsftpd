@@ -26,12 +26,11 @@ static const unsigned int kMaxStrlist = 10 * 1000 * 1000;
 
 static struct mystr s_null_str;
 
-static int sort_compare_func(const void* p1, const void* p2);
-static int sort_compare_func_reverse(const void* p1, const void* p2);
-static int sort_compare_common(const void* p1, const void* p2, int reverse);
+static int sort_compare_func(const void *p1, const void *p2);
+static int sort_compare_func_reverse(const void *p1, const void *p2);
+static int sort_compare_common(const void *p1, const void *p2, int reverse);
 
-void
-str_list_free(struct mystr_list* p_list)
+void str_list_free(_Ptr<struct mystr_list> p_list)
 {
   unsigned int i;
   for (i=0; i < p_list->list_len; ++i)
@@ -48,15 +47,12 @@ str_list_free(struct mystr_list* p_list)
   }
 }
 
-unsigned int
-str_list_get_length(const struct mystr_list* p_list)
+unsigned int str_list_get_length(const struct mystr_list *p_list : itype(_Ptr<const struct mystr_list> ))
 {
   return p_list->list_len;
 }
 
-int
-str_list_contains_str(const struct mystr_list* p_list,
-                      const struct mystr* p_str)
+int str_list_contains_str(const struct mystr_list *p_list : itype(_Ptr<const struct mystr_list> ), _Ptr<const struct mystr> p_str)
 {
   unsigned int i;
   for (i=0; i < p_list->list_len; ++i)
@@ -69,11 +65,9 @@ str_list_contains_str(const struct mystr_list* p_list,
   return 0;
 }
 
-void
-str_list_add(struct mystr_list* p_list, const struct mystr* p_str,
-             const struct mystr* p_sort_key_str)
+void str_list_add(struct mystr_list *p_list : itype(_Ptr<struct mystr_list> ), _Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_sort_key_str)
 {
-  struct mystr_list_node* p_node;
+  _Ptr<struct mystr_list_node> p_node = ((void *)0);
   /* Expand the node allocation if we have to */
   if (p_list->list_len == p_list->alloc_len)
   {
@@ -88,7 +82,7 @@ str_list_add(struct mystr_list* p_list, const struct mystr* p_str,
       p_list->alloc_len *= 2;
       if (p_list->alloc_len > kMaxStrlist)
       {
-        die("excessive strlist");
+        die(((const char *)"excessive strlist"));
       }
       p_list->p_nodes = vsf_sysutil_realloc(
           p_list->p_nodes,
@@ -106,8 +100,7 @@ str_list_add(struct mystr_list* p_list, const struct mystr* p_str,
   p_list->list_len++;
 }
 
-void
-str_list_sort(struct mystr_list* p_list, int reverse)
+void str_list_sort(struct mystr_list *p_list : itype(_Ptr<struct mystr_list> ), int reverse)
 {
   if (!reverse)
   {
@@ -122,23 +115,20 @@ str_list_sort(struct mystr_list* p_list, int reverse)
   }
 }
 
-static int
-sort_compare_func(const void* p1, const void* p2)
+static int sort_compare_func(const void *p1, const void *p2)
 {
   return sort_compare_common(p1, p2, 0);
 }
 
-static int
-sort_compare_func_reverse(const void* p1, const void* p2)
+static int sort_compare_func_reverse(const void *p1, const void *p2)
 {
   return sort_compare_common(p1, p2, 1);
 }
 
-static int
-sort_compare_common(const void* p1, const void* p2, int reverse)
+static int sort_compare_common(const void *p1, const void *p2, int reverse)
 {
-  const struct mystr* p_cmp1;
-  const struct mystr* p_cmp2;
+  _Ptr<const struct mystr> p_cmp1 = ((void *)0);
+  _Ptr<const struct mystr> p_cmp2 = ((void *)0);
   const struct mystr_list_node* p_node1 = (const struct mystr_list_node*) p1;
   const struct mystr_list_node* p_node2 = (const struct mystr_list_node*) p2;
   if (!str_isempty(&p_node1->sort_key_str))
@@ -168,12 +158,11 @@ sort_compare_common(const void* p1, const void* p2, int reverse)
   }
 }
 
-const struct mystr*
-str_list_get_pstr(const struct mystr_list* p_list, unsigned int indexx)
+_Ptr<const struct mystr> str_list_get_pstr(const struct mystr_list *p_list : itype(_Ptr<const struct mystr_list> ), unsigned int indexx)
 {
   if (indexx >= p_list->list_len)
   {
-    bug("indexx out of range in str_list_get_str");
+    bug(((const char *)"indexx out of range in str_list_get_str"));
   }
   return &p_list->p_nodes[indexx].str;
 }

@@ -16,8 +16,7 @@
 #include "secbuf.h"
 #include "utility.h"
 
-int
-str_fileread(struct mystr* p_str, const char* p_filename, unsigned int maxsize)
+int str_fileread(_Ptr<struct mystr> p_str, const char *p_filename, unsigned int maxsize)
 {
   int fd;
   int retval = 0;
@@ -48,7 +47,7 @@ str_fileread(struct mystr* p_str, const char* p_filename, unsigned int maxsize)
     }
     else if ((unsigned int) retval != size)
     {
-      die("read size mismatch");
+      die(((const char *)"read size mismatch"));
     }
     str_alloc_memchunk(p_str, p_sec_buf, (unsigned int) size);
   }

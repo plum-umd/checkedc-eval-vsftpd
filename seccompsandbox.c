@@ -700,14 +700,12 @@ seccomp_sandbox_init()
 {
 }
 
-void
-seccomp_sandbox_setup_prelogin(const struct vsf_session* p_sess)
+void seccomp_sandbox_setup_prelogin(const struct vsf_session *p_sess)
 {
   (void) p_sess;
 }
 
-void
-seccomp_sandbox_setup_postlogin(const struct vsf_session* p_sess)
+void seccomp_sandbox_setup_postlogin(const struct vsf_session *p_sess)
 {
   (void) p_sess;
 }

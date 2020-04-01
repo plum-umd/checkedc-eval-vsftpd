@@ -28,12 +28,11 @@
  */
 static void die_unless_privileged(void);
 static void do_sanity_checks(void);
-static void session_init(struct vsf_session* p_sess);
+static void session_init(_Ptr<struct vsf_session> p_sess);
 static void env_init(void);
 static void limits_init(void);
 
-int
-main(int argc, const char* argv[])
+int main(int argc, const char *argv[])
 {
   struct vsf_session the_session =
   {
@@ -84,7 +83,7 @@ main(int argc, const char* argv[])
    */
   if (argc == 0)
   {
-    die("vsftpd: missing argv[0]");
+    die(((const char *)"vsftpd: missing argv[0]"));
   }
   for (i = 1; i < argc; ++i)
   {
@@ -98,7 +97,7 @@ main(int argc, const char* argv[])
     {
       if (p_arg[1] == 'v')
       {
-        vsf_exit("vsftpd: version " VSF_VERSION "\n");
+        vsf_exit(((const char *)"vsftpd: version " VSF_VERSION "\n"));
       }
       else if (p_arg[1] == 'o')
       {
@@ -106,7 +105,7 @@ main(int argc, const char* argv[])
       }
       else
       {
-        die2("unrecognise option: ", p_arg);
+        die2(((const char *)"unrecognise option: "), p_arg);
       }
     }
   }
@@ -160,7 +159,7 @@ main(int argc, const char* argv[])
     the_session.tcp_wrapper_ok = vsf_tcp_wrapper_ok(VSFTP_COMMAND_FD);
   }
   {
-    const char* p_load_conf = vsf_sysutil_getenv("VSFTPD_LOAD_CONF");
+    const char* p_load_conf = vsf_sysutil_getenv(((const char *)"VSFTPD_LOAD_CONF"));
     if (p_load_conf)
     {
       vsf_parseconf_load_file(p_load_conf, 1);
@@ -187,7 +186,7 @@ main(int argc, const char* argv[])
   if (tunable_setproctitle_enable)
   {
     vsf_sysutil_set_proctitle_prefix(&the_session.remote_ip_str);
-    vsf_sysutil_setproctitle("connected");
+    vsf_sysutil_setproctitle(((const char *)"connected"));
   }
   /* We might chroot() very soon (one process model), so we need to open
    * any required config files here.
@@ -208,7 +207,7 @@ main(int argc, const char* argv[])
     }
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die2("cannot read anon e-mail list file:", tunable_banned_email_file);
+      die2(((const char *)"cannot read anon e-mail list file:"), tunable_banned_email_file);
     }
   }
   if (tunable_banner_file)
@@ -217,7 +216,7 @@ main(int argc, const char* argv[])
                               VSFTP_CONF_FILE_MAX);
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die2("cannot read banner file:", tunable_banner_file);
+      die2(((const char *)"cannot read banner file:"), tunable_banner_file);
     }
   }
   if (tunable_secure_email_list_enable)
@@ -231,7 +230,7 @@ main(int argc, const char* argv[])
     }
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die2("cannot read email passwords file:", tunable_email_password_file);
+      die2(((const char *)"cannot read email passwords file:"), tunable_email_password_file);
     }
   }
   if (tunable_run_as_launching_user)
@@ -252,7 +251,7 @@ main(int argc, const char* argv[])
     vsf_two_process_start(&the_session);
   }
   /* NOTREACHED */
-  bug("should not get here: main");
+  bug(((const char *)"should not get here: main"));
   return 1;
 }
 
@@ -261,7 +260,7 @@ die_unless_privileged(void)
 {
   if (!vsf_sysutil_running_as_root())
   {
-    die("vsftpd: must be started as root (see run_as_launching_user option)");
+    die(((const char *)"vsftpd: must be started as root (see run_as_launching_user option)"));
   }
 }
 
@@ -273,7 +272,7 @@ do_sanity_checks(void)
     vsf_sysutil_fstat(VSFTP_COMMAND_FD, &p_statbuf);
     if (!vsf_sysutil_statbuf_is_socket(p_statbuf))
     {
-      die("vsftpd: not configured for standalone, must be started from inetd");
+      die(((const char *)"vsftpd: not configured for standalone, must be started from inetd"));
     }
     vsf_sysutil_free(p_statbuf);
   }
@@ -281,24 +280,24 @@ do_sanity_checks(void)
   {
     if (tunable_local_enable)
     {
-      die("vsftpd: security: 'one_process_model' is anonymous only");
+      die(((const char *)"vsftpd: security: 'one_process_model' is anonymous only"));
     }
     if (!vsf_sysdep_has_capabilities_as_non_root())
     {
-      die("vsftpd: security: 'one_process_model' needs a better OS");
+      die(((const char *)"vsftpd: security: 'one_process_model' needs a better OS"));
     }
   }
   if (!tunable_local_enable && !tunable_anonymous_enable)
   {
-    die("vsftpd: both local and anonymous access disabled!");
+    die(((const char *)"vsftpd: both local and anonymous access disabled!"));
   }
   if (!tunable_ftp_enable && !tunable_http_enable)
   {
-    die("vsftpd: both FTP and HTTP disabled!");
+    die(((const char *)"vsftpd: both FTP and HTTP disabled!"));
   }
   if (tunable_http_enable && !tunable_one_process_model)
   {
-    die("vsftpd: HTTP needs 'one_process_model' for now");
+    die(((const char *)"vsftpd: HTTP needs 'one_process_model' for now"));
   }
 }
 
@@ -328,8 +327,7 @@ limits_init(void)
   vsf_sysutil_set_address_space_limit(limit);
 }
 
-static void
-session_init(struct vsf_session* p_sess)
+static void session_init(_Ptr<struct vsf_session> p_sess)
 {
   /* Get the addresses of the control connection */
   vsf_sysutil_getpeername(VSFTP_COMMAND_FD, &p_sess->p_remote_addr);
@@ -344,7 +342,7 @@ session_init(struct vsf_session* p_sess)
     }
     if (p_user == 0)
     {
-      die2("vsftpd: cannot locate user specified in 'ftp_username':",
+      die2(((const char *)"vsftpd: cannot locate user specified in 'ftp_username':"),
            tunable_ftp_username);
     }
     p_sess->anon_ftp_uid = vsf_sysutil_user_getuid(p_user);
@@ -358,7 +356,7 @@ session_init(struct vsf_session* p_sess)
     }
     if (p_user == 0)
     {
-      die2("vsftpd: cannot locate user specified in 'guest_username':",
+      die2(((const char *)"vsftpd: cannot locate user specified in 'guest_username':"),
            tunable_guest_username);
     }
     p_sess->guest_user_uid = vsf_sysutil_user_getuid(p_user);
@@ -372,7 +370,7 @@ session_init(struct vsf_session* p_sess)
     }
     if (p_user == 0)
     {
-      die2("vsftpd: cannot locate user specified in 'chown_username':",
+      die2(((const char *)"vsftpd: cannot locate user specified in 'chown_username':"),
            tunable_chown_username);
     }
     p_sess->anon_upload_chown_uid = vsf_sysutil_user_getuid(p_user);

@@ -77,7 +77,8 @@ enum EVSFSysUtilOpenMode
 {
   kVSFSysUtilOpenReadOnly = 1,
   kVSFSysUtilOpenWriteOnly,
-  kVSFSysUtilOpenReadWrite
+  kVSFSysUtilOpenReadWrite,
+  kVSFSysUtilOpenUnknown
 };
 int vsf_sysutil_open_file(const char* p_filename,
                           const enum EVSFSysUtilOpenMode);

@@ -8,7 +8,13 @@ import sys
 import fileinput
 import subprocess
 
-def update_python_location(filename, python_loc): 
+def update_script_locations(cconv_loc, include_loc, python_loc): 
+    for line in fileinput.input("convert_all.sh", inplace=1):
+        if "CCONV=" in line:
+            line = "CCONV=" + cconv_loc
+        elif "INCLUDES=" in line: 
+            line = "INCUDES=" + include_loc
+        sys.stdout.write(line) 
     for line in fileinput.input(filename, inplace=1):
         if "#!" in line: 
             line = "#!" + python_loc 
@@ -54,14 +60,13 @@ python_loc = input("[PYTHON LOCATION] > ") + "\n"
 
 print("##########\tupdating scripts with new locations...\t##########")
 
-update_python_location("update_database.py", python_loc) 
-update_python_location("replace.py", python_loc)
+update_script_locations(cconv_loc, include_loc, python_loc)
 
 print("##########\tupdating the database with your locations...\t##########")
 os.system("python3 update_database.py") 
 
 print("##########\trunning the conversion tool...\t##########")
-os.system("sh convert_all.sh") 
+os.system("sh convert_all.sh")
 
 print("##########\treplacing the output\t##########")
 os.system("python replace.py")
@@ -74,11 +79,25 @@ stdout = str(stdout)
 if "error:" in stdout: 
     compiles = False
 if not compiles: 
-    print("\nFailure to compile! Would you like to continue looking at diffs?\n")
-os.system("rm *.o")
+    print("\nFailure to compile!\n")
+os.system("rm *.o")  
 
 
+# reset everything 
+os.system("git reset --HARD") 
+update_script_locations(cconv_loc, include_loc, python_loc) 
+for line in fileinput.input("convert_all.sh", inplace=1):
+    if "output-postfix" in line: 
+        line = "-output-postfix=checked \\\n-alltypes \\"
+    sys.stdout.write(line) 
+print("##########\tupdating the database with your locations...\t##########")
+os.system("python3 update_database.py") 
 
+print("##########\trunning the conversion tool...\t##########")
+os.system("sh convert_all.sh")
+
+print("##########\treplacing the output\t##########")
+os.system("python replace.py")
 
 
 
@@ -95,7 +114,7 @@ Press
 print(menu)
 choice = input("[CHOICE] > ").rstrip()
 if choice=="1": 
-    command = "git diff baseline-converted..baseline --output=GIT_DIFF_GENERATOR.txt -- '*.c'" 
+    command = "git diff sane-baseline-converted..sane-baseline --output=GIT_DIFF_GENERATOR.txt -- '*.c'" 
     run_diff_command(command, None)
 elif choice=="2": 
     run_file_by_file()

@@ -15,7 +15,11 @@ def update_script_locations(cconv_loc, include_loc, python_loc):
         elif "INCLUDES=" in line: 
             line = "INCUDES=" + include_loc
         sys.stdout.write(line) 
-    for line in fileinput.input(filename, inplace=1):
+    for line in fileinput.input("update_database.py", inplace=1):
+        if "#!" in line: 
+            line = "#!" + python_loc 
+        sys.stdout.write(line)
+    for line in fileinput.input("replace.py", inplace=1):
         if "#!" in line: 
             line = "#!" + python_loc 
         sys.stdout.write(line)

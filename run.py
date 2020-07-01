@@ -44,7 +44,7 @@ def run_file_by_file():
         if file.endswith(".c"):
             f.extend(file)
     for filename in f: 
-        command = "git diff baseline-converted..baseline --output=GIT_DIFF_GENERATOR.txt -- {}".format(filename) 
+        command = "git diff sane-baseline-converted..sane-baseline --output=GIT_DIFF_GENERATOR.txt -- {}".format(filename) 
         run_diff_command(command, filename)
 
 

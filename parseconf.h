@@ -15,7 +15,7 @@
  * If p_filename is NULL, then the last filename passed to this function is
  * used to reload the configuration details.
  */
-void vsf_parseconf_load_file(const char* p_filename, int errs_fatal);
+void vsf_parseconf_load_file(const char *p_filename, int errs_fatal);
 
 /* vsf_parseconf_parse_setting()
  * PURPOSE
@@ -25,7 +25,7 @@ void vsf_parseconf_load_file(const char* p_filename, int errs_fatal);
  * p_settings    - the name=value pair to apply
  * errs_fatal    - errors will cause the calling process to exit if not 0
  */
-void vsf_parseconf_load_setting(const char* p_setting, int errs_fatal);
+void vsf_parseconf_load_setting(const char *p_setting, int errs_fatal);
 
 #endif /* VSF_PARSECONF_H */
 

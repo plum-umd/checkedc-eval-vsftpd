@@ -26,21 +26,20 @@
 #include "opts.h"
 
 /* Functions used */
-static void check_limits(struct vsf_session* p_sess);
-static void emit_greeting(struct vsf_session* p_sess);
-static void parse_username_password(struct vsf_session* p_sess);
-static void handle_user_command(struct vsf_session* p_sess);
-static void handle_pass_command(struct vsf_session* p_sess);
-static void handle_get(struct vsf_session* p_sess);
+static void check_limits(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
+static void emit_greeting(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
+static void parse_username_password(struct vsf_session *p_sess);
+static void handle_user_command(struct vsf_session *p_sess);
+static void handle_pass_command(struct vsf_session *p_sess);
+static void handle_get(struct vsf_session *p_sess);
 static void check_login_delay();
-static void check_login_fails(struct vsf_session* p_sess);
+static void check_login_fails(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
 
-void
-init_connection(struct vsf_session* p_sess)
+void init_connection(struct vsf_session *p_sess)
 {
   if (tunable_setproctitle_enable)
   {
-    vsf_sysutil_setproctitle("not logged in");
+    vsf_sysutil_setproctitle(((const char *)((const char *)((const char *)"not logged in"))));
   }
   /* Before we talk to the remote, make sure an alarm is set up in case
    * writing the initial greetings should block.
@@ -62,51 +61,49 @@ init_connection(struct vsf_session* p_sess)
   parse_username_password(p_sess);
 }
 
-static void
-check_limits(struct vsf_session* p_sess)
+static void check_limits(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
 {
   struct mystr str_log_line = INIT_MYSTR;
   /* Check for client limits (standalone mode only) */
   if (tunable_max_clients > 0 &&
       p_sess->num_clients > tunable_max_clients)
   {
-    str_alloc_text(&str_log_line, "Connection refused: too many sessions.");
+    str_alloc_text(&str_log_line, ((const char *)((const char *)((const char *)"Connection refused: too many sessions."))));
     vsf_log_line(p_sess, kVSFLogEntryConnection, &str_log_line);
     vsf_cmdio_write_exit(p_sess, FTP_TOO_MANY_USERS,
-      "There are too many connected users, please try later.", 1);
+      ((const char *)((const char *)((const char *)"There are too many connected users, please try later."))), 1);
   }
   if (tunable_max_per_ip > 0 &&
       p_sess->num_this_ip > tunable_max_per_ip)
   {
     str_alloc_text(&str_log_line,
-                   "Connection refused: too many sessions for this address.");
+                   ((const char *)((const char *)((const char *)"Connection refused: too many sessions for this address."))));
     vsf_log_line(p_sess, kVSFLogEntryConnection, &str_log_line);
     vsf_cmdio_write_exit(p_sess, FTP_IP_LIMIT,
-      "There are too many connections from your internet address.", 1);
+      ((const char *)((const char *)((const char *)"There are too many connections from your internet address."))), 1);
   }
   if (!p_sess->tcp_wrapper_ok)
   {
     str_alloc_text(&str_log_line,
-                   "Connection refused: tcp_wrappers denial.");
+                   ((const char *)((const char *)((const char *)"Connection refused: tcp_wrappers denial."))));
     vsf_log_line(p_sess, kVSFLogEntryConnection, &str_log_line);
-    vsf_cmdio_write_exit(p_sess, FTP_IP_DENY, "Service not available.", 1);
+    vsf_cmdio_write_exit(p_sess, FTP_IP_DENY, ((const char *)((const char *)((const char *)"Service not available."))), 1);
   }
   vsf_log_line(p_sess, kVSFLogEntryConnection, &str_log_line);
 }
 
-static void
-emit_greeting(struct vsf_session* p_sess)
+static void emit_greeting(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
 {
   if (!str_isempty(&p_sess->banner_str))
   {
     vsf_banner_write(p_sess, &p_sess->banner_str, FTP_GREET);
     str_free(&p_sess->banner_str);
-    vsf_cmdio_write(p_sess, FTP_GREET, "");
+    vsf_cmdio_write(p_sess, FTP_GREET, ((const char *)((const char *)((const char *)""))));
   }
   else if (tunable_ftpd_banner == 0)
   {
-    vsf_cmdio_write(p_sess, FTP_GREET, "(vsFTPd " VSF_VERSION 
-                    ")");
+    vsf_cmdio_write(p_sess, FTP_GREET, ((const char *)((const char *)((const char *)"(vsFTPd " VSF_VERSION 
+                    ")"))));
   }
   else
   {
@@ -114,8 +111,7 @@ emit_greeting(struct vsf_session* p_sess)
   }
 }
 
-static void
-parse_username_password(struct vsf_session* p_sess)
+static void parse_username_password(struct vsf_session *p_sess)
 {
   while (1)
   {
@@ -123,39 +119,39 @@ parse_username_password(struct vsf_session* p_sess)
                               &p_sess->ftp_arg_str, 1);
     if (tunable_ftp_enable)
     {
-      if (str_equal_text(&p_sess->ftp_cmd_str, "USER"))
+      if (str_equal_text(&p_sess->ftp_cmd_str, ((const char *)((const char *)((const char *)"USER")))))
       {
         handle_user_command(p_sess);
       }
-      else if (str_equal_text(&p_sess->ftp_cmd_str, "PASS"))
+      else if (str_equal_text(&p_sess->ftp_cmd_str, ((const char *)((const char *)((const char *)"PASS")))))
       {
         handle_pass_command(p_sess);
       }
-      else if (str_equal_text(&p_sess->ftp_cmd_str, "QUIT"))
+      else if (str_equal_text(&p_sess->ftp_cmd_str, ((const char *)((const char *)((const char *)"QUIT")))))
       {
-        vsf_cmdio_write_exit(p_sess, FTP_GOODBYE, "Goodbye.", 0);
+        vsf_cmdio_write_exit(p_sess, FTP_GOODBYE, ((const char *)((const char *)((const char *)"Goodbye."))), 0);
       }
-      else if (str_equal_text(&p_sess->ftp_cmd_str, "FEAT"))
+      else if (str_equal_text(&p_sess->ftp_cmd_str, ((const char *)((const char *)((const char *)"FEAT")))))
       {
         handle_feat(p_sess);
       }
-      else if (str_equal_text(&p_sess->ftp_cmd_str, "OPTS"))
+      else if (str_equal_text(&p_sess->ftp_cmd_str, ((const char *)((const char *)((const char *)"OPTS")))))
       {
         handle_opts(p_sess);
       }
       else if (tunable_ssl_enable &&
-               str_equal_text(&p_sess->ftp_cmd_str, "AUTH") &&
+               str_equal_text(&p_sess->ftp_cmd_str, ((const char *)((const char *)((const char *)"AUTH")))) &&
                !p_sess->control_use_ssl)
       {
         handle_auth(p_sess);
       }
       else if (tunable_ssl_enable &&
-               str_equal_text(&p_sess->ftp_cmd_str, "PBSZ"))
+               str_equal_text(&p_sess->ftp_cmd_str, ((const char *)((const char *)((const char *)"PBSZ")))))
       {
         handle_pbsz(p_sess);
       }
       else if (tunable_ssl_enable &&
-               str_equal_text(&p_sess->ftp_cmd_str, "PROT"))
+               str_equal_text(&p_sess->ftp_cmd_str, ((const char *)((const char *)((const char *)"PROT")))))
       {
         handle_prot(p_sess);
       }
@@ -167,36 +163,34 @@ parse_username_password(struct vsf_session* p_sess)
       else
       {
         vsf_cmdio_write(p_sess, FTP_LOGINERR,
-                        "Please login with USER and PASS.");
+                        ((const char *)((const char *)((const char *)"Please login with USER and PASS."))));
       }
     }
     else if (tunable_http_enable)
     {
-      if (str_equal_text(&p_sess->ftp_cmd_str, "GET"))
+      if (str_equal_text(&p_sess->ftp_cmd_str, ((const char *)((const char *)((const char *)"GET")))))
       {
         handle_get(p_sess);
       }
       else
       {
-        vsf_cmdio_write(p_sess, FTP_LOGINERR, "Bad HTTP verb.");
+        vsf_cmdio_write(p_sess, FTP_LOGINERR, ((const char *)((const char *)((const char *)"Bad HTTP verb."))));
       }
       vsf_sysutil_exit(0);
     }
   }
 }
 
-static void
-handle_get(struct vsf_session* p_sess)
+static void handle_get(struct vsf_session *p_sess)
 {
   p_sess->is_http = 1;
   str_copy(&p_sess->http_get_arg, &p_sess->ftp_arg_str);
-  str_alloc_text(&p_sess->user_str, "FTP");
-  str_alloc_text(&p_sess->ftp_arg_str, "<http>");
+  str_alloc_text(&p_sess->user_str, ((const char *)((const char *)((const char *)"FTP"))));
+  str_alloc_text(&p_sess->ftp_arg_str, ((const char *)((const char *)((const char *)"<http>"))));
   handle_pass_command(p_sess);
 }
 
-static void
-handle_user_command(struct vsf_session* p_sess)
+static void handle_user_command(struct vsf_session *p_sess)
 {
   /* SECURITY: If we're in anonymous only-mode, immediately reject
    * non-anonymous usernames in the hope we save passwords going plaintext
@@ -205,15 +199,15 @@ handle_user_command(struct vsf_session* p_sess)
   int is_anon = 1;
   str_copy(&p_sess->user_str, &p_sess->ftp_arg_str);
   str_upper(&p_sess->ftp_arg_str);
-  if (!str_equal_text(&p_sess->ftp_arg_str, "FTP") &&
-      !str_equal_text(&p_sess->ftp_arg_str, "ANONYMOUS"))
+  if (!str_equal_text(&p_sess->ftp_arg_str, ((const char *)((const char *)((const char *)"FTP")))) &&
+      !str_equal_text(&p_sess->ftp_arg_str, ((const char *)((const char *)((const char *)"ANONYMOUS")))))
   {
     is_anon = 0;
   }
   if (!tunable_local_enable && !is_anon)
   {
     vsf_cmdio_write(
-      p_sess, FTP_LOGINERR, "This FTP server is anonymous only.");
+      p_sess, FTP_LOGINERR, ((const char *)((const char *)((const char *)"This FTP server is anonymous only."))));
     str_empty(&p_sess->user_str);
     return;
   }
@@ -221,7 +215,7 @@ handle_user_command(struct vsf_session* p_sess)
       !tunable_force_anon_logins_ssl)
   {
     vsf_cmdio_write(
-      p_sess, FTP_LOGINERR, "Anonymous sessions may not use encryption.");
+      p_sess, FTP_LOGINERR, ((const char *)((const char *)((const char *)"Anonymous sessions may not use encryption."))));
     str_empty(&p_sess->user_str);
     return;
   }
@@ -229,13 +223,13 @@ handle_user_command(struct vsf_session* p_sess)
       tunable_force_local_logins_ssl)
   {
     vsf_cmdio_write_exit(
-      p_sess, FTP_LOGINERR, "Non-anonymous sessions must use encryption.", 1);
+      p_sess, FTP_LOGINERR, ((const char *)((const char *)((const char *)"Non-anonymous sessions must use encryption."))), 1);
   }
   if (tunable_ssl_enable && is_anon && !p_sess->control_use_ssl &&
       tunable_force_anon_logins_ssl)
   { 
     vsf_cmdio_write_exit(
-      p_sess, FTP_LOGINERR, "Anonymous sessions must use encryption.", 1);
+      p_sess, FTP_LOGINERR, ((const char *)((const char *)((const char *)"Anonymous sessions must use encryption."))), 1);
   }
   if (tunable_userlist_enable)
   {
@@ -244,7 +238,7 @@ handle_user_command(struct vsf_session* p_sess)
         (!located && !tunable_userlist_deny))
     {
       check_login_delay();
-      vsf_cmdio_write(p_sess, FTP_LOGINERR, "Permission denied.");
+      vsf_cmdio_write(p_sess, FTP_LOGINERR, ((const char *)((const char *)((const char *)"Permission denied."))));
       check_login_fails(p_sess);
       str_empty(&p_sess->user_str);
       return;
@@ -253,21 +247,20 @@ handle_user_command(struct vsf_session* p_sess)
   if (is_anon && tunable_no_anon_password)
   {
     /* Fake a password */
-    str_alloc_text(&p_sess->ftp_arg_str, "<no password>");
+    str_alloc_text(&p_sess->ftp_arg_str, ((const char *)((const char *)((const char *)"<no password>"))));
     handle_pass_command(p_sess);
   }
   else
   {
-    vsf_cmdio_write(p_sess, FTP_GIVEPWORD, "Please specify the password.");
+    vsf_cmdio_write(p_sess, FTP_GIVEPWORD, ((const char *)((const char *)((const char *)"Please specify the password."))));
   }
 }
 
-static void
-handle_pass_command(struct vsf_session* p_sess)
+static void handle_pass_command(struct vsf_session *p_sess)
 {
   if (str_isempty(&p_sess->user_str))
   {
-    vsf_cmdio_write(p_sess, FTP_NEEDUSER, "Login with USER first.");
+    vsf_cmdio_write(p_sess, FTP_NEEDUSER, ((const char *)((const char *)((const char *)"Login with USER first."))));
     return;
   }
   /* These login calls never return if successful */
@@ -279,7 +272,7 @@ handle_pass_command(struct vsf_session* p_sess)
   {
     vsf_two_process_login(p_sess, &p_sess->ftp_arg_str);
   }
-  vsf_cmdio_write(p_sess, FTP_LOGINERR, "Login incorrect.");
+  vsf_cmdio_write(p_sess, FTP_LOGINERR, ((const char *)((const char *)((const char *)"Login incorrect."))));
   check_login_fails(p_sess);
   str_empty(&p_sess->user_str);
   /* FALLTHRU if login fails */
@@ -293,7 +286,7 @@ static void check_login_delay()
   }
 }
 
-static void check_login_fails(struct vsf_session* p_sess)
+static void check_login_fails(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
 {
   if (++p_sess->login_fails >= tunable_max_login_fails)
   {

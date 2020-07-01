@@ -16,8 +16,7 @@
 #include "readwrite.h"
 #include "defs.h"
 
-void
-ssl_slave(struct vsf_session* p_sess)
+void ssl_slave(_Ptr<struct vsf_session> p_sess)
 {
   struct mystr data_str = INIT_MYSTR;
   str_reserve(&data_str, VSFTP_DATA_BUFSIZE);
@@ -27,7 +26,7 @@ ssl_slave(struct vsf_session* p_sess)
   priv_sock_set_parent_context(p_sess);
   if (tunable_setproctitle_enable)
   {
-    vsf_sysutil_setproctitle("SSL handler");
+    vsf_sysutil_setproctitle(((const char *)((const char *)((const char *)"SSL handler"))));
   }
   while (1)
   {
@@ -54,7 +53,7 @@ ssl_slave(struct vsf_session* p_sess)
       char result = PRIV_SOCK_RESULT_BAD;
       if (p_sess->data_fd != -1 || p_sess->p_data_ssl != 0)
       {
-        bug("state not clean");
+        bug(((const char *)((const char *)((const char *)"state not clean"))));
       }
       p_sess->data_fd = priv_sock_recv_fd(p_sess->ssl_slave_fd);
       ret = ssl_accept(p_sess, p_sess->data_fd);
@@ -74,11 +73,11 @@ ssl_slave(struct vsf_session* p_sess)
       int size = priv_sock_get_int(p_sess->ssl_slave_fd);
       if (size <= 0 || size > VSFTP_DATA_BUFSIZE)
       {
-        bug("bad size");
+        bug(((const char *)((const char *)((const char *)"bad size"))));
       }
       if (p_sess->data_fd == -1 || p_sess->p_data_ssl == 0)
       {
-        bug("invalid state");
+        bug(((const char *)((const char *)((const char *)"invalid state"))));
       }
       str_trunc(&data_str, (unsigned int) size);
       ret = ssl_read_into_str(p_sess, p_sess->p_data_ssl, &data_str);
@@ -89,7 +88,7 @@ ssl_slave(struct vsf_session* p_sess)
     {
       if (p_sess->data_fd == -1 || p_sess->p_data_ssl == 0)
       {
-        bug("invalid state");
+        bug(((const char *)((const char *)((const char *)"invalid state"))));
       }
       priv_sock_get_str(p_sess->ssl_slave_fd, &data_str);
       ret = ssl_write(p_sess->p_data_ssl,
@@ -108,7 +107,7 @@ ssl_slave(struct vsf_session* p_sess)
       {
         if (p_sess->data_fd == -1 || p_sess->p_data_ssl == 0)
         {
-          bug("invalid state");
+          bug(((const char *)((const char *)((const char *)"invalid state"))));
         }
         ret = ssl_data_close(p_sess);
         if (ret == 1)
@@ -122,7 +121,7 @@ ssl_slave(struct vsf_session* p_sess)
     }
     else
     {
-      die("bad request in process_ssl_slave_req");
+      die(((const char *)((const char *)((const char *)"bad request in process_ssl_slave_req"))));
     }
   }
 }

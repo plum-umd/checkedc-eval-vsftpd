@@ -12,8 +12,7 @@
 
 #define DIE_DEBUG
 
-void
-die(const char* p_text)
+void die(const char *p_text)
 {
 #ifdef DIE_DEBUG
   bug(p_text);
@@ -21,8 +20,7 @@ die(const char* p_text)
   vsf_sysutil_exit(2);
 }
 
-void
-die2(const char* p_text1, const char* p_text2)
+void die2(const char *p_text1, const char *p_text2)
 {
   struct mystr die_str = INIT_MYSTR;
   str_alloc_text(&die_str, p_text1);
@@ -32,13 +30,12 @@ die2(const char* p_text1, const char* p_text2)
   }
   else
   {
-    str_append_text(&die_str, "(null)");
+    str_append_text(&die_str, ((const char *)((const char *)((const char *)"(null)"))));
   }
-  die(str_getbuf(&die_str));
+  die(((const char *)((const char *)((const char *)str_getbuf(&die_str)))));
 }
 
-void
-bug(const char* p_text)
+void bug(const char *p_text)
 {
   /* Rats. Try and write the reason to the network for diagnostics */
   vsf_sysutil_activate_noblock(VSFTP_COMMAND_FD);
@@ -49,8 +46,7 @@ bug(const char* p_text)
   vsf_sysutil_exit(2);
 }
 
-void
-vsf_exit(const char* p_text)
+void vsf_exit(const char *p_text)
 {
   (void) vsf_sysutil_write_loop(VSFTP_COMMAND_FD, p_text,
                                 vsf_sysutil_strlen(p_text));

@@ -1,5 +1,5 @@
-CCONV=/Users/mwh/checkedc/checkedc-clang/llvm/cmake-build-debug/bin/cconv-standalone
-INCLUDES=/Users/mwh/checkedc/checkedc/include
+CCONV=/home/sroy4899/checkedc-clang/build/bin/cconv-standalone
+INCLUDES=/home/sroy4899/checkedc/include/
 BASEDIR=.
 
 # -dump-stats \

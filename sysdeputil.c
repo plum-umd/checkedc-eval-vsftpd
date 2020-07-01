@@ -195,7 +195,7 @@
 #include <linux/capability.h>
 #include <errno_checked.h>
 #include <syscall.h>
-int capset(cap_user_header_t header, const cap_user_data_t data)
+int capset(_Ptr<struct __user_cap_header_struct> header, const _Ptr<struct __user_cap_data_struct> data)
 {
   return syscall(__NR_capset, header, data);
 }
@@ -236,24 +236,19 @@ static int s_zero_fd = -1;
 #endif
 
 /* File private functions/variables */
-static int do_sendfile(const int out_fd, const int in_fd,
-                       unsigned int num_send, filesize_t start_pos);
-static void vsf_sysutil_setproctitle_internal(const char* p_text);
+static int do_sendfile(const int out_fd, const int in_fd, unsigned int num_send, filesize_t start_pos);
+void vsf_sysutil_setproctitle_internal(const char *p_buf);
 static struct mystr s_proctitle_prefix_str;
 
 /* These two aren't static to avoid OpenBSD build warnings. */
-void vsf_insert_uwtmp(const struct mystr* p_user_str,
-                      const struct mystr* p_host_str);
+void vsf_insert_uwtmp(_Ptr<const struct mystr> p_user_str, _Ptr<const struct mystr> p_host_str);
 void vsf_remove_uwtmp(void);
 
 #ifndef VSF_SYSDEP_HAVE_PAM
-int
-vsf_sysdep_check_auth(struct mystr* p_user_str,
-                      const struct mystr* p_pass_str,
-                      const struct mystr* p_remote_host)
+int vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str, _Ptr<const struct mystr> p_pass_str, _Ptr<const struct mystr> p_remote_host)
 {
   const char* p_crypted;
-  const struct passwd* p_pwd = getpwnam(str_getbuf(p_user_str));
+  const struct passwd* p_pwd = getpwnam(((const char *)((const char *)((const char *)str_getbuf(p_user_str)))));
   (void) p_remote_host;
   if (p_pwd == NULL)
   {
@@ -279,7 +274,7 @@ vsf_sysdep_check_auth(struct mystr* p_user_str,
   #endif
   #ifdef VSF_SYSDEP_HAVE_SHADOW
   {
-    const struct spwd* p_spwd = getspnam(str_getbuf(p_user_str));
+    const struct spwd* p_spwd = getspnam(((const char *)((const char *)((const char *)str_getbuf(p_user_str)))));
     if (p_spwd != NULL)
     {
       long curr_time = vsf_sysutil_get_time_sec();
@@ -294,7 +289,7 @@ vsf_sysdep_check_auth(struct mystr* p_user_str,
       {
         return 0;
       }
-      p_crypted = crypt(str_getbuf(p_pass_str), p_spwd->sp_pwdp);
+      p_crypted = crypt(((const char *)((const char *)((const char *)str_getbuf(p_pass_str)))), p_spwd->sp_pwdp);
       if (!vsf_sysutil_strcmp(p_crypted, p_spwd->sp_pwdp))
       {
         return 1;
@@ -302,7 +297,7 @@ vsf_sysdep_check_auth(struct mystr* p_user_str,
     }
   }
   #endif /* VSF_SYSDEP_HAVE_SHADOW */
-  p_crypted = crypt(str_getbuf(p_pass_str), p_pwd->pw_passwd);
+  p_crypted = crypt(((const char *)((const char *)((const char *)str_getbuf(p_pass_str)))), p_pwd->pw_passwd);
   if (!vsf_sysutil_strcmp(p_crypted, p_pwd->pw_passwd))
   {
     return 1;
@@ -500,14 +495,14 @@ vsf_sysdep_keep_capabilities(void)
 {
   if (!vsf_sysdep_has_capabilities_as_non_root())
   {
-    bug("asked to keep capabilities, but no support exists");
+    bug(((const char *)((const char *)((const char *)"asked to keep capabilities, but no support exists"))));
   }
 #ifdef VSF_SYSDEP_HAVE_SETKEEPCAPS
   {
     int retval = prctl(PR_SET_KEEPCAPS, 1);
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die("prctl");
+      die(((const char *)((const char *)((const char *)"prctl"))));
     }
   }
 #endif /* VSF_SYSDEP_HAVE_SETKEEPCAPS */
@@ -586,8 +581,7 @@ do_checkcap(void)
   return 0;
 }
 
-void
-vsf_sysdep_adopt_capabilities(unsigned int caps)
+void vsf_sysdep_adopt_capabilities(unsigned int caps)
 {
   /* n.b. yes I know I should be using libcap!! */
   int retval;
@@ -596,7 +590,7 @@ vsf_sysdep_adopt_capabilities(unsigned int caps)
   __u32 cap_mask = 0;
   if (!caps)
   {
-    bug("asked to adopt no capabilities");
+    bug(((const char *)((const char *)((const char *)"asked to adopt no capabilities"))));
   }
   vsf_sysutil_memclr(&cap_head, sizeof(cap_head));
   vsf_sysutil_memclr(&cap_data, sizeof(cap_data));
@@ -615,7 +609,7 @@ vsf_sysdep_adopt_capabilities(unsigned int caps)
   retval = capset(&cap_head, &cap_data);
   if (retval != 0)
   {
-    die("capset");
+    die(((const char *)((const char *)((const char *)"capset"))));
   }
 }
 
@@ -661,15 +655,12 @@ vsf_sysdep_adopt_capabilities(unsigned int caps)
   #endif /* !VSF_SYSDEP_HAVE_LIBCAP */
 #endif /* VSF_SYSDEP_HAVE_CAPABILITIES || VSF_SYSDEP_HAVE_LIBCAP */
 
-int
-vsf_sysutil_sendfile(const int out_fd, const int in_fd,
-                     filesize_t* p_offset, filesize_t num_send,
-                     unsigned int max_chunk)
+int vsf_sysutil_sendfile(const int out_fd, const int in_fd, _Ptr<filesize_t> p_offset, filesize_t num_send, unsigned int max_chunk)
 {
   /* Grr - why is off_t signed? */
   if (*p_offset < 0 || num_send < 0)
   {
-    die("invalid offset or send count in vsf_sysutil_sendfile");
+    die(((const char *)((const char *)((const char *)"invalid offset or send count in vsf_sysutil_sendfile"))));
   }
   if (max_chunk == 0)
   {
@@ -700,8 +691,7 @@ vsf_sysutil_sendfile(const int out_fd, const int in_fd,
   return 0;
 }
 
-static int do_sendfile(const int out_fd, const int in_fd,
-                       unsigned int num_send, filesize_t start_pos)
+static int do_sendfile(const int out_fd, const int in_fd, unsigned int num_send, filesize_t start_pos)
 {
   /* Probably should one day be shared with instance in ftpdataio.c */
   static char* p_recvbuf;
@@ -810,7 +800,7 @@ static int do_sendfile(const int out_fd, const int in_fd,
 #endif /* VSF_SYSDEP_HAVE_LINUX_SENDFILE || VSF_SYSDEP_HAVE_FREEBSD_SENDFILE */
   if (p_recvbuf == 0)
   {
-    vsf_secbuf_alloc(&p_recvbuf, VSFTP_DATA_BUFSIZE);
+    vsf_secbuf_alloc(((_Ptr<char *> )((_Ptr<char *> )((char **)&p_recvbuf))), VSFTP_DATA_BUFSIZE);
   }
   while (1)
   {
@@ -844,7 +834,7 @@ static int do_sendfile(const int out_fd, const int in_fd,
     }
     if (num_written > num_send)
     {
-      bug("num_written bigger than num_send in do_sendfile");
+      bug(((const char *)((const char *)((const char *)"num_written bigger than num_send in do_sendfile"))));
     }
     num_send -= num_written;
     if (num_send == 0)
@@ -855,30 +845,27 @@ static int do_sendfile(const int out_fd, const int in_fd,
   }
 }
 
-void
-vsf_sysutil_set_proctitle_prefix(const struct mystr* p_str)
+void vsf_sysutil_set_proctitle_prefix(_Ptr<const struct mystr> p_str)
 {
   str_copy(&s_proctitle_prefix_str, p_str);
 }
 
 /* This delegation is common to all setproctitle() implementations */
-void
-vsf_sysutil_setproctitle_str(const struct mystr* p_str)
+void vsf_sysutil_setproctitle_str(_Ptr<const struct mystr> p_str)
 {
-  vsf_sysutil_setproctitle(str_getbuf(p_str));
+  vsf_sysutil_setproctitle(((const char *)((const char *)((const char *)str_getbuf(p_str)))));
 }
 
-void
-vsf_sysutil_setproctitle(const char* p_text)
+void vsf_sysutil_setproctitle(const char *p_text)
 {
   struct mystr proctitle_str = INIT_MYSTR;
   str_copy(&proctitle_str, &s_proctitle_prefix_str);
   if (!str_isempty(&proctitle_str))
   {
-    str_append_text(&proctitle_str, ": ");
+    str_append_text(&proctitle_str, ((const char *)((const char *)((const char *)": "))));
   }
   str_append_text(&proctitle_str, p_text);
-  vsf_sysutil_setproctitle_internal(str_getbuf(&proctitle_str));
+  vsf_sysutil_setproctitle_internal(((const char *)((const char *)((const char *)str_getbuf(&proctitle_str)))));
   str_free(&proctitle_str);
 }
 
@@ -915,19 +902,18 @@ vsf_sysutil_setproctitle_internal(const char* p_buf)
   str_free(&proctitle_str);
 }
 #elif defined(VSF_SYSDEP_TRY_LINUX_SETPROCTITLE_HACK)
-void
-vsf_sysutil_setproctitle_init(int argc, const char* argv[])
+void vsf_sysutil_setproctitle_init(int argc, const char *argv[])
 {
   int i;
   char** p_env = environ;
   if (s_proctitle_inited)
   {
-    bug("vsf_sysutil_setproctitle_init called twice");
+    bug(((const char *)((const char *)((const char *)"vsf_sysutil_setproctitle_init called twice"))));
   }
   s_proctitle_inited = 1;
   if (argv[0] == 0)
   {
-    die("no argv[0] in vsf_sysutil_setproctitle_init");
+    die(((const char *)((const char *)((const char *)"no argv[0] in vsf_sysutil_setproctitle_init"))));
   }
   for (i=0; i<argc; i++)
   {
@@ -948,21 +934,20 @@ vsf_sysutil_setproctitle_init(int argc, const char* argv[])
   vsf_sysutil_memclr(s_p_proctitle, s_proctitle_space);
 }
 
-void
-vsf_sysutil_setproctitle_internal(const char* p_buf)
+void vsf_sysutil_setproctitle_internal(const char *p_buf)
 {
   struct mystr proctitle_str = INIT_MYSTR;
   unsigned int to_copy;
   if (!s_proctitle_inited)
   {
-    bug("vsf_sysutil_setproctitle: not initialized");
+    bug(((const char *)((const char *)((const char *)"vsf_sysutil_setproctitle: not initialized"))));
   }
   vsf_sysutil_memclr(s_p_proctitle, s_proctitle_space);
   if (s_proctitle_space < 32)
   {
     return;
   }
-  str_alloc_text(&proctitle_str, "vsftpd: ");
+  str_alloc_text(&proctitle_str, ((const char *)((const char *)((const char *)"vsftpd: "))));
   str_append_text(&proctitle_str, p_buf);
   to_copy = str_getlen(&proctitle_str);
   if (to_copy > s_proctitle_space - 1)
@@ -994,14 +979,13 @@ vsf_sysutil_map_anon_pages_init(void)
 {
 }
 
-void*
-vsf_sysutil_map_anon_pages(unsigned int length)
+void * vsf_sysutil_map_anon_pages(unsigned int length)
 {
   char* retval = mmap(0, length, PROT_READ | PROT_WRITE,
                       MAP_PRIVATE | MAP_ANON, -1, 0);
   if (retval == MAP_FAILED)
   {
-    die("mmap");
+    die(((const char *)((const char *)((const char *)"mmap"))));
   }
   return retval;
 }
@@ -1035,8 +1019,7 @@ vsf_sysutil_map_anon_pages(unsigned int length)
 
 #ifndef VSF_SYSDEP_NEED_OLD_FD_PASSING
 
-void
-vsf_sysutil_send_fd(int sock_fd, int send_fd)
+void vsf_sysutil_send_fd(int sock_fd, int send_fd)
 {
   int retval;
   struct msghdr msg;
@@ -1067,12 +1050,11 @@ vsf_sysutil_send_fd(int sock_fd, int send_fd)
   retval = sendmsg(sock_fd, &msg, 0);
   if (retval != 1)
   {
-    die("sendmsg");
+    die(((const char *)((const char *)((const char *)"sendmsg"))));
   }
 }
 
-int
-vsf_sysutil_recv_fd(const int sock_fd)
+int vsf_sysutil_recv_fd(const int sock_fd)
 {
   int retval;
   struct msghdr msg;
@@ -1097,12 +1079,12 @@ vsf_sysutil_recv_fd(const int sock_fd)
   retval = recvmsg(sock_fd, &msg, 0);
   if (retval != 1)
   {
-    die("recvmsg");
+    die(((const char *)((const char *)((const char *)"recvmsg"))));
   }
   p_cmsg = CMSG_FIRSTHDR(&msg);
   if (p_cmsg == NULL)
   {
-    die("no passed fd");
+    die(((const char *)((const char *)((const char *)"no passed fd"))));
   }
   /* We used to verify the returned cmsg_level, cmsg_type and cmsg_len here,
    * but Linux 2.0 totally uselessly fails to fill these in.
@@ -1111,7 +1093,7 @@ vsf_sysutil_recv_fd(const int sock_fd)
   recv_fd = *p_fd;
   if (recv_fd == -1)
   {
-    die("no passed fd");
+    die(((const char *)((const char *)((const char *)"no passed fd"))));
   }
   return recv_fd;
 }
@@ -1192,9 +1174,7 @@ vsf_remove_uwtmp(void)
 static int s_uwtmp_inserted;
 static struct utmpx s_utent;
 
-void
-vsf_insert_uwtmp(const struct mystr* p_user_str,
-                 const struct mystr* p_host_str)
+void vsf_insert_uwtmp(_Ptr<const struct mystr> p_user_str, _Ptr<const struct mystr> p_host_str)
 {
   if (sizeof(s_utent.ut_line) < 16)
   {
@@ -1202,36 +1182,36 @@ vsf_insert_uwtmp(const struct mystr* p_user_str,
   }
   if (s_uwtmp_inserted)
   {
-    bug("vsf_insert_uwtmp");
+    bug(((const char *)((const char *)((const char *)"vsf_insert_uwtmp"))));
   }
   {
     struct mystr line_str = INIT_MYSTR;
-    str_alloc_text(&line_str, "vsftpd:");
+    str_alloc_text(&line_str, ((const char *)((const char *)((const char *)"vsftpd:"))));
     str_append_ulong(&line_str, vsf_sysutil_getpid());
     if (str_getlen(&line_str) >= sizeof(s_utent.ut_line))
     {
       str_free(&line_str);
       return;
     }
-    vsf_sysutil_strcpy(s_utent.ut_line, str_getbuf(&line_str),
+    vsf_sysutil_strcpy(s_utent.ut_line, ((const char *)((const char *)((const char *)str_getbuf(&line_str)))),
                        sizeof(s_utent.ut_line));
     str_free(&line_str);
   }
   s_uwtmp_inserted = 1;
   s_utent.ut_type = USER_PROCESS;
   s_utent.ut_pid = vsf_sysutil_getpid();
-  vsf_sysutil_strcpy(s_utent.ut_user, str_getbuf(p_user_str),
+  vsf_sysutil_strcpy(s_utent.ut_user, ((const char *)((const char *)((const char *)str_getbuf(p_user_str)))),
                      sizeof(s_utent.ut_user));
-  vsf_sysutil_strcpy(s_utent.ut_host, str_getbuf(p_host_str),
+  vsf_sysutil_strcpy(s_utent.ut_host, ((const char *)((const char *)((const char *)str_getbuf(p_host_str)))),
                      sizeof(s_utent.ut_host));
   s_utent.ut_tv.tv_sec = vsf_sysutil_get_time_sec();
   setutxent();
-  (void) pututxline(&s_utent);
+  (void) pututxline(((const struct utmpx *)((const struct utmpx *)((const struct utmpx *)&s_utent))));
   endutxent();
 #ifdef __APPLE__
   bug("DOESN'T WORK ON MY MAC");
 #else
-  updwtmpx(WTMPX_FILE, &s_utent);
+  updwtmpx(((const char *)((const char *)((const char *)WTMPX_FILE))), ((const struct utmpx *)((const struct utmpx *)((const struct utmpx *)&s_utent))));
 #endif
 }
 
@@ -1248,13 +1228,13 @@ vsf_remove_uwtmp(void)
   vsf_sysutil_memclr(s_utent.ut_host, sizeof(s_utent.ut_host));
   s_utent.ut_tv.tv_sec = 0;
   setutxent();
-  (void) pututxline(&s_utent);
+  (void) pututxline(((const struct utmpx *)((const struct utmpx *)((const struct utmpx *)&s_utent))));
   endutxent();
   s_utent.ut_tv.tv_sec = vsf_sysutil_get_time_sec();
 #ifdef __APPLE__
   bug("DOESN'T WORK ON MY MAC");
 #else
-  updwtmpx(WTMPX_FILE, &s_utent);
+  updwtmpx(((const char *)((const char *)((const char *)WTMPX_FILE))), ((const struct utmpx *)((const struct utmpx *)((const struct utmpx *)&s_utent))));
 #endif
 }
 
@@ -1266,7 +1246,7 @@ vsf_set_die_if_parent_dies()
 #ifdef VSF_SYSDEP_HAVE_SETPDEATHSIG
   if (prctl(PR_SET_PDEATHSIG, SIGKILL, 0, 0, 0) != 0)
   {
-    die("prctl");
+    die(((const char *)((const char *)((const char *)"prctl"))));
   }
 #endif
 }
@@ -1277,7 +1257,7 @@ vsf_set_term_if_parent_dies()
 #ifdef VSF_SYSDEP_HAVE_SETPDEATHSIG
   if (prctl(PR_SET_PDEATHSIG, SIGTERM, 0, 0, 0) != 0)
   {
-    die("prctl");
+    die(((const char *)((const char *)((const char *)"prctl"))));
   }
 #endif
 }

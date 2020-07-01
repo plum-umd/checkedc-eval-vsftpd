@@ -27,24 +27,23 @@
 #include "ftppolicy.h"
 #include "seccompsandbox.h"
 
-static void one_process_start(void* p_arg);
+static void one_process_start(void *p_arg);
 
-void
-vsf_one_process_start(struct vsf_session* p_sess)
+void vsf_one_process_start(struct vsf_session *p_sess)
 {
   if (tunable_ptrace_sandbox)
   {
-    struct pt_sandbox* p_sandbox = ptrace_sandbox_alloc();
+    _Ptr<struct pt_sandbox> p_sandbox =    ptrace_sandbox_alloc();
     if (p_sandbox == 0)
     {
-      die("could not allocate sandbox (only works for 32-bit builds)");
+      die(((const char *)((const char *)((const char *)"could not allocate sandbox (only works for 32-bit builds)"))));
     }
     policy_setup(p_sandbox, p_sess);
     if (ptrace_sandbox_launch_process(p_sandbox,
                                       one_process_start,
                                       (void*) p_sess) <= 0)
     {
-      die("could not launch sandboxed child");
+      die(((const char *)((const char *)((const char *)"could not launch sandboxed child"))));
     }
     /* TODO - could drop privs here. For now, run as root as the attack surface
      * is negligible, and running as root permits us to correctly deliver the
@@ -60,8 +59,7 @@ vsf_one_process_start(struct vsf_session* p_sess)
   }
 }
 
-static void
-one_process_start(void* p_arg)
+static void one_process_start(void *p_arg)
 {
   struct vsf_session* p_sess = (struct vsf_session*) p_arg;
   unsigned int caps = 0;
@@ -111,9 +109,7 @@ one_process_start(void* p_arg)
   init_connection(p_sess);
 }
 
-void
-vsf_one_process_login(struct vsf_session* p_sess,
-                      const struct mystr* p_pass_str)
+void vsf_one_process_login(struct vsf_session *p_sess, _Ptr<const struct mystr> p_pass_str)
 {
   enum EVSFPrivopLoginResult login_result =
     vsf_privop_do_login(p_sess, p_pass_str);
@@ -131,44 +127,38 @@ vsf_one_process_login(struct vsf_session* p_sess,
     case kVSFLoginReal:
       /* Fall through. */
     default:
-      bug("bad state in vsf_one_process_login");
+      bug(((const char *)((const char *)((const char *)"bad state in vsf_one_process_login"))));
       break;
   }
 }
 
-int
-vsf_one_process_get_priv_data_sock(struct vsf_session* p_sess)
+int vsf_one_process_get_priv_data_sock(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
 {
   unsigned short port = vsf_sysutil_sockaddr_get_port(p_sess->p_port_sockaddr);
   return vsf_privop_get_ftp_port_sock(p_sess, port, 1);
 }
 
-void
-vsf_one_process_pasv_cleanup(struct vsf_session* p_sess)
+void vsf_one_process_pasv_cleanup(_Ptr<struct vsf_session> p_sess)
 {
   vsf_privop_pasv_cleanup(p_sess);
 }
 
-int
-vsf_one_process_pasv_active(struct vsf_session* p_sess)
+int vsf_one_process_pasv_active(_Ptr<struct vsf_session> p_sess)
 {
   return vsf_privop_pasv_active(p_sess);
 }
 
-unsigned short
-vsf_one_process_listen(struct vsf_session* p_sess)
+unsigned short vsf_one_process_listen(_Ptr<struct vsf_session> p_sess)
 {
   return vsf_privop_pasv_listen(p_sess);
 }
 
-int
-vsf_one_process_get_pasv_fd(struct vsf_session* p_sess)
+int vsf_one_process_get_pasv_fd(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
 {
   return vsf_privop_accept_pasv(p_sess);
 }
 
-void
-vsf_one_process_chown_upload(struct vsf_session* p_sess, int fd)
+void vsf_one_process_chown_upload(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>), int fd)
 {
   vsf_privop_do_file_chown(p_sess, fd);
 }

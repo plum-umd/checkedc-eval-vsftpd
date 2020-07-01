@@ -16,22 +16,12 @@
 #include "defs.h"
 #include "sysutil.h"
 
-static int plain_peek_adapter(struct vsf_session* p_sess,
-                              char* p_buf,
-                              unsigned int len);
-static int plain_read_adapter(struct vsf_session* p_sess,
-                              char* p_buf,
-                              unsigned int len);
-static int ssl_peek_adapter(struct vsf_session* p_sess,
-                            char* p_buf,
-                            unsigned int len);
-static int ssl_read_adapter(struct vsf_session* p_sess,
-                            char* p_buf,
-                            unsigned int len);
+static int plain_peek_adapter(_Ptr<struct vsf_session> p_sess, char *p_buf, unsigned int len);
+static int plain_read_adapter(_Ptr<struct vsf_session> p_sess, char *p_buf, unsigned int len);
+static int ssl_peek_adapter(_Ptr<struct vsf_session> p_sess, char *p_buf, unsigned int len);
+static int ssl_read_adapter(_Ptr<struct vsf_session> p_sess, char *p_buf, unsigned int len);
 
-int
-ftp_write_str(const struct vsf_session* p_sess, const struct mystr* p_str,
-              enum EVSFRWTarget target)
+int ftp_write_str(_Ptr<const struct vsf_session> p_sess, _Ptr<const struct mystr> p_str, enum EVSFRWTarget target)
 {
   if (target == kVSFRWData)
   {
@@ -76,8 +66,7 @@ ftp_write_str(const struct vsf_session* p_sess, const struct mystr* p_str,
   }
 }
 
-int
-ftp_read_data(struct vsf_session* p_sess, char* p_buf, unsigned int len)
+int ftp_read_data(_Ptr<struct vsf_session> p_sess, char *p_buf, unsigned int len)
 {
   if (p_sess->data_use_ssl && p_sess->ssl_slave_active)
   {
@@ -100,9 +89,7 @@ ftp_read_data(struct vsf_session* p_sess, char* p_buf, unsigned int len)
   }
 }
 
-int
-ftp_write_data(const struct vsf_session* p_sess, const char* p_buf,
-               unsigned int len)
+int ftp_write_data(_Ptr<const struct vsf_session> p_sess, const char *p_buf, unsigned int len)
 {
   if (p_sess->data_use_ssl && p_sess->ssl_slave_active)
   {
@@ -124,8 +111,7 @@ ftp_write_data(const struct vsf_session* p_sess, const char* p_buf,
   }
 }
 
-int
-ftp_getline(struct vsf_session* p_sess, struct mystr* p_str, char* p_buf)
+int ftp_getline(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, char *p_buf)
 {
   if (p_sess->control_use_ssl && p_sess->ssl_slave_active)
   {
@@ -140,8 +126,8 @@ ftp_getline(struct vsf_session* p_sess, struct mystr* p_str, char* p_buf)
   }
   else
   {
-    str_netfd_read_t p_peek = plain_peek_adapter;
-    str_netfd_read_t p_read = plain_read_adapter;
+    _Ptr<int (_Ptr<struct vsf_session> , char *, unsigned int )> p_peek =    plain_peek_adapter;
+    _Ptr<int (_Ptr<struct vsf_session> , char *, unsigned int )> p_read =    plain_read_adapter;
     if (p_sess->control_use_ssl)
     {
       p_peek = ssl_peek_adapter;
@@ -157,28 +143,24 @@ ftp_getline(struct vsf_session* p_sess, struct mystr* p_str, char* p_buf)
   }
 }
 
-static int
-plain_peek_adapter(struct vsf_session* p_sess, char* p_buf, unsigned int len)
+static int plain_peek_adapter(_Ptr<struct vsf_session> p_sess, char *p_buf, unsigned int len)
 {
   (void) p_sess;
   return vsf_sysutil_recv_peek(VSFTP_COMMAND_FD, p_buf, len);
 }
 
-static int
-plain_read_adapter(struct vsf_session* p_sess, char* p_buf, unsigned int len)
+static int plain_read_adapter(_Ptr<struct vsf_session> p_sess, char *p_buf, unsigned int len)
 {
   (void) p_sess;
   return vsf_sysutil_read_loop(VSFTP_COMMAND_FD, p_buf, len);
 }
 
-static int
-ssl_peek_adapter(struct vsf_session* p_sess, char* p_buf, unsigned int len)
+static int ssl_peek_adapter(_Ptr<struct vsf_session> p_sess, char *p_buf, unsigned int len)
 {
   return ssl_peek(p_sess, p_sess->p_control_ssl, p_buf, len);
 }
 
-static int
-ssl_read_adapter(struct vsf_session* p_sess, char* p_buf, unsigned int len)
+static int ssl_read_adapter(_Ptr<struct vsf_session> p_sess, char *p_buf, unsigned int len)
 {
   return ssl_read(p_sess, p_sess->p_control_ssl, p_buf, len);
 }

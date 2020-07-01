@@ -24,14 +24,14 @@ static struct hash* s_p_ip_count_hash;
 static struct hash* s_p_pid_ip_hash;
 static unsigned int s_ipaddr_size;
 
-static void handle_sigchld(void*  duff);
-static void handle_sighup(void*  duff);
-static void prepare_child(int sockfd);
-static unsigned int handle_ip_count(void* p_raw_addr);
-static void drop_ip_count(void* p_raw_addr);
+static void handle_sigchld(void *duff);
+static void handle_sighup(void *duff);
+static void prepare_child(int new_client_sock);
+static unsigned int handle_ip_count(void *p_ipaddr);
+static void drop_ip_count(void *p_raw_addr);
 
-static unsigned int hash_ip(unsigned int buckets, void* p_key);
-static unsigned int hash_pid(unsigned int buckets, void* p_key);
+static unsigned int hash_ip(unsigned int buckets, void *p_key);
+static unsigned int hash_pid(unsigned int buckets, void *p_key);
 
 struct vsf_client_launch
 vsf_standalone_main(void)
@@ -42,7 +42,7 @@ vsf_standalone_main(void)
   s_ipaddr_size = vsf_sysutil_get_ipaddr_size();
   if (tunable_listen && tunable_listen_ipv6)
   {
-    die("run two copies of vsftpd for IPv4 and IPv6");
+    die(((const char *)((const char *)((const char *)"run two copies of vsftpd for IPv4 and IPv6"))));
   }
   if (tunable_background)
   {
@@ -72,14 +72,14 @@ vsf_standalone_main(void)
                                s_ipaddr_size, hash_pid);
   if (tunable_setproctitle_enable)
   {
-    vsf_sysutil_setproctitle("LISTENER");
+    vsf_sysutil_setproctitle(((const char *)((const char *)((const char *)"LISTENER"))));
   }
   vsf_sysutil_install_sighandler(kVSFSysUtilSigCHLD, handle_sigchld, 0, 1);
   vsf_sysutil_install_sighandler(kVSFSysUtilSigHUP, handle_sighup, 0, 1);
   if (tunable_listen)
   {
     struct vsf_sysutil_sockaddr* p_sockaddr = 0;
-    vsf_sysutil_sockaddr_alloc_ipv4(&p_sockaddr);
+    vsf_sysutil_sockaddr_alloc_ipv4(((_Ptr<struct vsf_sysutil_sockaddr *> )((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_sockaddr))));
     vsf_sysutil_sockaddr_set_port(p_sockaddr,
                                   (unsigned short) tunable_listen_port);
     if (!tunable_listen_address)
@@ -90,20 +90,20 @@ vsf_standalone_main(void)
     {
       if (!vsf_sysutil_inet_aton(tunable_listen_address, p_sockaddr))
       {
-        die2("bad listen_address: ", tunable_listen_address);
+        die2(((const char *)((const char *)((const char *)"bad listen_address: "))), tunable_listen_address);
       }
     }
     retval = vsf_sysutil_bind(listen_sock, p_sockaddr);
     vsf_sysutil_free(p_sockaddr);
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die("could not bind listening IPv4 socket");
+      die(((const char *)((const char *)((const char *)"could not bind listening IPv4 socket"))));
     }
   }
   else
   {
     struct vsf_sysutil_sockaddr* p_sockaddr = 0;
-    vsf_sysutil_sockaddr_alloc_ipv6(&p_sockaddr);
+    vsf_sysutil_sockaddr_alloc_ipv6(((_Ptr<struct vsf_sysutil_sockaddr *> )((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_sockaddr))));
     vsf_sysutil_sockaddr_set_port(p_sockaddr,
                                   (unsigned short) tunable_listen_port);
     if (!tunable_listen_address6)
@@ -119,7 +119,7 @@ vsf_standalone_main(void)
       str_free(&addr_str);
       if (!p_raw_addr)
       {
-        die2("bad listen_address6: ", tunable_listen_address6);
+        die2(((const char *)((const char *)((const char *)"bad listen_address6: "))), tunable_listen_address6);
       }
       vsf_sysutil_sockaddr_set_ipv6addr(p_sockaddr, p_raw_addr);
     }
@@ -127,15 +127,15 @@ vsf_standalone_main(void)
     vsf_sysutil_free(p_sockaddr);
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die("could not bind listening IPv6 socket");
+      die(((const char *)((const char *)((const char *)"could not bind listening IPv6 socket"))));
     }
   }
   retval = vsf_sysutil_listen(listen_sock, VSFTP_LISTEN_BACKLOG);
   if (vsf_sysutil_retval_is_error(retval))
   {
-    die("could not listen");
+    die(((const char *)((const char *)((const char *)"could not listen"))));
   }
-  vsf_sysutil_sockaddr_alloc(&p_accept_addr);
+  vsf_sysutil_sockaddr_alloc(((_Ptr<struct vsf_sysutil_sockaddr *> )((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_accept_addr))));
   while (1)
   {
     struct vsf_client_launch child_info;
@@ -198,8 +198,7 @@ vsf_standalone_main(void)
   }
 }
 
-static void
-prepare_child(int new_client_sock)
+static void prepare_child(int new_client_sock)
 {
   /* We must satisfy the contract: command socket on fd 0, 1, 2 */
   vsf_sysutil_dupfd2(new_client_sock, 0);
@@ -211,20 +210,19 @@ prepare_child(int new_client_sock)
   }
 }
 
-static void
-drop_ip_count(void* p_raw_addr)
+static void drop_ip_count(void *p_raw_addr)
 {
   unsigned int count;
   unsigned int* p_count =
     (unsigned int*)hash_lookup_entry(s_p_ip_count_hash, p_raw_addr);
   if (!p_count)
   {
-    bug("IP address missing from hash");
+    bug(((const char *)((const char *)((const char *)"IP address missing from hash"))));
   }
   count = *p_count;
   if (!count)
   {
-    bug("zero count for IP address");
+    bug(((const char *)((const char *)((const char *)"zero count for IP address"))));
   }
   count--;
   *p_count = count;
@@ -234,8 +232,7 @@ drop_ip_count(void* p_raw_addr)
   }
 }
 
-static void
-handle_sigchld(void* duff)
+static void handle_sigchld(void *duff)
 {
   unsigned int reap_one = 1;
   (void) duff;
@@ -256,8 +253,7 @@ handle_sigchld(void* duff)
   }
 }
 
-static void
-handle_sighup(void* duff)
+static void handle_sighup(void *duff)
 {
   (void) duff;
   /* We don't crash the out the listener if an invalid config was added */
@@ -265,8 +261,7 @@ handle_sighup(void* duff)
   vsf_parseconf_load_file(0, 0);
 }
 
-static unsigned int
-hash_ip(unsigned int buckets, void* p_key)
+static unsigned int hash_ip(unsigned int buckets, void *p_key)
 {
   const unsigned char* p_raw_ip = (const unsigned char*)p_key;
   unsigned int val = 0;
@@ -284,15 +279,13 @@ hash_ip(unsigned int buckets, void* p_key)
   return val % buckets;
 }
 
-static unsigned int
-hash_pid(unsigned int buckets, void* p_key)
+static unsigned int hash_pid(unsigned int buckets, void *p_key)
 {
   unsigned int* p_pid = (unsigned int*)p_key;
   return (*p_pid) % buckets;
 }
 
-static unsigned int
-handle_ip_count(void* p_ipaddr)
+static unsigned int handle_ip_count(void *p_ipaddr)
 {
   unsigned int* p_count =
     (unsigned int*)hash_lookup_entry(s_p_ip_count_hash, p_ipaddr);

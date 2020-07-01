@@ -15,7 +15,7 @@ struct mystr;
  * p_sess         - the current FTP session object
  * ftpcode        - the FTP code to show with the message
  */
-void vsf_banner_dir_changed(struct vsf_session* p_sess, int ftpcode);
+void vsf_banner_dir_changed(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>), int ftpcode);
 
 /* vsf_banner_write()
  * PURPOSE
@@ -26,8 +26,7 @@ void vsf_banner_dir_changed(struct vsf_session* p_sess, int ftpcode);
  * p_str          - the string to write
  * ftpcode        - the FTP code to show with the message
  */
-void vsf_banner_write(struct vsf_session* p_sess, struct mystr* p_str,
-                      int ftpcode);
+void vsf_banner_write(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, int ftpcode);
 
 #endif /* VSF_BANNER_H */
 

@@ -12,8 +12,7 @@
 #include "tunables.h"
 #include "str.h"
 
-int
-vsf_access_check_file(const struct mystr* p_filename_str)
+int vsf_access_check_file(_Ptr<const struct mystr> p_filename_str)
 {
   static struct mystr s_access_str;
   unsigned int iters = 0;
@@ -42,8 +41,7 @@ vsf_access_check_file(const struct mystr* p_filename_str)
   return 1;
 }
 
-int
-vsf_access_check_file_visible(const struct mystr* p_filename_str)
+int vsf_access_check_file_visible(_Ptr<const struct mystr> p_filename_str)
 {
   static struct mystr s_access_str;
   unsigned int iters = 0;

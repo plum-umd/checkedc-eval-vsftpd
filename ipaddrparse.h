@@ -8,13 +8,11 @@ struct mystr;
  * and safety.
  */
 
-const unsigned char* vsf_sysutil_parse_ipv6(const struct mystr* p_str);
+const unsigned char * vsf_sysutil_parse_ipv6(_Ptr<const struct mystr> p_str);
 
-const unsigned char* vsf_sysutil_parse_ipv4(const struct mystr* p_str);
+const unsigned char *vsf_sysutil_parse_ipv4(_Ptr<const struct mystr> p_str) : itype(_Array_ptr<const unsigned char>);
 
-const unsigned char* vsf_sysutil_parse_uchar_string_sep(
-  const struct mystr* p_str, char sep, unsigned char* p_items,
-  unsigned int items);
+_Array_ptr<const unsigned char> vsf_sysutil_parse_uchar_string_sep(_Ptr<const struct mystr> p_str, char sep, unsigned char *p_items : itype(_Array_ptr<unsigned char>), unsigned int items);
 
 #endif /* VSF_IPADDRPARSE_H */
 

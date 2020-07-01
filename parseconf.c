@@ -20,12 +20,7 @@ static const char* s_p_saved_filename;
 
 /* Tables mapping setting names to runtime variables */
 /* Boolean settings */
-static struct parseconf_bool_setting
-{
-  const char* p_setting_name;
-  int* p_variable;
-}
-parseconf_bool_array[] =
+static struct parseconf_bool_setting parseconf_bool_array _Checked[81] = 
 {
   { "anonymous_enable", &tunable_anonymous_enable },
   { "local_enable", &tunable_local_enable },
@@ -110,12 +105,7 @@ parseconf_bool_array[] =
   { 0, 0 }
 };
 
-static struct parseconf_uint_setting
-{
-  const char* p_setting_name;
-  unsigned int* p_variable;
-}
-parseconf_uint_array[] =
+static struct parseconf_uint_setting parseconf_uint_array _Checked[21] = 
 {
   { "accept_timeout", &tunable_accept_timeout },
   { "connect_timeout", &tunable_connect_timeout },
@@ -140,12 +130,7 @@ parseconf_uint_array[] =
   { 0, 0 }
 };
 
-static struct parseconf_str_setting
-{
-  const char* p_setting_name;
-  const char** p_variable;
-}
-parseconf_str_array[] =
+static struct parseconf_str_setting parseconf_str_array _Checked[33] = 
 {
   { "secure_chroot_dir", &tunable_secure_chroot_dir },
   { "ftp_username", &tunable_ftp_username },
@@ -182,8 +167,7 @@ parseconf_str_array[] =
   { 0, 0 }
 };
 
-void
-vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
+void vsf_parseconf_load_file(const char *p_filename, int errs_fatal)
 {
   struct mystr config_file_str = INIT_MYSTR;
   struct mystr config_setting_str = INIT_MYSTR;
@@ -204,14 +188,14 @@ vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
   }
   if (!p_filename)
   {
-    bug("null filename in vsf_parseconf_load_file");
+    bug(((const char *)((const char *)"null filename in vsf_parseconf_load_file")));
   }
   retval = str_fileread(&config_file_str, p_filename, VSFTP_CONF_FILE_MAX);
   if (vsf_sysutil_retval_is_error(retval))
   {
     if (errs_fatal)
     {
-      die2("cannot read config file: ", p_filename);
+      die2(((const char *)((const char *)"cannot read config file: ")), p_filename);
     }
     else
     {
@@ -221,7 +205,7 @@ vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
   }
   {
     struct vsf_sysutil_statbuf* p_statbuf = 0;
-    retval = vsf_sysutil_stat(p_filename, &p_statbuf);
+    retval = vsf_sysutil_stat(p_filename, ((_Ptr<struct vsf_sysutil_statbuf *> )((struct vsf_sysutil_statbuf **)&p_statbuf)));
     /* Security: check current user owns the config file. These are sanity
      * checks for the admin, and are NOT designed to be checks safe from
      * race conditions.
@@ -230,7 +214,7 @@ vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
         vsf_sysutil_statbuf_get_uid(p_statbuf) != vsf_sysutil_getuid() ||
         !vsf_sysutil_statbuf_is_regfile(p_statbuf))
     {
-      die("config file not owned by correct user, or not a file");
+      die(((const char *)((const char *)"config file not owned by correct user, or not a file")));
     }
     vsf_sysutil_free(p_statbuf);
   }
@@ -242,15 +226,14 @@ vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
     {
       continue;
     }
-    vsf_parseconf_load_setting(str_getbuf(&config_setting_str), errs_fatal);
+    vsf_parseconf_load_setting(((const char *)((const char *)str_getbuf(&config_setting_str))), errs_fatal);
   }
   str_free(&config_file_str);
   str_free(&config_setting_str);
   str_free(&config_value_str);
 }
 
-void
-vsf_parseconf_load_setting(const char* p_setting, int errs_fatal)
+void vsf_parseconf_load_setting(const char *p_setting, int errs_fatal)
 {
   static struct mystr s_setting_str;
   static struct mystr s_value_str;
@@ -262,13 +245,13 @@ vsf_parseconf_load_setting(const char* p_setting, int errs_fatal)
   str_split_char(&s_setting_str, &s_value_str, '=');
   /* Is it a string setting? */
   {
-    const struct parseconf_str_setting* p_str_setting = parseconf_str_array;
+    _Array_ptr<const struct parseconf_str_setting> p_str_setting =  parseconf_str_array;
     while (p_str_setting->p_setting_name != 0)
     {
       if (str_equal_text(&s_setting_str, p_str_setting->p_setting_name))
       {
         /* Got it */
-        const char** p_curr_setting = p_str_setting->p_variable;
+        _Ptr<const char*> p_curr_setting =   p_str_setting->p_variable;
         if (*p_curr_setting)
         {
           vsf_sysutil_free((char*) *p_curr_setting);
@@ -290,7 +273,7 @@ vsf_parseconf_load_setting(const char* p_setting, int errs_fatal)
   {
     if (errs_fatal)
     {
-      die2("missing value in config file for: ", str_getbuf(&s_setting_str));
+      die2(((const char *)((const char *)"missing value in config file for: ")), ((const char *)((const char *)str_getbuf(&s_setting_str))));
     }
     else
     {
@@ -299,29 +282,29 @@ vsf_parseconf_load_setting(const char* p_setting, int errs_fatal)
   }
   /* Is it a boolean value? */
   {
-    const struct parseconf_bool_setting* p_bool_setting = parseconf_bool_array;
+    _Array_ptr<const struct parseconf_bool_setting> p_bool_setting =  parseconf_bool_array;
     while (p_bool_setting->p_setting_name != 0)
     {
       if (str_equal_text(&s_setting_str, p_bool_setting->p_setting_name))
       {
         /* Got it */
         str_upper(&s_value_str);
-        if (str_equal_text(&s_value_str, "YES") ||
-            str_equal_text(&s_value_str, "TRUE") ||
-            str_equal_text(&s_value_str, "1"))
+        if (str_equal_text(&s_value_str, ((const char *)((const char *)"YES"))) ||
+            str_equal_text(&s_value_str, ((const char *)((const char *)"TRUE"))) ||
+            str_equal_text(&s_value_str, ((const char *)((const char *)"1"))))
         {
           *(p_bool_setting->p_variable) = 1;
         }
-        else if (str_equal_text(&s_value_str, "NO") ||
-                 str_equal_text(&s_value_str, "FALSE") ||
-                 str_equal_text(&s_value_str, "0"))
+        else if (str_equal_text(&s_value_str, ((const char *)((const char *)"NO"))) ||
+                 str_equal_text(&s_value_str, ((const char *)((const char *)"FALSE"))) ||
+                 str_equal_text(&s_value_str, ((const char *)((const char *)"0"))))
         {
           *(p_bool_setting->p_variable) = 0;
         }
         else if (errs_fatal)
         {
-          die2("bad bool value in config file for: ",
-               str_getbuf(&s_setting_str));
+          die2(((const char *)((const char *)"bad bool value in config file for: ")),
+               ((const char *)((const char *)str_getbuf(&s_setting_str))));
         }
         return;
       }
@@ -330,7 +313,7 @@ vsf_parseconf_load_setting(const char* p_setting, int errs_fatal)
   }
   /* Is it an unsigned integer setting? */
   {
-    const struct parseconf_uint_setting* p_uint_setting = parseconf_uint_array;
+    _Array_ptr<const struct parseconf_uint_setting> p_uint_setting =  parseconf_uint_array;
     while (p_uint_setting->p_setting_name != 0)
     {
       if (str_equal_text(&s_setting_str, p_uint_setting->p_setting_name))
@@ -354,6 +337,6 @@ vsf_parseconf_load_setting(const char* p_setting, int errs_fatal)
   }
   if (errs_fatal)
   {
-    die2("unrecognised variable in config file: ", str_getbuf(&s_setting_str));
+    die2(((const char *)((const char *)"unrecognised variable in config file: ")), ((const char *)((const char *)str_getbuf(&s_setting_str))));
   }
 }

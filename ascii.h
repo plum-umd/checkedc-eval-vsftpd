@@ -25,8 +25,7 @@ struct ascii_to_bin_ret
   int last_was_cr;
   char* p_buf;
 };
-struct ascii_to_bin_ret vsf_ascii_ascii_to_bin(
-  char* p_in, unsigned int in_len, int prev_cr);
+struct ascii_to_bin_ret vsf_ascii_ascii_to_bin(char *p_buf, unsigned int in_len, int prev_cr);
 
 /* vsf_ascii_bin_to_ascii()
  * PURPOSE
@@ -49,10 +48,7 @@ struct bin_to_ascii_ret
   unsigned int stored;
   int last_was_cr;
 };
-struct bin_to_ascii_ret vsf_ascii_bin_to_ascii(const char* p_in,
-                                               char* p_out,
-                                               unsigned int in_len,
-                                               int prev_cr);
+struct bin_to_ascii_ret vsf_ascii_bin_to_ascii(const char *p_in : itype(_Array_ptr<const char>), char *p_out : itype(_Array_ptr<char>) count(in_len), unsigned int in_len, int prev_cr);
 
 #endif /* VSFTP_ASCII_H */
 

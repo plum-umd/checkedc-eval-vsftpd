@@ -17,19 +17,19 @@ void vsf_secutil_change_credentials(_Ptr<const struct mystr> p_user_str, _Ptr<co
   struct vsf_sysutil_user* p_user;
   if (!vsf_sysutil_running_as_root())
   {
-    bug(((const char *)((const char *)((const char *)"vsf_secutil_change_credentials: not running as root"))));
+    bug("vsf_secutil_change_credentials: not running as root");
   }
   p_user = str_getpwnam(p_user_str);
   if (p_user == 0)
   {
-    die2(((const char *)((const char *)((const char *)"cannot locate user entry:"))), ((const char *)((const char *)((const char *)str_getbuf(p_user_str)))));
+    die2("cannot locate user entry:", str_getbuf(p_user_str));
   }
   {
     struct mystr dir_str = INIT_MYSTR;
     /* Work out where the chroot() jail is */
     if (p_dir_str == 0 || str_isempty(p_dir_str))
     {
-      str_alloc_text(&dir_str, ((const char *)((const char *)((const char *)vsf_sysutil_user_get_homedir(p_user)))));
+      str_alloc_text(&dir_str, vsf_sysutil_user_get_homedir(p_user));
     }
     else
     {
@@ -64,7 +64,7 @@ void vsf_secutil_change_credentials(_Ptr<const struct mystr> p_user_str, _Ptr<co
       retval = str_chdir(&dir_str);
       if (retval != 0)
       {
-        die2(((const char *)((const char *)((const char *)"cannot change directory:"))), ((const char *)((const char *)((const char *)str_getbuf(&dir_str)))));
+        die2("cannot change directory:", str_getbuf(&dir_str));
       }
       if (p_ext_dir_str && !str_isempty(p_ext_dir_str))
       {
@@ -79,7 +79,7 @@ void vsf_secutil_change_credentials(_Ptr<const struct mystr> p_user_str, _Ptr<co
       }
       if (retval != 0)
       {
-        die2(((const char *)((const char *)((const char *)"cannot change directory:"))), ((const char *)((const char *)((const char *)str_getbuf(p_ext_dir_str)))));
+        die2("cannot change directory:", str_getbuf(p_ext_dir_str));
       }
       if (options & VSF_SECUTIL_OPTION_CHANGE_EUID)
       {
@@ -89,7 +89,7 @@ void vsf_secutil_change_credentials(_Ptr<const struct mystr> p_user_str, _Ptr<co
       /* Do the chroot() if required */
       if (options & VSF_SECUTIL_OPTION_CHROOT)
       {
-        vsf_sysutil_chroot(((const char *)((const char *)((const char *)"."))));
+        vsf_sysutil_chroot(".");
       }
     }
     str_free(&dir_str);
@@ -131,9 +131,9 @@ void vsf_secutil_change_credentials(_Ptr<const struct mystr> p_user_str, _Ptr<co
   if ((options & VSF_SECUTIL_OPTION_CHROOT) &&
       !(options & VSF_SECUTIL_OPTION_ALLOW_WRITEABLE_ROOT))
   {
-    if (vsf_sysutil_write_access(((const char *)((const char *)((const char *)"/")))))
+    if (vsf_sysutil_write_access("/"))
     {
-      die(((const char *)((const char *)((const char *)"vsftpd: refusing to run with writable root inside chroot()"))));
+      die("vsftpd: refusing to run with writable root inside chroot()");
     }
   }
 }

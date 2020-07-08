@@ -89,7 +89,7 @@ enum EVSFPrivopLoginResult
  * kVSFLoginAnon - anonymous login credentials OK
  * kVSFLoginReal - real login credentials OK
  */
-enum EVSFPrivopLoginResult vsf_privop_do_login(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>), _Ptr<const struct mystr> p_pass_str);
+enum EVSFPrivopLoginResult vsf_privop_do_login(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), _Ptr<const struct mystr> p_pass_str);
 
 #endif /* VSF_PRIVOPS_H */
 

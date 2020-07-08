@@ -92,11 +92,11 @@ static void allow_nr(int nr)
 {
   if (s_syscall_index >= kMaxSyscalls)
   {
-    bug(((const char *)((const char *)((const char *)"out of syscall space"))));
+    bug("out of syscall space");
   }
   if (nr < 0)
   {
-    bug(((const char *)((const char *)((const char *)"negative syscall"))));
+    bug("negative syscall");
   }
   s_errnos[s_syscall_index] = 0;
   s_syscalls[s_syscall_index++] = nr;
@@ -106,15 +106,15 @@ static void reject_nr(int nr, int errcode)
 {
   if (s_syscall_index >= kMaxSyscalls)
   {
-    bug(((const char *)((const char *)((const char *)"out of syscall space"))));
+    bug("out of syscall space");
   }
   if (nr < 0)
   {
-    bug(((const char *)((const char *)((const char *)"negative syscall"))));
+    bug("negative syscall");
   }
   if (errcode < 0 || errcode > 255)
   {
-    bug(((const char *)((const char *)((const char *)"bad errcode"))));
+    bug("bad errcode");
   }
   s_errnos[s_syscall_index] = errcode;
   s_syscalls[s_syscall_index++] = nr;
@@ -124,15 +124,15 @@ static void allow_nr_1_arg_match(int nr, int arg, int val)
 {
   if (s_syscall_index >= kMaxSyscalls)
   {
-    bug(((const char *)((const char *)((const char *)"out of syscall space"))));
+    bug("out of syscall space");
   }
   if (nr < 0)
   {
-    bug(((const char *)((const char *)((const char *)"negative syscall"))));
+    bug("negative syscall");
   }
   if (arg < 1 || arg > 6)
   {
-    bug(((const char *)((const char *)((const char *)"arg out of range"))));
+    bug("arg out of range");
   }
   s_args_1[s_syscall_index] = arg;
   s_vals_1[s_syscall_index] = val;
@@ -145,15 +145,15 @@ static void allow_nr_1_arg_mask(int nr, int arg, int val)
 {
   if (s_syscall_index >= kMaxSyscalls)
   {
-    bug(((const char *)((const char *)((const char *)"out of syscall space"))));
+    bug("out of syscall space");
   }
   if (nr < 0)
   {
-    bug(((const char *)((const char *)((const char *)"negative syscall"))));
+    bug("negative syscall");
   }
   if (arg < 1 || arg > 6)
   {
-    bug(((const char *)((const char *)((const char *)"arg out of range"))));
+    bug("arg out of range");
   }
   s_args_1[s_syscall_index] = 100 + arg;
   s_vals_1[s_syscall_index] = val;
@@ -166,19 +166,19 @@ static void allow_nr_2_arg_match(int nr, int arg1, int val1, int arg2, int val2)
 {
   if (s_syscall_index >= kMaxSyscalls)
   {
-    bug(((const char *)((const char *)((const char *)"out of syscall space"))));
+    bug("out of syscall space");
   }
   if (nr < 0)
   {
-    bug(((const char *)((const char *)((const char *)"negative syscall"))));
+    bug("negative syscall");
   }
   if (arg1 < 1 || arg1 > 6)
   {
-    bug(((const char *)((const char *)((const char *)"arg1 out of range"))));
+    bug("arg1 out of range");
   }
   if (arg2 < 1 || arg2 > 6)
   {
-    bug(((const char *)((const char *)((const char *)"arg2 out of range"))));
+    bug("arg2 out of range");
   }
   s_args_1[s_syscall_index] = arg1;
   s_vals_1[s_syscall_index] = val1;
@@ -193,19 +193,19 @@ static void allow_nr_2_arg_mask_match(int nr, int arg1, int val1, int arg2, int 
 {
   if (s_syscall_index >= kMaxSyscalls)
   {
-    bug(((const char *)((const char *)((const char *)"out of syscall space"))));
+    bug("out of syscall space");
   }
   if (nr < 0)
   {
-    bug(((const char *)((const char *)((const char *)"negative syscall"))));
+    bug("negative syscall");
   }
   if (arg1 < 1 || arg1 > 6)
   {
-    bug(((const char *)((const char *)((const char *)"arg1 out of range"))));
+    bug("arg1 out of range");
   }
   if (arg2 < 1 || arg2 > 6)
   {
-    bug(((const char *)((const char *)((const char *)"arg2 out of range"))));
+    bug("arg2 out of range");
   }
   s_args_1[s_syscall_index] = 100 + arg1;
   s_vals_1[s_syscall_index] = val1;
@@ -220,23 +220,23 @@ static void allow_nr_3_arg_match(int nr, int arg1, int val1, int arg2, int val2,
 {
   if (s_syscall_index >= kMaxSyscalls)
   {
-    bug(((const char *)((const char *)((const char *)"out of syscall space"))));
+    bug("out of syscall space");
   }
   if (nr < 0)
   {
-    bug(((const char *)((const char *)((const char *)"negative syscall"))));
+    bug("negative syscall");
   }
   if (arg1 < 1 || arg1 > 6)
   {
-    bug(((const char *)((const char *)((const char *)"arg1 out of range"))));
+    bug("arg1 out of range");
   }
   if (arg2 < 1 || arg2 > 6)
   {
-    bug(((const char *)((const char *)((const char *)"arg2 out of range"))));
+    bug("arg2 out of range");
   }
   if (arg3 < 1 || arg3 > 6)
   {
-    bug(((const char *)((const char *)((const char *)"arg3 out of range"))));
+    bug("arg3 out of range");
   }
   s_args_1[s_syscall_index] = arg1;
   s_vals_1[s_syscall_index] = val1;
@@ -307,11 +307,11 @@ seccomp_sandbox_init()
 {
   if (s_syscall_index != 0)
   {
-    bug(((const char *)((const char *)((const char *)"bad state in seccomp_sandbox_init"))));
+    bug("bad state in seccomp_sandbox_init");
   }
 }
 
-void seccomp_sandbox_setup_prelogin(const struct vsf_session* p_sess : itype(_Ptr<const struct vsf_session>))
+void seccomp_sandbox_setup_prelogin(const struct vsf_session *p_sess : itype(_Ptr<const struct vsf_session>))
 {
   (void) p_sess;
 
@@ -353,7 +353,7 @@ void seccomp_sandbox_setup_prelogin(const struct vsf_session* p_sess : itype(_Pt
   }
 }
 
-void seccomp_sandbox_setup_postlogin(const struct vsf_session* p_sess : itype(_Ptr<const struct vsf_session>))
+void seccomp_sandbox_setup_postlogin(const struct vsf_session *p_sess : itype(_Ptr<const struct vsf_session>))
 {
   int is_anon = p_sess->is_anonymous;
   int open_flag = kOpenFlags;
@@ -654,7 +654,7 @@ seccomp_sandbox_lockdown()
       /* Kernel isn't good enough. */
       return;
     }
-    die(((const char *)((const char *)((const char *)"prctl PR_SET_NO_NEW_PRIVS"))));
+    die("prctl PR_SET_NO_NEW_PRIVS");
   }
 
   if (!tunable_seccomp_sandbox)
@@ -679,7 +679,7 @@ seccomp_sandbox_lockdown()
       /* Kernel isn't good enough. */
       return;
     }
-    die(((const char *)((const char *)((const char *)"prctl PR_SET_SECCOMP failed"))));
+    die("prctl PR_SET_SECCOMP failed");
   }
 }
 

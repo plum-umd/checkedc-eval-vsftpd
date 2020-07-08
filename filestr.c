@@ -30,7 +30,7 @@ int str_fileread(_Ptr<struct mystr> p_str, const char *p_filename, unsigned int 
   {
     return fd;
   }
-  vsf_sysutil_fstat(fd, ((_Ptr<struct vsf_sysutil_statbuf *> )((_Ptr<struct vsf_sysutil_statbuf *> )((struct vsf_sysutil_statbuf **)&p_stat))));
+  vsf_sysutil_fstat(fd, ((struct vsf_sysutil_statbuf **)&p_stat));
   if (vsf_sysutil_statbuf_is_regfile(p_stat))
   {
     size = vsf_sysutil_statbuf_get_size(p_stat);
@@ -38,7 +38,7 @@ int str_fileread(_Ptr<struct mystr> p_str, const char *p_filename, unsigned int 
     {
       size = maxsize;
     }
-    vsf_secbuf_alloc(((_Ptr<char *> )((_Ptr<char *> )((char **)&p_sec_buf))), (unsigned int) size);
+    vsf_secbuf_alloc(((char **)&p_sec_buf), (unsigned int) size);
 
     retval = vsf_sysutil_read_loop(fd, p_sec_buf, (unsigned int) size);
     if (vsf_sysutil_retval_is_error(retval))
@@ -47,13 +47,13 @@ int str_fileread(_Ptr<struct mystr> p_str, const char *p_filename, unsigned int 
     }
     else if ((unsigned int) retval != size)
     {
-      die(((const char *)((const char *)((const char *)"read size mismatch"))));
+      die("read size mismatch");
     }
     str_alloc_memchunk(p_str, p_sec_buf, (unsigned int) size);
   }
 free_out:
   vsf_sysutil_free(p_stat);
-  vsf_secbuf_free(((_Ptr<char *> )((_Ptr<char *> )((char **)&p_sec_buf))));
+  vsf_secbuf_free(((char **)&p_sec_buf));
   vsf_sysutil_close(fd);
   return retval;
 }

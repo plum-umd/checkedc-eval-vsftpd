@@ -30,9 +30,9 @@ void die2(const char *p_text1, const char *p_text2)
   }
   else
   {
-    str_append_text(&die_str, ((const char *)((const char *)((const char *)"(null)"))));
+    str_append_text(&die_str, "(null)");
   }
-  die(((const char *)((const char *)((const char *)str_getbuf(&die_str)))));
+  die(str_getbuf(&die_str));
 }
 
 void bug(const char *p_text)

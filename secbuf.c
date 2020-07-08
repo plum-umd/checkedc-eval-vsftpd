@@ -23,7 +23,7 @@ void vsf_secbuf_alloc(_Ptr<char*> p_ptr, unsigned int size)
   unsigned int page_size = vsf_sysutil_getpagesize();
 
   /* Free any previous buffer */
-  vsf_secbuf_free(((_Ptr<char *> )((_Ptr<char *> )((char **)p_ptr))));
+  vsf_secbuf_free(((char **)p_ptr));
   /* Round up to next page size */
   page_offset = size % page_size;
   if (page_offset)

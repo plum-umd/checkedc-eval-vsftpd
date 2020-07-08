@@ -41,7 +41,7 @@ void vsf_log_init(_Ptr<struct vsf_session> p_sess)
     }
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die2(((const char *)((const char *)((const char *)"failed to open xferlog log file:"))), tunable_xferlog_file);
+      die2("failed to open xferlog log file:", tunable_xferlog_file);
     }
     p_sess->xferlog_fd = retval;
   }
@@ -57,7 +57,7 @@ void vsf_log_init(_Ptr<struct vsf_session> p_sess)
       }
       if (vsf_sysutil_retval_is_error(retval))
       {
-        die2(((const char *)((const char *)((const char *)"failed to open vsftpd log file:"))), tunable_vsftpd_log_file);
+        die2("failed to open vsftpd log file:", tunable_vsftpd_log_file);
       }
       p_sess->vsftpd_log_fd = retval;
     }
@@ -69,11 +69,11 @@ static int vsf_log_type_is_transfer(enum EVSFLogEntryType type)
   return (type == kVSFLogEntryDownload || type == kVSFLogEntryUpload);
 }
 
-void vsf_log_start_entry(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>), enum EVSFLogEntryType what)
+void vsf_log_start_entry(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), enum EVSFLogEntryType what)
 {
   if (p_sess->log_type != 0)
   {
-    bug(((const char *)((const char *)((const char *)"non null log_type in vsf_log_start_entry"))));
+    bug("non null log_type in vsf_log_start_entry");
   }
   p_sess->log_type = (unsigned long) what;
   p_sess->log_start_sec = 0;
@@ -87,12 +87,12 @@ void vsf_log_start_entry(struct vsf_session* p_sess : itype(_Ptr<struct vsf_sess
   }
 }
 
-void vsf_log_line(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>), enum EVSFLogEntryType what, _Ptr<struct mystr> p_str)
+void vsf_log_line(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), enum EVSFLogEntryType what, _Ptr<struct mystr> p_str)
 {
   vsf_log_common(p_sess, 1, what, p_str);
 }
 
-int vsf_log_entry_pending(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
+int vsf_log_entry_pending(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   if (p_sess->log_type == 0)
   {
@@ -101,12 +101,12 @@ int vsf_log_entry_pending(struct vsf_session* p_sess : itype(_Ptr<struct vsf_ses
   return 1;
 }
 
-void vsf_log_clear_entry(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
+void vsf_log_clear_entry(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   p_sess->log_type = 0;
 }
 
-void vsf_log_do_log(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>), int succeeded)
+void vsf_log_do_log(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int succeeded)
 {
   vsf_log_common(p_sess, succeeded, (enum EVSFLogEntryType) p_sess->log_type,
                  &p_sess->log_str);
@@ -167,7 +167,7 @@ static void vsf_log_do_log_wuftpd_format(_Ptr<struct vsf_session> p_sess, _Ptr<s
   long delta_sec;
   enum EVSFLogEntryType what = (enum EVSFLogEntryType) p_sess->log_type;
   /* Date - vsf_sysutil_get_current_date updates cached time */
-  str_alloc_text(p_str, ((const char *)((const char *)((const char *)vsf_sysutil_get_current_date()))));
+  str_alloc_text(p_str, vsf_sysutil_get_current_date());
   str_append_char(p_str, ' ');
   /* Transfer time (in seconds) */
   delta_sec = vsf_sysutil_get_time_sec() - p_sess->log_start_sec;
@@ -191,44 +191,44 @@ static void vsf_log_do_log_wuftpd_format(_Ptr<struct vsf_session> p_sess, _Ptr<s
   /* Transfer type (ascii/binary) */
   if (p_sess->is_ascii)
   {
-    str_append_text(p_str, ((const char *)((const char *)((const char *)"a "))));
+    str_append_text(p_str, "a ");
   }
   else
   {
-    str_append_text(p_str, ((const char *)((const char *)((const char *)"b "))));
+    str_append_text(p_str, "b ");
   }
   /* Special action flag - tar, gzip etc. */
-  str_append_text(p_str, ((const char *)((const char *)((const char *)"_ "))));
+  str_append_text(p_str, "_ ");
   /* Direction of transfer */
   if (what == kVSFLogEntryUpload)
   {
-    str_append_text(p_str, ((const char *)((const char *)((const char *)"i "))));
+    str_append_text(p_str, "i ");
   }
   else
   {
-    str_append_text(p_str, ((const char *)((const char *)((const char *)"o "))));
+    str_append_text(p_str, "o ");
   }
   /* Access mode: anonymous/real user, and identity */
   if (p_sess->is_anonymous && !p_sess->is_guest)
   {
-    str_append_text(p_str, ((const char *)((const char *)((const char *)"a "))));
+    str_append_text(p_str, "a ");
     str_append_str(p_str, &p_sess->anon_pass_str);
   }
   else
   {
     if (p_sess->is_guest)
     {
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"g "))));
+      str_append_text(p_str, "g ");
     } 
     else
     {
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"r "))));
+      str_append_text(p_str, "r ");
     }
     str_append_str(p_str, &p_sess->user_str);
   }
   str_append_char(p_str, ' ');
   /* Service name, authentication method, authentication user id */
-  str_append_text(p_str, ((const char *)((const char *)((const char *)"ftp 0 * "))));
+  str_append_text(p_str, "ftp 0 * ");
   /* Completion status */
   if (succeeded)
   {
@@ -246,18 +246,18 @@ static void vsf_log_do_log_vsftpd_format(_Ptr<struct vsf_session> p_sess, _Ptr<s
   if (!tunable_syslog_enable)
   {
     /* Date - vsf_sysutil_get_current_date updates cached time */
-    str_append_text(p_str, ((const char *)((const char *)((const char *)vsf_sysutil_get_current_date()))));
+    str_append_text(p_str, vsf_sysutil_get_current_date());
     /* Pid */
-    str_append_text(p_str, ((const char *)((const char *)((const char *)" [pid "))));
+    str_append_text(p_str, " [pid ");
     str_append_ulong(p_str, vsf_sysutil_getpid());
-    str_append_text(p_str, ((const char *)((const char *)((const char *)"] "))));
+    str_append_text(p_str, "] ");
   }
   /* User */
   if (!str_isempty(&p_sess->user_str))
   {
     str_append_char(p_str, '[');
     str_append_str(p_str, &p_sess->user_str);
-    str_append_text(p_str, ((const char *)((const char *)((const char *)"] "))));
+    str_append_text(p_str, "] ");
   }
   /* And the action */
   if (what != kVSFLogEntryFTPInput && what != kVSFLogEntryFTPOutput &&
@@ -265,69 +265,69 @@ static void vsf_log_do_log_vsftpd_format(_Ptr<struct vsf_session> p_sess, _Ptr<s
   {
     if (succeeded)
     {
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"OK "))));
+      str_append_text(p_str, "OK ");
     }
     else
     {
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"FAIL "))));
+      str_append_text(p_str, "FAIL ");
     }
   }
   switch (what)
   {
     case kVSFLogEntryDownload:
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"DOWNLOAD"))));
+      str_append_text(p_str, "DOWNLOAD");
       break;
     case kVSFLogEntryUpload:
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"UPLOAD"))));
+      str_append_text(p_str, "UPLOAD");
       break;
     case kVSFLogEntryMkdir:
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"MKDIR"))));
+      str_append_text(p_str, "MKDIR");
       break;
     case kVSFLogEntryLogin:
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"LOGIN"))));
+      str_append_text(p_str, "LOGIN");
       break;
     case kVSFLogEntryFTPInput:
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"FTP command"))));
+      str_append_text(p_str, "FTP command");
       break;
     case kVSFLogEntryFTPOutput:
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"FTP response"))));
+      str_append_text(p_str, "FTP response");
       break;
     case kVSFLogEntryConnection:
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"CONNECT"))));
+      str_append_text(p_str, "CONNECT");
       break;
     case kVSFLogEntryDelete:
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"DELETE"))));
+      str_append_text(p_str, "DELETE");
       break;
     case kVSFLogEntryRename:
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"RENAME"))));
+      str_append_text(p_str, "RENAME");
       break;
     case kVSFLogEntryRmdir:
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"RMDIR"))));
+      str_append_text(p_str, "RMDIR");
       break;
     case kVSFLogEntryChmod:
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"CHMOD"))));
+      str_append_text(p_str, "CHMOD");
       break;
     case kVSFLogEntryDebug:
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"DEBUG"))));
+      str_append_text(p_str, "DEBUG");
       break;
     case kVSFLogEntryNull:
       /* Fall through */
     default:
-      bug(((const char *)((const char *)((const char *)"bad entry_type in vsf_log_do_log"))));
+      bug("bad entry_type in vsf_log_do_log");
       break;
   }
-  str_append_text(p_str, ((const char *)((const char *)((const char *)": Client \""))));
+  str_append_text(p_str, ": Client \"");
   str_append_str(p_str, &p_sess->remote_ip_str);
   str_append_char(p_str, '"');
   if (what == kVSFLogEntryLogin && !str_isempty(&p_sess->anon_pass_str))
   {
-    str_append_text(p_str, ((const char *)((const char *)((const char *)", anon password \""))));
+    str_append_text(p_str, ", anon password \"");
     str_append_str(p_str, &p_sess->anon_pass_str);
     str_append_char(p_str, '"');
   }
   if (!str_isempty(p_log_str))
   {
-    str_append_text(p_str, ((const char *)((const char *)((const char *)", \""))));
+    str_append_text(p_str, ", \"");
     str_append_str(p_str, p_log_str);
     str_append_char(p_str, '"');
   }
@@ -336,9 +336,9 @@ static void vsf_log_do_log_vsftpd_format(_Ptr<struct vsf_session> p_sess, _Ptr<s
   {
     if (p_sess->transfer_size)
     {
-      str_append_text(p_str, ((const char *)((const char *)((const char *)", "))));
+      str_append_text(p_str, ", ");
       str_append_filesize_t(p_str, p_sess->transfer_size);
-      str_append_text(p_str, ((const char *)((const char *)((const char *)" bytes"))));
+      str_append_text(p_str, " bytes");
     }
     if (vsf_log_type_is_transfer(what))
     {
@@ -353,9 +353,9 @@ static void vsf_log_do_log_vsftpd_format(_Ptr<struct vsf_session> p_sess, _Ptr<s
       }
       kbyte_rate =
         ((double) p_sess->transfer_size / time_delta) / (double) 1024;
-      str_append_text(p_str, ((const char *)((const char *)((const char *)", "))));
+      str_append_text(p_str, ", ");
       str_append_double(p_str, kbyte_rate);
-      str_append_text(p_str, ((const char *)((const char *)((const char *)"Kbyte/sec"))));
+      str_append_text(p_str, "Kbyte/sec");
     }
   }
 }

@@ -248,7 +248,7 @@ void vsf_remove_uwtmp(void);
 int vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str, _Ptr<const struct mystr> p_pass_str, _Ptr<const struct mystr> p_remote_host)
 {
   const char* p_crypted;
-  const struct passwd* p_pwd = getpwnam(((const char *)((const char *)((const char *)str_getbuf(p_user_str)))));
+  const struct passwd* p_pwd = getpwnam(str_getbuf(p_user_str));
   (void) p_remote_host;
   if (p_pwd == NULL)
   {
@@ -274,7 +274,7 @@ int vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str, _Ptr<const struct mystr
   #endif
   #ifdef VSF_SYSDEP_HAVE_SHADOW
   {
-    const struct spwd* p_spwd = getspnam(((const char *)((const char *)((const char *)str_getbuf(p_user_str)))));
+    const struct spwd* p_spwd = getspnam(str_getbuf(p_user_str));
     if (p_spwd != NULL)
     {
       long curr_time = vsf_sysutil_get_time_sec();
@@ -289,7 +289,7 @@ int vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str, _Ptr<const struct mystr
       {
         return 0;
       }
-      p_crypted = crypt(((const char *)((const char *)((const char *)str_getbuf(p_pass_str)))), p_spwd->sp_pwdp);
+      p_crypted = crypt(str_getbuf(p_pass_str), p_spwd->sp_pwdp);
       if (!vsf_sysutil_strcmp(p_crypted, p_spwd->sp_pwdp))
       {
         return 1;
@@ -297,7 +297,7 @@ int vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str, _Ptr<const struct mystr
     }
   }
   #endif /* VSF_SYSDEP_HAVE_SHADOW */
-  p_crypted = crypt(((const char *)((const char *)((const char *)str_getbuf(p_pass_str)))), p_pwd->pw_passwd);
+  p_crypted = crypt(str_getbuf(p_pass_str), p_pwd->pw_passwd);
   if (!vsf_sysutil_strcmp(p_crypted, p_pwd->pw_passwd))
   {
     return 1;
@@ -495,14 +495,14 @@ vsf_sysdep_keep_capabilities(void)
 {
   if (!vsf_sysdep_has_capabilities_as_non_root())
   {
-    bug(((const char *)((const char *)((const char *)"asked to keep capabilities, but no support exists"))));
+    bug("asked to keep capabilities, but no support exists");
   }
 #ifdef VSF_SYSDEP_HAVE_SETKEEPCAPS
   {
     int retval = prctl(PR_SET_KEEPCAPS, 1);
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die(((const char *)((const char *)((const char *)"prctl"))));
+      die("prctl");
     }
   }
 #endif /* VSF_SYSDEP_HAVE_SETKEEPCAPS */
@@ -590,7 +590,7 @@ void vsf_sysdep_adopt_capabilities(unsigned int caps)
   __u32 cap_mask = 0;
   if (!caps)
   {
-    bug(((const char *)((const char *)((const char *)"asked to adopt no capabilities"))));
+    bug("asked to adopt no capabilities");
   }
   vsf_sysutil_memclr(&cap_head, sizeof(cap_head));
   vsf_sysutil_memclr(&cap_data, sizeof(cap_data));
@@ -609,7 +609,7 @@ void vsf_sysdep_adopt_capabilities(unsigned int caps)
   retval = capset(&cap_head, &cap_data);
   if (retval != 0)
   {
-    die(((const char *)((const char *)((const char *)"capset"))));
+    die("capset");
   }
 }
 
@@ -660,7 +660,7 @@ int vsf_sysutil_sendfile(const int out_fd, const int in_fd, _Ptr<filesize_t> p_o
   /* Grr - why is off_t signed? */
   if (*p_offset < 0 || num_send < 0)
   {
-    die(((const char *)((const char *)((const char *)"invalid offset or send count in vsf_sysutil_sendfile"))));
+    die("invalid offset or send count in vsf_sysutil_sendfile");
   }
   if (max_chunk == 0)
   {
@@ -800,7 +800,7 @@ static int do_sendfile(const int out_fd, const int in_fd, unsigned int num_send,
 #endif /* VSF_SYSDEP_HAVE_LINUX_SENDFILE || VSF_SYSDEP_HAVE_FREEBSD_SENDFILE */
   if (p_recvbuf == 0)
   {
-    vsf_secbuf_alloc(((_Ptr<char *> )((_Ptr<char *> )((char **)&p_recvbuf))), VSFTP_DATA_BUFSIZE);
+    vsf_secbuf_alloc(((char **)&p_recvbuf), VSFTP_DATA_BUFSIZE);
   }
   while (1)
   {
@@ -834,7 +834,7 @@ static int do_sendfile(const int out_fd, const int in_fd, unsigned int num_send,
     }
     if (num_written > num_send)
     {
-      bug(((const char *)((const char *)((const char *)"num_written bigger than num_send in do_sendfile"))));
+      bug("num_written bigger than num_send in do_sendfile");
     }
     num_send -= num_written;
     if (num_send == 0)
@@ -853,7 +853,7 @@ void vsf_sysutil_set_proctitle_prefix(_Ptr<const struct mystr> p_str)
 /* This delegation is common to all setproctitle() implementations */
 void vsf_sysutil_setproctitle_str(_Ptr<const struct mystr> p_str)
 {
-  vsf_sysutil_setproctitle(((const char *)((const char *)((const char *)str_getbuf(p_str)))));
+  vsf_sysutil_setproctitle(str_getbuf(p_str));
 }
 
 void vsf_sysutil_setproctitle(const char *p_text)
@@ -862,10 +862,10 @@ void vsf_sysutil_setproctitle(const char *p_text)
   str_copy(&proctitle_str, &s_proctitle_prefix_str);
   if (!str_isempty(&proctitle_str))
   {
-    str_append_text(&proctitle_str, ((const char *)((const char *)((const char *)": "))));
+    str_append_text(&proctitle_str, ": ");
   }
   str_append_text(&proctitle_str, p_text);
-  vsf_sysutil_setproctitle_internal(((const char *)((const char *)((const char *)str_getbuf(&proctitle_str)))));
+  vsf_sysutil_setproctitle_internal(str_getbuf(&proctitle_str));
   str_free(&proctitle_str);
 }
 
@@ -908,12 +908,12 @@ void vsf_sysutil_setproctitle_init(int argc, const char *argv[])
   char** p_env = environ;
   if (s_proctitle_inited)
   {
-    bug(((const char *)((const char *)((const char *)"vsf_sysutil_setproctitle_init called twice"))));
+    bug("vsf_sysutil_setproctitle_init called twice");
   }
   s_proctitle_inited = 1;
   if (argv[0] == 0)
   {
-    die(((const char *)((const char *)((const char *)"no argv[0] in vsf_sysutil_setproctitle_init"))));
+    die("no argv[0] in vsf_sysutil_setproctitle_init");
   }
   for (i=0; i<argc; i++)
   {
@@ -940,14 +940,14 @@ void vsf_sysutil_setproctitle_internal(const char *p_buf)
   unsigned int to_copy;
   if (!s_proctitle_inited)
   {
-    bug(((const char *)((const char *)((const char *)"vsf_sysutil_setproctitle: not initialized"))));
+    bug("vsf_sysutil_setproctitle: not initialized");
   }
   vsf_sysutil_memclr(s_p_proctitle, s_proctitle_space);
   if (s_proctitle_space < 32)
   {
     return;
   }
-  str_alloc_text(&proctitle_str, ((const char *)((const char *)((const char *)"vsftpd: "))));
+  str_alloc_text(&proctitle_str, "vsftpd: ");
   str_append_text(&proctitle_str, p_buf);
   to_copy = str_getlen(&proctitle_str);
   if (to_copy > s_proctitle_space - 1)
@@ -985,7 +985,7 @@ void * vsf_sysutil_map_anon_pages(unsigned int length)
                       MAP_PRIVATE | MAP_ANON, -1, 0);
   if (retval == MAP_FAILED)
   {
-    die(((const char *)((const char *)((const char *)"mmap"))));
+    die("mmap");
   }
   return retval;
 }
@@ -1050,7 +1050,7 @@ void vsf_sysutil_send_fd(int sock_fd, int send_fd)
   retval = sendmsg(sock_fd, &msg, 0);
   if (retval != 1)
   {
-    die(((const char *)((const char *)((const char *)"sendmsg"))));
+    die("sendmsg");
   }
 }
 
@@ -1079,12 +1079,12 @@ int vsf_sysutil_recv_fd(const int sock_fd)
   retval = recvmsg(sock_fd, &msg, 0);
   if (retval != 1)
   {
-    die(((const char *)((const char *)((const char *)"recvmsg"))));
+    die("recvmsg");
   }
   p_cmsg = CMSG_FIRSTHDR(&msg);
   if (p_cmsg == NULL)
   {
-    die(((const char *)((const char *)((const char *)"no passed fd"))));
+    die("no passed fd");
   }
   /* We used to verify the returned cmsg_level, cmsg_type and cmsg_len here,
    * but Linux 2.0 totally uselessly fails to fill these in.
@@ -1093,7 +1093,7 @@ int vsf_sysutil_recv_fd(const int sock_fd)
   recv_fd = *p_fd;
   if (recv_fd == -1)
   {
-    die(((const char *)((const char *)((const char *)"no passed fd"))));
+    die("no passed fd");
   }
   return recv_fd;
 }
@@ -1182,36 +1182,36 @@ void vsf_insert_uwtmp(_Ptr<const struct mystr> p_user_str, _Ptr<const struct mys
   }
   if (s_uwtmp_inserted)
   {
-    bug(((const char *)((const char *)((const char *)"vsf_insert_uwtmp"))));
+    bug("vsf_insert_uwtmp");
   }
   {
     struct mystr line_str = INIT_MYSTR;
-    str_alloc_text(&line_str, ((const char *)((const char *)((const char *)"vsftpd:"))));
+    str_alloc_text(&line_str, "vsftpd:");
     str_append_ulong(&line_str, vsf_sysutil_getpid());
     if (str_getlen(&line_str) >= sizeof(s_utent.ut_line))
     {
       str_free(&line_str);
       return;
     }
-    vsf_sysutil_strcpy(s_utent.ut_line, ((const char *)((const char *)((const char *)str_getbuf(&line_str)))),
+    vsf_sysutil_strcpy(s_utent.ut_line, str_getbuf(&line_str),
                        sizeof(s_utent.ut_line));
     str_free(&line_str);
   }
   s_uwtmp_inserted = 1;
   s_utent.ut_type = USER_PROCESS;
   s_utent.ut_pid = vsf_sysutil_getpid();
-  vsf_sysutil_strcpy(s_utent.ut_user, ((const char *)((const char *)((const char *)str_getbuf(p_user_str)))),
+  vsf_sysutil_strcpy(s_utent.ut_user, str_getbuf(p_user_str),
                      sizeof(s_utent.ut_user));
-  vsf_sysutil_strcpy(s_utent.ut_host, ((const char *)((const char *)((const char *)str_getbuf(p_host_str)))),
+  vsf_sysutil_strcpy(s_utent.ut_host, str_getbuf(p_host_str),
                      sizeof(s_utent.ut_host));
   s_utent.ut_tv.tv_sec = vsf_sysutil_get_time_sec();
   setutxent();
-  (void) pututxline(((const struct utmpx *)((const struct utmpx *)((const struct utmpx *)&s_utent))));
+  (void) pututxline(&s_utent);
   endutxent();
 #ifdef __APPLE__
   bug("DOESN'T WORK ON MY MAC");
 #else
-  updwtmpx(((const char *)((const char *)((const char *)WTMPX_FILE))), ((const struct utmpx *)((const struct utmpx *)((const struct utmpx *)&s_utent))));
+  updwtmpx(WTMPX_FILE, &s_utent);
 #endif
 }
 
@@ -1228,13 +1228,13 @@ vsf_remove_uwtmp(void)
   vsf_sysutil_memclr(s_utent.ut_host, sizeof(s_utent.ut_host));
   s_utent.ut_tv.tv_sec = 0;
   setutxent();
-  (void) pututxline(((const struct utmpx *)((const struct utmpx *)((const struct utmpx *)&s_utent))));
+  (void) pututxline(&s_utent);
   endutxent();
   s_utent.ut_tv.tv_sec = vsf_sysutil_get_time_sec();
 #ifdef __APPLE__
   bug("DOESN'T WORK ON MY MAC");
 #else
-  updwtmpx(((const char *)((const char *)((const char *)WTMPX_FILE))), ((const struct utmpx *)((const struct utmpx *)((const struct utmpx *)&s_utent))));
+  updwtmpx(WTMPX_FILE, &s_utent);
 #endif
 }
 
@@ -1246,7 +1246,7 @@ vsf_set_die_if_parent_dies()
 #ifdef VSF_SYSDEP_HAVE_SETPDEATHSIG
   if (prctl(PR_SET_PDEATHSIG, SIGKILL, 0, 0, 0) != 0)
   {
-    die(((const char *)((const char *)((const char *)"prctl"))));
+    die("prctl");
   }
 #endif
 }
@@ -1257,7 +1257,7 @@ vsf_set_term_if_parent_dies()
 #ifdef VSF_SYSDEP_HAVE_SETPDEATHSIG
   if (prctl(PR_SET_PDEATHSIG, SIGTERM, 0, 0, 0) != 0)
   {
-    die(((const char *)((const char *)((const char *)"prctl"))));
+    die("prctl");
   }
 #endif
 }

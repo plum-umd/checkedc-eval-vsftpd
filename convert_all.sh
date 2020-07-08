@@ -1,5 +1,5 @@
-CCONV=/home/sroy4899/checkedc-clang/build/bin/cconv-standalone
-INCLUDES=/home/sroy4899/checkedc/include/
+CCONV=~/checkedc-clang/build/bin/cconv-standalone
+INCLUDES=~/checkedc/include
 BASEDIR=.
 
 # -dump-stats \

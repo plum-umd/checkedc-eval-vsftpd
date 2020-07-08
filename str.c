@@ -29,7 +29,7 @@ static void s_setbuf(_Ptr<struct mystr> p_str, char *p_newbuf)
 {
   if (p_str->p_buf != 0)
   {
-    bug(((const char *)((const char *)((const char *)"p_buf not NULL when setting it"))));
+    bug("p_buf not NULL when setting it");
   }
   p_str->p_buf = p_newbuf;
 }
@@ -40,13 +40,13 @@ void private_str_alloc_memchunk(_Ptr<struct mystr> p_str, const char *p_src, uns
   unsigned int buf_needed;
   if (len + 1 < len)
   {
-    bug(((const char *)((const char *)((const char *)"integer overflow"))));
+    bug("integer overflow");
   }
   buf_needed = len + 1;
   if (buf_needed > p_str->alloc_bytes)
   {
     str_free(p_str);
-    s_setbuf(p_str, ((char *)((char *)((char *)vsf_sysutil_malloc(buf_needed)))));
+    s_setbuf(p_str, vsf_sysutil_malloc(buf_needed));
     p_str->alloc_bytes = buf_needed;
   }
   vsf_sysutil_memcpy(p_str->p_buf, p_src, len);
@@ -59,12 +59,12 @@ void private_str_append_memchunk(_Ptr<struct mystr> p_str, const char *p_src, un
   unsigned int buf_needed;
   if (len + p_str->len < len)
   {
-    bug(((const char *)((const char *)((const char *)"integer overflow"))));
+    bug("integer overflow");
   }
   buf_needed = len + p_str->len;
   if (buf_needed + 1 < buf_needed)
   {
-    bug(((const char *)((const char *)((const char *)"integer overflow"))));
+    bug("integer overflow");
   }
   buf_needed++;
   if (buf_needed > p_str->alloc_bytes)
@@ -91,7 +91,7 @@ void str_copy(_Ptr<struct mystr> p_dest, _Ptr<const struct mystr> p_src)
 
 const char * str_strdup(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_strdup(((const char *)((const char *)((const char *)str_getbuf(p_str)))));
+  return vsf_sysutil_strdup(str_getbuf(p_str));
 }
 
 void str_alloc_alt_term(_Ptr<struct mystr> p_str, const char *p_src, char term)
@@ -104,7 +104,7 @@ void str_alloc_alt_term(_Ptr<struct mystr> p_str, const char *p_src, char term)
     len++;
     if (len == 0)
     {
-      bug(((const char *)((const char *)((const char *)"integer overflow"))));
+      bug("integer overflow");
     }
   }
   private_str_alloc_memchunk(p_str, p_src, len);
@@ -112,12 +112,12 @@ void str_alloc_alt_term(_Ptr<struct mystr> p_str, const char *p_src, char term)
 
 void str_alloc_ulong(_Ptr<struct mystr> p_str, unsigned long the_long)
 {
-  str_alloc_text(p_str, ((const char *)((const char *)((const char *)vsf_sysutil_ulong_to_str(the_long)))));
+  str_alloc_text(p_str, vsf_sysutil_ulong_to_str(the_long));
 }
 
 void str_alloc_filesize_t(_Ptr<struct mystr> p_str, filesize_t the_filesize)
 {
-  str_alloc_text(p_str, ((const char *)((const char *)((const char *)vsf_sysutil_filesize_t_to_str(the_filesize)))));
+  str_alloc_text(p_str, vsf_sysutil_filesize_t_to_str(the_filesize));
 }
 
 void str_free(_Ptr<struct mystr> p_str)
@@ -142,7 +142,7 @@ void str_trunc(_Ptr<struct mystr> p_str, unsigned int trunc_len)
 {
   if (trunc_len >= p_str->alloc_bytes)
   {
-    bug(((const char *)((const char *)((const char *)"trunc_len not smaller than alloc_bytes in str_trunc"))));
+    bug("trunc_len not smaller than alloc_bytes in str_trunc");
   }
   p_str->len = trunc_len;
   p_str->p_buf[p_str->len] = '\0';
@@ -154,7 +154,7 @@ void str_reserve(_Ptr<struct mystr> p_str, unsigned int res_len)
   res_len++;
   if (res_len == 0)
   {
-    bug(((const char *)((const char *)((const char *)"integer overflow"))));
+    bug("integer overflow");
   }
   if (res_len > p_str->alloc_bytes)
   {
@@ -180,7 +180,7 @@ const char * str_getbuf(_Ptr<const struct mystr> p_str)
   {
     if (p_str->len != 0 || p_str->alloc_bytes != 0)
     {
-      bug(((const char *)((const char *)((const char *)"p_buf NULL and len or alloc_bytes != 0 in str_getbuf"))));
+      bug("p_buf NULL and len or alloc_bytes != 0 in str_getbuf");
     }
     private_str_alloc_memchunk((struct mystr*)p_str, 0, 0);
   }
@@ -234,22 +234,22 @@ void str_append_text(_Ptr<struct mystr> p_str, const char *p_src)
 
 void str_append_char(_Ptr<struct mystr> p_str, char the_char)
 {
-  private_str_append_memchunk(p_str, ((const char *)((const char *)((const char *)&the_char))), sizeof(the_char));
+  private_str_append_memchunk(p_str, &the_char, sizeof(the_char));
 }
 
 void str_append_ulong(_Ptr<struct mystr> p_str, unsigned long the_ulong)
 {
-  str_append_text(p_str, ((const char *)((const char *)((const char *)vsf_sysutil_ulong_to_str(the_ulong)))));
+  str_append_text(p_str, vsf_sysutil_ulong_to_str(the_ulong));
 }
 
 void str_append_filesize_t(_Ptr<struct mystr> p_str, filesize_t the_filesize)
 {
-  str_append_text(p_str, ((const char *)((const char *)((const char *)vsf_sysutil_filesize_t_to_str(the_filesize)))));
+  str_append_text(p_str, vsf_sysutil_filesize_t_to_str(the_filesize));
 }
 
 void str_append_double(_Ptr<struct mystr> p_str, double the_double)
 {
-  str_append_text(p_str, ((const char *)((const char *)((const char *)vsf_sysutil_double_to_str(the_double)))));
+  str_append_text(p_str, vsf_sysutil_double_to_str(the_double));
 }
 
 void str_upper(_Ptr<struct mystr> p_str)
@@ -378,7 +378,7 @@ static void str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p
   indexx = locate_result.index;
   if (indexx + search_len > p_src->len)
   {
-    bug(((const char *)((const char *)((const char *)"indexx invalid in str_split_text"))));
+    bug("indexx invalid in str_split_text");
   } 
   /* Build rhs */
   private_str_alloc_memchunk(p_rhs, p_src->p_buf + indexx + search_len,
@@ -389,12 +389,12 @@ static void str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p
 
 struct str_locate_result str_locate_str(_Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_look_str)
 {
-  return str_locate_text(p_str, ((const char *)((const char *)((const char *)str_getbuf(p_look_str)))));
+  return str_locate_text(p_str, str_getbuf(p_look_str));
 }
 
 struct str_locate_result str_locate_str_reverse(_Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_look_str)
 {
-  return str_locate_text_reverse(p_str, ((const char *)((const char *)((const char *)str_getbuf(p_look_str)))));
+  return str_locate_text_reverse(p_str, str_getbuf(p_look_str));
 }
 
 struct str_locate_result str_locate_char(_Ptr<const struct mystr> p_str, char look_char)
@@ -493,7 +493,7 @@ void str_left(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_out, unsigned
 {
   if (chars > p_str->len)
   {
-    bug(((const char *)((const char *)((const char *)"chars invalid in str_left"))));
+    bug("chars invalid in str_left");
   }
   private_str_alloc_memchunk(p_out, p_str->p_buf, chars);
 }
@@ -503,7 +503,7 @@ void str_right(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_out, unsigne
   unsigned int indexx = p_str->len - chars;
   if (chars > p_str->len)
   {
-    bug(((const char *)((const char *)((const char *)"chars invalid in str_right"))));
+    bug("chars invalid in str_right");
   }
   private_str_alloc_memchunk(p_out, p_str->p_buf + indexx, chars);
 }
@@ -512,7 +512,7 @@ void str_mid_to_end(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_out, un
 {
   if (indexx > p_str->len)
   {
-    bug(((const char *)((const char *)((const char *)"invalid indexx in str_mid_to_end"))));
+    bug("invalid indexx in str_mid_to_end");
   }
   private_str_alloc_memchunk(p_out, p_str->p_buf + indexx,
                              p_str->len - indexx);
@@ -522,7 +522,7 @@ char str_get_char_at(_Ptr<const struct mystr> p_str, const unsigned int indexx)
 {
   if (indexx >= p_str->len)
   {
-    bug(((const char *)((const char *)((const char *)"bad indexx in str_get_char_at"))));
+    bug("bad indexx in str_get_char_at");
   }
   return p_str->p_buf[indexx];
 }
@@ -568,17 +568,17 @@ int str_contains_unprintable(_Ptr<const struct mystr> p_str)
 
 int str_atoi(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_atoi(((const char *)((const char *)((const char *)str_getbuf(p_str)))));
+  return vsf_sysutil_atoi(str_getbuf(p_str));
 }
 
 filesize_t str_a_to_filesize_t(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_a_to_filesize_t(((const char *)((const char *)((const char *)str_getbuf(p_str)))));
+  return vsf_sysutil_a_to_filesize_t(str_getbuf(p_str));
 }
 
 unsigned int str_octal_to_uint(_Ptr<const struct mystr> p_str)
 {
-  return vsf_sysutil_octal_to_uint(((const char *)((const char *)((const char *)str_getbuf(p_str)))));
+  return vsf_sysutil_octal_to_uint(str_getbuf(p_str));
 }
 
 int str_getline(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_line_str, _Ptr<unsigned int> p_pos)
@@ -590,7 +590,7 @@ int str_getline(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_line_str, _
   unsigned int out_len;
   if (start_pos > buf_len)
   {
-    bug(((const char *)((const char *)((const char *)"p_pos out of range in str_getline"))));
+    bug("p_pos out of range in str_getline");
   }
   str_empty(p_line_str);
   if (start_pos == buf_len)
@@ -602,7 +602,7 @@ int str_getline(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_line_str, _
     curr_pos++;
     if (curr_pos == 0)
     {
-      bug(((const char *)((const char *)((const char *)"integer overflow"))));
+      bug("integer overflow");
     }
   }
   out_len = curr_pos - start_pos;
@@ -612,7 +612,7 @@ int str_getline(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_line_str, _
     curr_pos++;
     if (curr_pos == 0)
     {
-      bug(((const char *)((const char *)((const char *)"integer overflow"))));
+      bug("integer overflow");
     }
   }
   private_str_alloc_memchunk(p_line_str, p_buf + start_pos, out_len);

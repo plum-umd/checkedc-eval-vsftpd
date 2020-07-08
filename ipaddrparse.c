@@ -27,7 +27,7 @@ const unsigned char * vsf_sysutil_parse_ipv6(_Ptr<const struct mystr> p_str)
   str_empty(&s_ret);
   str_empty(&s_rhs_ret);
   str_copy(&s_lhs_str, p_str);
-  str_split_text(&s_lhs_str, &s_rhs_str, ((const char *)((const char *)((const char *)"::"))));
+  str_split_text(&s_lhs_str, &s_rhs_str, "::");
   if (!ipv6_parse_main(&s_ret, &s_lhs_str))
   {
     return 0;

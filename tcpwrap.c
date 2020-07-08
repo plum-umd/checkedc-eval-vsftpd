@@ -44,7 +44,7 @@ vsf_tcp_wrapper_ok(int remote_fd)
 int vsf_tcp_wrapper_ok(int remote_fd)
 {
   (void) remote_fd;
-  die(((const char *)((const char *)((const char *)"tcp_wrappers is set to YES but no tcp wrapper support compiled in"))));
+  die("tcp_wrappers is set to YES but no tcp wrapper support compiled in");
   return 0;
 }
 

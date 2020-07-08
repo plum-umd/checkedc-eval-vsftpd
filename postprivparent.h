@@ -10,7 +10,7 @@ struct vsf_session;
  * PARAMETERS
  * p_sess       - the current session object
  */
-void vsf_priv_parent_postlogin(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
+void vsf_priv_parent_postlogin(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 #endif /* VSF_LOGINPRIVPARENT_H */
 

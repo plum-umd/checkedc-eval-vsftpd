@@ -27,7 +27,7 @@ int str_netfd_alloc(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, c
   {
     if (p_readpos + left != p_readbuf + maxlen)
     {
-      bug(((const char *)((const char *)((const char *)"poor buffer accounting in str_netfd_alloc"))));
+      bug("poor buffer accounting in str_netfd_alloc");
     }
     /* Did we hit the max? */
     if (left == 0)
@@ -37,7 +37,7 @@ int str_netfd_alloc(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, c
     retval = (*p_peekfunc)(p_sess, p_readpos, left);
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die(((const char *)((const char *)((const char *)"vsf_sysutil_recv_peek"))));
+      die("vsf_sysutil_recv_peek");
     }
     else if (retval == 0)
     {
@@ -55,11 +55,11 @@ int str_netfd_alloc(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, c
         if (vsf_sysutil_retval_is_error(retval) ||
             (unsigned int) retval != i)
         {
-          die(((const char *)((const char *)((const char *)"vsf_sysutil_read_loop"))));
+          die("vsf_sysutil_read_loop");
         }
         if (p_readpos[i - 1] != term)
         {
-          die(((const char *)((const char *)((const char *)"missing terminator in str_netfd_alloc"))));
+          die("missing terminator in str_netfd_alloc");
         }
         str_alloc_alt_term(p_str, p_readbuf, term);
         return (int) i;
@@ -68,14 +68,14 @@ int str_netfd_alloc(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, c
     /* Not found in this read chunk, so consume the data and re-loop */
     if (bytes_read > left)
     {
-      bug(((const char *)((const char *)((const char *)"bytes_read > left in str_netfd_alloc"))));
+      bug("bytes_read > left in str_netfd_alloc");
     }
     left -= bytes_read;
     retval = (*p_readfunc)(p_sess, p_readpos, bytes_read);
     if (vsf_sysutil_retval_is_error(retval) ||
         (unsigned int) retval != bytes_read)
     {
-      die(((const char *)((const char *)((const char *)"vsf_sysutil_read_loop"))));
+      die("vsf_sysutil_read_loop");
     }
     p_readpos += bytes_read;
   } /* END: while(1) */
@@ -88,7 +88,7 @@ int str_netfd_write(_Ptr<const struct mystr> p_str, int fd)
   unsigned int str_len = str_getlen(p_str);
   if (str_len == 0)
   {
-    bug(((const char *)((const char *)((const char *)"zero str_len in str_netfd_write"))));
+    bug("zero str_len in str_netfd_write");
   }
   retval = str_write_loop(p_str, fd);
   if (vsf_sysutil_retval_is_error(retval) || (unsigned int) retval != str_len)

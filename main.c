@@ -83,7 +83,7 @@ int main(int argc, const char *argv[])
    */
   if (argc == 0)
   {
-    die(((const char *)((const char *)((const char *)"vsftpd: missing argv[0]"))));
+    die("vsftpd: missing argv[0]");
   }
   for (i = 1; i < argc; ++i)
   {
@@ -97,7 +97,7 @@ int main(int argc, const char *argv[])
     {
       if (p_arg[1] == 'v')
       {
-        vsf_exit(((const char *)((const char *)((const char *)"vsftpd: version " VSF_VERSION "\n"))));
+        vsf_exit("vsftpd: version " VSF_VERSION "\n");
       }
       else if (p_arg[1] == 'o')
       {
@@ -105,17 +105,17 @@ int main(int argc, const char *argv[])
       }
       else
       {
-        die2(((const char *)((const char *)((const char *)"unrecognise option: "))), p_arg);
+        die2("unrecognise option: ", p_arg);
       }
     }
   }
   /* Parse default config file if necessary */
   if (!config_loaded) {
     struct vsf_sysutil_statbuf* p_statbuf = 0;
-    int retval = vsf_sysutil_stat(((const char *)((const char *)((const char *)VSFTP_DEFAULT_CONFIG))), ((_Ptr<struct vsf_sysutil_statbuf *> )((_Ptr<struct vsf_sysutil_statbuf *> )((struct vsf_sysutil_statbuf **)&p_statbuf))));
+    int retval = vsf_sysutil_stat(VSFTP_DEFAULT_CONFIG, ((struct vsf_sysutil_statbuf **)&p_statbuf));
     if (!vsf_sysutil_retval_is_error(retval))
     {
-      vsf_parseconf_load_file(((const char *)((const char *)((const char *)VSFTP_DEFAULT_CONFIG))), 1);
+      vsf_parseconf_load_file(VSFTP_DEFAULT_CONFIG, 1);
     }
     vsf_sysutil_free(p_statbuf);
   }
@@ -124,7 +124,7 @@ int main(int argc, const char *argv[])
   {
     struct vsf_sysutil_sockaddr* p_addr = 0;
     const char* p_numeric_addr;
-    vsf_sysutil_dns_resolve(((_Ptr<struct vsf_sysutil_sockaddr *> )((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_addr))), tunable_pasv_address);
+    vsf_sysutil_dns_resolve(((struct vsf_sysutil_sockaddr **)&p_addr), tunable_pasv_address);
     vsf_sysutil_free((char*) tunable_pasv_address);
     p_numeric_addr = vsf_sysutil_inet_ntop(p_addr);
     tunable_pasv_address = vsf_sysutil_strdup(p_numeric_addr);
@@ -159,7 +159,7 @@ int main(int argc, const char *argv[])
     the_session.tcp_wrapper_ok = vsf_tcp_wrapper_ok(VSFTP_COMMAND_FD);
   }
   {
-    const char* p_load_conf = vsf_sysutil_getenv(((const char *)((const char *)((const char *)"VSFTPD_LOAD_CONF"))));
+    const char* p_load_conf = vsf_sysutil_getenv("VSFTPD_LOAD_CONF");
     if (p_load_conf)
     {
       vsf_parseconf_load_file(p_load_conf, 1);
@@ -180,13 +180,13 @@ int main(int argc, const char *argv[])
    */
   vsf_log_init(&the_session);
   str_alloc_text(&the_session.remote_ip_str,
-                 ((const char *)((const char *)((const char *)vsf_sysutil_inet_ntop(the_session.p_remote_addr)))));
+                 vsf_sysutil_inet_ntop(the_session.p_remote_addr));
   /* Set up options on the command socket */
   vsf_cmdio_sock_setup();
   if (tunable_setproctitle_enable)
   {
     vsf_sysutil_set_proctitle_prefix(&the_session.remote_ip_str);
-    vsf_sysutil_setproctitle(((const char *)((const char *)((const char *)"connected"))));
+    vsf_sysutil_setproctitle("connected");
   }
   /* We might chroot() very soon (one process model), so we need to open
    * any required config files here.
@@ -207,7 +207,7 @@ int main(int argc, const char *argv[])
     }
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die2(((const char *)((const char *)((const char *)"cannot read anon e-mail list file:"))), tunable_banned_email_file);
+      die2("cannot read anon e-mail list file:", tunable_banned_email_file);
     }
   }
   if (tunable_banner_file)
@@ -216,7 +216,7 @@ int main(int argc, const char *argv[])
                               VSFTP_CONF_FILE_MAX);
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die2(((const char *)((const char *)((const char *)"cannot read banner file:"))), tunable_banner_file);
+      die2("cannot read banner file:", tunable_banner_file);
     }
   }
   if (tunable_secure_email_list_enable)
@@ -230,7 +230,7 @@ int main(int argc, const char *argv[])
     }
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die2(((const char *)((const char *)((const char *)"cannot read email passwords file:"))), tunable_email_password_file);
+      die2("cannot read email passwords file:", tunable_email_password_file);
     }
   }
   if (tunable_run_as_launching_user)
@@ -244,14 +244,14 @@ int main(int argc, const char *argv[])
   }
   if (tunable_one_process_model)
   {
-    vsf_one_process_start(((struct vsf_session *)((struct vsf_session *)((struct vsf_session *)&the_session))));
+    vsf_one_process_start(&the_session);
   }
   else
   {
-    vsf_two_process_start(((struct vsf_session *)((struct vsf_session *)((struct vsf_session *)&the_session))));
+    vsf_two_process_start(&the_session);
   }
   /* NOTREACHED */
-  bug(((const char *)((const char *)((const char *)"should not get here: main"))));
+  bug("should not get here: main");
   return 1;
 }
 
@@ -260,7 +260,7 @@ die_unless_privileged(void)
 {
   if (!vsf_sysutil_running_as_root())
   {
-    die(((const char *)((const char *)((const char *)"vsftpd: must be started as root (see run_as_launching_user option)"))));
+    die("vsftpd: must be started as root (see run_as_launching_user option)");
   }
 }
 
@@ -269,10 +269,10 @@ do_sanity_checks(void)
 {
   {
     struct vsf_sysutil_statbuf* p_statbuf = 0;
-    vsf_sysutil_fstat(VSFTP_COMMAND_FD, ((_Ptr<struct vsf_sysutil_statbuf *> )((_Ptr<struct vsf_sysutil_statbuf *> )((struct vsf_sysutil_statbuf **)&p_statbuf))));
+    vsf_sysutil_fstat(VSFTP_COMMAND_FD, ((struct vsf_sysutil_statbuf **)&p_statbuf));
     if (!vsf_sysutil_statbuf_is_socket(p_statbuf))
     {
-      die(((const char *)((const char *)((const char *)"vsftpd: not configured for standalone, must be started from inetd"))));
+      die("vsftpd: not configured for standalone, must be started from inetd");
     }
     vsf_sysutil_free(p_statbuf);
   }
@@ -280,24 +280,24 @@ do_sanity_checks(void)
   {
     if (tunable_local_enable)
     {
-      die(((const char *)((const char *)((const char *)"vsftpd: security: 'one_process_model' is anonymous only"))));
+      die("vsftpd: security: 'one_process_model' is anonymous only");
     }
     if (!vsf_sysdep_has_capabilities_as_non_root())
     {
-      die(((const char *)((const char *)((const char *)"vsftpd: security: 'one_process_model' needs a better OS"))));
+      die("vsftpd: security: 'one_process_model' needs a better OS");
     }
   }
   if (!tunable_local_enable && !tunable_anonymous_enable)
   {
-    die(((const char *)((const char *)((const char *)"vsftpd: both local and anonymous access disabled!"))));
+    die("vsftpd: both local and anonymous access disabled!");
   }
   if (!tunable_ftp_enable && !tunable_http_enable)
   {
-    die(((const char *)((const char *)((const char *)"vsftpd: both FTP and HTTP disabled!"))));
+    die("vsftpd: both FTP and HTTP disabled!");
   }
   if (tunable_http_enable && !tunable_one_process_model)
   {
-    die(((const char *)((const char *)((const char *)"vsftpd: HTTP needs 'one_process_model' for now"))));
+    die("vsftpd: HTTP needs 'one_process_model' for now");
   }
 }
 
@@ -330,8 +330,8 @@ limits_init(void)
 static void session_init(_Ptr<struct vsf_session> p_sess)
 {
   /* Get the addresses of the control connection */
-  vsf_sysutil_getpeername(VSFTP_COMMAND_FD, ((_Ptr<struct vsf_sysutil_sockaddr *> )((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_sess->p_remote_addr))));
-  vsf_sysutil_getsockname(VSFTP_COMMAND_FD, ((_Ptr<struct vsf_sysutil_sockaddr *> )((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_sess->p_local_addr))));
+  vsf_sysutil_getpeername(VSFTP_COMMAND_FD, ((struct vsf_sysutil_sockaddr **)&p_sess->p_remote_addr));
+  vsf_sysutil_getsockname(VSFTP_COMMAND_FD, ((struct vsf_sysutil_sockaddr **)&p_sess->p_local_addr));
   /* If anonymous mode is active, fetch the uid of the anonymous user */
   if (tunable_anonymous_enable)
   {
@@ -342,7 +342,7 @@ static void session_init(_Ptr<struct vsf_session> p_sess)
     }
     if (p_user == 0)
     {
-      die2(((const char *)((const char *)((const char *)"vsftpd: cannot locate user specified in 'ftp_username':"))),
+      die2("vsftpd: cannot locate user specified in 'ftp_username':",
            tunable_ftp_username);
     }
     p_sess->anon_ftp_uid = vsf_sysutil_user_getuid(p_user);
@@ -356,7 +356,7 @@ static void session_init(_Ptr<struct vsf_session> p_sess)
     }
     if (p_user == 0)
     {
-      die2(((const char *)((const char *)((const char *)"vsftpd: cannot locate user specified in 'guest_username':"))),
+      die2("vsftpd: cannot locate user specified in 'guest_username':",
            tunable_guest_username);
     }
     p_sess->guest_user_uid = vsf_sysutil_user_getuid(p_user);
@@ -370,7 +370,7 @@ static void session_init(_Ptr<struct vsf_session> p_sess)
     }
     if (p_user == 0)
     {
-      die2(((const char *)((const char *)((const char *)"vsftpd: cannot locate user specified in 'chown_username':"))),
+      die2("vsftpd: cannot locate user specified in 'chown_username':",
            tunable_chown_username);
     }
     p_sess->anon_upload_chown_uid = vsf_sysutil_user_getuid(p_user);

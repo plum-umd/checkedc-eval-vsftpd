@@ -723,39 +723,30 @@ ssl_add_entropy(struct vsf_session* p_sess)
 void ssl_init(_Ptr<struct vsf_session> p_sess)
 {
   (void) p_sess;
-  die(((const char *)((const char *)((const char *)"SSL: ssl_enable is set but SSL support not compiled in"))));
+  die("SSL: ssl_enable is set but SSL support not compiled in");
 }
 
-void ssl_control_handshake(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
+void ssl_control_handshake(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   (void) p_sess;
 }
 
-void handle_auth(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
+void handle_auth(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   (void) p_sess;
 }
 
-void handle_pbsz(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
+void handle_pbsz(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   (void) p_sess;
 }
 
-void handle_prot(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
+void handle_prot(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   (void) p_sess;
 }
 
-int ssl_read(_Ptr<struct vsf_session> p_sess, void *p_ssl, char* p_buf : itype(_Ptr<char>), unsigned int len)
-{
-  (void) p_sess;
-  (void) p_ssl;
-  (void) p_buf;
-  (void) len;
-  return -1;
-}
-
-int ssl_peek(_Ptr<struct vsf_session> p_sess, void *p_ssl, char* p_buf : itype(_Ptr<char>), unsigned int len)
+int ssl_read(_Ptr<struct vsf_session> p_sess, void *p_ssl, char *p_buf : itype(_Ptr<char>), unsigned int len)
 {
   (void) p_sess;
   (void) p_ssl;
@@ -764,7 +755,16 @@ int ssl_peek(_Ptr<struct vsf_session> p_sess, void *p_ssl, char* p_buf : itype(_
   return -1;
 }
 
-int ssl_write(void *p_ssl, const char* p_buf : itype(_Ptr<const char>), unsigned int len)
+int ssl_peek(_Ptr<struct vsf_session> p_sess, void *p_ssl, char *p_buf : itype(_Ptr<char>), unsigned int len)
+{
+  (void) p_sess;
+  (void) p_ssl;
+  (void) p_buf;
+  (void) len;
+  return -1;
+}
+
+int ssl_write(void *p_ssl, const char *p_buf : itype(_Ptr<const char>), unsigned int len)
 {
   (void) p_ssl;
   (void) p_buf;
@@ -786,23 +786,23 @@ int ssl_accept(_Ptr<struct vsf_session> p_sess, int fd)
   return -1;
 }
 
-int ssl_data_close(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
+int ssl_data_close(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   (void) p_sess;
   return 1;
 }
 
-void ssl_comm_channel_init(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
+void ssl_comm_channel_init(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   (void) p_sess;
 }
 
-void ssl_comm_channel_set_consumer_context(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
+void ssl_comm_channel_set_consumer_context(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   (void) p_sess;
 }
 
-void ssl_comm_channel_set_producer_context(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
+void ssl_comm_channel_set_producer_context(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   (void) p_sess;
 }

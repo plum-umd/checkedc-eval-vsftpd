@@ -17,11 +17,11 @@ struct mystr_list
 
 void str_list_free(_Ptr<struct mystr_list> p_list);
 
-void str_list_add(struct mystr_list* p_list : itype(_Ptr<struct mystr_list>), _Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_sort_key_str);
+void str_list_add(struct mystr_list *p_list : itype(_Ptr<struct mystr_list>), _Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_sort_key_str);
 void str_list_sort(_Ptr<struct mystr_list> p_list, int reverse);
 
-unsigned int str_list_get_length(const struct mystr_list* p_list : itype(_Ptr<const struct mystr_list>));
-int str_list_contains_str(const struct mystr_list* p_list : itype(_Ptr<const struct mystr_list>), _Ptr<const struct mystr> p_str);
+unsigned int str_list_get_length(const struct mystr_list *p_list : itype(_Ptr<const struct mystr_list>));
+int str_list_contains_str(const struct mystr_list *p_list : itype(_Ptr<const struct mystr_list>), _Ptr<const struct mystr> p_str);
 
 _Ptr<const struct mystr> str_list_get_pstr(_Ptr<const struct mystr_list> p_list, unsigned int indexx);
 

@@ -23,7 +23,7 @@
 #define VSFTP_MAX_VISIT_REMEMBER 100
 #define VSFTP_MAX_MSGFILE_SIZE 4000
 
-void vsf_banner_dir_changed(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>), int ftpcode)
+void vsf_banner_dir_changed(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int ftpcode)
 {
   struct mystr dir_str = INIT_MYSTR;
   /* Do nothing if .message support is off */

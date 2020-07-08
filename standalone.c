@@ -42,7 +42,7 @@ vsf_standalone_main(void)
   s_ipaddr_size = vsf_sysutil_get_ipaddr_size();
   if (tunable_listen && tunable_listen_ipv6)
   {
-    die(((const char *)((const char *)"run two copies of vsftpd for IPv4 and IPv6")));
+    die("run two copies of vsftpd for IPv4 and IPv6");
   }
   if (tunable_background)
   {
@@ -72,14 +72,14 @@ vsf_standalone_main(void)
                                s_ipaddr_size, hash_pid);
   if (tunable_setproctitle_enable)
   {
-    vsf_sysutil_setproctitle(((const char *)((const char *)"LISTENER")));
+    vsf_sysutil_setproctitle("LISTENER");
   }
   vsf_sysutil_install_sighandler(kVSFSysUtilSigCHLD, handle_sigchld, 0, 1);
   vsf_sysutil_install_sighandler(kVSFSysUtilSigHUP, handle_sighup, 0, 1);
   if (tunable_listen)
   {
     struct vsf_sysutil_sockaddr* p_sockaddr = 0;
-    vsf_sysutil_sockaddr_alloc_ipv4(((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_sockaddr)));
+    vsf_sysutil_sockaddr_alloc_ipv4(((struct vsf_sysutil_sockaddr **)&p_sockaddr));
     vsf_sysutil_sockaddr_set_port(p_sockaddr,
                                   (unsigned short) tunable_listen_port);
     if (!tunable_listen_address)
@@ -90,20 +90,20 @@ vsf_standalone_main(void)
     {
       if (!vsf_sysutil_inet_aton(tunable_listen_address, p_sockaddr))
       {
-        die2(((const char *)((const char *)"bad listen_address: ")), tunable_listen_address);
+        die2("bad listen_address: ", tunable_listen_address);
       }
     }
     retval = vsf_sysutil_bind(listen_sock, p_sockaddr);
     vsf_sysutil_free(p_sockaddr);
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die(((const char *)((const char *)"could not bind listening IPv4 socket")));
+      die("could not bind listening IPv4 socket");
     }
   }
   else
   {
     struct vsf_sysutil_sockaddr* p_sockaddr = 0;
-    vsf_sysutil_sockaddr_alloc_ipv6(((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_sockaddr)));
+    vsf_sysutil_sockaddr_alloc_ipv6(((struct vsf_sysutil_sockaddr **)&p_sockaddr));
     vsf_sysutil_sockaddr_set_port(p_sockaddr,
                                   (unsigned short) tunable_listen_port);
     if (!tunable_listen_address6)
@@ -119,7 +119,7 @@ vsf_standalone_main(void)
       str_free(&addr_str);
       if (!p_raw_addr)
       {
-        die2(((const char *)((const char *)"bad listen_address6: ")), tunable_listen_address6);
+        die2("bad listen_address6: ", tunable_listen_address6);
       }
       vsf_sysutil_sockaddr_set_ipv6addr(p_sockaddr, p_raw_addr);
     }
@@ -127,15 +127,15 @@ vsf_standalone_main(void)
     vsf_sysutil_free(p_sockaddr);
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die(((const char *)((const char *)"could not bind listening IPv6 socket")));
+      die("could not bind listening IPv6 socket");
     }
   }
   retval = vsf_sysutil_listen(listen_sock, VSFTP_LISTEN_BACKLOG);
   if (vsf_sysutil_retval_is_error(retval))
   {
-    die(((const char *)((const char *)"could not listen")));
+    die("could not listen");
   }
-  vsf_sysutil_sockaddr_alloc(((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_accept_addr)));
+  vsf_sysutil_sockaddr_alloc(((struct vsf_sysutil_sockaddr **)&p_accept_addr));
   while (1)
   {
     struct vsf_client_launch child_info;
@@ -217,12 +217,12 @@ static void drop_ip_count(void *p_raw_addr)
     (unsigned int*)hash_lookup_entry(s_p_ip_count_hash, p_raw_addr);
   if (!p_count)
   {
-    bug(((const char *)((const char *)"IP address missing from hash")));
+    bug("IP address missing from hash");
   }
   count = *p_count;
   if (!count)
   {
-    bug(((const char *)((const char *)"zero count for IP address")));
+    bug("zero count for IP address");
   }
   count--;
   *p_count = count;

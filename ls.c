@@ -59,7 +59,7 @@ void vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list, _Ptr<struct mystr_
   /* "Normalise" the incoming base directory string by making sure it
    * ends in a '/' if it is nonempty
    */
-  if (!str_equal_text(p_base_dir_str, ((const char *)((const char *)"."))))
+  if (!str_equal_text(p_base_dir_str, "."))
   {
     str_copy(&normalised_base_dir_str, p_base_dir_str);
   }
@@ -128,7 +128,7 @@ void vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list, _Ptr<struct mystr_
        * directory entry may have gone away whilst we read it, so
        * ignore failure to stat
        */
-      int retval = str_lstat(&s_next_path_and_filename_str, ((_Ptr<struct vsf_sysutil_statbuf *> )((struct vsf_sysutil_statbuf **)&s_p_statbuf)));
+      int retval = str_lstat(&s_next_path_and_filename_str, ((struct vsf_sysutil_statbuf **)&s_p_statbuf));
       if (vsf_sysutil_retval_is_error(retval))
       {
         continue;
@@ -145,7 +145,7 @@ void vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list, _Ptr<struct mystr_
         int retval = str_readlink(&s_temp_str, &s_next_path_and_filename_str);
         if (retval == 0 && !str_isempty(&s_temp_str))
         {
-          str_append_text(&s_final_file_str, ((const char *)((const char *)" -> ")));
+          str_append_text(&s_final_file_str, " -> ");
           str_append_str(&s_final_file_str, &s_temp_str);
         }
       }
@@ -172,7 +172,7 @@ void vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list, _Ptr<struct mystr_
           str_append_char(&dirline_str, '@');
         }
       }
-      str_append_text(&dirline_str, ((const char *)((const char *)"\r\n")));
+      str_append_text(&dirline_str, "\r\n");
     }
     /* Add filename into our sorted list - sorting by filename or time. Also,
      * if we are required to, maintain a distinct list of direct
@@ -180,8 +180,8 @@ void vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list, _Ptr<struct mystr_
      */
     {
       static struct mystr s_temp_str;
-      _Ptr<const struct mystr> p_sort_str =   0;
-      _Ptr<const struct mystr> p_sort_subdir_str =   0;
+      _Ptr<const struct mystr> p_sort_str =  0;
+      _Ptr<const struct mystr> p_sort_subdir_str =  0;
       if (!t_option)
       {
         p_sort_str = &s_next_filename_str;
@@ -189,7 +189,7 @@ void vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list, _Ptr<struct mystr_
       else
       {
         str_alloc_text(&s_temp_str,
-                       ((const char *)((const char *)vsf_sysutil_statbuf_get_sortkey_mtime(s_p_statbuf))));
+                       vsf_sysutil_statbuf_get_sortkey_mtime(s_p_statbuf));
         p_sort_str = &s_temp_str;
         p_sort_subdir_str = &s_temp_str;
       }
@@ -241,7 +241,7 @@ int vsf_filename_passes_filter(_Ptr<const struct mystr> p_filename_str, _Ptr<con
     static struct mystr s_match_needed_str;
     /* Locate next special token */
     struct str_locate_result locate_result =
-      str_locate_chars(&filter_remain_str, ((const char *)"*?{"));
+      str_locate_chars(&filter_remain_str, "*?{");
     (*iters)++;
     /* Isolate text leading up to token (if any) - needs to be matched */
     if (locate_result.found)
@@ -360,7 +360,7 @@ static void build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_
   static struct mystr s_tmp_str;
   filesize_t size = vsf_sysutil_statbuf_get_size(p_stat);
   /* Permissions */
-  str_alloc_text(p_str, ((const char *)((const char *)vsf_sysutil_statbuf_get_perms(p_stat))));
+  str_alloc_text(p_str, vsf_sysutil_statbuf_get_perms(p_stat));
   str_append_char(p_str, ' ');
   /* Hard link count */
   str_alloc_ulong(&s_tmp_str, vsf_sysutil_statbuf_get_links(p_stat));
@@ -370,7 +370,7 @@ static void build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_
   /* User */
   if (tunable_hide_ids)
   {
-    str_alloc_text(&s_tmp_str, ((const char *)((const char *)"ftp")));
+    str_alloc_text(&s_tmp_str, "ftp");
   }
   else
   {
@@ -386,7 +386,7 @@ static void build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_
     }
     else
     {
-      str_alloc_text(&s_tmp_str, ((const char *)((const char *)vsf_sysutil_user_getname(p_user))));
+      str_alloc_text(&s_tmp_str, vsf_sysutil_user_getname(p_user));
     }
   }
   str_rpad(&s_tmp_str, 8);
@@ -395,7 +395,7 @@ static void build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_
   /* Group */
   if (tunable_hide_ids)
   {
-    str_alloc_text(&s_tmp_str, ((const char *)((const char *)"ftp")));
+    str_alloc_text(&s_tmp_str, "ftp");
   }
   else
   {
@@ -411,7 +411,7 @@ static void build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_
     }
     else
     {
-      str_alloc_text(&s_tmp_str, ((const char *)((const char *)vsf_sysutil_group_getname(p_group))));
+      str_alloc_text(&s_tmp_str, vsf_sysutil_group_getname(p_group));
     }
   }
   str_rpad(&s_tmp_str, 8);
@@ -423,12 +423,12 @@ static void build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_
   str_append_str(p_str, &s_tmp_str);
   str_append_char(p_str, ' ');
   /* Date stamp */
-  str_append_text(p_str, ((const char *)((const char *)vsf_sysutil_statbuf_get_date(p_stat,
+  str_append_text(p_str, vsf_sysutil_statbuf_get_date(p_stat,
                                                       tunable_use_localtime,
-                                                      curr_time))));
+                                                      curr_time));
   str_append_char(p_str, ' ');
   /* Filename */
   str_append_str(p_str, p_filename_str);
-  str_append_text(p_str, ((const char *)((const char *)"\r\n")));
+  str_append_text(p_str, "\r\n");
 }
 

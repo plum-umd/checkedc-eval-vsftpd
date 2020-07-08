@@ -11,7 +11,7 @@ struct vsf_session;
  * PARAMETERS
  * p_sess       - the current session object
  */
-void priv_sock_init(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
+void priv_sock_init(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 /* priv_sock_close()
  * PURPOSE
@@ -20,7 +20,7 @@ void priv_sock_init(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>)
  * PARAMETERS
  * p_sess       - the current session object
  */
-void priv_sock_close(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
+void priv_sock_close(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 /* priv_sock_set_parent_context()
  * PURPOSE
@@ -29,7 +29,7 @@ void priv_sock_close(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>
  * PARAMETERS
  * p_sess       - the current session object
  */
-void priv_sock_set_parent_context(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
+void priv_sock_set_parent_context(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 /* priv_sock_set_child_context()
  * PURPOSE
@@ -38,7 +38,7 @@ void priv_sock_set_parent_context(struct vsf_session* p_sess : itype(_Ptr<struct
  * PARAMETERS
  * p_sess       - the current session object
  */
-void priv_sock_set_child_context(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
+void priv_sock_set_child_context(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 /* priv_sock_send_cmd()
  * PURPOSE

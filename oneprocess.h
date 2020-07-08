@@ -31,7 +31,7 @@ void vsf_one_process_login(struct vsf_session *p_sess, _Ptr<const struct mystr> 
  * RETURNS
  * The file descriptor of the privileged socket
  */
-int vsf_one_process_get_priv_data_sock(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
+int vsf_one_process_get_priv_data_sock(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 /* vsf_one_process_pasv_cleanup()
  * PURPOSE
@@ -69,7 +69,7 @@ unsigned short vsf_one_process_listen(_Ptr<struct vsf_session> p_sess);
  * RETURNS
  * The file descriptor for the incoming connection.
  */
-int vsf_one_process_get_pasv_fd(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
+int vsf_one_process_get_pasv_fd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 /* vsf_one_process_chown_upload()
  * PURPOSE
@@ -78,7 +78,7 @@ int vsf_one_process_get_pasv_fd(struct vsf_session* p_sess : itype(_Ptr<struct v
  * p_sess       - the current session object
  * fd           - the file descriptor to change ownership on
  */
-void vsf_one_process_chown_upload(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>), int fd);
+void vsf_one_process_chown_upload(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int fd);
 
 #endif /* VSF_ONEPROCESS_H */
 

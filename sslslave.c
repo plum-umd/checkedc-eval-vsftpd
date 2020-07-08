@@ -26,7 +26,7 @@ void ssl_slave(_Ptr<struct vsf_session> p_sess)
   priv_sock_set_parent_context(p_sess);
   if (tunable_setproctitle_enable)
   {
-    vsf_sysutil_setproctitle(((const char *)((const char *)"SSL handler")));
+    vsf_sysutil_setproctitle("SSL handler");
   }
   while (1)
   {
@@ -53,7 +53,7 @@ void ssl_slave(_Ptr<struct vsf_session> p_sess)
       char result = PRIV_SOCK_RESULT_BAD;
       if (p_sess->data_fd != -1 || p_sess->p_data_ssl != 0)
       {
-        bug(((const char *)((const char *)"state not clean")));
+        bug("state not clean");
       }
       p_sess->data_fd = priv_sock_recv_fd(p_sess->ssl_slave_fd);
       ret = ssl_accept(p_sess, p_sess->data_fd);
@@ -73,11 +73,11 @@ void ssl_slave(_Ptr<struct vsf_session> p_sess)
       int size = priv_sock_get_int(p_sess->ssl_slave_fd);
       if (size <= 0 || size > VSFTP_DATA_BUFSIZE)
       {
-        bug(((const char *)((const char *)"bad size")));
+        bug("bad size");
       }
       if (p_sess->data_fd == -1 || p_sess->p_data_ssl == 0)
       {
-        bug(((const char *)((const char *)"invalid state")));
+        bug("invalid state");
       }
       str_trunc(&data_str, (unsigned int) size);
       ret = ssl_read_into_str(p_sess, p_sess->p_data_ssl, &data_str);
@@ -88,7 +88,7 @@ void ssl_slave(_Ptr<struct vsf_session> p_sess)
     {
       if (p_sess->data_fd == -1 || p_sess->p_data_ssl == 0)
       {
-        bug(((const char *)((const char *)"invalid state")));
+        bug("invalid state");
       }
       priv_sock_get_str(p_sess->ssl_slave_fd, &data_str);
       ret = ssl_write(p_sess->p_data_ssl,
@@ -107,7 +107,7 @@ void ssl_slave(_Ptr<struct vsf_session> p_sess)
       {
         if (p_sess->data_fd == -1 || p_sess->p_data_ssl == 0)
         {
-          bug(((const char *)((const char *)"invalid state")));
+          bug("invalid state");
         }
         ret = ssl_data_close(p_sess);
         if (ret == 1)
@@ -121,7 +121,7 @@ void ssl_slave(_Ptr<struct vsf_session> p_sess)
     }
     else
     {
-      die(((const char *)((const char *)"bad request in process_ssl_slave_req")));
+      die("bad request in process_ssl_slave_req");
     }
   }
 }

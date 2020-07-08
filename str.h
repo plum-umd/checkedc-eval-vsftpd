@@ -29,7 +29,7 @@ void str_alloc_alt_term(_Ptr<struct mystr> p_str, const char *p_src, char term);
 void str_alloc_ulong(_Ptr<struct mystr> p_str, unsigned long the_ulong);
 void str_alloc_filesize_t(_Ptr<struct mystr> p_str, filesize_t the_filesize);
 void str_copy(_Ptr<struct mystr> p_dest, _Ptr<const struct mystr> p_src);
-const char* str_strdup(_Ptr<const struct mystr> p_str) : itype(_Ptr<const char>) : itype(_Ptr<const char>);
+const char *str_strdup(_Ptr<const struct mystr> p_str) : itype(_Nt_array_ptr<const char>);
 void str_empty(_Ptr<struct mystr> p_str);
 void str_free(_Ptr<struct mystr> p_str);
 void str_trunc(_Ptr<struct mystr> p_str, unsigned int trunc_len);
@@ -73,7 +73,7 @@ struct str_locate_result str_locate_str(_Ptr<const struct mystr> p_str, _Ptr<con
 struct str_locate_result str_locate_str_reverse(_Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_look_str);
 struct str_locate_result str_locate_text(_Ptr<const struct mystr> p_str, const char *p_text);
 struct str_locate_result str_locate_text_reverse(_Ptr<const struct mystr> p_str, const char *p_text);
-struct str_locate_result str_locate_chars(_Ptr<const struct mystr> p_str, _Array_ptr<const char> p_chars);
+struct str_locate_result str_locate_chars(_Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_chars);
 
 void str_left(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_out, unsigned int chars);
 void str_right(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_out, unsigned int chars);

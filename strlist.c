@@ -47,12 +47,12 @@ void str_list_free(_Ptr<struct mystr_list> p_list)
   }
 }
 
-unsigned int str_list_get_length(const struct mystr_list* p_list : itype(_Ptr<const struct mystr_list>))
+unsigned int str_list_get_length(const struct mystr_list *p_list : itype(_Ptr<const struct mystr_list>))
 {
   return p_list->list_len;
 }
 
-int str_list_contains_str(const struct mystr_list* p_list : itype(_Ptr<const struct mystr_list>), _Ptr<const struct mystr> p_str)
+int str_list_contains_str(const struct mystr_list *p_list : itype(_Ptr<const struct mystr_list>), _Ptr<const struct mystr> p_str)
 {
   unsigned int i;
   for (i=0; i < p_list->list_len; ++i)
@@ -65,7 +65,7 @@ int str_list_contains_str(const struct mystr_list* p_list : itype(_Ptr<const str
   return 0;
 }
 
-void str_list_add(struct mystr_list* p_list : itype(_Ptr<struct mystr_list>), _Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_sort_key_str)
+void str_list_add(struct mystr_list *p_list : itype(_Ptr<struct mystr_list>), _Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_sort_key_str)
 {
   struct mystr_list_node* p_node;
   /* Expand the node allocation if we have to */
@@ -82,7 +82,7 @@ void str_list_add(struct mystr_list* p_list : itype(_Ptr<struct mystr_list>), _P
       p_list->alloc_len *= 2;
       if (p_list->alloc_len > kMaxStrlist)
       {
-        die(((const char *)((const char *)"excessive strlist")));
+        die("excessive strlist");
       }
       p_list->p_nodes = vsf_sysutil_realloc(
           p_list->p_nodes,
@@ -127,8 +127,8 @@ static int sort_compare_func_reverse(const void *p1, const void *p2)
 
 static int sort_compare_common(const void *p1, const void *p2, int reverse)
 {
-  _Ptr<const struct mystr> p_cmp1 =  ((void *)0);
-  _Ptr<const struct mystr> p_cmp2 =  ((void *)0);
+  _Ptr<const struct mystr> p_cmp1 = ((void *)0);
+  _Ptr<const struct mystr> p_cmp2 = ((void *)0);
   const struct mystr_list_node* p_node1 = (const struct mystr_list_node*) p1;
   const struct mystr_list_node* p_node2 = (const struct mystr_list_node*) p2;
   if (!str_isempty(&p_node1->sort_key_str))
@@ -162,7 +162,7 @@ _Ptr<const struct mystr> str_list_get_pstr(_Ptr<const struct mystr_list> p_list,
 {
   if (indexx >= p_list->list_len)
   {
-    bug(((const char *)((const char *)"indexx out of range in str_list_get_str")));
+    bug("indexx out of range in str_list_get_str");
   }
   return &p_list->p_nodes[indexx].str;
 }

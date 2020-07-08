@@ -254,40 +254,40 @@ tunables_load_defaults()
   /* -rw------- */
   tunable_chown_upload_mode = 0600;
 
-  install_str_setting(((const char *)((const char *)"/usr/share/empty")), ((_Ptr<const char *> )((const char **)&tunable_secure_chroot_dir)));
-  install_str_setting(((const char *)((const char *)"ftp")), ((_Ptr<const char *> )((const char **)&tunable_ftp_username)));
-  install_str_setting(((const char *)((const char *)"root")), ((_Ptr<const char *> )((const char **)&tunable_chown_username)));
-  install_str_setting(((const char *)((const char *)"/var/log/xferlog")), ((_Ptr<const char *> )((const char **)&tunable_xferlog_file)));
-  install_str_setting(((const char *)((const char *)"/var/log/vsftpd.log")), ((_Ptr<const char *> )((const char **)&tunable_vsftpd_log_file)));
-  install_str_setting(((const char *)((const char *)".message")), ((_Ptr<const char *> )((const char **)&tunable_message_file)));
-  install_str_setting(((const char *)((const char *)"nobody")), ((_Ptr<const char *> )((const char **)&tunable_nopriv_user)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_ftpd_banner)));
-  install_str_setting(((const char *)((const char *)"/etc/vsftpd.banned_emails")), ((_Ptr<const char *> )((const char **)&tunable_banned_email_file)));
-  install_str_setting(((const char *)((const char *)"/etc/vsftpd.chroot_list")), ((_Ptr<const char *> )((const char **)&tunable_chroot_list_file)));
-  install_str_setting(((const char *)((const char *)"ftp")), ((_Ptr<const char *> )((const char **)&tunable_pam_service_name)));
-  install_str_setting(((const char *)((const char *)"ftp")), ((_Ptr<const char *> )((const char **)&tunable_guest_username)));
-  install_str_setting(((const char *)((const char *)"/etc/vsftpd.user_list")), ((_Ptr<const char *> )((const char **)&tunable_userlist_file)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_anon_root)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_local_root)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_banner_file)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_pasv_address)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_listen_address)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_user_config_dir)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_listen_address6)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_cmds_allowed)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_cmds_denied)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_hide_file)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_deny_file)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_user_sub_token)));
-  install_str_setting(((const char *)((const char *)"/etc/vsftpd.email_passwords")),
-                      ((_Ptr<const char *> )((const char **)&tunable_email_password_file)));
-  install_str_setting(((const char *)((const char *)"/usr/share/ssl/certs/vsftpd.pem")),
-                      ((_Ptr<const char *> )((const char **)&tunable_rsa_cert_file)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_dsa_cert_file)));
-  install_str_setting(((const char *)((const char *)"ECDHE-RSA-AES256-GCM-SHA384")), ((_Ptr<const char *> )((const char **)&tunable_ssl_ciphers)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_rsa_private_key_file)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_dsa_private_key_file)));
-  install_str_setting(0, ((_Ptr<const char *> )((const char **)&tunable_ca_certs_file)));
+  install_str_setting("/usr/share/empty", ((const char **)&tunable_secure_chroot_dir));
+  install_str_setting("ftp", ((const char **)&tunable_ftp_username));
+  install_str_setting("root", ((const char **)&tunable_chown_username));
+  install_str_setting("/var/log/xferlog", ((const char **)&tunable_xferlog_file));
+  install_str_setting("/var/log/vsftpd.log", ((const char **)&tunable_vsftpd_log_file));
+  install_str_setting(".message", ((const char **)&tunable_message_file));
+  install_str_setting("nobody", ((const char **)&tunable_nopriv_user));
+  install_str_setting(0, ((const char **)&tunable_ftpd_banner));
+  install_str_setting("/etc/vsftpd.banned_emails", ((const char **)&tunable_banned_email_file));
+  install_str_setting("/etc/vsftpd.chroot_list", ((const char **)&tunable_chroot_list_file));
+  install_str_setting("ftp", ((const char **)&tunable_pam_service_name));
+  install_str_setting("ftp", ((const char **)&tunable_guest_username));
+  install_str_setting("/etc/vsftpd.user_list", ((const char **)&tunable_userlist_file));
+  install_str_setting(0, ((const char **)&tunable_anon_root));
+  install_str_setting(0, ((const char **)&tunable_local_root));
+  install_str_setting(0, ((const char **)&tunable_banner_file));
+  install_str_setting(0, ((const char **)&tunable_pasv_address));
+  install_str_setting(0, ((const char **)&tunable_listen_address));
+  install_str_setting(0, ((const char **)&tunable_user_config_dir));
+  install_str_setting(0, ((const char **)&tunable_listen_address6));
+  install_str_setting(0, ((const char **)&tunable_cmds_allowed));
+  install_str_setting(0, ((const char **)&tunable_cmds_denied));
+  install_str_setting(0, ((const char **)&tunable_hide_file));
+  install_str_setting(0, ((const char **)&tunable_deny_file));
+  install_str_setting(0, ((const char **)&tunable_user_sub_token));
+  install_str_setting("/etc/vsftpd.email_passwords",
+                      ((const char **)&tunable_email_password_file));
+  install_str_setting("/usr/share/ssl/certs/vsftpd.pem",
+                      ((const char **)&tunable_rsa_cert_file));
+  install_str_setting(0, ((const char **)&tunable_dsa_cert_file));
+  install_str_setting("ECDHE-RSA-AES256-GCM-SHA384", ((const char **)&tunable_ssl_ciphers));
+  install_str_setting(0, ((const char **)&tunable_rsa_private_key_file));
+  install_str_setting(0, ((const char **)&tunable_dsa_private_key_file));
+  install_str_setting(0, ((const char **)&tunable_ca_certs_file));
 }
 
 void install_str_setting(const char *p_value, _Ptr<const char*> p_storage)

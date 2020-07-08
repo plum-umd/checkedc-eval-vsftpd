@@ -1,5 +1,5 @@
 CCONV=~/checkedc-clang/build/bin/cconv-standalone
-INCUDES=~/checkedc/include/
+INCLUDES=~/checkedc/include
 BASEDIR=.
 
 # -dump-stats \
@@ -7,7 +7,8 @@ BASEDIR=.
 
 CPATH=$INCLUDES $CCONV \
 -output-postfix=checked \
--alltypes \-extra-arg-before=-D_FORTIFY_SOURCE=2 \
+-alltypes \
+-extra-arg-before=-D_FORTIFY_SOURCE=2 \
 -extra-arg-before=-w \
 -base-dir="$BASEDIR" \
 $BASEDIR/ftpdataio.c \

@@ -27,7 +27,7 @@ const unsigned char * vsf_sysutil_parse_ipv6(_Ptr<const struct mystr> p_str)
   str_empty(&s_ret);
   str_empty(&s_rhs_ret);
   str_copy(&s_lhs_str, p_str);
-  str_split_text(&s_lhs_str, &s_rhs_str, ((const char *)((const char *)"::")));
+  str_split_text(&s_lhs_str, &s_rhs_str, "::");
   if (!ipv6_parse_main(&s_ret, &s_lhs_str))
   {
     return 0;
@@ -54,13 +54,13 @@ const unsigned char * vsf_sysutil_parse_ipv6(_Ptr<const struct mystr> p_str)
   return (const unsigned char*) str_getbuf(&s_ret);
 }
 
-const unsigned char *vsf_sysutil_parse_ipv4(_Ptr<const struct mystr> p_str) : itype(_Array_ptr<const unsigned char>)
+const unsigned char *vsf_sysutil_parse_ipv4(_Ptr<const struct mystr> p_str) : itype(_Ptr<const unsigned char>)
 {
   static unsigned char items _Checked[4];
   return vsf_sysutil_parse_uchar_string_sep(p_str, '.', items, sizeof(items));
 }
 
-_Array_ptr<const unsigned char> vsf_sysutil_parse_uchar_string_sep(_Ptr<const struct mystr> p_str, char sep, unsigned char *p_items : itype(_Array_ptr<unsigned char>) count(items), unsigned int items)
+_Ptr<const unsigned char> vsf_sysutil_parse_uchar_string_sep(_Ptr<const struct mystr> p_str, char sep, unsigned char *p_items : itype(_Array_ptr<unsigned char>) count(items), unsigned int items)
 {
   static struct mystr s_tmp_str;
   unsigned int i;

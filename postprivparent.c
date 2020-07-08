@@ -32,7 +32,7 @@ static void cmd_process_pasv_active(_Ptr<struct vsf_session> p_sess);
 static void cmd_process_pasv_listen(_Ptr<struct vsf_session> p_sess);
 static void cmd_process_pasv_accept(_Ptr<struct vsf_session> p_sess);
 
-void vsf_priv_parent_postlogin(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
+void vsf_priv_parent_postlogin(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   minimize_privilege(p_sess);
   /* We're still here... */
@@ -73,7 +73,7 @@ static void process_post_login_req(_Ptr<struct vsf_session> p_sess)
   }
   else
   {
-    die(((const char *)((const char *)"bad request in process_post_login_req")));
+    die("bad request in process_post_login_req");
   }
 }
 

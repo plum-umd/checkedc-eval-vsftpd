@@ -35,11 +35,11 @@ int vsf_privop_get_ftp_port_sock(_Ptr<struct vsf_session> p_sess, unsigned short
   unsigned short port = 0;
   if (p_sess->pasv_listen_fd != -1)
   {
-    die(((const char *)((const char *)"listed fd is active?")));
+    die("listed fd is active?");
   }
   if (vsf_sysutil_is_port_reserved(remote_port))
   {
-    die(((const char *)((const char *)"Illegal port request")));
+    die("Illegal port request");
   }
   if (tunable_connect_from_port_20)
   {
@@ -52,7 +52,7 @@ int vsf_privop_get_ftp_port_sock(_Ptr<struct vsf_session> p_sess, unsigned short
   for (i = 0; i < 2; ++i)
   {
     double sleep_for;
-    vsf_sysutil_sockaddr_clone(((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_sockaddr)), p_sess->p_local_addr);
+    vsf_sysutil_sockaddr_clone(((struct vsf_sysutil_sockaddr **)&p_sockaddr), p_sess->p_local_addr);
     vsf_sysutil_sockaddr_set_port(p_sockaddr, port);
     retval = vsf_sysutil_bind(s, p_sockaddr);
     if (retval == 0)
@@ -61,7 +61,7 @@ int vsf_privop_get_ftp_port_sock(_Ptr<struct vsf_session> p_sess, unsigned short
     }
     if (vsf_sysutil_get_error() != kVSFSysUtilErrADDRINUSE || i == 1)
     {
-      die(((const char *)((const char *)"vsf_sysutil_bind")));
+      die("vsf_sysutil_bind");
     }
     sleep_for = vsf_sysutil_get_random_byte();
     sleep_for /= 256.0;
@@ -116,7 +116,7 @@ unsigned short vsf_privop_pasv_listen(_Ptr<struct vsf_session> p_sess)
   int is_ipv6 = vsf_sysutil_sockaddr_is_ipv6(p_sess->p_local_addr);
   if (p_sess->pasv_listen_fd != -1)
   {
-    die(((const char *)((const char *)"listed fd already active")));
+    die("listed fd already active");
   }
 
   if (tunable_pasv_min_port > min_port && tunable_pasv_min_port <= max_port)
@@ -148,7 +148,7 @@ unsigned short vsf_privop_pasv_listen(_Ptr<struct vsf_session> p_sess)
       p_sess->pasv_listen_fd = vsf_sysutil_get_ipv4_sock();
     }
     vsf_sysutil_activate_reuseaddr(p_sess->pasv_listen_fd);
-    vsf_sysutil_sockaddr_clone(((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&s_p_sockaddr)), p_sess->p_local_addr);
+    vsf_sysutil_sockaddr_clone(((struct vsf_sysutil_sockaddr **)&s_p_sockaddr), p_sess->p_local_addr);
     vsf_sysutil_sockaddr_set_port(s_p_sockaddr, the_port);
     retval = vsf_sysutil_bind(p_sess->pasv_listen_fd, s_p_sockaddr);
     if (!vsf_sysutil_retval_is_error(retval))
@@ -167,11 +167,11 @@ unsigned short vsf_privop_pasv_listen(_Ptr<struct vsf_session> p_sess)
       p_sess->pasv_listen_fd = -1;
       continue;
     }
-    die(((const char *)((const char *)"vsf_sysutil_bind / listen")));
+    die("vsf_sysutil_bind / listen");
   }
   if (!bind_retries)
   {
-    die(((const char *)((const char *)"vsf_sysutil_bind")));
+    die("vsf_sysutil_bind");
   }
   return the_port;
 }
@@ -182,14 +182,14 @@ int vsf_privop_accept_pasv(_Ptr<struct vsf_session> p_sess)
   int remote_fd;
   if (p_sess->pasv_listen_fd == -1)
   {
-    die(((const char *)((const char *)"listed fd not active")));
+    die("listed fd not active");
   }
-  vsf_sysutil_sockaddr_alloc(((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_accept_addr)));
+  vsf_sysutil_sockaddr_alloc(((struct vsf_sysutil_sockaddr **)&p_accept_addr));
   remote_fd = vsf_sysutil_accept_timeout(p_sess->pasv_listen_fd, p_accept_addr,
                                          tunable_accept_timeout);
   if (vsf_sysutil_retval_is_error(remote_fd))
   {
-    vsf_sysutil_sockaddr_clear(((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_accept_addr)));
+    vsf_sysutil_sockaddr_clear(((struct vsf_sysutil_sockaddr **)&p_accept_addr));
     return -1;
   }
   /* SECURITY:
@@ -201,18 +201,18 @@ int vsf_privop_accept_pasv(_Ptr<struct vsf_session> p_sess)
     if (!vsf_sysutil_sockaddr_addr_equal(p_sess->p_remote_addr, p_accept_addr))
     {
       vsf_sysutil_close(remote_fd);
-      vsf_sysutil_sockaddr_clear(((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_accept_addr)));
+      vsf_sysutil_sockaddr_clear(((struct vsf_sysutil_sockaddr **)&p_accept_addr));
       return -2;
     }
   }
-  vsf_sysutil_sockaddr_clear(((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_accept_addr)));
+  vsf_sysutil_sockaddr_clear(((struct vsf_sysutil_sockaddr **)&p_accept_addr));
   return remote_fd;
 }
 
 void vsf_privop_do_file_chown(_Ptr<struct vsf_session> p_sess, int fd)
 {
   static struct vsf_sysutil_statbuf* s_p_statbuf;
-  vsf_sysutil_fstat(fd, ((_Ptr<struct vsf_sysutil_statbuf *> )((struct vsf_sysutil_statbuf **)&s_p_statbuf)));
+  vsf_sysutil_fstat(fd, ((struct vsf_sysutil_statbuf **)&s_p_statbuf));
   /* Do nothing if it is already owned by the desired user. */
   if (vsf_sysutil_statbuf_get_uid(s_p_statbuf) ==
       p_sess->anon_upload_chown_uid)
@@ -227,7 +227,7 @@ void vsf_privop_do_file_chown(_Ptr<struct vsf_session> p_sess, int fd)
       (vsf_sysutil_statbuf_get_uid(s_p_statbuf) != p_sess->anon_ftp_uid &&
        vsf_sysutil_statbuf_get_uid(s_p_statbuf) != p_sess->guest_user_uid))
   {
-    die(((const char *)((const char *)"invalid fd in cmd_process_chown")));
+    die("invalid fd in cmd_process_chown");
   }
   /* SECURITY! You need an OS which strips SUID/SGID bits on chown(),
    * otherwise a compromise of the FTP user will lead to compromise of
@@ -236,7 +236,7 @@ void vsf_privop_do_file_chown(_Ptr<struct vsf_session> p_sess, int fd)
   vsf_sysutil_fchown(fd, p_sess->anon_upload_chown_uid, -1);
 }
 
-enum EVSFPrivopLoginResult vsf_privop_do_login(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>), _Ptr<const struct mystr> p_pass_str)
+enum EVSFPrivopLoginResult vsf_privop_do_login(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), _Ptr<const struct mystr> p_pass_str)
 {
   enum EVSFPrivopLoginResult result =
     handle_login(p_sess, &p_sess->user_str, p_pass_str);
@@ -298,8 +298,8 @@ static enum EVSFPrivopLoginResult handle_login(_Ptr<struct vsf_session> p_sess, 
     struct mystr upper_str = INIT_MYSTR;
     str_copy(&upper_str, p_user_str);
     str_upper(&upper_str);
-    if (str_equal_text(&upper_str, ((const char *)((const char *)"FTP"))) ||
-        str_equal_text(&upper_str, ((const char *)((const char *)"ANONYMOUS"))))
+    if (str_equal_text(&upper_str, "FTP") ||
+        str_equal_text(&upper_str, "ANONYMOUS"))
     {
       anonymous_login = 1;
     }
@@ -315,7 +315,7 @@ static enum EVSFPrivopLoginResult handle_login(_Ptr<struct vsf_session> p_sess, 
     {
       if (!tunable_local_enable)
       {
-        die(((const char *)((const char *)"unexpected local login in handle_login")));
+        die("unexpected local login in handle_login");
       }
       result = handle_local_login(p_sess, p_user_str, p_pass_str);
     }
@@ -340,7 +340,7 @@ static enum EVSFPrivopLoginResult handle_anonymous_login(_Ptr<struct vsf_session
   str_copy(&p_sess->anon_pass_str, p_pass_str);
   if (str_isempty(&p_sess->anon_pass_str))
   {
-    str_alloc_text(&p_sess->anon_pass_str, ((const char *)((const char *)"?")));
+    str_alloc_text(&p_sess->anon_pass_str, "?");
   }
   /* "Fix" any characters which might upset the log processing */
   str_replace_char(&p_sess->anon_pass_str, ' ', '_');

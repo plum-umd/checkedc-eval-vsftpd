@@ -47,11 +47,11 @@ static void handle_sigchld(void *duff)
    */
   if (vsf_sysutil_retval_is_error(vsf_sysutil_wait_get_retval(&wait_retval)))
   {
-    die(((const char *)((const char *)"waiting for child")));
+    die("waiting for child");
   }
   else if (!vsf_sysutil_wait_exited_normally(&wait_retval))
   {
-    die(((const char *)((const char *)"child died")));
+    die("child died");
   }
   vsf_sysutil_exit(0);
 }
@@ -123,7 +123,7 @@ void vsf_two_process_start(struct vsf_session *p_sess)
     }
     if (vsf_sysutil_retval_is_error(retval))
     {
-      die2(((const char *)((const char *)"cannot read user list file:")), tunable_userlist_file);
+      die2("cannot read user list file:", tunable_userlist_file);
     }
   }
   drop_all_privs();
@@ -158,9 +158,9 @@ drop_all_privs(void)
   /* Be kind: give good error message if the secure dir is missing */
   {
     struct vsf_sysutil_statbuf* p_statbuf = 0;
-    if (vsf_sysutil_retval_is_error(str_lstat(&dir_str, ((_Ptr<struct vsf_sysutil_statbuf *> )((struct vsf_sysutil_statbuf **)&p_statbuf)))))
+    if (vsf_sysutil_retval_is_error(str_lstat(&dir_str, ((struct vsf_sysutil_statbuf **)&p_statbuf))))
     {
-      die2(((const char *)((const char *)"vsftpd: not found: directory given in 'secure_chroot_dir':")),
+      die2("vsftpd: not found: directory given in 'secure_chroot_dir':",
            tunable_secure_chroot_dir);
     }
     vsf_sysutil_free(p_statbuf);
@@ -170,7 +170,7 @@ drop_all_privs(void)
   str_free(&dir_str);
 }
 
-void vsf_two_process_login(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>), _Ptr<const struct mystr> p_pass_str)
+void vsf_two_process_login(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), _Ptr<const struct mystr> p_pass_str)
 {
   char result;
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_LOGIN);
@@ -202,11 +202,11 @@ void vsf_two_process_login(struct vsf_session* p_sess : itype(_Ptr<struct vsf_se
   }
   else
   {
-    die(((const char *)((const char *)"priv_sock_get_result")));
+    die("priv_sock_get_result");
   }
 }
 
-int vsf_two_process_get_priv_data_sock(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
+int vsf_two_process_get_priv_data_sock(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   char res;
   unsigned short port = vsf_sysutil_sockaddr_get_port(p_sess->p_port_sockaddr);
@@ -219,7 +219,7 @@ int vsf_two_process_get_priv_data_sock(struct vsf_session* p_sess : itype(_Ptr<s
   }
   else if (res != PRIV_SOCK_RESULT_OK)
   {
-    die(((const char *)((const char *)"could not get privileged socket")));
+    die("could not get privileged socket");
   }
   return priv_sock_recv_fd(p_sess->child_fd);
 }
@@ -231,7 +231,7 @@ void vsf_two_process_pasv_cleanup(_Ptr<struct vsf_session> p_sess)
   res = priv_sock_get_result(p_sess->child_fd);
   if (res != PRIV_SOCK_RESULT_OK)
   {
-    die(((const char *)((const char *)"could not clean up socket")));
+    die("could not clean up socket");
   }
 }
 
@@ -247,7 +247,7 @@ unsigned short vsf_two_process_listen(_Ptr<struct vsf_session> p_sess)
   return (unsigned short) priv_sock_get_int(p_sess->child_fd);
 }
 
-int vsf_two_process_get_pasv_fd(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
+int vsf_two_process_get_pasv_fd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   char res;
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_PASV_ACCEPT);
@@ -258,12 +258,12 @@ int vsf_two_process_get_pasv_fd(struct vsf_session* p_sess : itype(_Ptr<struct v
   }
   else if (res != PRIV_SOCK_RESULT_OK)
   {
-    die(((const char *)((const char *)"could not accept on listening socket")));
+    die("could not accept on listening socket");
   }
   return priv_sock_recv_fd(p_sess->child_fd);
 }
 
-void vsf_two_process_chown_upload(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>), int fd)
+void vsf_two_process_chown_upload(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int fd)
 {
   char res;
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_CHOWN);
@@ -271,7 +271,7 @@ void vsf_two_process_chown_upload(struct vsf_session* p_sess : itype(_Ptr<struct
   res = priv_sock_get_result(p_sess->child_fd);
   if (res != PRIV_SOCK_RESULT_OK)
   {
-    die(((const char *)((const char *)"unexpected failure in vsf_two_process_chown_upload")));
+    die("unexpected failure in vsf_two_process_chown_upload");
   }
 }
 
@@ -283,7 +283,7 @@ static void process_login_req(struct vsf_session *p_sess)
   cmd = priv_sock_get_cmd(p_sess->parent_fd);
   if (cmd != PRIV_SOCK_LOGIN)
   {
-    die(((const char *)((const char *)"bad request")));
+    die("bad request");
   }
   /* Get username and password - we must distrust these */
   {
@@ -332,7 +332,7 @@ static void process_login_req(struct vsf_session *p_sess)
           }
           if (vsf_sysutil_retval_is_error(retval))
           {
-            die2(((const char *)((const char *)"could not read chroot() list file:")),
+            die2("could not read chroot() list file:",
                  tunable_chroot_list_file);
           }
           if (str_contains_line(&chroot_list_file, &p_sess->user_str))
@@ -354,7 +354,7 @@ static void process_login_req(struct vsf_session *p_sess)
     case kVSFLoginNull:
       /* Fall through */
     default:
-      bug(((const char *)((const char *)"weird state in process_login_request")));
+      bug("weird state in process_login_request");
       break;
   }
   /* NOTREACHED */
@@ -363,7 +363,7 @@ static void process_login_req(struct vsf_session *p_sess)
 static void common_do_login(struct vsf_session *p_sess, _Ptr<const struct mystr> p_user_str, int do_chroot, int anon)
 {
   int was_anon = anon;
-  _Ptr<const struct mystr> p_orig_user_str =   p_user_str;
+  _Ptr<const struct mystr> p_orig_user_str =  p_user_str;
   int newpid;
   vsf_sysutil_install_null_sighandler(kVSFSysUtilSigCHLD);
   /* Tells the pre-login child all is OK (it may exit in response) */
@@ -450,7 +450,7 @@ static void common_do_login(struct vsf_session *p_sess, _Ptr<const struct mystr>
     seccomp_sandbox_setup_postlogin(p_sess);
     seccomp_sandbox_lockdown();
     process_post_login(p_sess);
-    bug(((const char *)((const char *)"should not get here: common_do_login")));
+    bug("should not get here: common_do_login");
   }
   /* Parent */
   priv_sock_set_parent_context(p_sess);
@@ -460,7 +460,7 @@ static void common_do_login(struct vsf_session *p_sess, _Ptr<const struct mystr>
   }
   /* The seccomp sandbox lockdown for the priv parent is done inside here */
   vsf_priv_parent_postlogin(p_sess);
-  bug(((const char *)((const char *)"should not get here in common_do_login")));
+  bug("should not get here in common_do_login");
 }
 
 static void handle_per_user_config(_Ptr<const struct mystr> p_user_str)
@@ -482,15 +482,15 @@ static void handle_per_user_config(_Ptr<const struct mystr> p_user_str)
   str_alloc_text(&filename_str, tunable_user_config_dir);
   str_append_char(&filename_str, '/');
   str_append_str(&filename_str, p_user_str);
-  retval = str_stat(&filename_str, ((_Ptr<struct vsf_sysutil_statbuf *> )((struct vsf_sysutil_statbuf **)&p_statbuf)));
+  retval = str_stat(&filename_str, ((struct vsf_sysutil_statbuf **)&p_statbuf));
   if (!vsf_sysutil_retval_is_error(retval))
   {
     /* Security - file ownership check now in vsf_parseconf_load_file() */
-    vsf_parseconf_load_file(((const char *)((const char *)str_getbuf(&filename_str))), 1);
+    vsf_parseconf_load_file(str_getbuf(&filename_str), 1);
   }
   else if (vsf_sysutil_get_error() != kVSFSysUtilErrNOENT)
   {
-    die(((const char *)((const char *)"error opening per-user config file")));
+    die("error opening per-user config file");
   }
   str_free(&filename_str);
   vsf_sysutil_free(p_statbuf);
@@ -503,13 +503,13 @@ static void calculate_chdir_dir(int anon_login, _Ptr<struct mystr> p_userdir_str
     const struct vsf_sysutil_user* p_user = str_getpwnam(p_user_str);
     if (p_user == 0)
     {
-      die2(((const char *)((const char *)"cannot locate user entry:")), ((const char *)((const char *)str_getbuf(p_user_str))));
+      die2("cannot locate user entry:", str_getbuf(p_user_str));
     }
-    str_alloc_text(p_userdir_str, ((const char *)((const char *)vsf_sysutil_user_get_homedir(p_user))));
+    str_alloc_text(p_userdir_str, vsf_sysutil_user_get_homedir(p_user));
     if (tunable_user_sub_token)
     {
       str_replace_text(p_userdir_str, tunable_user_sub_token,
-                       ((const char *)((const char *)str_getbuf(p_orig_user_str))));
+                       str_getbuf(p_orig_user_str));
     }
   }
   if (anon_login && tunable_anon_root)
@@ -522,7 +522,7 @@ static void calculate_chdir_dir(int anon_login, _Ptr<struct mystr> p_userdir_str
     if (tunable_user_sub_token)
     {
       str_replace_text(p_chroot_str, tunable_user_sub_token,
-                       ((const char *)((const char *)str_getbuf(p_orig_user_str))));
+                       str_getbuf(p_orig_user_str));
     }
   }
   /* If enabled, the chroot() location embedded in the HOMEDIR takes
@@ -531,10 +531,10 @@ static void calculate_chdir_dir(int anon_login, _Ptr<struct mystr> p_userdir_str
   if (!anon_login && tunable_passwd_chroot_enable)
   {
     struct str_locate_result loc_result;
-    loc_result = str_locate_text(p_userdir_str, ((const char *)((const char *)"/./")));
+    loc_result = str_locate_text(p_userdir_str, "/./");
     if (loc_result.found)
     {
-      str_split_text(p_userdir_str, p_chdir_str, ((const char *)((const char *)"/./")));
+      str_split_text(p_userdir_str, p_chdir_str, "/./");
       str_copy(p_chroot_str, p_userdir_str);
     }
   }

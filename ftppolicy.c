@@ -230,7 +230,7 @@ static int connect_validator(_Ptr<struct pt_sandbox> p_sandbox, void *p_arg)
   if (expected_family == AF_INET)
   {
     struct sockaddr_in* p_sockaddr_in = (struct sockaddr_in*) p_sockaddr;
-    vsf_sysutil_sockaddr_alloc_ipv4(((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_sockptr)));
+    vsf_sysutil_sockaddr_alloc_ipv4(((struct vsf_sysutil_sockaddr **)&p_sockptr));
     vsf_sysutil_sockaddr_set_ipv4addr(p_sockptr,
                                       (const unsigned char*)
                                           &p_sockaddr_in->sin_addr);
@@ -238,7 +238,7 @@ static int connect_validator(_Ptr<struct pt_sandbox> p_sandbox, void *p_arg)
   else
   {
     struct sockaddr_in6* p_sockaddr_in6 = (struct sockaddr_in6*) p_sockaddr;
-    vsf_sysutil_sockaddr_alloc_ipv6(((_Ptr<struct vsf_sysutil_sockaddr *> )((struct vsf_sysutil_sockaddr **)&p_sockptr)));
+    vsf_sysutil_sockaddr_alloc_ipv6(((struct vsf_sysutil_sockaddr **)&p_sockptr));
     vsf_sysutil_sockaddr_set_ipv6addr(p_sockptr,
                                       (const unsigned char*)
                                           &p_sockaddr_in6->sin6_addr);

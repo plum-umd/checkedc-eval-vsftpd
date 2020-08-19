@@ -29,56 +29,53 @@
 #include "opts.h"
 
 /* Private local functions */
-static void handle_pwd(struct vsf_session* p_sess);
-static void handle_cwd(struct vsf_session* p_sess);
-static void handle_pasv(struct vsf_session* p_sess, int is_epsv);
+static void handle_pwd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void handle_cwd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void handle_pasv(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int is_epsv);
 static void handle_retr(struct vsf_session* p_sess, int is_http);
-static void handle_cdup(struct vsf_session* p_sess);
+static void handle_cdup(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_list(struct vsf_session* p_sess);
-static void handle_type(struct vsf_session* p_sess);
-static void handle_port(struct vsf_session* p_sess);
+static void handle_type(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void handle_port(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_stor(struct vsf_session* p_sess);
-static void handle_mkd(struct vsf_session* p_sess);
-static void handle_rmd(struct vsf_session* p_sess);
-static void handle_dele(struct vsf_session* p_sess);
-static void handle_rest(struct vsf_session* p_sess);
-static void handle_rnfr(struct vsf_session* p_sess);
-static void handle_rnto(struct vsf_session* p_sess);
+static void handle_mkd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void handle_rmd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void handle_dele(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void handle_rest(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void handle_rnfr(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void handle_rnto(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_nlst(struct vsf_session* p_sess);
-static void handle_size(struct vsf_session* p_sess);
-static void handle_site(struct vsf_session* p_sess);
+static void handle_size(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void handle_site(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_appe(struct vsf_session* p_sess);
-static void handle_mdtm(struct vsf_session* p_sess);
-static void handle_site_chmod(struct vsf_session* p_sess,
-                              struct mystr* p_arg_str);
-static void handle_site_umask(struct vsf_session* p_sess,
-                              struct mystr* p_arg_str);
-static void handle_eprt(struct vsf_session* p_sess);
-static void handle_help(struct vsf_session* p_sess);
+static void handle_mdtm(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void handle_site_chmod(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_arg_str);
+static void handle_site_umask(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_arg_str);
+static void handle_eprt(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void handle_help(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_stou(struct vsf_session* p_sess);
-static void handle_stat(struct vsf_session* p_sess);
+static void handle_stat(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_stat_file(struct vsf_session* p_sess);
-static void handle_logged_in_user(struct vsf_session* p_sess);
-static void handle_logged_in_pass(struct vsf_session* p_sess);
+static void handle_logged_in_user(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void handle_logged_in_pass(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_http(struct vsf_session* p_sess);
 
-static int pasv_active(struct vsf_session* p_sess);
-static int port_active(struct vsf_session* p_sess);
-static void pasv_cleanup(struct vsf_session* p_sess);
-static void port_cleanup(struct vsf_session* p_sess);
+static int pasv_active(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static int port_active(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void pasv_cleanup(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void port_cleanup(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_dir_common(struct vsf_session* p_sess, int full_details,
                               int stat_cmd);
-static void prepend_path_to_filename(struct mystr* p_str);
+static void prepend_path_to_filename(_Ptr<struct mystr> p_str);
 static int get_remote_transfer_fd(struct vsf_session* p_sess,
                                   const char* p_status_msg);
-static void check_abor(struct vsf_session* p_sess);
+static void check_abor(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_sigurg(void* p_private);
 static void handle_upload_common(struct vsf_session* p_sess, int is_append,
                                  int is_unique);
-static void get_unique_filename(struct mystr* p_outstr,
-                                const struct mystr* p_base);
-static int data_transfer_checks_ok(struct vsf_session* p_sess);
-static void resolve_tilde(struct mystr* p_str, struct vsf_session* p_sess);
+static void get_unique_filename(_Ptr<struct mystr> p_outstr, _Ptr<const struct mystr> p_base_str);
+static int data_transfer_checks_ok(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void resolve_tilde(_Ptr<struct mystr> p_str, struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 void
 process_post_login(struct vsf_session* p_sess)
@@ -464,8 +461,7 @@ process_post_login(struct vsf_session* p_sess)
   }
 }
 
-static void
-handle_pwd(struct vsf_session* p_sess)
+static void handle_pwd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   static struct mystr s_cwd_buf_mangle_str;
   static struct mystr s_pwd_res_str;
@@ -479,8 +475,7 @@ handle_pwd(struct vsf_session* p_sess)
   vsf_cmdio_write_str(p_sess, FTP_PWDOK, &s_pwd_res_str);
 }
 
-static void
-handle_cwd(struct vsf_session* p_sess)
+static void handle_cwd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   int retval;
   resolve_tilde(&p_sess->ftp_arg_str, p_sess);
@@ -502,15 +497,13 @@ handle_cwd(struct vsf_session* p_sess)
   }
 }
 
-static void
-handle_cdup(struct vsf_session* p_sess)
+static void handle_cdup(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   str_alloc_text(&p_sess->ftp_arg_str, "..");
   handle_cwd(p_sess);
 }
 
-static int
-port_active(struct vsf_session* p_sess)
+static int port_active(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   int ret = 0;
   if (p_sess->p_port_sockaddr != 0)
@@ -524,8 +517,7 @@ port_active(struct vsf_session* p_sess)
   return ret;
 }
 
-static int
-pasv_active(struct vsf_session* p_sess)
+static int pasv_active(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   int ret = 0;
   if (tunable_one_process_model)
@@ -546,14 +538,12 @@ pasv_active(struct vsf_session* p_sess)
   return ret;
 }
 
-static void
-port_cleanup(struct vsf_session* p_sess)
+static void port_cleanup(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
-  vsf_sysutil_sockaddr_clear(&p_sess->p_port_sockaddr);
+  vsf_sysutil_sockaddr_clear(((struct vsf_sysutil_sockaddr **)&p_sess->p_port_sockaddr));
 }
 
-static void
-pasv_cleanup(struct vsf_session* p_sess)
+static void pasv_cleanup(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   if (tunable_one_process_model)
   {
@@ -565,8 +555,7 @@ pasv_cleanup(struct vsf_session* p_sess)
   }
 }
 
-static void
-handle_pasv(struct vsf_session* p_sess, int is_epsv)
+static void handle_pasv(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int is_epsv)
 {
   unsigned short the_port;
   static struct mystr s_pasv_res_str;
@@ -609,7 +598,7 @@ handle_pasv(struct vsf_session* p_sess, int is_epsv)
   }
   if (tunable_pasv_address != 0)
   {
-    vsf_sysutil_sockaddr_alloc_ipv4(&s_p_sockaddr);
+    vsf_sysutil_sockaddr_alloc_ipv4(((struct vsf_sysutil_sockaddr **)&s_p_sockaddr));
     /* Report passive address as specified in configuration */
     if (vsf_sysutil_inet_aton(tunable_pasv_address, s_p_sockaddr) == 0)
     {
@@ -618,7 +607,7 @@ handle_pasv(struct vsf_session* p_sess, int is_epsv)
   }
   else
   {
-    vsf_sysutil_sockaddr_clone(&s_p_sockaddr, p_sess->p_local_addr);
+    vsf_sysutil_sockaddr_clone(((struct vsf_sysutil_sockaddr **)&s_p_sockaddr), p_sess->p_local_addr);
   }
   str_alloc_text(&s_pasv_res_str, "Entering Passive Mode (");
   if (!is_ipv6)
@@ -687,7 +676,7 @@ handle_retr(struct vsf_session* p_sess, int is_http)
   {
     vsf_sysutil_lock_file_read(opened_file);
   }
-  vsf_sysutil_fstat(opened_file, &s_p_statbuf);
+  vsf_sysutil_fstat(opened_file, ((struct vsf_sysutil_statbuf **)&s_p_statbuf));
   /* No games please */
   if (!vsf_sysutil_statbuf_is_regfile(s_p_statbuf))
   {
@@ -892,7 +881,7 @@ handle_dir_common(struct vsf_session* p_sess, int full_details, int stat_cmd)
   }
   if (p_sess->is_anonymous && p_dir && tunable_anon_world_readable_only)
   {
-    vsf_sysutil_dir_stat(p_dir, &s_p_dirstat);
+    vsf_sysutil_dir_stat(p_dir, ((struct vsf_sysutil_statbuf **)&s_p_dirstat));
     if (!vsf_sysutil_statbuf_is_readable_other(s_p_dirstat))
     {
       dir_allow_read = 0;
@@ -945,8 +934,7 @@ dir_close_out:
   }
 }
 
-static void
-handle_type(struct vsf_session* p_sess)
+static void handle_type(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   str_upper(&p_sess->ftp_arg_str);
   if (str_equal_text(&p_sess->ftp_arg_str, "I") ||
@@ -968,12 +956,11 @@ handle_type(struct vsf_session* p_sess)
   }
 }
 
-static void
-handle_port(struct vsf_session* p_sess)
+static void handle_port(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   unsigned short the_port;
   unsigned char vals[6];
-  const unsigned char* p_raw;
+  _Ptr<const unsigned char> p_raw = ((void *)0);
   pasv_cleanup(p_sess);
   port_cleanup(p_sess);
   p_raw = vsf_sysutil_parse_uchar_string_sep(&p_sess->ftp_arg_str, ',', vals,
@@ -984,7 +971,7 @@ handle_port(struct vsf_session* p_sess)
     return;
   }
   the_port = (unsigned short) ((vals[4] << 8) | vals[5]);
-  vsf_sysutil_sockaddr_clone(&p_sess->p_port_sockaddr, p_sess->p_local_addr);
+  vsf_sysutil_sockaddr_clone(((struct vsf_sysutil_sockaddr **)&p_sess->p_port_sockaddr), p_sess->p_local_addr);
   vsf_sysutil_sockaddr_set_ipv4addr(p_sess->p_port_sockaddr, vals);
   vsf_sysutil_sockaddr_set_port(p_sess->p_port_sockaddr, the_port);
   /* SECURITY:
@@ -1017,7 +1004,7 @@ handle_upload_common(struct vsf_session* p_sess, int is_append, int is_unique)
 {
   static struct vsf_sysutil_statbuf* s_p_statbuf;
   static struct mystr s_filename;
-  struct mystr* p_filename;
+  _Ptr<struct mystr> p_filename = ((void *)0);
   struct vsf_transfer_ret trans_ret;
   int new_file_fd;
   int remote_fd;
@@ -1068,7 +1055,7 @@ handle_upload_common(struct vsf_session* p_sess, int is_append, int is_unique)
     return;
   }
   created = 1;
-  vsf_sysutil_fstat(new_file_fd, &s_p_statbuf);
+  vsf_sysutil_fstat(new_file_fd, ((struct vsf_sysutil_statbuf **)&s_p_statbuf));
   if (vsf_sysutil_statbuf_is_regfile(s_p_statbuf))
   {
     /* Now deactive O_NONBLOCK, otherwise we have a problem on DMAPI filesystems
@@ -1172,8 +1159,7 @@ port_pasv_cleanup_out:
   vsf_sysutil_close(new_file_fd);
 }
 
-static void
-handle_mkd(struct vsf_session* p_sess)
+static void handle_mkd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   int retval;
   resolve_tilde(&p_sess->ftp_arg_str, p_sess);
@@ -1209,8 +1195,7 @@ handle_mkd(struct vsf_session* p_sess)
   }
 }
 
-static void
-handle_rmd(struct vsf_session* p_sess)
+static void handle_rmd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   int retval;
   resolve_tilde(&p_sess->ftp_arg_str, p_sess);
@@ -1236,8 +1221,7 @@ handle_rmd(struct vsf_session* p_sess)
   }
 }
 
-static void
-handle_dele(struct vsf_session* p_sess)
+static void handle_dele(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   int retval;
   resolve_tilde(&p_sess->ftp_arg_str, p_sess);
@@ -1261,8 +1245,7 @@ handle_dele(struct vsf_session* p_sess)
   }
 }
 
-static void
-handle_rest(struct vsf_session* p_sess)
+static void handle_rest(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   static struct mystr s_rest_str;
   filesize_t val = str_a_to_filesize_t(&p_sess->ftp_arg_str);
@@ -1277,8 +1260,7 @@ handle_rest(struct vsf_session* p_sess)
   vsf_cmdio_write_str(p_sess, FTP_RESTOK, &s_rest_str);
 }
 
-static void
-handle_rnfr(struct vsf_session* p_sess)
+static void handle_rnfr(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   static struct vsf_sysutil_statbuf* p_statbuf;
   int retval;
@@ -1294,7 +1276,7 @@ handle_rnfr(struct vsf_session* p_sess)
     return;
   }
   /* Does it exist? */
-  retval = str_stat(&p_sess->ftp_arg_str, &p_statbuf);
+  retval = str_stat(&p_sess->ftp_arg_str, ((struct vsf_sysutil_statbuf **)&p_statbuf));
   if (retval == 0)
   {
     /* Yes */
@@ -1310,8 +1292,7 @@ handle_rnfr(struct vsf_session* p_sess)
   }
 }
 
-static void
-handle_rnto(struct vsf_session* p_sess)
+static void handle_rnto(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   static struct mystr s_tmp_str;
   int retval;
@@ -1358,8 +1339,7 @@ handle_nlst(struct vsf_session* p_sess)
   handle_dir_common(p_sess, 0, 0);
 }
 
-static void
-prepend_path_to_filename(struct mystr* p_str)
+static void prepend_path_to_filename(_Ptr<struct mystr> p_str)
 {
   static struct mystr s_tmp_str;
   /* Only prepend current working directory if the incoming filename is
@@ -1454,8 +1434,7 @@ get_remote_transfer_fd(struct vsf_session* p_sess, const char* p_status_msg)
   return remote_fd;
 }
 
-static void
-check_abor(struct vsf_session* p_sess)
+static void check_abor(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   /* If the client sent ABOR, respond to it here */
   if (p_sess->abor_received)
@@ -1465,8 +1444,7 @@ check_abor(struct vsf_session* p_sess)
   }
 }
 
-static void
-handle_size(struct vsf_session* p_sess)
+static void handle_size(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   /* Note - in ASCII mode, are supposed to return the size after taking into
    * account ASCII linefeed conversions. At least this is what wu-ftpd does in
@@ -1481,7 +1459,7 @@ handle_size(struct vsf_session* p_sess)
     vsf_cmdio_write(p_sess, FTP_NOPERM, "Permission denied.");
     return;
   }
-  retval = str_stat(&p_sess->ftp_arg_str, &s_p_statbuf);
+  retval = str_stat(&p_sess->ftp_arg_str, ((struct vsf_sysutil_statbuf **)&s_p_statbuf));
   if (retval != 0 || !vsf_sysutil_statbuf_is_regfile(s_p_statbuf))
   {
     vsf_cmdio_write(p_sess, FTP_FILEFAIL, "Could not get file size.");
@@ -1495,8 +1473,7 @@ handle_size(struct vsf_session* p_sess)
   }
 }
 
-static void
-handle_site(struct vsf_session* p_sess)
+static void handle_site(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   static struct mystr s_site_args_str;
   /* What SITE sub-command is it? */
@@ -1530,8 +1507,7 @@ handle_site(struct vsf_session* p_sess)
   }
 }
 
-static void
-handle_site_chmod(struct vsf_session* p_sess, struct mystr* p_arg_str)
+static void handle_site_chmod(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_arg_str)
 {
   static struct mystr s_chmod_file_str;
   unsigned int perms;
@@ -1572,8 +1548,7 @@ handle_site_chmod(struct vsf_session* p_sess, struct mystr* p_arg_str)
   }
 }
 
-static void
-handle_site_umask(struct vsf_session* p_sess, struct mystr* p_arg_str)
+static void handle_site_umask(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_arg_str)
 {
   static struct mystr s_umask_resp_str;
   if (str_isempty(p_arg_str))
@@ -1601,15 +1576,14 @@ handle_appe(struct vsf_session* p_sess)
   handle_upload_common(p_sess, 1, 0);
 }
 
-static void
-handle_mdtm(struct vsf_session* p_sess)
+static void handle_mdtm(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   static struct mystr s_filename_str;
   static struct vsf_sysutil_statbuf* s_p_statbuf;
   int do_write = 0;
   long modtime = 0;
   struct str_locate_result loc = str_locate_char(&p_sess->ftp_arg_str, ' ');
-  int retval = str_stat(&p_sess->ftp_arg_str, &s_p_statbuf);
+  int retval = str_stat(&p_sess->ftp_arg_str, ((struct vsf_sysutil_statbuf **)&s_p_statbuf));
   if (tunable_mdtm_write && retval != 0 && loc.found &&
       vsf_sysutil_isdigit(str_get_char_at(&p_sess->ftp_arg_str, 0)))
   {
@@ -1634,7 +1608,7 @@ handle_mdtm(struct vsf_session* p_sess)
   if (do_write && tunable_write_enable &&
       (tunable_anon_other_write_enable || !p_sess->is_anonymous))
   {
-    retval = str_stat(&p_sess->ftp_arg_str, &s_p_statbuf);
+    retval = str_stat(&p_sess->ftp_arg_str, ((struct vsf_sysutil_statbuf **)&s_p_statbuf));
     if (retval != 0 || !vsf_sysutil_statbuf_is_regfile(s_p_statbuf))
     {
       vsf_cmdio_write(p_sess, FTP_FILEFAIL,
@@ -1674,8 +1648,7 @@ handle_mdtm(struct vsf_session* p_sess)
   }
 }
 
-static void
-handle_eprt(struct vsf_session* p_sess)
+static void handle_eprt(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   static struct mystr s_part1_str;
   static struct mystr s_part2_str;
@@ -1726,7 +1699,7 @@ handle_eprt(struct vsf_session* p_sess)
   {
     goto bad_eprt;
   }
-  vsf_sysutil_sockaddr_clone(&p_sess->p_port_sockaddr, p_sess->p_local_addr);
+  vsf_sysutil_sockaddr_clone(((struct vsf_sysutil_sockaddr **)&p_sess->p_port_sockaddr), p_sess->p_local_addr);
   if (proto == 2)
   {
     vsf_sysutil_sockaddr_set_ipv6addr(p_sess->p_port_sockaddr, p_raw_addr);
@@ -1759,8 +1732,7 @@ bad_eprt:
 }
 
 /* XXX - add AUTH etc. */
-static void
-handle_help(struct vsf_session* p_sess)
+static void handle_help(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   vsf_cmdio_write_hyphen(p_sess, FTP_HELP,
                          "The following commands are recognized.");
@@ -1781,8 +1753,7 @@ handle_stou(struct vsf_session* p_sess)
   handle_upload_common(p_sess, 0, 1);
 }
 
-static void
-get_unique_filename(struct mystr* p_outstr, const struct mystr* p_base_str)
+static void get_unique_filename(_Ptr<struct mystr> p_outstr, _Ptr<const struct mystr> p_base_str)
 {
   /* Use silly wu-ftpd algorithm for compatibility. It has races of course, if
    * two sessions are using the same file prefix at the same time.
@@ -1790,7 +1761,7 @@ get_unique_filename(struct mystr* p_outstr, const struct mystr* p_base_str)
   static struct vsf_sysutil_statbuf* s_p_statbuf;
   static struct mystr s_stou_str;
   unsigned int suffix = 1;
-  const struct mystr* p_real_base_str = p_base_str;
+  _Ptr<const struct mystr> p_real_base_str =  p_base_str;
   int retval;
   if (str_isempty(p_real_base_str))
   {
@@ -1800,7 +1771,7 @@ get_unique_filename(struct mystr* p_outstr, const struct mystr* p_base_str)
   else
   {
     /* Do not add any suffix at all if the name is not taken. */
-    retval = str_stat(p_real_base_str, &s_p_statbuf);
+    retval = str_stat(p_real_base_str, ((struct vsf_sysutil_statbuf **)&s_p_statbuf));
     if (vsf_sysutil_retval_is_error(retval))
     {
        str_copy(p_outstr, p_real_base_str);
@@ -1812,7 +1783,7 @@ get_unique_filename(struct mystr* p_outstr, const struct mystr* p_base_str)
     str_copy(p_outstr, p_real_base_str);
     str_append_char(p_outstr, '.');
     str_append_ulong(p_outstr, suffix);
-    retval = str_stat(p_outstr, &s_p_statbuf);
+    retval = str_stat(p_outstr, ((struct vsf_sysutil_statbuf **)&s_p_statbuf));
     if (vsf_sysutil_retval_is_error(retval))
     {
       return;
@@ -1821,8 +1792,7 @@ get_unique_filename(struct mystr* p_outstr, const struct mystr* p_base_str)
   }
 }
 
-static void
-handle_stat(struct vsf_session* p_sess)
+static void handle_stat(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   vsf_cmdio_write_hyphen(p_sess, FTP_STATOK, "FTP server status:");
   vsf_cmdio_write_raw(p_sess, "     Connected to ");
@@ -1894,8 +1864,7 @@ handle_stat_file(struct vsf_session* p_sess)
   handle_dir_common(p_sess, 1, 1);
 }
 
-static int
-data_transfer_checks_ok(struct vsf_session* p_sess)
+static int data_transfer_checks_ok(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   if (!pasv_active(p_sess) && !port_active(p_sess))
   {
@@ -1913,8 +1882,7 @@ data_transfer_checks_ok(struct vsf_session* p_sess)
   return 1;
 }
 
-static void
-resolve_tilde(struct mystr* p_str, struct vsf_session* p_sess)
+static void resolve_tilde(_Ptr<struct mystr> p_str, struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   unsigned int len = str_getlen(p_str);
   if (len > 0 && str_get_char_at(p_str, 0) == '~')
@@ -1947,7 +1915,7 @@ resolve_tilde(struct mystr* p_str, struct vsf_session* p_sess)
   }
 }
 
-static void handle_logged_in_user(struct vsf_session* p_sess)
+static void handle_logged_in_user(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   if (p_sess->is_anonymous)
   {
@@ -1963,7 +1931,7 @@ static void handle_logged_in_user(struct vsf_session* p_sess)
   }
 }
 
-static void handle_logged_in_pass(struct vsf_session* p_sess)
+static void handle_logged_in_pass(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   vsf_cmdio_write(p_sess, FTP_LOGINOK, "Already logged in.");
 }

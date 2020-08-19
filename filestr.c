@@ -16,8 +16,7 @@
 #include "secbuf.h"
 #include "utility.h"
 
-int
-str_fileread(struct mystr* p_str, const char* p_filename, unsigned int maxsize)
+int str_fileread(_Ptr<struct mystr> p_str, const char *p_filename, unsigned int maxsize)
 {
   int fd;
   int retval = 0;
@@ -31,7 +30,7 @@ str_fileread(struct mystr* p_str, const char* p_filename, unsigned int maxsize)
   {
     return fd;
   }
-  vsf_sysutil_fstat(fd, &p_stat);
+  vsf_sysutil_fstat(fd, ((struct vsf_sysutil_statbuf **)&p_stat));
   if (vsf_sysutil_statbuf_is_regfile(p_stat))
   {
     size = vsf_sysutil_statbuf_get_size(p_stat);
@@ -39,7 +38,7 @@ str_fileread(struct mystr* p_str, const char* p_filename, unsigned int maxsize)
     {
       size = maxsize;
     }
-    vsf_secbuf_alloc(&p_sec_buf, (unsigned int) size);
+    vsf_secbuf_alloc(((char **)&p_sec_buf), (unsigned int) size);
 
     retval = vsf_sysutil_read_loop(fd, p_sec_buf, (unsigned int) size);
     if (vsf_sysutil_retval_is_error(retval))
@@ -54,7 +53,7 @@ str_fileread(struct mystr* p_str, const char* p_filename, unsigned int maxsize)
   }
 free_out:
   vsf_sysutil_free(p_stat);
-  vsf_secbuf_free(&p_sec_buf);
+  vsf_secbuf_free(((char **)&p_sec_buf));
   vsf_sysutil_close(fd);
   return retval;
 }

@@ -21,13 +21,12 @@
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
 
-static int socket_validator(struct pt_sandbox* p_sandbox, void* p_arg);
-static int connect_validator(struct pt_sandbox* p_sandbox, void* p_arg);
-static int getsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg);
-static int setsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg);
+static int socket_validator(_Ptr<struct pt_sandbox> p_sandbox, void *p_arg);
+static int connect_validator(_Ptr<struct pt_sandbox> p_sandbox, void *p_arg);
+static int getsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void *p_arg);
+static int setsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void *p_arg);
 
-void
-policy_setup(struct pt_sandbox* p_sandbox, const struct vsf_session* p_sess)
+void policy_setup(_Ptr<struct pt_sandbox> p_sandbox, const struct vsf_session *p_sess)
 {
   int is_anon = p_sess->is_anonymous;
   /* Always need to be able to exit! */
@@ -157,8 +156,7 @@ policy_setup(struct pt_sandbox* p_sandbox, const struct vsf_session* p_sess)
   }
 }
 
-static int
-socket_validator(struct pt_sandbox* p_sandbox, void* p_arg)
+static int socket_validator(_Ptr<struct pt_sandbox> p_sandbox, void *p_arg)
 {
   int ret;
   struct vsf_session* p_sess = (struct vsf_session*) p_arg;
@@ -186,8 +184,7 @@ socket_validator(struct pt_sandbox* p_sandbox, void* p_arg)
   return 0;
 }
 
-static int
-connect_validator(struct pt_sandbox* p_sandbox, void* p_arg)
+static int connect_validator(_Ptr<struct pt_sandbox> p_sandbox, void *p_arg)
 {
   int ret;
   struct vsf_session* p_sess = (struct vsf_session*) p_arg;
@@ -233,7 +230,7 @@ connect_validator(struct pt_sandbox* p_sandbox, void* p_arg)
   if (expected_family == AF_INET)
   {
     struct sockaddr_in* p_sockaddr_in = (struct sockaddr_in*) p_sockaddr;
-    vsf_sysutil_sockaddr_alloc_ipv4(&p_sockptr);
+    vsf_sysutil_sockaddr_alloc_ipv4(((struct vsf_sysutil_sockaddr **)&p_sockptr));
     vsf_sysutil_sockaddr_set_ipv4addr(p_sockptr,
                                       (const unsigned char*)
                                           &p_sockaddr_in->sin_addr);
@@ -241,7 +238,7 @@ connect_validator(struct pt_sandbox* p_sandbox, void* p_arg)
   else
   {
     struct sockaddr_in6* p_sockaddr_in6 = (struct sockaddr_in6*) p_sockaddr;
-    vsf_sysutil_sockaddr_alloc_ipv6(&p_sockptr);
+    vsf_sysutil_sockaddr_alloc_ipv6(((struct vsf_sysutil_sockaddr **)&p_sockptr));
     vsf_sysutil_sockaddr_set_ipv6addr(p_sockptr,
                                       (const unsigned char*)
                                           &p_sockaddr_in6->sin6_addr);
@@ -255,8 +252,7 @@ connect_validator(struct pt_sandbox* p_sandbox, void* p_arg)
   return 0;
 }
 
-static int
-getsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg)
+static int getsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void *p_arg)
 {
   int ret;
   unsigned long arg2;
@@ -279,8 +275,7 @@ getsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg)
   return 0;
 }
 
-static int
-setsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg)
+static int setsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void *p_arg)
 {
   int ret;
   unsigned long arg2;

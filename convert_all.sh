@@ -1,11 +1,13 @@
-CCONV=/Users/mwh/checkedc/checkedc-clang/llvm/cmake-build-debug/bin/cconv-standalone
-INCLUDES=/Users/mwh/checkedc/checkedc/include
+CCONV=/home/sroy4899/checkedc-clang/build/bin/cconv-standalone
+INCLUDES=/home/sroy4899/checkedc/include
 BASEDIR=.
 
 # -dump-stats \
 # -dump-intermediate \
 
 CPATH=$INCLUDES $CCONV \
+-alltypes \
+-use-malloc=vsf_sysutil_malloc \
 -output-postfix=checked \
 -extra-arg-before=-D_FORTIFY_SOURCE=2 \
 -extra-arg-before=-w \

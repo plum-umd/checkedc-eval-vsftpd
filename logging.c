@@ -16,19 +16,12 @@
 
 /* File local functions */
 static int vsf_log_type_is_transfer(enum EVSFLogEntryType type);
-static void vsf_log_common(struct vsf_session* p_sess, int succeeded,
-                           enum EVSFLogEntryType what,
-                           const struct mystr* p_str);
-static void vsf_log_do_log_vsftpd_format(struct vsf_session* p_sess,
-                                         struct mystr* p_str, int succeeded,
-                                         enum EVSFLogEntryType what,
-                                         const struct mystr* p_log_str);
-static void vsf_log_do_log_wuftpd_format(struct vsf_session* p_sess,
-                                         struct mystr* p_str, int succeeded);
-static void vsf_log_do_log_to_file(int fd, struct mystr* p_str);
+static void vsf_log_common(_Ptr<struct vsf_session> p_sess, int succeeded, enum EVSFLogEntryType what, _Ptr<const struct mystr> p_str);
+static void vsf_log_do_log_vsftpd_format(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, int succeeded, enum EVSFLogEntryType what, _Ptr<const struct mystr> p_log_str);
+static void vsf_log_do_log_wuftpd_format(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, int succeeded);
+static void vsf_log_do_log_to_file(int fd, _Ptr<struct mystr> p_str);
 
-void
-vsf_log_init(struct vsf_session* p_sess)
+void vsf_log_init(_Ptr<struct vsf_session> p_sess)
 {
   if (tunable_syslog_enable || tunable_tcp_wrappers)
   {
@@ -77,8 +70,7 @@ vsf_log_type_is_transfer(enum EVSFLogEntryType type)
   return (type == kVSFLogEntryDownload || type == kVSFLogEntryUpload);
 }
 
-void
-vsf_log_start_entry(struct vsf_session* p_sess, enum EVSFLogEntryType what)
+void vsf_log_start_entry(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), enum EVSFLogEntryType what)
 {
   if (p_sess->log_type != 0)
   {
@@ -96,15 +88,12 @@ vsf_log_start_entry(struct vsf_session* p_sess, enum EVSFLogEntryType what)
   }
 }
 
-void
-vsf_log_line(struct vsf_session* p_sess, enum EVSFLogEntryType what,
-             struct mystr* p_str)
+void vsf_log_line(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), enum EVSFLogEntryType what, _Ptr<struct mystr> p_str)
 {
   vsf_log_common(p_sess, 1, what, p_str);
 }
 
-int
-vsf_log_entry_pending(struct vsf_session* p_sess)
+int vsf_log_entry_pending(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   if (p_sess->log_type == 0)
   {
@@ -113,23 +102,19 @@ vsf_log_entry_pending(struct vsf_session* p_sess)
   return 1;
 }
 
-void
-vsf_log_clear_entry(struct vsf_session* p_sess)
+void vsf_log_clear_entry(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   p_sess->log_type = 0;
 }
 
-void
-vsf_log_do_log(struct vsf_session* p_sess, int succeeded)
+void vsf_log_do_log(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int succeeded)
 {
   vsf_log_common(p_sess, succeeded, (enum EVSFLogEntryType) p_sess->log_type,
                  &p_sess->log_str);
   p_sess->log_type = 0;
 }
 
-static void
-vsf_log_common(struct vsf_session* p_sess, int succeeded,
-               enum EVSFLogEntryType what, const struct mystr* p_str)
+static void vsf_log_common(_Ptr<struct vsf_session> p_sess, int succeeded, enum EVSFLogEntryType what, _Ptr<const struct mystr> p_str)
 {
   static struct mystr s_log_str;
   /* Handle xferlog line if appropriate */
@@ -157,8 +142,7 @@ vsf_log_common(struct vsf_session* p_sess, int succeeded,
   }
 }
 
-static void
-vsf_log_do_log_to_file(int fd, struct mystr* p_str)
+static void vsf_log_do_log_to_file(int fd, _Ptr<struct mystr> p_str)
 {
   if (!tunable_no_log_lock)
   {
@@ -178,9 +162,7 @@ vsf_log_do_log_to_file(int fd, struct mystr* p_str)
   }
 }
 
-static void
-vsf_log_do_log_wuftpd_format(struct vsf_session* p_sess, struct mystr* p_str,
-                             int succeeded)
+static void vsf_log_do_log_wuftpd_format(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, int succeeded)
 {
   static struct mystr s_filename_str;
   long delta_sec;
@@ -259,10 +241,7 @@ vsf_log_do_log_wuftpd_format(struct vsf_session* p_sess, struct mystr* p_str,
   }
 }
 
-static void
-vsf_log_do_log_vsftpd_format(struct vsf_session* p_sess, struct mystr* p_str,
-                             int succeeded, enum EVSFLogEntryType what,
-                             const struct mystr* p_log_str)
+static void vsf_log_do_log_vsftpd_format(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, int succeeded, enum EVSFLogEntryType what, _Ptr<const struct mystr> p_log_str)
 {
   str_empty(p_str);
   if (!tunable_syslog_enable)

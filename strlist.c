@@ -30,8 +30,7 @@ static int sort_compare_func(const void* p1, const void* p2);
 static int sort_compare_func_reverse(const void* p1, const void* p2);
 static int sort_compare_common(const void* p1, const void* p2, int reverse);
 
-void
-str_list_free(struct mystr_list* p_list)
+void str_list_free(_Ptr<struct mystr_list> p_list)
 {
   unsigned int i;
   for (i=0; i < p_list->list_len; ++i)
@@ -48,15 +47,12 @@ str_list_free(struct mystr_list* p_list)
   }
 }
 
-unsigned int
-str_list_get_length(const struct mystr_list* p_list)
+unsigned int str_list_get_length(_Ptr<const struct mystr_list> p_list)
 {
   return p_list->list_len;
 }
 
-int
-str_list_contains_str(const struct mystr_list* p_list,
-                      const struct mystr* p_str)
+int str_list_contains_str(_Ptr<const struct mystr_list> p_list, _Ptr<const struct mystr> p_str)
 {
   unsigned int i;
   for (i=0; i < p_list->list_len; ++i)
@@ -69,9 +65,7 @@ str_list_contains_str(const struct mystr_list* p_list,
   return 0;
 }
 
-void
-str_list_add(struct mystr_list* p_list, const struct mystr* p_str,
-             const struct mystr* p_sort_key_str)
+void str_list_add(_Ptr<struct mystr_list> p_list, _Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_sort_key_str)
 {
   struct mystr_list_node* p_node;
   /* Expand the node allocation if we have to */
@@ -80,7 +74,7 @@ str_list_add(struct mystr_list* p_list, const struct mystr* p_str,
     if (p_list->alloc_len == 0)
     {
       p_list->alloc_len = 32;
-      p_list->p_nodes = vsf_sysutil_malloc(
+      p_list->p_nodes = vsf_sysutil_malloc<struct mystr_list_node>(
           p_list->alloc_len * (unsigned int) sizeof(struct mystr_list_node));
     }
     else
@@ -106,8 +100,7 @@ str_list_add(struct mystr_list* p_list, const struct mystr* p_str,
   p_list->list_len++;
 }
 
-void
-str_list_sort(struct mystr_list* p_list, int reverse)
+void str_list_sort(_Ptr<struct mystr_list> p_list, int reverse)
 {
   if (!reverse)
   {
@@ -137,8 +130,8 @@ sort_compare_func_reverse(const void* p1, const void* p2)
 static int
 sort_compare_common(const void* p1, const void* p2, int reverse)
 {
-  const struct mystr* p_cmp1;
-  const struct mystr* p_cmp2;
+  _Ptr<const struct mystr> p_cmp1 = ((void *)0);
+  _Ptr<const struct mystr> p_cmp2 = ((void *)0);
   const struct mystr_list_node* p_node1 = (const struct mystr_list_node*) p1;
   const struct mystr_list_node* p_node2 = (const struct mystr_list_node*) p2;
   if (!str_isempty(&p_node1->sort_key_str))
@@ -168,8 +161,7 @@ sort_compare_common(const void* p1, const void* p2, int reverse)
   }
 }
 
-const struct mystr*
-str_list_get_pstr(const struct mystr_list* p_list, unsigned int indexx)
+_Ptr<const struct mystr> str_list_get_pstr(_Ptr<const struct mystr_list> p_list, unsigned int indexx)
 {
   if (indexx >= p_list->list_len)
   {

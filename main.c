@@ -28,12 +28,11 @@
  */
 static void die_unless_privileged(void);
 static void do_sanity_checks(void);
-static void session_init(struct vsf_session* p_sess);
+static void session_init(_Ptr<struct vsf_session> p_sess);
 static void env_init(void);
 static void limits_init(void);
 
-int
-main(int argc, const char* argv[])
+int main(int argc, _Array_ptr<const char *> argv : count(argc))
 {
   struct vsf_session the_session =
   {
@@ -113,10 +112,10 @@ main(int argc, const char* argv[])
   /* Parse default config file if necessary */
   if (!config_loaded) {
     struct vsf_sysutil_statbuf* p_statbuf = 0;
-    int retval = vsf_sysutil_stat(VSFTP_DEFAULT_CONFIG, &p_statbuf);
+    int retval = vsf_sysutil_stat(((const char *)VSFTP_DEFAULT_CONFIG), ((struct vsf_sysutil_statbuf **)&p_statbuf));
     if (!vsf_sysutil_retval_is_error(retval))
     {
-      vsf_parseconf_load_file(VSFTP_DEFAULT_CONFIG, 1);
+      vsf_parseconf_load_file(((const char *)VSFTP_DEFAULT_CONFIG), 1);
     }
     vsf_sysutil_free(p_statbuf);
   }
@@ -125,7 +124,7 @@ main(int argc, const char* argv[])
   {
     struct vsf_sysutil_sockaddr* p_addr = 0;
     const char* p_numeric_addr;
-    vsf_sysutil_dns_resolve(&p_addr, tunable_pasv_address);
+    vsf_sysutil_dns_resolve(((struct vsf_sysutil_sockaddr **)&p_addr), tunable_pasv_address);
     vsf_sysutil_free((char*) tunable_pasv_address);
     p_numeric_addr = vsf_sysutil_inet_ntop(p_addr);
     tunable_pasv_address = vsf_sysutil_strdup(p_numeric_addr);
@@ -139,7 +138,7 @@ main(int argc, const char* argv[])
   if (tunable_setproctitle_enable)
   {
     /* Warning -- warning -- may nuke argv, environ */
-    vsf_sysutil_setproctitle_init(argc, argv);
+    vsf_sysutil_setproctitle_init(argc, ((const char **)argv));
   }
   /* Initialize the SSL system here if needed - saves the overhead of each
    * child doing this itself.
@@ -270,7 +269,7 @@ do_sanity_checks(void)
 {
   {
     struct vsf_sysutil_statbuf* p_statbuf = 0;
-    vsf_sysutil_fstat(VSFTP_COMMAND_FD, &p_statbuf);
+    vsf_sysutil_fstat(VSFTP_COMMAND_FD, ((struct vsf_sysutil_statbuf **)&p_statbuf));
     if (!vsf_sysutil_statbuf_is_socket(p_statbuf))
     {
       die("vsftpd: not configured for standalone, must be started from inetd");
@@ -328,12 +327,11 @@ limits_init(void)
   vsf_sysutil_set_address_space_limit(limit);
 }
 
-static void
-session_init(struct vsf_session* p_sess)
+static void session_init(_Ptr<struct vsf_session> p_sess)
 {
   /* Get the addresses of the control connection */
-  vsf_sysutil_getpeername(VSFTP_COMMAND_FD, &p_sess->p_remote_addr);
-  vsf_sysutil_getsockname(VSFTP_COMMAND_FD, &p_sess->p_local_addr);
+  vsf_sysutil_getpeername(VSFTP_COMMAND_FD, ((struct vsf_sysutil_sockaddr **)&p_sess->p_remote_addr));
+  vsf_sysutil_getsockname(VSFTP_COMMAND_FD, ((struct vsf_sysutil_sockaddr **)&p_sess->p_local_addr));
   /* If anonymous mode is active, fetch the uid of the anonymous user */
   if (tunable_anonymous_enable)
   {

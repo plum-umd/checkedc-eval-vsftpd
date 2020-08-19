@@ -20,8 +20,8 @@
 #include "ipaddrparse.h"
 
 static unsigned int s_children;
-static struct hash* s_p_ip_count_hash;
-static struct hash* s_p_pid_ip_hash;
+static _Ptr<struct hash> s_p_ip_count_hash = ((void *)0);
+static _Ptr<struct hash> s_p_pid_ip_hash = ((void *)0);
 static unsigned int s_ipaddr_size;
 
 static void handle_sigchld(void*  duff);
@@ -79,7 +79,7 @@ vsf_standalone_main(void)
   if (tunable_listen)
   {
     struct vsf_sysutil_sockaddr* p_sockaddr = 0;
-    vsf_sysutil_sockaddr_alloc_ipv4(&p_sockaddr);
+    vsf_sysutil_sockaddr_alloc_ipv4(((struct vsf_sysutil_sockaddr **)&p_sockaddr));
     vsf_sysutil_sockaddr_set_port(p_sockaddr,
                                   (unsigned short) tunable_listen_port);
     if (!tunable_listen_address)
@@ -103,7 +103,7 @@ vsf_standalone_main(void)
   else
   {
     struct vsf_sysutil_sockaddr* p_sockaddr = 0;
-    vsf_sysutil_sockaddr_alloc_ipv6(&p_sockaddr);
+    vsf_sysutil_sockaddr_alloc_ipv6(((struct vsf_sysutil_sockaddr **)&p_sockaddr));
     vsf_sysutil_sockaddr_set_port(p_sockaddr,
                                   (unsigned short) tunable_listen_port);
     if (!tunable_listen_address6)
@@ -135,7 +135,7 @@ vsf_standalone_main(void)
   {
     die("could not listen");
   }
-  vsf_sysutil_sockaddr_alloc(&p_accept_addr);
+  vsf_sysutil_sockaddr_alloc(((struct vsf_sysutil_sockaddr **)&p_accept_addr));
   while (1)
   {
     struct vsf_client_launch child_info;

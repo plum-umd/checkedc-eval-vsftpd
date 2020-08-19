@@ -64,21 +64,21 @@ static struct timeval s_current_time;
 /* Current pid */
 static int s_current_pid = -1;
 /* Exit function */
-static exitfunc_t s_exit_func;
+static _Ptr<void ()> s_exit_func = ((void *)0);
 /* Difference in timezone from GMT in seconds */
 static long s_timezone;
 
 /* Our internal signal handling implementation details */
 static struct vsf_sysutil_sig_details
 {
-  vsf_sighandle_t sync_sig_handler;
+  _Ptr<void (void *)> sync_sig_handler;
   void* p_private;
   volatile sig_atomic_t pending;
   int running;
   int use_alarm;
 } s_sig_details[NSIG];
 
-static vsf_context_io_t s_io_handler;
+static _Ptr<void (int , int , void *)> s_io_handler = ((void *)0);
 static void* s_p_io_handler_private;
 static int s_io_handler_running;
 
@@ -101,8 +101,8 @@ static int vsf_sysutil_translate_memprot(
   const enum EVSFSysUtilMapPermission perm);
 static int vsf_sysutil_translate_openmode(
   const enum EVSFSysUtilOpenMode mode);
-static void vsf_sysutil_alloc_statbuf(struct vsf_sysutil_statbuf** p_ptr);
-void vsf_sysutil_sockaddr_alloc(struct vsf_sysutil_sockaddr** p_sockptr);
+static void vsf_sysutil_alloc_statbuf(_Ptr<struct vsf_sysutil_statbuf *> p_ptr);
+void vsf_sysutil_sockaddr_alloc(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr);
 static int lock_internal(int fd, int lock_type);
 
 static void
@@ -212,11 +212,7 @@ vsf_sysutil_translate_sig(const enum EVSFSysUtilSignal sig)
   return realsig;
 }
 
-void
-vsf_sysutil_install_sighandler(const enum EVSFSysUtilSignal sig,
-                               vsf_sighandle_t handler,
-                               void* p_private,
-                               int use_alarm)
+void vsf_sysutil_install_sighandler(const enum EVSFSysUtilSignal sig, _Ptr<void (void *)> handler, void *p_private, int use_alarm)
 {
   int realsig = vsf_sysutil_translate_sig(sig);
   s_sig_details[realsig].p_private = p_private;
@@ -233,7 +229,7 @@ void
 vsf_sysutil_default_sig(const enum EVSFSysUtilSignal sig)
 {
   int realsig = vsf_sysutil_translate_sig(sig);
-  vsf_sysutil_set_sighandler(realsig, SIG_DFL);
+  vsf_sysutil_set_sighandler(realsig, ((void (*)(int) )SIG_DFL));
   s_sig_details[realsig].p_private = NULL;
   s_sig_details[realsig].sync_sig_handler = NULL;
 }
@@ -322,8 +318,7 @@ vsf_sysutil_unblock_sig(const enum EVSFSysUtilSignal sig)
     die("sigprocmask");
   }
 }
-void
-vsf_sysutil_install_io_handler(vsf_context_io_t handler, void* p_private)
+void vsf_sysutil_install_io_handler(_Ptr<void (int , int , void *)> handler, void *p_private)
 {
   if (s_io_handler != NULL)
   {
@@ -496,8 +491,7 @@ vsf_sysutil_lseek_end(const int fd)
   }
 }
 
-void*
-vsf_sysutil_malloc(unsigned int size)
+_Itype_for_any(T) void *vsf_sysutil_malloc(unsigned int size) : itype(_Array_ptr<T>) byte_count(size)
 {
   void* p_ret;
   /* Paranoia - what if we got an integer overflow/underflow? */
@@ -521,7 +515,7 @@ vsf_sysutil_realloc(void* p_ptr, unsigned int size)
   {
     bug("zero or big size in vsf_sysutil_realloc");
   }
-  p_ret = realloc(p_ptr, size);
+  p_ret = realloc<void>(p_ptr, size);
   if (p_ret == NULL)
   {
     die("realloc");
@@ -536,7 +530,7 @@ vsf_sysutil_free(void* p_ptr)
   {
     bug("vsf_sysutil_free got a null pointer");
   }
-  free(p_ptr);
+  free<void>(p_ptr);
 }
 
 unsigned int
@@ -572,8 +566,7 @@ vsf_sysutil_fork_failok(void)
   return retval;
 }
 
-void
-vsf_sysutil_set_exit_func(exitfunc_t exitfunc)
+void vsf_sysutil_set_exit_func(_Ptr<void ()> exitfunc)
 {
   s_exit_func = exitfunc;
 }
@@ -583,7 +576,7 @@ vsf_sysutil_exit(int exit_code)
 {
   if (s_exit_func)
   {
-    exitfunc_t curr_func = s_exit_func;
+    _Ptr<void ()> curr_func =  s_exit_func;
     /* Prevent recursion */
     s_exit_func = 0;
     (*curr_func)();
@@ -626,22 +619,18 @@ vsf_sysutil_wait_reap_one(void)
   return retval;
 }
 
-int
-vsf_sysutil_wait_get_retval(const struct vsf_sysutil_wait_retval* p_waitret)
+int vsf_sysutil_wait_get_retval(_Ptr<const struct vsf_sysutil_wait_retval> p_waitret)
 {
   return p_waitret->syscall_retval;
 }
 
-int
-vsf_sysutil_wait_exited_normally(
-  const struct vsf_sysutil_wait_retval* p_waitret)
+int vsf_sysutil_wait_exited_normally(_Ptr<const struct vsf_sysutil_wait_retval> p_waitret)
 {
   int status = ((struct vsf_sysutil_wait_retval*) p_waitret)->exit_status;
   return WIFEXITED(status);
 }
 
-int
-vsf_sysutil_wait_get_exitcode(const struct vsf_sysutil_wait_retval* p_waitret)
+int vsf_sysutil_wait_get_exitcode(_Ptr<const struct vsf_sysutil_wait_retval> p_waitret)
 {
   int status;
   if (!vsf_sysutil_wait_exited_normally(p_waitret))
@@ -799,8 +788,7 @@ vsf_sysutil_atoi(const char* p_str)
   return atoi(p_str);
 }
 
-filesize_t
-vsf_sysutil_a_to_filesize_t(const char* p_str)
+filesize_t vsf_sysutil_a_to_filesize_t(const char *p_str : itype(_Nt_array_ptr<const char>))
 {
   /* atoll() is C99 standard - but even modern FreeBSD, OpenBSD don't have
    * it, so we'll supply our own
@@ -879,8 +867,7 @@ vsf_sysutil_uint_to_octal(unsigned int the_uint)
   return octal_buf;
 }
 
-unsigned int
-vsf_sysutil_octal_to_uint(const char* p_str)
+unsigned int vsf_sysutil_octal_to_uint(const char *p_str : itype(_Array_ptr<const char>))
 {
   /* NOTE - avoiding using sscanf() parser */
   unsigned int result = 0;
@@ -982,8 +969,7 @@ vsf_sysutil_chdir(const char* p_dirname)
   return chdir(p_dirname);
 }
 
-int
-vsf_sysutil_rename(const char* p_from, const char* p_to)
+int vsf_sysutil_rename(const char *p_from : itype(_Nt_array_ptr<const char>), const char *p_to : itype(_Nt_array_ptr<const char>))
 {
   return rename(p_from, p_to);
 }
@@ -1017,8 +1003,7 @@ vsf_sysutil_next_dirent(struct vsf_sysutil_dir* p_dir)
   return p_dirent->d_name;
 }
 
-unsigned int
-vsf_sysutil_strlen(const char* p_text)
+unsigned int vsf_sysutil_strlen(const char *p_text : itype(_Nt_array_ptr<const char>))
 {
   size_t ret = strlen(p_text);
   /* A defense in depth measure. */
@@ -1029,8 +1014,7 @@ vsf_sysutil_strlen(const char* p_text)
   return (unsigned int) ret;
 }
 
-char*
-vsf_sysutil_strdup(const char* p_str)
+char *vsf_sysutil_strdup(const char *p_str : itype(_Nt_array_ptr<const char>)) : itype(_Nt_array_ptr<char>)
 {
   return strdup(p_str);
 }
@@ -1059,7 +1043,7 @@ vsf_sysutil_memcpy(void* p_dest, const void* p_src, const unsigned int size)
   {
     die("possible negative value to memcpy?");
   }
-  memcpy(p_dest, p_src, size);
+  memcpy<void>(p_dest, p_src, size);
 }
 
 void
@@ -1084,8 +1068,7 @@ vsf_sysutil_memcmp(const void* p_src1, const void* p_src2, unsigned int size)
   return memcmp(p_src1, p_src2, size);
 }
 
-int
-vsf_sysutil_strcmp(const char* p_src1, const char* p_src2)
+int vsf_sysutil_strcmp(const char *p_src1 : itype(_Nt_array_ptr<const char>), const char *p_src2 : itype(_Nt_array_ptr<const char>))
 {
   return strcmp(p_src1, p_src2);
 }
@@ -1242,27 +1225,24 @@ vsf_sysutil_unlink(const char* p_dead)
   return unlink(p_dead);
 }
 
-int
-vsf_sysutil_write_access(const char* p_filename)
+int vsf_sysutil_write_access(_Nt_array_ptr<const char> p_filename)
 {
   int retval = access(p_filename, W_OK);
   return (retval == 0);
 }
 
-static void
-vsf_sysutil_alloc_statbuf(struct vsf_sysutil_statbuf** p_ptr)
+static void vsf_sysutil_alloc_statbuf(_Ptr<struct vsf_sysutil_statbuf *> p_ptr)
 {
   if (*p_ptr == NULL)
   {
-    *p_ptr = vsf_sysutil_malloc(sizeof(struct stat));
+    *p_ptr = vsf_sysutil_malloc<struct vsf_sysutil_statbuf>(sizeof(struct stat));
   }
 }
 
-void
-vsf_sysutil_fstat(int fd, struct vsf_sysutil_statbuf** p_ptr)
+void vsf_sysutil_fstat(int fd, _Ptr<struct vsf_sysutil_statbuf *> p_ptr)
 {
   int retval;
-  vsf_sysutil_alloc_statbuf(p_ptr);
+  vsf_sysutil_alloc_statbuf(((struct vsf_sysutil_statbuf **)p_ptr));
   retval = fstat(fd, (struct stat*) (*p_ptr));
   if (retval != 0)
   {
@@ -1270,26 +1250,22 @@ vsf_sysutil_fstat(int fd, struct vsf_sysutil_statbuf** p_ptr)
   }
 }
 
-int
-vsf_sysutil_stat(const char* p_name, struct vsf_sysutil_statbuf** p_ptr)
+int vsf_sysutil_stat(const char *p_name, _Ptr<struct vsf_sysutil_statbuf *> p_ptr)
 {
-  vsf_sysutil_alloc_statbuf(p_ptr);
+  vsf_sysutil_alloc_statbuf(((struct vsf_sysutil_statbuf **)p_ptr));
   return stat(p_name, (struct stat*) (*p_ptr));
 }
 
-int
-vsf_sysutil_lstat(const char* p_name, struct vsf_sysutil_statbuf** p_ptr)
+int vsf_sysutil_lstat(const char *p_name, _Ptr<struct vsf_sysutil_statbuf *> p_ptr)
 {
-  vsf_sysutil_alloc_statbuf(p_ptr);
+  vsf_sysutil_alloc_statbuf(((struct vsf_sysutil_statbuf **)p_ptr));
   return lstat(p_name, (struct stat*) (*p_ptr));
 }
 
-void
-vsf_sysutil_dir_stat(const struct vsf_sysutil_dir* p_dir,
-                     struct vsf_sysutil_statbuf** p_ptr)
+void vsf_sysutil_dir_stat(const struct vsf_sysutil_dir *p_dir, _Ptr<struct vsf_sysutil_statbuf *> p_ptr)
 {
   int fd = dirfd((DIR*) p_dir);
-  vsf_sysutil_fstat(fd, p_ptr);
+  vsf_sysutil_fstat(fd, ((struct vsf_sysutil_statbuf **)p_ptr));
 }
 
 int
@@ -1320,10 +1296,9 @@ vsf_sysutil_statbuf_is_dir(const struct vsf_sysutil_statbuf* p_stat)
   return S_ISDIR(p_realstat->st_mode);
 }
 
-const char*
-vsf_sysutil_statbuf_get_perms(const struct vsf_sysutil_statbuf* p_statbuf)
+const char *vsf_sysutil_statbuf_get_perms(const struct vsf_sysutil_statbuf *p_statbuf) : itype(_Nt_array_ptr<const char>)
 {
-  static char perms[11];
+  static char perms _Nt_checked[11];
   int i;
   const struct stat* p_stat = (const struct stat*) p_statbuf;
   for (i=0; i<10; i++)
@@ -1358,15 +1333,13 @@ vsf_sysutil_statbuf_get_perms(const struct vsf_sysutil_statbuf* p_statbuf)
   return perms;
 }
 
-const char*
-vsf_sysutil_statbuf_get_date(const struct vsf_sysutil_statbuf* p_statbuf,
-                             int use_localtime, long curr_time)
+const char *vsf_sysutil_statbuf_get_date(const struct vsf_sysutil_statbuf *p_statbuf, int use_localtime, long curr_time) : itype(_Nt_array_ptr<const char>)
 {
-  static char datebuf[64];
+  static char datebuf _Nt_checked[64];
   int retval;
-  struct tm* p_tm;
+  _Ptr<struct tm> p_tm = ((void *)0);
   const struct stat* p_stat = (const struct stat*) p_statbuf;
-  const char* p_date_format = "%b %d %H:%M";
+  _Nt_array_ptr<const char> p_date_format : byte_count(11) =  "%b %d %H:%M";
   if (!use_localtime)
   {
     p_tm = gmtime(&p_stat->st_mtime);
@@ -1390,14 +1363,11 @@ vsf_sysutil_statbuf_get_date(const struct vsf_sysutil_statbuf* p_statbuf,
   return datebuf;
 }
 
-const char*
-vsf_sysutil_statbuf_get_numeric_date(
-  const struct vsf_sysutil_statbuf* p_statbuf,
-  int use_localtime)
+const char *vsf_sysutil_statbuf_get_numeric_date(const struct vsf_sysutil_statbuf *p_statbuf, int use_localtime) : itype(_Nt_array_ptr<const char>)
 {
-  static char datebuf[15];
+  static char datebuf _Nt_checked[15];
   const struct stat* p_stat = (const struct stat*) p_statbuf;
-  struct tm* p_tm;
+  _Ptr<struct tm> p_tm = ((void *)0);
   int retval;
   if (!use_localtime)
   {
@@ -1647,10 +1617,9 @@ vsf_sysutil_unix_stream_socketpair(void)
   return retval;
 }
 
-int
-vsf_sysutil_bind(int fd, const struct vsf_sysutil_sockaddr* p_sockptr)
+int vsf_sysutil_bind(int fd, const struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
 {
-  const struct sockaddr* p_sockaddr = &p_sockptr->u.u_sockaddr;
+  _Ptr<const struct sockaddr> p_sockaddr =  &p_sockptr->u.u_sockaddr;
   int len = 0;
   if (p_sockaddr->sa_family == AF_INET)
   {
@@ -1752,11 +1721,9 @@ vsf_sysutil_accept_timeout(int fd, struct vsf_sysutil_sockaddr* p_sockaddr,
   return retval;
 }
 
-int
-vsf_sysutil_connect_timeout(int fd, const struct vsf_sysutil_sockaddr* p_addr,
-                            unsigned int wait_seconds)
+int vsf_sysutil_connect_timeout(int fd, const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>), unsigned int wait_seconds)
 {
-  const struct sockaddr* p_sockaddr = &p_addr->u.u_sockaddr;
+  _Ptr<const struct sockaddr> p_sockaddr =  &p_addr->u.u_sockaddr;
   unsigned int addrlen = 0;
   int retval;
   int saved_errno;
@@ -1822,13 +1789,12 @@ vsf_sysutil_connect_timeout(int fd, const struct vsf_sysutil_sockaddr* p_addr,
   return retval;
 }
 
-void
-vsf_sysutil_getsockname(int fd, struct vsf_sysutil_sockaddr** p_sockptr)
+void vsf_sysutil_getsockname(int fd, _Ptr<struct vsf_sysutil_sockaddr *> p_sockptr)
 {
   struct vsf_sysutil_sockaddr the_addr;
   int retval;
   socklen_t socklen = sizeof(the_addr);
-  vsf_sysutil_sockaddr_clear(p_sockptr);
+  vsf_sysutil_sockaddr_clear(((struct vsf_sysutil_sockaddr **)p_sockptr));
   retval = getsockname(fd, &the_addr.u.u_sockaddr, &socklen);
   if (retval != 0)
   {
@@ -1839,7 +1805,7 @@ vsf_sysutil_getsockname(int fd, struct vsf_sysutil_sockaddr** p_sockptr)
   {
     die("can only support ipv4 and ipv6 currently");
   }
-  vsf_sysutil_sockaddr_alloc(p_sockptr);
+  vsf_sysutil_sockaddr_alloc(((struct vsf_sysutil_sockaddr **)p_sockptr));
   if (socklen > sizeof(the_addr))
   {
     socklen = sizeof(the_addr);
@@ -1847,13 +1813,12 @@ vsf_sysutil_getsockname(int fd, struct vsf_sysutil_sockaddr** p_sockptr)
   vsf_sysutil_memcpy(*p_sockptr, &the_addr, socklen);
 }
 
-void
-vsf_sysutil_getpeername(int fd, struct vsf_sysutil_sockaddr** p_sockptr)
+void vsf_sysutil_getpeername(int fd, _Ptr<struct vsf_sysutil_sockaddr *> p_sockptr)
 {
   struct vsf_sysutil_sockaddr the_addr;
   int retval;
   socklen_t socklen = sizeof(the_addr);
-  vsf_sysutil_sockaddr_clear(p_sockptr);
+  vsf_sysutil_sockaddr_clear(((struct vsf_sysutil_sockaddr **)p_sockptr));
   retval = getpeername(fd, &the_addr.u.u_sockaddr, &socklen);
   if (retval != 0)
   {
@@ -1864,7 +1829,7 @@ vsf_sysutil_getpeername(int fd, struct vsf_sysutil_sockaddr** p_sockptr)
   {
     die("can only support ipv4 and ipv6 currently");
   }
-  vsf_sysutil_sockaddr_alloc(p_sockptr);
+  vsf_sysutil_sockaddr_alloc(((struct vsf_sysutil_sockaddr **)p_sockptr));
   if (socklen > sizeof(the_addr))
   {
     socklen = sizeof(the_addr);
@@ -1892,8 +1857,7 @@ vsf_sysutil_shutdown_read_failok(int fd)
   (void) shutdown(fd, SHUT_RD);
 }
 
-void
-vsf_sysutil_sockaddr_clear(struct vsf_sysutil_sockaddr** p_sockptr)
+void vsf_sysutil_sockaddr_clear(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr)
 {
   if (*p_sockptr != NULL)
   {
@@ -1902,34 +1866,29 @@ vsf_sysutil_sockaddr_clear(struct vsf_sysutil_sockaddr** p_sockptr)
   }
 }
 
-void
-vsf_sysutil_sockaddr_alloc(struct vsf_sysutil_sockaddr** p_sockptr)
+void vsf_sysutil_sockaddr_alloc(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr)
 {
-  vsf_sysutil_sockaddr_clear(p_sockptr);
-  *p_sockptr = vsf_sysutil_malloc(sizeof(**p_sockptr));
+  vsf_sysutil_sockaddr_clear(((struct vsf_sysutil_sockaddr **)p_sockptr));
+  *p_sockptr = vsf_sysutil_malloc<struct vsf_sysutil_sockaddr>(sizeof(**p_sockptr));
   vsf_sysutil_memclr(*p_sockptr, sizeof(**p_sockptr));
 }
 
-void
-vsf_sysutil_sockaddr_alloc_ipv4(struct vsf_sysutil_sockaddr** p_sockptr)
+void vsf_sysutil_sockaddr_alloc_ipv4(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr)
 {
-  vsf_sysutil_sockaddr_alloc(p_sockptr);
+  vsf_sysutil_sockaddr_alloc(((struct vsf_sysutil_sockaddr **)p_sockptr));
   (*p_sockptr)->u.u_sockaddr.sa_family = AF_INET;
 }
 
-void
-vsf_sysutil_sockaddr_alloc_ipv6(struct vsf_sysutil_sockaddr** p_sockptr)
+void vsf_sysutil_sockaddr_alloc_ipv6(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr)
 {
-  vsf_sysutil_sockaddr_alloc(p_sockptr);
+  vsf_sysutil_sockaddr_alloc(((struct vsf_sysutil_sockaddr **)p_sockptr));
   (*p_sockptr)->u.u_sockaddr.sa_family = AF_INET6;
 }
 
-void
-vsf_sysutil_sockaddr_clone(struct vsf_sysutil_sockaddr** p_sockptr,
-                           const struct vsf_sysutil_sockaddr* p_src)
+void vsf_sysutil_sockaddr_clone(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr, const struct vsf_sysutil_sockaddr *p_src : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
 {
   struct vsf_sysutil_sockaddr* p_sockaddr = 0;
-  vsf_sysutil_sockaddr_alloc(p_sockptr);
+  vsf_sysutil_sockaddr_alloc(((struct vsf_sysutil_sockaddr **)p_sockptr));
   p_sockaddr = *p_sockptr;
   if (p_src->u.u_sockaddr.sa_family == AF_INET)
   {
@@ -1953,9 +1912,7 @@ vsf_sysutil_sockaddr_clone(struct vsf_sysutil_sockaddr** p_sockptr,
   }
 }
 
-int
-vsf_sysutil_sockaddr_addr_equal(const struct vsf_sysutil_sockaddr* p1,
-                                const struct vsf_sysutil_sockaddr* p2)
+int vsf_sysutil_sockaddr_addr_equal(const struct vsf_sysutil_sockaddr *p1 : itype(_Ptr<const struct vsf_sysutil_sockaddr>), const struct vsf_sysutil_sockaddr *p2 : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
 {
   int family1 = p1->u.u_sockaddr.sa_family;
   int family2 = p2->u.u_sockaddr.sa_family;
@@ -2004,8 +1961,7 @@ vsf_sysutil_sockaddr_addr_equal(const struct vsf_sysutil_sockaddr* p1,
   return 0;
 }
 
-int
-vsf_sysutil_sockaddr_is_ipv6(const struct vsf_sysutil_sockaddr* p_sockaddr)
+int vsf_sysutil_sockaddr_is_ipv6(const struct vsf_sysutil_sockaddr *p_sockaddr : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
 {
   if (p_sockaddr->u.u_sockaddr.sa_family == AF_INET6)
   {
@@ -2014,9 +1970,7 @@ vsf_sysutil_sockaddr_is_ipv6(const struct vsf_sysutil_sockaddr* p_sockaddr)
   return 0;
 }
 
-void
-vsf_sysutil_sockaddr_set_ipv4addr(struct vsf_sysutil_sockaddr* p_sockptr,
-                                  const unsigned char* p_raw)
+void vsf_sysutil_sockaddr_set_ipv4addr(struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<struct vsf_sysutil_sockaddr>), const unsigned char *p_raw)
 {
   if (p_sockptr->u.u_sockaddr.sa_family == AF_INET)
   {
@@ -2026,7 +1980,7 @@ vsf_sysutil_sockaddr_set_ipv4addr(struct vsf_sysutil_sockaddr* p_sockptr,
   else if (p_sockptr->u.u_sockaddr.sa_family == AF_INET6)
   {
     static struct vsf_sysutil_sockaddr* s_p_sockaddr;
-    vsf_sysutil_sockaddr_alloc_ipv4(&s_p_sockaddr);
+    vsf_sysutil_sockaddr_alloc_ipv4(((struct vsf_sysutil_sockaddr **)&s_p_sockaddr));
     vsf_sysutil_memcpy(&s_p_sockaddr->u.u_sockaddr_in.sin_addr, p_raw,
                        sizeof(s_p_sockaddr->u.u_sockaddr_in.sin_addr));
     vsf_sysutil_memcpy(&p_sockptr->u.u_sockaddr_in6.sin6_addr,
@@ -2039,9 +1993,7 @@ vsf_sysutil_sockaddr_set_ipv4addr(struct vsf_sysutil_sockaddr* p_sockptr,
   }
 }
 
-void
-vsf_sysutil_sockaddr_set_ipv6addr(struct vsf_sysutil_sockaddr* p_sockptr,
-                                  const unsigned char* p_raw)
+void vsf_sysutil_sockaddr_set_ipv6addr(struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<struct vsf_sysutil_sockaddr>), const unsigned char *p_raw)
 {
   if (p_sockptr->u.u_sockaddr.sa_family == AF_INET6)
   {
@@ -2054,8 +2006,7 @@ vsf_sysutil_sockaddr_set_ipv6addr(struct vsf_sysutil_sockaddr* p_sockptr,
   }
 }
 
-const void*
-vsf_sysutil_sockaddr_ipv6_v4(const struct vsf_sysutil_sockaddr* p_addr)
+const void * vsf_sysutil_sockaddr_ipv6_v4(const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
 {
   static unsigned char pattern[12] =
       { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF };
@@ -2072,8 +2023,7 @@ vsf_sysutil_sockaddr_ipv6_v4(const struct vsf_sysutil_sockaddr* p_addr)
   return &p_addr_start[12];
 }
 
-const void*
-vsf_sysutil_sockaddr_ipv4_v6(const struct vsf_sysutil_sockaddr* p_addr)
+const void * vsf_sysutil_sockaddr_ipv4_v6(const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
 {
   static unsigned char ret[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF };
   if (p_addr->u.u_sockaddr.sa_family != AF_INET)
@@ -2084,8 +2034,7 @@ vsf_sysutil_sockaddr_ipv4_v6(const struct vsf_sysutil_sockaddr* p_addr)
   return ret;
 }
 
-void*
-vsf_sysutil_sockaddr_get_raw_addr(struct vsf_sysutil_sockaddr* p_sockptr)
+void * vsf_sysutil_sockaddr_get_raw_addr(struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<struct vsf_sysutil_sockaddr>))
 {
   if (p_sockptr->u.u_sockaddr.sa_family == AF_INET)
   {
@@ -2115,8 +2064,7 @@ vsf_sysutil_get_ipaddr_size(void)
   return size;
 }
 
-int
-vsf_sysutil_get_ipsock(const struct vsf_sysutil_sockaddr* p_addr)
+int vsf_sysutil_get_ipsock(const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
 {
   if (p_addr->u.u_sockaddr.sa_family == AF_INET)
   {
@@ -2133,8 +2081,7 @@ vsf_sysutil_get_ipsock(const struct vsf_sysutil_sockaddr* p_addr)
   return -1;
 }
 
-void
-vsf_sysutil_sockaddr_set_any(struct vsf_sysutil_sockaddr* p_sockaddr)
+void vsf_sysutil_sockaddr_set_any(struct vsf_sysutil_sockaddr *p_sockaddr : itype(_Ptr<struct vsf_sysutil_sockaddr>))
 {
   if (p_sockaddr->u.u_sockaddr.sa_family == AF_INET)
   {
@@ -2152,8 +2099,7 @@ vsf_sysutil_sockaddr_set_any(struct vsf_sysutil_sockaddr* p_sockaddr)
   }
 }
 
-unsigned short
-vsf_sysutil_sockaddr_get_port(const struct vsf_sysutil_sockaddr* p_sockptr)
+unsigned short vsf_sysutil_sockaddr_get_port(const struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
 {
   if (p_sockptr->u.u_sockaddr.sa_family == AF_INET)
   {
@@ -2171,9 +2117,7 @@ vsf_sysutil_sockaddr_get_port(const struct vsf_sysutil_sockaddr* p_sockptr)
   return 0;
 }
 
-void
-vsf_sysutil_sockaddr_set_port(struct vsf_sysutil_sockaddr* p_sockptr,
-                              unsigned short the_port)
+void vsf_sysutil_sockaddr_set_port(struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<struct vsf_sysutil_sockaddr>), unsigned short the_port)
 {
   if (p_sockptr->u.u_sockaddr.sa_family == AF_INET)
   {
@@ -2199,10 +2143,9 @@ vsf_sysutil_is_port_reserved(unsigned short the_port)
   return 0;
 }
 
-const char*
-vsf_sysutil_inet_ntop(const struct vsf_sysutil_sockaddr* p_sockptr)
+const char * vsf_sysutil_inet_ntop(const struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
 {
-  const struct sockaddr* p_sockaddr = &p_sockptr->u.u_sockaddr;
+  _Ptr<const struct sockaddr> p_sockaddr =  &p_sockptr->u.u_sockaddr;
   if (p_sockaddr->sa_family == AF_INET)
   {
     return inet_ntoa(p_sockptr->u.u_sockaddr_in.sin_addr);
@@ -2233,8 +2176,7 @@ vsf_sysutil_inet_ntoa(const void* p_raw_addr)
   return inet_ntoa(*((struct in_addr*)p_raw_addr));
 }
 
-int
-vsf_sysutil_inet_aton(const char* p_text, struct vsf_sysutil_sockaddr* p_addr)
+int vsf_sysutil_inet_aton(const char *p_text, struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<struct vsf_sysutil_sockaddr>))
 {
   struct in_addr sin_addr;
   if (p_addr->u.u_sockaddr.sa_family != AF_INET)
@@ -2253,16 +2195,14 @@ vsf_sysutil_inet_aton(const char* p_text, struct vsf_sysutil_sockaddr* p_addr)
   }
 }
 
-void
-vsf_sysutil_dns_resolve(struct vsf_sysutil_sockaddr** p_sockptr,
-                        const char* p_name)
+void vsf_sysutil_dns_resolve(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr, const char *p_name)
 {
   struct hostent* hent = gethostbyname(p_name);
   if (hent == NULL)
   {
     die2("cannot resolve host:", p_name);
   }
-  vsf_sysutil_sockaddr_clear(p_sockptr);
+  vsf_sysutil_sockaddr_clear(((struct vsf_sysutil_sockaddr **)p_sockptr));
   if (hent->h_addrtype == AF_INET)
   {
     unsigned int len = hent->h_length;
@@ -2270,7 +2210,7 @@ vsf_sysutil_dns_resolve(struct vsf_sysutil_sockaddr** p_sockptr,
     {
       len = sizeof((*p_sockptr)->u.u_sockaddr_in.sin_addr);
     }
-    vsf_sysutil_sockaddr_alloc_ipv4(p_sockptr);
+    vsf_sysutil_sockaddr_alloc_ipv4(((struct vsf_sysutil_sockaddr **)p_sockptr));
     vsf_sysutil_memcpy(&(*p_sockptr)->u.u_sockaddr_in.sin_addr,
                        hent->h_addr_list[0], len);
   }
@@ -2281,7 +2221,7 @@ vsf_sysutil_dns_resolve(struct vsf_sysutil_sockaddr** p_sockptr,
     {
       len = sizeof((*p_sockptr)->u.u_sockaddr_in6.sin6_addr);
     }
-    vsf_sysutil_sockaddr_alloc_ipv6(p_sockptr);
+    vsf_sysutil_sockaddr_alloc_ipv6(((struct vsf_sysutil_sockaddr **)p_sockptr));
     vsf_sysutil_memcpy(&(*p_sockptr)->u.u_sockaddr_in6.sin6_addr,
                        hent->h_addr_list[0], len);
   }
@@ -2557,9 +2497,9 @@ void
 vsf_sysutil_tzset(void)
 {
   int retval;
-  char tzbuf[sizeof("+HHMM!")];
+  char tzbuf _Checked[7];
   time_t the_time = time(NULL);
-  struct tm* p_tm;
+  _Ptr<struct tm> p_tm = ((void *)0);
   tzset();
   p_tm = localtime(&the_time);
   if (p_tm == NULL)
@@ -2615,12 +2555,11 @@ vsf_sysutil_tzset(void)
   }
 }
 
-const char*
-vsf_sysutil_get_current_date(void)
+const char *vsf_sysutil_get_current_date(void) : itype(_Nt_array_ptr<const char>)
 {
-  static char datebuf[64];
+  static char datebuf _Nt_checked[64];
   time_t curr_time;
-  const struct tm* p_tm;
+  _Ptr<const struct tm> p_tm = ((void *)0);
   int i = 0;
   curr_time = vsf_sysutil_get_time_sec();
   p_tm = localtime(&curr_time);
@@ -2661,11 +2600,9 @@ vsf_sysutil_get_time_usec(void)
   return s_current_time.tv_usec;
 }
 
-void
-vsf_sysutil_qsort(void* p_base, unsigned int num_elem, unsigned int elem_size,
-                  int (*p_compar)(const void *, const void *))
+void vsf_sysutil_qsort(void *p_base, unsigned int num_elem, unsigned int elem_size, _Ptr<int (const void *, const void *)> p_compar)
 {
-  qsort(p_base, num_elem, elem_size, p_compar);
+  qsort(p_base, num_elem, elem_size, ((__compar_fn_t )p_compar));
 }
 
 void
@@ -2688,8 +2625,7 @@ vsf_sysutil_sleep(double seconds)
   } while (retval == -1 && saved_errno == EINTR);
 }
 
-char*
-vsf_sysutil_getenv(const char* p_var)
+char *vsf_sysutil_getenv(_Nt_array_ptr<const char> p_var) : itype(_Nt_array_ptr<char>)
 {
   return getenv(p_var);
 }
@@ -2715,8 +2651,7 @@ vsf_sysutil_closelog(void)
   closelog();
 }
 
-void
-vsf_sysutil_syslog(const char* p_text, int severe)
+void vsf_sysutil_syslog(const char *p_text : itype(_Ptr<const char>), int severe)
 {
   int prio = LOG_INFO;
   if (severe)

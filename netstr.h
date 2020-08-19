@@ -31,13 +31,7 @@ typedef int (*str_netfd_read_t)(struct vsf_session*
  * of bytes read, _including_ the terminator. 0 for an EOF on the socket.
  * Does not return (exits) for a serious socket error.
  */
-int str_netfd_alloc(struct vsf_session* p_sess,
-                    struct mystr* p_str,
-                    char term,
-                    char* p_readbuf,
-                    unsigned int maxlen,
-                    str_netfd_read_t p_peekfunc,
-                    str_netfd_read_t p_readfunc);
+int str_netfd_alloc(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, char term, char *p_readbuf, unsigned int maxlen, _Ptr<int (_Ptr<struct vsf_session> , char *, unsigned int )> p_peekfunc, _Ptr<int (_Ptr<struct vsf_session> , char *, unsigned int )> p_readfunc);
 
 /* str_netfd_read()
  * PURPOSE
@@ -51,7 +45,7 @@ int str_netfd_alloc(struct vsf_session* p_sess,
  * Number read on success, -1 on failure. The read is considered a failure
  * unless the full requested byte count is read.
  */
-int str_netfd_read(struct mystr* p_str, int fd, unsigned int len);
+int str_netfd_read(_Ptr<struct mystr> p_str, int fd, unsigned int len);
 
 /* str_netfd_write()
  * PURPOSE
@@ -64,7 +58,7 @@ int str_netfd_read(struct mystr* p_str, int fd, unsigned int len);
  * Number written on success, -1 on failure. The write is considered a failure
  * unless the full string buffer object is written.
  */
-int str_netfd_write(const struct mystr* p_str, int fd);
+int str_netfd_write(_Ptr<const struct mystr> p_str, int fd);
 
 #endif /* VSFTP_NETSTR_H */
 

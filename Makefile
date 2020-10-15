@@ -17,7 +17,7 @@ OBJS	=	main.o utility.o prelogin.o ftpcmdio.o postlogin.o privsock.o \
 		postprivparent.o logging.o str.o netstr.o sysstr.o strlist.o \
     banner.o filestr.o parseconf.o secutil.o \
     ascii.o oneprocess.o twoprocess.o privops.o standalone.o hash.o \
-    tcpwrap.o ipaddrparse.o access.o features.o readwrite.o opts.o \
+    tcpwrap.o ipaddrparse.o access.o vsftpd_features.o readwrite.o opts.o \
     ssl.o sslslave.o ptracesandbox.o ftppolicy.o sysutil.o sysdeputil.o \
     seccompsandbox.o
 

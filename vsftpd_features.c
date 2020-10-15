@@ -7,7 +7,7 @@
  * Routines to tell the client what features we support.
  */
 
-#include "features.h"
+#include "vsftpd_features.h"
 #include "ftpcodes.h"
 #include "ftpcmdio.h"
 #include "tunables.h"

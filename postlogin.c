@@ -23,7 +23,7 @@
 #include "sysdeputil.h"
 #include "ipaddrparse.h"
 #include "access.h"
-#include "features.h"
+#include "vsftpd_features.h"
 #include "ssl.h"
 #include "vsftpver.h"
 #include "opts.h"

@@ -21,7 +21,7 @@
 #include "banner.h"
 #include "logging.h"
 #include "ssl.h"
-#include "features.h"
+#include "vsftpd_features.h"
 #include "defs.h"
 #include "opts.h"
 

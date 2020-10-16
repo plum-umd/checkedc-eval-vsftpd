@@ -212,7 +212,7 @@ int capset(cap_user_header_t header, const cap_user_data_t data)
 #endif
 
 #ifdef VSF_SYSDEP_TRY_LINUX_SETPROCTITLE_HACK
-extern char** environ;
+extern char ** environ;
 static unsigned int s_proctitle_space = 0;
 static int s_proctitle_inited = 0;
 static char* s_p_proctitle = 0;
@@ -908,6 +908,12 @@ vsf_sysutil_setproctitle_init(int argc, const char* argv[])
 {
   int i;
   char** p_env = environ;
+  /* Force p_env to stay wild */
+  if (0) {
+    *p_env = (char*) 0xBAD;
+    p_env = (char**) 0xBAD;
+  }
+
   if (s_proctitle_inited)
   {
     bug("vsf_sysutil_setproctitle_init called twice");

@@ -1381,7 +1381,7 @@ vsf_sysutil_statbuf_get_date(const struct vsf_sysutil_statbuf* p_statbuf,
   {
     p_date_format = "%b %d  %Y";
   }
-  retval = strftime(datebuf, sizeof(datebuf), p_date_format, p_tm);
+  retval = strftime(datebuf, sizeof(datebuf) - 1, p_date_format, p_tm);
   datebuf[sizeof(datebuf)-1] = '\0';
   if (retval == 0)
   {
@@ -1407,7 +1407,7 @@ vsf_sysutil_statbuf_get_numeric_date(
   {
     p_tm = localtime(&p_stat->st_mtime);
   }
-  retval = strftime(datebuf, sizeof(datebuf), "%Y%m%d%H%M%S", p_tm);
+  retval = strftime(datebuf, sizeof(datebuf) - 1, "%Y%m%d%H%M%S", p_tm);
   if (retval == 0)
   {
     die("strftime");
@@ -2624,7 +2624,7 @@ vsf_sysutil_get_current_date(void)
   int i = 0;
   curr_time = vsf_sysutil_get_time_sec();
   p_tm = localtime(&curr_time);
-  if (strftime(datebuf, sizeof(datebuf), "%a %b!%d %H:%M:%S %Y", p_tm) == 0)
+  if (strftime(datebuf, sizeof(datebuf) - 1, "%a %b!%d %H:%M:%S %Y", p_tm) == 0)
   {
     die("strftime");
   }

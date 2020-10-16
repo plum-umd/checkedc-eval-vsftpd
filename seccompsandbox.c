@@ -17,7 +17,7 @@
 #include "tunables.h"
 #include "utility.h"
 
-#include <errno.h>
+#include <errno_checked.h>
 
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -62,8 +62,8 @@
 
 #ifdef DEBUG_SIGSYS
 
-#include <signal.h>
-#include <string.h>
+#include <signal_checked.h>
+#include <string_checked.h>
 
 void
 handle_sigsys(int sig)

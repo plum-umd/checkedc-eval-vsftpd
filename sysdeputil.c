@@ -36,7 +36,7 @@
 #include <sys/uio.h>
 
 #include <sys/prctl.h>
-#include <signal.h>
+#include <signal_checked.h>
 
 /* Configuration.. here are the possibilities */
 #undef VSF_SYSDEP_HAVE_CAPABILITIES
@@ -65,7 +65,7 @@
 
 /* BEGIN config */
 #if defined(__linux__)
-  #include <errno.h>
+  #include <errno_checked.h>
   #include <syscall.h>
   #define VSF_SYSDEP_HAVE_LINUX_CLONE
   #include <sched.h>
@@ -79,7 +79,7 @@
     #define CLONE_NEWNET 0x40000000
   #endif
   #include <linux/unistd.h>
-  #include <errno.h>
+  #include <errno_checked.h>
   #include <syscall.h>
 #endif
 
@@ -106,7 +106,7 @@
 #endif
 
 #if defined(__NetBSD__)
-  #include <stdlib.h>
+  #include <stdlib_checked.h>
   #define VSF_SYSDEP_HAVE_SETPROCTITLE
   #include <sys/param.h>
   #if __NetBSD_Version__ >= 106070000
@@ -129,7 +129,7 @@
   #undef VSF_SYSDEP_HAVE_UTMPX
 #endif
 
-#include <unistd.h>
+#include <unistd_checked.h>
 #include <sys/mman.h>
 #ifdef MAP_ANON
   #define VSF_SYSDEP_HAVE_MAP_ANON
@@ -173,7 +173,7 @@
 /* This may hit our own "dummy" include and undef VSF_SYSDEP_HAVE_SHADOW */
 #include <shadow.h>
 #include <pwd.h>
-#include <unistd.h>
+#include <unistd_checked.h>
 #include <crypt.h>
 #endif
 
@@ -183,7 +183,7 @@
 #if defined(VSF_SYSDEP_HAVE_CAPABILITIES) && !defined(VSF_SYSDEP_HAVE_LIBCAP)
 #include <linux/unistd.h>
 #include <linux/capability.h>
-#include <errno.h>
+#include <errno_checked.h>
 #include <syscall.h>
 int capset(cap_user_header_t header, const cap_user_data_t data)
 {
@@ -203,12 +203,12 @@ int capset(cap_user_header_t header, const cap_user_data_t data)
 #elif defined(VSF_SYSDEP_HAVE_HPUX_SENDFILE)
 #include <sys/socket.h>
 #else /* VSF_SYSDEP_HAVE_LINUX_SENDFILE */
-#include <unistd.h>
+#include <unistd_checked.h>
 #endif /* VSF_SYSDEP_HAVE_LINUX_SENDFILE */
 
 #ifdef VSF_SYSDEP_HAVE_SETPROCTITLE
 #include <sys/types.h>
-#include <unistd.h>
+#include <unistd_checked.h>
 #endif
 
 #ifdef VSF_SYSDEP_TRY_LINUX_SETPROCTITLE_HACK

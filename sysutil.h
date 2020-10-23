@@ -151,9 +151,9 @@ void vsf_sysutil_memprotect(void* p_addr, unsigned int len,
 void vsf_sysutil_memunmap(void* p_start, unsigned int length);
 
 /* Memory allocating/freeing */
-void* vsf_sysutil_malloc(unsigned int size);
-void* vsf_sysutil_realloc(void* p_ptr, unsigned int size);
-void vsf_sysutil_free(void* p_ptr);
+_Itype_for_any(T) void* vsf_sysutil_malloc(unsigned int size) : itype(_Array_ptr<T>) byte_count(size);
+_Itype_for_any(T) void* vsf_sysutil_realloc(void* p_ptr : itype(_Array_ptr<T>) byte_count(1), unsigned int size) : itype(_Array_ptr<T>) byte_count(size);
+_Itype_for_any(T) void vsf_sysutil_free(void* p_ptr : itype(_Array_ptr<T>) byte_count(0));
 
 /* Process creation/exit/process handling */
 unsigned int vsf_sysutil_getpid(void);
@@ -175,12 +175,12 @@ int vsf_sysutil_wait_get_exitcode(_Ptr<const struct vsf_sysutil_wait_retval> p_w
 /* Various string functions */
 unsigned int vsf_sysutil_strlen(const char *p_text : itype(_Nt_array_ptr<const char>));
 char *vsf_sysutil_strdup(const char *p_str : itype(_Nt_array_ptr<const char>)) : itype(_Nt_array_ptr<char>);
-void vsf_sysutil_memclr(void* p_dest, unsigned int size);
-void vsf_sysutil_memcpy(void* p_dest, const void* p_src,
-                        const unsigned int size);
+_Itype_for_any(T) void vsf_sysutil_memclr(void* p_dest : itype(_Array_ptr<T>) byte_count(size), unsigned int size);
+_Itype_for_any(T) void vsf_sysutil_memcpy(void* p_dest : itype(_Array_ptr<T>) byte_count(size), const void* p_src : itype(_Array_ptr<const T>) byte_count(size),
+		                          const unsigned int size);
 void vsf_sysutil_strcpy(char *p_dest : itype(_Array_ptr<char>), const char *p_src : itype(_Array_ptr<const char>), unsigned int maxsize);
-int vsf_sysutil_memcmp(const void* p_src1, const void* p_src2,
-                       unsigned int size);
+_Itype_for_any(T) int vsf_sysutil_memcmp(const void* p_src1 : itype(_Array_ptr<const T>) byte_count(size), const void* p_src2 : itype(_Array_ptr<const T>) byte_count(size),
+                                         unsigned int size);
 int vsf_sysutil_strcmp(const char *p_src1 : itype(_Nt_array_ptr<const char>), const char *p_src2 : itype(_Nt_array_ptr<const char>));
 int vsf_sysutil_atoi(const char* p_str);
 filesize_t vsf_sysutil_a_to_filesize_t(const char *p_str : itype(_Nt_array_ptr<const char>));

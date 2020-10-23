@@ -496,8 +496,9 @@ vsf_sysutil_lseek_end(const int fd)
   }
 }
 
-void*
-vsf_sysutil_malloc(unsigned int size)
+
+_Itype_for_any(T) void*
+vsf_sysutil_malloc(unsigned int size) : itype(_Array_ptr<T>) byte_count(size)
 {
   void* p_ret;
   /* Paranoia - what if we got an integer overflow/underflow? */
@@ -513,8 +514,8 @@ vsf_sysutil_malloc(unsigned int size)
   return p_ret;
 }
 
-void*
-vsf_sysutil_realloc(void* p_ptr, unsigned int size)
+_Itype_for_any(T) void*
+vsf_sysutil_realloc(void* p_ptr : itype(_Array_ptr<T>) byte_count(1), unsigned int size) : itype(_Array_ptr<T>) byte_count(size)
 {
   void* p_ret;
   if (size == 0 || size > INT_MAX)
@@ -529,8 +530,8 @@ vsf_sysutil_realloc(void* p_ptr, unsigned int size)
   return p_ret;
 }
 
-void
-vsf_sysutil_free(void* p_ptr)
+_Itype_for_any(T) void
+vsf_sysutil_free(void* p_ptr : itype(_Array_ptr<T>) byte_count(0))
 {
   if (p_ptr == NULL)
   {
@@ -1035,8 +1036,8 @@ vsf_sysutil_strdup(const char* p_str)
   return strdup(p_str);
 }
 
-void
-vsf_sysutil_memclr(void* p_dest, unsigned int size)
+_Itype_for_any(T) void
+vsf_sysutil_memclr(void* p_dest : itype(_Array_ptr<T>) byte_count(size), unsigned int size)
 {
   /* Safety */
   if (size == 0)
@@ -1046,8 +1047,8 @@ vsf_sysutil_memclr(void* p_dest, unsigned int size)
   memset(p_dest, '\0', size);
 }
 
-void
-vsf_sysutil_memcpy(void* p_dest, const void* p_src, const unsigned int size)
+_Itype_for_any(T) void
+vsf_sysutil_memcpy(void* p_dest : itype(_Array_ptr<T>) byte_count(size), const void* p_src : itype(_Array_ptr<const T>) byte_count(size), const unsigned int size)
 {
   /* Safety */
   if (size == 0)
@@ -1073,8 +1074,8 @@ vsf_sysutil_strcpy(char* p_dest, const char* p_src, unsigned int maxsize)
   p_dest[maxsize - 1] = '\0';
 }
 
-int
-vsf_sysutil_memcmp(const void* p_src1, const void* p_src2, unsigned int size)
+_Itype_for_any(T) int
+vsf_sysutil_memcmp(const void* p_src1 : itype(_Array_ptr<const T>) byte_count(size), const void* p_src2 : itype(_Array_ptr<const T>) byte_count(size), unsigned int size)
 {
   /* Safety */
   if (size == 0)

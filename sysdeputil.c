@@ -30,7 +30,7 @@
 
 /* For fd passing */
 #include <sys/types.h>
-#include <sys/socket.h>
+#include <sys/socket_checked.h>
 /* For FreeBSD */
 #include <sys/param.h>
 #include <sys/uio.h>
@@ -117,7 +117,7 @@
 #endif
 
 #ifdef __hpux
-  #include <sys/socket.h>
+  #include <sys/socket_checked.h>
   #ifdef SF_DISCONNECT
     #define VSF_SYSDEP_HAVE_HPUX_SENDFILE
   #endif
@@ -199,9 +199,9 @@ int capset(cap_user_header_t header, const cap_user_data_t data)
 #include <sys/sendfile.h>
 #elif defined(VSF_SYSDEP_HAVE_FREEBSD_SENDFILE)
 #include <sys/types.h>
-#include <sys/socket.h>
+#include <sys/socket_checked.h>
 #elif defined(VSF_SYSDEP_HAVE_HPUX_SENDFILE)
-#include <sys/socket.h>
+#include <sys/socket_checked.h>
 #else /* VSF_SYSDEP_HAVE_LINUX_SENDFILE */
 #include <unistd_checked.h>
 #endif /* VSF_SYSDEP_HAVE_LINUX_SENDFILE */

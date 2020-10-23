@@ -25,7 +25,7 @@
 #include <sys/fcntl.h>
 #include <sys/mman.h>
 #include <sys/prctl.h>
-#include <sys/socket.h>
+#include <sys/socket_checked.h>
 #include <sys/types.h>
 
 #include <linux/filter.h>

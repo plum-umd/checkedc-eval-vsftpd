@@ -2,7 +2,7 @@
 #define VSF_CMSG_EXTRAS_H
 
 #include <sys/types.h>
-#include <sys/socket.h>
+#include <sys/socket_checked.h>
 
 /* These are from Linux glibc-2.2 */
 #ifndef CMSG_ALIGN

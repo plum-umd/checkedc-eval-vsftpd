@@ -15,7 +15,7 @@
 
 /* For AF_INET etc. network constants. */
 #include <sys/types.h>
-#include <sys/socket.h>
+#include <sys/socket_checked.h>
 #include <netinet/in_systm.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>

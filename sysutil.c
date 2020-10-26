@@ -943,7 +943,7 @@ vsf_sysutil_isdigit(int the_char)
 }
 
 char*
-vsf_sysutil_getcwd(char* p_dest, const unsigned int buf_size)
+vsf_sysutil_getcwd(char* p_dest : itype(_Nt_array_ptr<char>), const unsigned int buf_size) : itype(_Nt_array_ptr<char>)
 {
   char* p_retval;
   if (buf_size == 0) {
@@ -955,19 +955,19 @@ vsf_sysutil_getcwd(char* p_dest, const unsigned int buf_size)
 }
 
 int
-vsf_sysutil_mkdir(const char* p_dirname, const unsigned int mode)
+vsf_sysutil_mkdir(const char* p_dirname : itype(_Nt_array_ptr<const char>) , const unsigned int mode)
 {
   return mkdir(p_dirname, mode);
 }
 
 int
-vsf_sysutil_rmdir(const char* p_dirname)
+vsf_sysutil_rmdir(const char* p_dirname : itype(_Nt_array_ptr<const char>))
 {
   return rmdir(p_dirname);
 }
 
 int
-vsf_sysutil_chdir(const char* p_dirname)
+vsf_sysutil_chdir(const char* p_dirname : itype(_Nt_array_ptr<const char>))
 {
   return chdir(p_dirname);
 }
@@ -979,13 +979,13 @@ vsf_sysutil_rename(const char *p_from : itype(_Nt_array_ptr<const char>), const 
 }
 
 struct vsf_sysutil_dir*
-vsf_sysutil_opendir(const char* p_dirname)
+vsf_sysutil_opendir(const char* p_dirname : itype(_Nt_array_ptr<const char>)) : itype(_Ptr<struct vsf_sysutil_dir>)
 {
   return (struct vsf_sysutil_dir*) opendir(p_dirname);
 }
 
 void
-vsf_sysutil_closedir(struct vsf_sysutil_dir* p_dir)
+vsf_sysutil_closedir(struct vsf_sysutil_dir* p_dir : itype(_Ptr<struct vsf_sysutil_dir>))
 {
   DIR* p_real_dir = (DIR*) p_dir;
   int retval = closedir(p_real_dir);
@@ -996,7 +996,7 @@ vsf_sysutil_closedir(struct vsf_sysutil_dir* p_dir)
 }
 
 const char*
-vsf_sysutil_next_dirent(struct vsf_sysutil_dir* p_dir)
+vsf_sysutil_next_dirent(struct vsf_sysutil_dir* p_dir : itype(_Ptr<struct vsf_sysutil_dir>)) : itype(_Nt_array_ptr<const char>)
 {
   DIR* p_real_dir = (DIR*) p_dir;
   struct dirent* p_dirent = readdir(p_real_dir);
@@ -2174,7 +2174,7 @@ vsf_sysutil_is_port_reserved(unsigned short the_port)
 }
 
 const char*
-vsf_sysutil_inet_ntop(const struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
+vsf_sysutil_inet_ntop(const struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<const struct vsf_sysutil_sockaddr>)) : itype(_Nt_array_ptr<const char>)
 {
   _Ptr<const struct sockaddr> p_sockaddr = &p_sockptr->u.u_sockaddr;
   if (p_sockaddr->sa_family == AF_INET)
@@ -2201,14 +2201,14 @@ vsf_sysutil_inet_ntop(const struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<
   }
 }
 
-const char*
-vsf_sysutil_inet_ntoa(const void* p_raw_addr)
+_Itype_for_any(T) const char*
+vsf_sysutil_inet_ntoa(const void* p_raw_addr : itype(_Ptr<T>)) : itype(_Nt_array_ptr<const char>)
 {
   return inet_ntoa(*((struct in_addr*)p_raw_addr));
 }
 
 int
-vsf_sysutil_inet_aton(const char* p_text, struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<struct vsf_sysutil_sockaddr>))
+vsf_sysutil_inet_aton(const char* p_text : itype(_Nt_array_ptr<const char>), struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<struct vsf_sysutil_sockaddr>))
 {
   struct in_addr sin_addr;
   if (p_addr->u.u_sockaddr.sa_family != AF_INET)
@@ -2228,7 +2228,7 @@ vsf_sysutil_inet_aton(const char* p_text, struct vsf_sysutil_sockaddr *p_addr : 
 }
 
 void
-vsf_sysutil_dns_resolve(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr, const char* p_name)
+vsf_sysutil_dns_resolve(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr, const char* p_name : itype(_Nt_array_ptr<const char>))
 {
   struct hostent* hent = gethostbyname(p_name);
   if (hent == NULL)
@@ -2265,7 +2265,7 @@ vsf_sysutil_dns_resolve(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr, const cha
 }
 
 struct vsf_sysutil_user*
-vsf_sysutil_getpwuid(const int uid)
+vsf_sysutil_getpwuid(const int uid) : itype(_Ptr<struct vsf_sysutil_user>)
 {
   if (uid < 0)
   {
@@ -2275,41 +2275,41 @@ vsf_sysutil_getpwuid(const int uid)
 }
 
 struct vsf_sysutil_user*
-vsf_sysutil_getpwnam(const char* p_user)
+vsf_sysutil_getpwnam(const char* p_user : itype(_Nt_array_ptr<const char>)) : itype(_Ptr<struct vsf_sysutil_user>)
 {
   return (struct vsf_sysutil_user*) getpwnam(p_user);
 }
 
 const char*
-vsf_sysutil_user_getname(const struct vsf_sysutil_user* p_user)
+vsf_sysutil_user_getname(const struct vsf_sysutil_user* p_user : itype(_Ptr<const struct vsf_sysutil_user>)) : itype(_Nt_array_ptr<const char>)
 {
   const struct passwd* p_passwd = (const struct passwd*) p_user;
   return p_passwd->pw_name;
 }
 
 const char*
-vsf_sysutil_user_get_homedir(const struct vsf_sysutil_user* p_user)
+vsf_sysutil_user_get_homedir(const struct vsf_sysutil_user* p_user : itype(_Ptr<const struct vsf_sysutil_user>)) : itype(_Nt_array_ptr<const char>)
 {
   const struct passwd* p_passwd = (const struct passwd*) p_user;
   return p_passwd->pw_dir;
 }
 
 int
-vsf_sysutil_user_getuid(const struct vsf_sysutil_user* p_user)
+vsf_sysutil_user_getuid(const struct vsf_sysutil_user* p_user : itype(_Ptr<const struct vsf_sysutil_user>))
 {
   const struct passwd* p_passwd = (const struct passwd*) p_user;
   return p_passwd->pw_uid;
 }
 
 int
-vsf_sysutil_user_getgid(const struct vsf_sysutil_user* p_user)
+vsf_sysutil_user_getgid(const struct vsf_sysutil_user* p_user : itype(_Ptr<const struct vsf_sysutil_user>))
 { 
   const struct passwd* p_passwd = (const struct passwd*) p_user;
   return p_passwd->pw_gid;
 }
 
 struct vsf_sysutil_group*
-vsf_sysutil_getgrgid(const int gid)
+vsf_sysutil_getgrgid(const int gid) : itype(_Ptr<struct vsf_sysutil_group>)
 {
   if (gid < 0)
   {
@@ -2319,7 +2319,7 @@ vsf_sysutil_getgrgid(const int gid)
 }
 
 const char*
-vsf_sysutil_group_getname(const struct vsf_sysutil_group* p_group)
+vsf_sysutil_group_getname(const struct vsf_sysutil_group* p_group : itype(_Ptr<const struct vsf_sysutil_group>)) : itype(_Nt_array_ptr<const char>)
 {
   const struct group* p_grp = (const struct group*) p_group;
   return p_grp->gr_name;

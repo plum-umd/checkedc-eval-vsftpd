@@ -58,16 +58,16 @@ void vsf_sysutil_set_alarm(const unsigned int trigger_seconds);
 void vsf_sysutil_clear_alarm(void);
 
 /* Directory related things */
-char* vsf_sysutil_getcwd(char* p_dest, const unsigned int buf_size);
-int vsf_sysutil_mkdir(const char* p_dirname, const unsigned int mode);
-int vsf_sysutil_rmdir(const char* p_dirname);
-int vsf_sysutil_chdir(const char* p_dirname);
+char* vsf_sysutil_getcwd(char* p_dest : itype(_Nt_array_ptr<char>), const unsigned int buf_size) : itype(_Nt_array_ptr<char>);
+int vsf_sysutil_mkdir(const char* p_dirname : itype(_Nt_array_ptr<const char>), const unsigned int mode);
+int vsf_sysutil_rmdir(const char* p_dirname : itype(_Nt_array_ptr<const char>));
+int vsf_sysutil_chdir(const char* p_dirname : itype(_Nt_array_ptr<const char>));
 int vsf_sysutil_rename(const char *p_from : itype(_Nt_array_ptr<const char>), const char *p_to : itype(_Nt_array_ptr<const char>));
 
 struct vsf_sysutil_dir;
-struct vsf_sysutil_dir* vsf_sysutil_opendir(const char* p_dirname);
-void vsf_sysutil_closedir(struct vsf_sysutil_dir* p_dir);
-const char* vsf_sysutil_next_dirent(struct vsf_sysutil_dir* p_dir);
+struct vsf_sysutil_dir* vsf_sysutil_opendir(const char* p_dirname : itype(_Nt_array_ptr<const char>)) : itype(_Ptr<struct vsf_sysutil_dir>);
+void vsf_sysutil_closedir(struct vsf_sysutil_dir* p_dir : itype(_Ptr<struct vsf_sysutil_dir>));
+const char* vsf_sysutil_next_dirent(struct vsf_sysutil_dir* p_dir : itype(_Ptr<struct vsf_sysutil_dir>)) : itype(_Nt_array_ptr<const char>);
 
 /* File create/open/close etc. */
 enum EVSFSysUtilOpenMode
@@ -230,7 +230,7 @@ void vsf_sysutil_getpeername(int fd, _Ptr<struct vsf_sysutil_sockaddr *> p_sockp
 int vsf_sysutil_accept_timeout(int fd,  struct vsf_sysutil_sockaddr *p_sockaddr : itype(_Ptr<struct vsf_sysutil_sockaddr>),
                                unsigned int wait_seconds);
 int vsf_sysutil_connect_timeout(int fd, const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>), unsigned int wait_seconds);
-void vsf_sysutil_dns_resolve(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr, const char* p_name);
+void vsf_sysutil_dns_resolve(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr, const char* p_name : itype(_Nt_array_ptr<const char>));
 /* Option setting on sockets */
 void vsf_sysutil_activate_keepalive(int fd);
 void vsf_sysutil_set_iptos_throughput(int fd);
@@ -249,24 +249,24 @@ void vsf_sysutil_shutdown_read_failok(int fd);
 _Itype_for_any(T) int vsf_sysutil_recv_peek(const int fd, void* p_buf : itype(_Array_ptr<T>) byte_count(len), unsigned int len);
 
 
-const char* vsf_sysutil_inet_ntop(const struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<const struct vsf_sysutil_sockaddr>));
-const char* vsf_sysutil_inet_ntoa(const void* p_raw_addr);
-int vsf_sysutil_inet_aton(const char* p_text, struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<struct vsf_sysutil_sockaddr>));
+const char* vsf_sysutil_inet_ntop(const struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<const struct vsf_sysutil_sockaddr>)) : itype(_Nt_array_ptr<const char>);
+_Itype_for_any(T) const char* vsf_sysutil_inet_ntoa(const void* p_raw_addr : itype(_Ptr<T>)) : itype(_Nt_array_ptr<const char>);
+int vsf_sysutil_inet_aton(const char* p_text : itype(_Nt_array_ptr<const char>), struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<struct vsf_sysutil_sockaddr>));
 
 /* User database queries etc. */
 struct vsf_sysutil_user;
 struct vsf_sysutil_group;
 
-struct vsf_sysutil_user* vsf_sysutil_getpwuid(const int uid);
-struct vsf_sysutil_user* vsf_sysutil_getpwnam(const char* p_user);
-const char* vsf_sysutil_user_getname(const struct vsf_sysutil_user* p_user);
+struct vsf_sysutil_user* vsf_sysutil_getpwuid(const int uid) : itype(_Ptr<struct vsf_sysutil_user>);
+struct vsf_sysutil_user* vsf_sysutil_getpwnam(const char* p_user : itype(_Nt_array_ptr<const char>)) : itype(_Ptr<struct vsf_sysutil_user>);
+const char* vsf_sysutil_user_getname(const struct vsf_sysutil_user* p_user : itype(_Ptr<const struct vsf_sysutil_user>)) : itype(_Nt_array_ptr<const char>);
 const char* vsf_sysutil_user_get_homedir(
-  const struct vsf_sysutil_user* p_user);
-int vsf_sysutil_user_getuid(const struct vsf_sysutil_user* p_user);
-int vsf_sysutil_user_getgid(const struct vsf_sysutil_user* p_user);
+  const struct vsf_sysutil_user* p_user : itype(_Ptr<const struct vsf_sysutil_user>)) : itype(_Nt_array_ptr<const char>);
+int vsf_sysutil_user_getuid(const struct vsf_sysutil_user* p_user : itype(_Ptr<const struct vsf_sysutil_user>));
+int vsf_sysutil_user_getgid(const struct vsf_sysutil_user* p_user : itype(_Ptr<const struct vsf_sysutil_user>));
 
-struct vsf_sysutil_group* vsf_sysutil_getgrgid(const int gid);
-const char* vsf_sysutil_group_getname(const struct vsf_sysutil_group* p_group);
+struct vsf_sysutil_group* vsf_sysutil_getgrgid(const int gid) : itype(_Ptr<struct vsf_sysutil_group>);
+const char* vsf_sysutil_group_getname(const struct vsf_sysutil_group* p_group : itype(_Ptr<const struct vsf_sysutil_group>)) : itype(_Nt_array_ptr<const char>);
 
 /* More random things */
 unsigned int vsf_sysutil_getpagesize(void);
@@ -290,19 +290,19 @@ void vsf_sysutil_closelog(void);
 
 /* Credentials handling */
 int vsf_sysutil_running_as_root(void);
-void vsf_sysutil_setuid(const struct vsf_sysutil_user* p_user);
-void vsf_sysutil_setgid(const struct vsf_sysutil_user* p_user);
+void vsf_sysutil_setuid(const struct vsf_sysutil_user* p_user : itype(_Ptr<const struct vsf_sysutil_user>));
+void vsf_sysutil_setgid(const struct vsf_sysutil_user* p_user : itype(_Ptr<const struct vsf_sysutil_user>));
 void vsf_sysutil_setuid_numeric(int uid);
 void vsf_sysutil_setgid_numeric(int gid);
 int vsf_sysutil_geteuid(void);
 int vsf_sysutil_getegid(void);
-void vsf_sysutil_seteuid(const struct vsf_sysutil_user* p_user);
-void vsf_sysutil_setegid(const struct vsf_sysutil_user* p_user);
+void vsf_sysutil_seteuid(const struct vsf_sysutil_user* p_user : itype(_Ptr<const struct vsf_sysutil_user>));
+void vsf_sysutil_setegid(const struct vsf_sysutil_user* p_user : itype(_Ptr<const struct vsf_sysutil_user>));
 void vsf_sysutil_seteuid_numeric(int uid);
 void vsf_sysutil_setegid_numeric(int gid);
 void vsf_sysutil_clear_supp_groups(void);
-void vsf_sysutil_initgroups(const struct vsf_sysutil_user* p_user);
-void vsf_sysutil_chroot(const char* p_root_path);
+void vsf_sysutil_initgroups(const struct vsf_sysutil_user* p_user : itype(_Ptr<const struct vsf_sysutil_user>));
+void vsf_sysutil_chroot(const char* p_root_path : itype(_Nt_array_ptr<const char>));
 
 /* Time handling */
 /* Do not call get_time_usec() without calling get_time_sec()
@@ -312,7 +312,7 @@ long vsf_sysutil_get_time_sec(void);
 long vsf_sysutil_get_time_usec(void);
 long vsf_sysutil_parse_time(const char *p_text : itype(_Nt_array_ptr<const char>));
 void vsf_sysutil_sleep(double seconds);
-int vsf_sysutil_setmodtime(const char* p_file, long the_time, int is_localtime);
+int vsf_sysutil_setmodtime(const char* p_file : itype(_Nt_array_ptr<const char>), long the_time, int is_localtime);
 
 /* Limits */
 void vsf_sysutil_set_address_space_limit(unsigned long bytes);

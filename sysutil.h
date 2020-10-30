@@ -246,7 +246,8 @@ void vsf_sysutil_deactivate_noblock(int fd);
 void vsf_sysutil_shutdown_failok(int fd);
 /* And this does SHUT_RD */
 void vsf_sysutil_shutdown_read_failok(int fd);
-int vsf_sysutil_recv_peek(const int fd, void* p_buf, unsigned int len);
+_Itype_for_any(T) int vsf_sysutil_recv_peek(const int fd, void* p_buf : itype(_Array_ptr<T>) byte_count(len), unsigned int len);
+
 
 const char* vsf_sysutil_inet_ntop(const struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<const struct vsf_sysutil_sockaddr>));
 const char* vsf_sysutil_inet_ntoa(const void* p_raw_addr);

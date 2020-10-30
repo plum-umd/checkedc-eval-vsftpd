@@ -772,8 +772,7 @@ vsf_sysutil_deactivate_noblock(int fd)
   }
 }
 
-int
-vsf_sysutil_recv_peek(const int fd, void* p_buf, unsigned int len)
+_Itype_for_any(T) int vsf_sysutil_recv_peek(const int fd, void* p_buf : itype(_Array_ptr<T>) byte_count(len), unsigned int len)
 {
   while (1)
   {

@@ -303,7 +303,7 @@ void vsf_sysutil_chroot(const char *p_root_path /*unsafe itype*/ : itype(_Ptr<co
  */
 long vsf_sysutil_get_time_sec(void);
 long vsf_sysutil_get_time_usec(void);
-long vsf_sysutil_parse_time(const char *p_text : itype(_Nt_array_ptr<const char>) count(2));
+long vsf_sysutil_parse_time(const char *p_text : itype(_Nt_array_ptr<const char>));
 void vsf_sysutil_sleep(double seconds);
 int vsf_sysutil_setmodtime(const char *p_file /*unsafe itype*/ : itype(_Ptr<const char>), long the_time, int is_localtime);
 

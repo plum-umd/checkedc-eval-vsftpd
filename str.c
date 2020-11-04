@@ -21,8 +21,8 @@
 #include "sysutil.h"
 
 /* File local functions */
-static void str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, _Nt_array_ptr<const char> p_text : count(2), int is_reverse);
-static int str_equal_internal(const char *p_buf1 : itype(_Array_ptr<const char>), unsigned int buf1_len, const char *p_buf2 : itype(_Array_ptr<const char>) count(2), unsigned int buf2_len);
+static void str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, _Nt_array_ptr<const char> p_text, int is_reverse);
+static int str_equal_internal(const char *p_buf1 : itype(_Array_ptr<const char>) count(buf1_len), unsigned int buf1_len, const char *p_buf2 : itype(_Array_ptr<const char>) count(buf2_len), unsigned int buf2_len);
 
 /* Private functions */
 static void
@@ -82,7 +82,7 @@ private_str_append_memchunk(_Ptr<struct mystr> p_str, const char *p_src : itype(
 
 /* Public functions */
 void
-str_alloc_text(_Ptr<struct mystr> p_str, const char *p_src : itype(_Nt_array_ptr<const char>) count(2))
+str_alloc_text(_Ptr<struct mystr> p_str, const char *p_src : itype(_Nt_array_ptr<const char>))
 {
   unsigned int len = vsf_sysutil_strlen(p_src);
   private_str_alloc_memchunk(p_str, p_src, len);
@@ -100,9 +100,9 @@ const char *str_strdup(_Ptr<const struct mystr> p_str) : itype(_Nt_array_ptr<con
 }
 
 void
-str_alloc_alt_term(_Ptr<struct mystr> p_str, const char *p_src : itype(_Array_ptr<const char>) count(2), char term)
+str_alloc_alt_term(_Ptr<struct mystr> p_str, const char *p_src : itype(_Array_ptr<const char>), char term)
 {
-  _Array_ptr<const char> p_search = p_src;
+  const char *p_search = p_src;
   unsigned int len = 0;
   while (*p_search != term)
   {
@@ -209,7 +209,7 @@ str_strcmp(_Ptr<const struct mystr> p_str1, _Ptr<const struct mystr> p_str2)
 }
 
 static int
-str_equal_internal(const char *p_buf1 : itype(_Array_ptr<const char>), unsigned int buf1_len, const char *p_buf2 : itype(_Array_ptr<const char>) count(2), unsigned int buf2_len)
+str_equal_internal(const char *p_buf1 : itype(_Array_ptr<const char>) count(buf1_len), unsigned int buf1_len, const char *p_buf2 : itype(_Array_ptr<const char>) count(buf2_len), unsigned int buf2_len)
 {
   int retval;
   unsigned int minlen = buf1_len;
@@ -233,10 +233,11 @@ str_equal(_Ptr<const struct mystr> p_str1, _Ptr<const struct mystr> p_str2)
 }
 
 int
-str_equal_text(_Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text : count(2))
+str_equal_text(_Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text)
 {
   unsigned int cmplen = vsf_sysutil_strlen(p_text);
-  return (str_equal_internal(p_str->p_buf, p_str->len, p_text, cmplen) == 0);
+  _Nt_array_ptr<const char> p_text_bound : count(cmplen) = _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_text, count(cmplen));
+  return (str_equal_internal(p_str->p_buf, p_str->len, p_text_bound, cmplen) == 0);
 }
 
 void
@@ -334,7 +335,7 @@ str_replace_char(_Ptr<struct mystr> p_str, char from, char to)
 }
 
 void
-str_replace_text(_Ptr<struct mystr> p_str, const char *p_from : itype(_Nt_array_ptr<const char>) count(2), const char *p_to : itype(_Nt_array_ptr<const char>))
+str_replace_text(_Ptr<struct mystr> p_str, const char *p_from : itype(_Nt_array_ptr<const char>), const char *p_to : itype(_Nt_array_ptr<const char>))
 {
   static struct mystr s_lhs_chunk_str;
   static struct mystr s_rhs_chunk_str;
@@ -378,19 +379,19 @@ str_split_char_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, char 
 }
 
 void
-str_split_text(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, _Nt_array_ptr<const char> p_text : count(2))
+str_split_text(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, _Nt_array_ptr<const char> p_text)
 {
   str_split_text_common(p_src, p_rhs, p_text, 0);
 }
 
 void
-str_split_text_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, _Nt_array_ptr<const char> p_text : count(2))
+str_split_text_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, _Nt_array_ptr<const char> p_text)
 {
   str_split_text_common(p_src, p_rhs, p_text, 1);
 }
 
 static void
-str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, _Nt_array_ptr<const char> p_text : count(2), int is_reverse)
+str_split_text_common(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, _Nt_array_ptr<const char> p_text, int is_reverse)
 {
   struct str_locate_result locate_result;
   unsigned int indexx;
@@ -443,7 +444,7 @@ str_locate_char(_Ptr<const struct mystr> p_str, char look_char)
 }
 
 struct str_locate_result
-str_locate_chars(_Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_chars : count(2))
+str_locate_chars(_Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_chars)
 {
   struct str_locate_result retval;
   unsigned int num_chars = vsf_sysutil_strlen(p_chars);
@@ -470,7 +471,7 @@ str_locate_chars(_Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_cha
 }
 
 struct str_locate_result
-str_locate_text(_Ptr<const struct mystr> p_str, const char *p_text : itype(_Nt_array_ptr<const char>) count(2))
+str_locate_text(_Ptr<const struct mystr> p_str, const char *p_text : itype(_Nt_array_ptr<const char>))
 {
   struct str_locate_result retval;
   unsigned int i;
@@ -497,7 +498,7 @@ str_locate_text(_Ptr<const struct mystr> p_str, const char *p_text : itype(_Nt_a
 }
 
 struct str_locate_result
-str_locate_text_reverse(_Ptr<const struct mystr> p_str, const char *p_text : itype(_Nt_array_ptr<const char>) count(2))
+str_locate_text_reverse(_Ptr<const struct mystr> p_str, const char *p_text : itype(_Nt_array_ptr<const char>))
 {
   struct str_locate_result retval;
   unsigned int i;

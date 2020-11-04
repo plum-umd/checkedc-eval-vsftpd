@@ -2685,7 +2685,7 @@ vsf_sysutil_syslog(const char *p_text : itype(_Ptr<const char>), int severe)
 }
 
 long
-vsf_sysutil_parse_time(const char *p_text : itype(_Nt_array_ptr<const char>) count(2))
+vsf_sysutil_parse_time(const char *p_text : itype(_Nt_array_ptr<const char>))
 {
   struct tm the_time;
   unsigned int len = vsf_sysutil_strlen(p_text);

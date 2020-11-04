@@ -1,4 +1,4 @@
-CCONV=/Users/mwh/checkedc/checkedc-clang/llvm/cmake-build-debug/bin/cconv-standalone
+CCONV=/Users/mwh/checkedc/checkedc-clang/llvm/cmake-build-debug/bin/3c
 INCLUDES=/Users/mwh/checkedc/checkedc/include
 BASEDIR=.
 

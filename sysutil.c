@@ -1798,7 +1798,7 @@ vsf_sysutil_connect_timeout(int fd, const struct vsf_sysutil_sockaddr *p_addr : 
 }
 
 void
-vsf_sysutil_getsockname(int fd, struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>))
+vsf_sysutil_getsockname(int fd, struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>))
 {
   struct vsf_sysutil_sockaddr the_addr;
   int retval;
@@ -1823,7 +1823,7 @@ vsf_sysutil_getsockname(int fd, struct vsf_sysutil_sockaddr **p_sockptr /*unsafe
 }
 
 void
-vsf_sysutil_getpeername(int fd, struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>))
+vsf_sysutil_getpeername(int fd, struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>))
 {
   struct vsf_sysutil_sockaddr the_addr;
   int retval;
@@ -2222,7 +2222,7 @@ vsf_sysutil_inet_aton(const char *p_text /*unsafe itype*/ : itype(_Ptr<const cha
 }
 
 void
-vsf_sysutil_dns_resolve(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>), const char *p_name /*unsafe itype*/ : itype(_Nt_array_ptr<const char>))
+vsf_sysutil_dns_resolve(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>), const char *p_name /*unsafe itype*/ : itype(_Nt_array_ptr<const char>))
 {
   struct hostent* hent = gethostbyname(p_name);
   if (hent == NULL)

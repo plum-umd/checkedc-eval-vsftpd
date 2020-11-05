@@ -29,7 +29,7 @@ int
 vsf_privop_get_ftp_port_sock(_Ptr<struct vsf_session> p_sess, unsigned short remote_port, int use_port_sockaddr)
 {
   static _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr = ((void *)0);
-  const struct vsf_sysutil_sockaddr* p_connect_to;
+  _Ptr<const struct vsf_sysutil_sockaddr> p_connect_to = ((void *)0);
   int retval;
   int i;
   int s = vsf_sysutil_get_ipsock(p_sess->p_local_addr);

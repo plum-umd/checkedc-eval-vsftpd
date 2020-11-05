@@ -102,7 +102,7 @@ const char *str_strdup(_Ptr<const struct mystr> p_str) : itype(_Nt_array_ptr<con
 void
 str_alloc_alt_term(_Ptr<struct mystr> p_str, const char *p_src : itype(_Array_ptr<const char>), char term)
 {
-  _Array_ptr<const char> p_search = p_src;
+  const char *p_search = p_src;
   unsigned int len = 0;
   while (*p_search != term)
   {
@@ -638,7 +638,7 @@ str_getline(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_line_str, _Ptr<
   unsigned int start_pos = *p_pos;
   unsigned int curr_pos = start_pos;
   unsigned int buf_len = str_getlen(p_str);
-  _Array_ptr<const char> p_buf : byte_count(out_len) = str_getbuf(p_str);
+  const char *p_buf = str_getbuf(p_str);
   unsigned int out_len;
   if (start_pos > buf_len)
   {

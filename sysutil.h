@@ -197,11 +197,11 @@ struct vsf_sysutil_socketpair_retval
   int socket_one;
   int socket_two;
 };
-void vsf_sysutil_sockaddr_alloc(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>));
-void vsf_sysutil_sockaddr_clear(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>));
-void vsf_sysutil_sockaddr_alloc_ipv4(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>));
-void vsf_sysutil_sockaddr_alloc_ipv6(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>));
-void vsf_sysutil_sockaddr_clone(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>), const struct vsf_sysutil_sockaddr *p_src : itype(_Ptr<const struct vsf_sysutil_sockaddr>));
+void vsf_sysutil_sockaddr_alloc(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>));
+void vsf_sysutil_sockaddr_clear(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>));
+void vsf_sysutil_sockaddr_alloc_ipv4(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>));
+void vsf_sysutil_sockaddr_alloc_ipv6(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>));
+void vsf_sysutil_sockaddr_clone(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>), const struct vsf_sysutil_sockaddr *p_src : itype(_Ptr<const struct vsf_sysutil_sockaddr>));
 int vsf_sysutil_sockaddr_addr_equal(const struct vsf_sysutil_sockaddr *p1 : itype(_Ptr<const struct vsf_sysutil_sockaddr>), const struct vsf_sysutil_sockaddr *p2 : itype(_Ptr<const struct vsf_sysutil_sockaddr>));
 int vsf_sysutil_sockaddr_is_ipv6(const struct vsf_sysutil_sockaddr *p_sockaddr : itype(_Ptr<const struct vsf_sysutil_sockaddr>));
 void vsf_sysutil_sockaddr_set_ipv4addr(struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<struct vsf_sysutil_sockaddr>), const unsigned char *p_raw /*unsafe itype*/ : itype(_Ptr<const unsigned char>));

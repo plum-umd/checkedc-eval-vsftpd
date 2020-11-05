@@ -293,10 +293,9 @@ tunables_load_defaults()
 void
 install_str_setting(const char *p_value /*unsafe itype*/ : itype(_Nt_array_ptr<const char>), const char **p_storage /*unsafe itype*/ : itype(_Ptr<_Nt_array_ptr<const char>>))
 {
-  _Ptr<char> p_curr_val = (_Ptr<char>) *p_storage;
-  if (p_curr_val != 0)
+  if (*p_storage != 0)
   {
-    vsf_sysutil_free<char>(p_curr_val);
+    vsf_sysutil_free<char>(*p_storage);
   }
   if (p_value != 0)
   {

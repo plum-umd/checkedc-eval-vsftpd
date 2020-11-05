@@ -134,7 +134,7 @@ struct vsf_sysutil_dir *str_opendir(_Ptr<const struct mystr> p_str) /*unsafe ity
 void
 str_next_dirent(_Ptr<struct mystr> p_filename_str, struct vsf_sysutil_dir *p_dir /*unsafe itype*/ : itype(_Ptr<struct vsf_sysutil_dir>))
 {
-  _Nt_array_ptr<const char> p_filename = vsf_sysutil_next_dirent(p_dir);
+  _Nt_array_ptr<const char> p_filename = (_Nt_array_ptr<const char>) vsf_sysutil_next_dirent(p_dir);
   str_empty(p_filename_str);
   if (p_filename != 0)
   {

@@ -933,7 +933,7 @@ vsf_sysutil_setproctitle_init(int argc, const char **argv /*unsafe itype*/ : ity
   }
   /* Oops :-) */
   environ = 0;
-  s_p_proctitle = (_Array_ptr<char>) argv[0];
+  s_p_proctitle = _Assume_bounds_cast<_Array_ptr<char>>(argv[0], byte_count(s_proctitle_space));
   vsf_sysutil_memclr<char>(s_p_proctitle, s_proctitle_space);
 }
 

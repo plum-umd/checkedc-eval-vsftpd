@@ -88,26 +88,27 @@ main(int argc, const char **argv /*unsafe itype*/ : itype(_Array_ptr<_Nt_array_p
   }
   for (i = 1; i < argc; ++i)
   {
-    _Nt_array_ptr<const char> p_arg = argv[i];
-    if (p_arg[0] != '-')
+    if (argv[i][0] != '-')
     {
       config_loaded = 1;
-      vsf_parseconf_load_file(p_arg, 1);
+      vsf_parseconf_load_file(argv[i], 1);
     }
-    else
+    else if (*argv[i])
     {
-      if (p_arg[1] == 'v')
+      if (argv[i][1] == 'v')
       {
         vsf_exit("vsftpd: version " VSF_VERSION "\n");
       }
-      else if (p_arg[1] == 'o')
+      else if (argv[i][1] == 'o')
       {
-        vsf_parseconf_load_setting(&p_arg[2], 1);
+        vsf_parseconf_load_setting(&argv[i][2], 1);
       }
       else
       {
-        die2("unrecognise option: ", p_arg);
+        die2("unrecognise option: ", argv[i]);
       }
+    } else {
+      die("");
     }
   }
   /* Parse default config file if necessary */
@@ -127,7 +128,7 @@ main(int argc, const char **argv /*unsafe itype*/ : itype(_Array_ptr<_Nt_array_p
     _Nt_array_ptr<const char> p_numeric_addr = ((void *)0);
     vsf_sysutil_dns_resolve(&p_addr, tunable_pasv_address);
     vsf_sysutil_free<char>((char*) tunable_pasv_address);
-    p_numeric_addr = vsf_sysutil_inet_ntop(p_addr);
+    p_numeric_addr = (_Nt_array_ptr<const char>) vsf_sysutil_inet_ntop(p_addr);
     tunable_pasv_address = vsf_sysutil_strdup(p_numeric_addr);
     vsf_sysutil_free<struct vsf_sysutil_sockaddr>(p_addr);
   }
@@ -160,7 +161,7 @@ main(int argc, const char **argv /*unsafe itype*/ : itype(_Array_ptr<_Nt_array_p
     the_session.tcp_wrapper_ok = vsf_tcp_wrapper_ok(VSFTP_COMMAND_FD);
   }
   {
-    _Nt_array_ptr<const char> p_load_conf = vsf_sysutil_getenv("VSFTPD_LOAD_CONF");
+    _Nt_array_ptr<const char> p_load_conf = (_Nt_array_ptr<const char>) vsf_sysutil_getenv("VSFTPD_LOAD_CONF");
     if (p_load_conf)
     {
       vsf_parseconf_load_file(p_load_conf, 1);

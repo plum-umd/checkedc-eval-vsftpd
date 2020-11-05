@@ -102,7 +102,7 @@ static int vsf_sysutil_translate_memprot(
 static int vsf_sysutil_translate_openmode(
   const enum EVSFSysUtilOpenMode mode);
 static void vsf_sysutil_alloc_statbuf(struct vsf_sysutil_statbuf **p_ptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_statbuf>>));
-void vsf_sysutil_sockaddr_alloc(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>));
+void vsf_sysutil_sockaddr_alloc(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>));
 static int lock_internal(int fd, int lock_type);
 
 static void
@@ -1868,7 +1868,7 @@ vsf_sysutil_shutdown_read_failok(int fd)
 }
 
 void
-vsf_sysutil_sockaddr_clear(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>))
+vsf_sysutil_sockaddr_clear(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>))
 {
   if (*p_sockptr != NULL)
   {
@@ -1878,7 +1878,7 @@ vsf_sysutil_sockaddr_clear(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe ityp
 }
 
 void
-vsf_sysutil_sockaddr_alloc(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>))
+vsf_sysutil_sockaddr_alloc(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>))
 {
   vsf_sysutil_sockaddr_clear(p_sockptr);
   *p_sockptr = vsf_sysutil_malloc<struct vsf_sysutil_sockaddr>(sizeof(**p_sockptr));
@@ -1886,25 +1886,25 @@ vsf_sysutil_sockaddr_alloc(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe ityp
 }
 
 void
-vsf_sysutil_sockaddr_alloc_ipv4(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>))
+vsf_sysutil_sockaddr_alloc_ipv4(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>))
 {
   vsf_sysutil_sockaddr_alloc(p_sockptr);
   (*p_sockptr)->u.u_sockaddr.sa_family = AF_INET;
 }
 
 void
-vsf_sysutil_sockaddr_alloc_ipv6(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>))
+vsf_sysutil_sockaddr_alloc_ipv6(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>))
 {
   vsf_sysutil_sockaddr_alloc(p_sockptr);
   (*p_sockptr)->u.u_sockaddr.sa_family = AF_INET6;
 }
 
 void
-vsf_sysutil_sockaddr_clone(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>), const struct vsf_sysutil_sockaddr *p_src : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
+vsf_sysutil_sockaddr_clone(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>), const struct vsf_sysutil_sockaddr *p_src : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
 {
   _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr = 0;
   vsf_sysutil_sockaddr_alloc(p_sockptr);
-  p_sockaddr = *p_sockptr;
+  p_sockaddr = * (_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>) p_sockptr;
   if (p_src->u.u_sockaddr.sa_family == AF_INET)
   {
     p_sockaddr->u.u_sockaddr.sa_family = AF_INET;
@@ -2624,7 +2624,7 @@ vsf_sysutil_get_time_usec(void)
 void
 vsf_sysutil_qsort(void* p_base, unsigned int num_elem, unsigned int elem_size, _Ptr<int (const void *, const void *)> p_compar)
 {
-  qsort(p_base, num_elem, elem_size, (_Ptr<int (const void *, const void *)>) p_compar);
+  qsort(p_base, num_elem, elem_size, (int (*)(const void *, const void *)) p_compar);
 }
 
 void

@@ -198,7 +198,7 @@ vsf_parseconf_load_file(const char *p_filename /*unsafe itype*/ : itype(_Nt_arra
   {
     if (s_p_saved_filename)
     {
-      vsf_sysutil_free<char>((_Ptr<char>)s_p_saved_filename);
+      vsf_sysutil_free<char>(s_p_saved_filename);
     }
     s_p_saved_filename = (_Nt_array_ptr<const char>) vsf_sysutil_strdup(p_filename);
   }

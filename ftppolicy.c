@@ -21,13 +21,13 @@
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
 
-static int socket_validator(struct pt_sandbox* p_sandbox, void* p_arg);
-static int connect_validator(struct pt_sandbox* p_sandbox, void* p_arg);
-static int getsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg);
-static int setsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg);
+static int socket_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
+static int connect_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
+static int getsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
+static int setsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
 
 void
-policy_setup(struct pt_sandbox* p_sandbox, const struct vsf_session* p_sess)
+policy_setup(_Ptr<struct pt_sandbox> p_sandbox, const struct vsf_session *p_sess /*unsafe itype*/ : itype(_Ptr<const struct vsf_session>))
 {
   int is_anon = p_sess->is_anonymous;
   /* Always need to be able to exit! */
@@ -158,7 +158,7 @@ policy_setup(struct pt_sandbox* p_sandbox, const struct vsf_session* p_sess)
 }
 
 static int
-socket_validator(struct pt_sandbox* p_sandbox, void* p_arg)
+socket_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   int ret;
   struct vsf_session* p_sess = (struct vsf_session*) p_arg;
@@ -187,7 +187,7 @@ socket_validator(struct pt_sandbox* p_sandbox, void* p_arg)
 }
 
 static int
-connect_validator(struct pt_sandbox* p_sandbox, void* p_arg)
+connect_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   int ret;
   struct vsf_session* p_sess = (struct vsf_session*) p_arg;
@@ -221,13 +221,13 @@ connect_validator(struct pt_sandbox* p_sandbox, void* p_arg)
   ret = ptrace_sandbox_get_buf(p_sandbox, arg2, expected_len, p_buf);
   if (ret != 0)
   {
-    vsf_sysutil_free(p_buf);
+    vsf_sysutil_free<void>(p_buf);
     return -2;
   }
   p_sockaddr = (struct sockaddr*) p_buf;
   if (p_sockaddr->sa_family != expected_family)
   {
-    vsf_sysutil_free(p_buf);
+    vsf_sysutil_free<void>(p_buf);
     return -3;
   }
   if (expected_family == AF_INET)
@@ -248,15 +248,15 @@ connect_validator(struct pt_sandbox* p_sandbox, void* p_arg)
   }
   if (!vsf_sysutil_sockaddr_addr_equal(p_sess->p_remote_addr, p_sockptr))
   {
-    vsf_sysutil_free(p_buf);
+    vsf_sysutil_free<void>(p_buf);
     return -4;
   }
-  vsf_sysutil_free(p_buf);
+  vsf_sysutil_free<void>(p_buf);
   return 0;
 }
 
 static int
-getsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg)
+getsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   int ret;
   unsigned long arg2;
@@ -280,7 +280,7 @@ getsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg)
 }
 
 static int
-setsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg)
+setsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   int ret;
   unsigned long arg2;

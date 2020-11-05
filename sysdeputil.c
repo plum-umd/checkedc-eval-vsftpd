@@ -185,7 +185,7 @@
 #include <linux/capability.h>
 #include <errno_checked.h>
 #include <syscall.h>
-int capset(cap_user_header_t header, const cap_user_data_t data)
+int capset(_Ptr<struct __user_cap_header_struct> header, const _Ptr<struct __user_cap_data_struct> data)
 {
   return syscall(__NR_capset, header, data);
 }
@@ -228,19 +228,16 @@ static int s_zero_fd = -1;
 /* File private functions/variables */
 static int do_sendfile(const int out_fd, const int in_fd,
                        unsigned int num_send, filesize_t start_pos);
-static void vsf_sysutil_setproctitle_internal(const char* p_text);
+static void vsf_sysutil_setproctitle_internal(const char *p_buf : itype(_Nt_array_ptr<const char>));
 static struct mystr s_proctitle_prefix_str;
 
 /* These two aren't static to avoid OpenBSD build warnings. */
-void vsf_insert_uwtmp(const struct mystr* p_user_str,
-                      const struct mystr* p_host_str);
+void vsf_insert_uwtmp(_Ptr<const struct mystr> p_user_str, _Ptr<const struct mystr> p_host_str);
 void vsf_remove_uwtmp(void);
 
 #ifndef VSF_SYSDEP_HAVE_PAM
 int
-vsf_sysdep_check_auth(struct mystr* p_user_str,
-                      const struct mystr* p_pass_str,
-                      const struct mystr* p_remote_host)
+vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str, _Ptr<const struct mystr> p_pass_str, _Ptr<const struct mystr> p_remote_host)
 {
   const char* p_crypted;
   const struct passwd* p_pwd = getpwnam(str_getbuf(p_user_str));
@@ -586,8 +583,8 @@ vsf_sysdep_adopt_capabilities(unsigned int caps)
   {
     bug("asked to adopt no capabilities");
   }
-  vsf_sysutil_memclr(&cap_head, sizeof(cap_head));
-  vsf_sysutil_memclr(&cap_data, sizeof(cap_data));
+  vsf_sysutil_memclr<struct __user_cap_header_struct>(&cap_head, sizeof(cap_head));
+  vsf_sysutil_memclr<struct __user_cap_data_struct>(&cap_data, sizeof(cap_data));
   cap_head.version = _LINUX_CAPABILITY_VERSION;
   cap_head.pid = 0;
   if (caps & kCapabilityCAP_CHOWN)
@@ -650,9 +647,7 @@ vsf_sysdep_adopt_capabilities(unsigned int caps)
 #endif /* VSF_SYSDEP_HAVE_CAPABILITIES || VSF_SYSDEP_HAVE_LIBCAP */
 
 int
-vsf_sysutil_sendfile(const int out_fd, const int in_fd,
-                     filesize_t* p_offset, filesize_t num_send,
-                     unsigned int max_chunk)
+vsf_sysutil_sendfile(const int out_fd, const int in_fd, _Ptr<filesize_t> p_offset, filesize_t num_send, unsigned int max_chunk)
 {
   /* Grr - why is off_t signed? */
   if (*p_offset < 0 || num_send < 0)
@@ -844,20 +839,20 @@ static int do_sendfile(const int out_fd, const int in_fd,
 }
 
 void
-vsf_sysutil_set_proctitle_prefix(const struct mystr* p_str)
+vsf_sysutil_set_proctitle_prefix(_Ptr<const struct mystr> p_str)
 {
   str_copy(&s_proctitle_prefix_str, p_str);
 }
 
 /* This delegation is common to all setproctitle() implementations */
 void
-vsf_sysutil_setproctitle_str(const struct mystr* p_str)
+vsf_sysutil_setproctitle_str(_Ptr<const struct mystr> p_str)
 {
   vsf_sysutil_setproctitle(str_getbuf(p_str));
 }
 
 void
-vsf_sysutil_setproctitle(const char* p_text)
+vsf_sysutil_setproctitle(const char *p_text : itype(_Nt_array_ptr<const char>))
 {
   struct mystr proctitle_str = INIT_MYSTR;
   str_copy(&proctitle_str, &s_proctitle_prefix_str);
@@ -904,7 +899,7 @@ vsf_sysutil_setproctitle_internal(const char* p_buf)
 }
 #elif defined(VSF_SYSDEP_TRY_LINUX_SETPROCTITLE_HACK)
 void
-vsf_sysutil_setproctitle_init(int argc, const char* argv[])
+vsf_sysutil_setproctitle_init(int argc, const char **argv /*unsafe itype*/ : itype(_Array_ptr<_Nt_array_ptr<const char>>) count(argc))
 {
   int i;
   char** p_env = environ;
@@ -939,11 +934,11 @@ vsf_sysutil_setproctitle_init(int argc, const char* argv[])
   /* Oops :-) */
   environ = 0;
   s_p_proctitle = (char*) argv[0];
-  vsf_sysutil_memclr(s_p_proctitle, s_proctitle_space);
+  vsf_sysutil_memclr<char>(s_p_proctitle, s_proctitle_space);
 }
 
 void
-vsf_sysutil_setproctitle_internal(const char* p_buf)
+vsf_sysutil_setproctitle_internal(const char *p_buf : itype(_Nt_array_ptr<const char>))
 {
   struct mystr proctitle_str = INIT_MYSTR;
   unsigned int to_copy;
@@ -951,7 +946,7 @@ vsf_sysutil_setproctitle_internal(const char* p_buf)
   {
     bug("vsf_sysutil_setproctitle: not initialized");
   }
-  vsf_sysutil_memclr(s_p_proctitle, s_proctitle_space);
+  vsf_sysutil_memclr<char>(s_p_proctitle, s_proctitle_space);
   if (s_proctitle_space < 32)
   {
     return;
@@ -963,7 +958,7 @@ vsf_sysutil_setproctitle_internal(const char* p_buf)
   {
     to_copy = s_proctitle_space - 1;
   }
-  vsf_sysutil_memcpy(s_p_proctitle, str_getbuf(&proctitle_str), to_copy);
+  vsf_sysutil_memcpy<char>(s_p_proctitle, str_getbuf(&proctitle_str), to_copy);
   str_free(&proctitle_str);
   s_p_proctitle[to_copy] = '\0';
 }
@@ -1187,8 +1182,7 @@ static int s_uwtmp_inserted;
 static struct utmpx s_utent;
 
 void
-vsf_insert_uwtmp(const struct mystr* p_user_str,
-                 const struct mystr* p_host_str)
+vsf_insert_uwtmp(_Ptr<const struct mystr> p_user_str, _Ptr<const struct mystr> p_host_str)
 {
   if (sizeof(s_utent.ut_line) < 16)
   {
@@ -1234,8 +1228,8 @@ vsf_remove_uwtmp(void)
   }
   s_uwtmp_inserted = 0;
   s_utent.ut_type = DEAD_PROCESS;
-  vsf_sysutil_memclr(s_utent.ut_user, sizeof(s_utent.ut_user));
-  vsf_sysutil_memclr(s_utent.ut_host, sizeof(s_utent.ut_host));
+  vsf_sysutil_memclr<char>(s_utent.ut_user, sizeof(s_utent.ut_user));
+  vsf_sysutil_memclr<char>(s_utent.ut_host, sizeof(s_utent.ut_host));
   s_utent.ut_tv.tv_sec = 0;
   setutxent();
   (void) pututxline(&s_utent);

@@ -17,7 +17,7 @@
 #include "tunables.h"
 
 void
-str_getcwd(struct mystr* p_str)
+str_getcwd(_Ptr<struct mystr> p_str)
 {
   static char* p_getcwd_buf;
   char* p_ret;
@@ -35,44 +35,44 @@ str_getcwd(struct mystr* p_str)
 }
 
 int
-str_write_loop(const struct mystr* p_str, const int fd)
+str_write_loop(_Ptr<const struct mystr> p_str, const int fd)
 {
   return vsf_sysutil_write_loop(fd, str_getbuf(p_str), str_getlen(p_str));
 }
 
 int
-str_read_loop(struct mystr* p_str, const int fd)
+str_read_loop(_Ptr<struct mystr> p_str, const int fd)
 {
   return vsf_sysutil_read_loop(
     fd, (char*) str_getbuf(p_str), str_getlen(p_str));
 }
 
 int
-str_mkdir(const struct mystr* p_str, const unsigned int mode)
+str_mkdir(_Ptr<const struct mystr> p_str, const unsigned int mode)
 {
   return vsf_sysutil_mkdir(str_getbuf(p_str), mode);
 }
 
 int
-str_rmdir(const struct mystr* p_str)
+str_rmdir(_Ptr<const struct mystr> p_str)
 {
   return vsf_sysutil_rmdir(str_getbuf(p_str));
 }
 
 int
-str_unlink(const struct mystr* p_str)
+str_unlink(_Ptr<const struct mystr> p_str)
 {
   return vsf_sysutil_unlink(str_getbuf(p_str));
 }
 
 int
-str_chdir(const struct mystr* p_str)
+str_chdir(_Ptr<const struct mystr> p_str)
 {
   return vsf_sysutil_chdir(str_getbuf(p_str));
 }
 
 int
-str_open(const struct mystr* p_str, const enum EVSFSysStrOpenMode mode)
+str_open(_Ptr<const struct mystr> p_str, const enum EVSFSysStrOpenMode mode)
 {
   enum EVSFSysUtilOpenMode open_mode = (enum EVSFSysUtilOpenMode)kVSFSysStrOpenUnknown;
   switch (mode)
@@ -90,50 +90,49 @@ str_open(const struct mystr* p_str, const enum EVSFSysStrOpenMode mode)
 }
 
 int
-str_stat(const struct mystr* p_str, struct vsf_sysutil_statbuf** p_ptr)
+str_stat(_Ptr<const struct mystr> p_str, struct vsf_sysutil_statbuf **p_ptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_statbuf>>))
 {
   return vsf_sysutil_stat(str_getbuf(p_str), p_ptr);
 }
 
 int
-str_lstat(const struct mystr* p_str, struct vsf_sysutil_statbuf** p_ptr)
+str_lstat(_Ptr<const struct mystr> p_str, struct vsf_sysutil_statbuf **p_ptr /*unsafe itype*/ : itype(_Ptr<_Ptr<struct vsf_sysutil_statbuf>>))
 {
   return vsf_sysutil_lstat(str_getbuf(p_str), p_ptr);
 }
 
 int
-str_create_exclusive(const struct mystr* p_str)
+str_create_exclusive(_Ptr<const struct mystr> p_str)
 {
   return vsf_sysutil_create_file_exclusive(str_getbuf(p_str));
 }
 
 int
-str_create(const struct mystr* p_str)
+str_create(_Ptr<const struct mystr> p_str)
 {
   return vsf_sysutil_create_or_open_file(
       str_getbuf(p_str), tunable_file_open_mode);
 }
 
 int
-str_chmod(const struct mystr* p_str, unsigned int mode)
+str_chmod(_Ptr<const struct mystr> p_str, unsigned int mode)
 {
   return vsf_sysutil_chmod(str_getbuf(p_str), mode);
 }
 
 int
-str_rename(const struct mystr* p_from_str, const struct mystr* p_to_str)
+str_rename(_Ptr<const struct mystr> p_from_str, _Ptr<const struct mystr> p_to_str)
 {
   return vsf_sysutil_rename(str_getbuf(p_from_str), str_getbuf(p_to_str));
 }
 
-struct vsf_sysutil_dir*
-str_opendir(const struct mystr* p_str)
+struct vsf_sysutil_dir *str_opendir(_Ptr<const struct mystr> p_str) /*unsafe itype*/ : itype(_Ptr<struct vsf_sysutil_dir>)
 {
   return vsf_sysutil_opendir(str_getbuf(p_str));
 }
 
 void
-str_next_dirent(struct mystr* p_filename_str, struct vsf_sysutil_dir* p_dir)
+str_next_dirent(_Ptr<struct mystr> p_filename_str, struct vsf_sysutil_dir *p_dir /*unsafe itype*/ : itype(_Ptr<struct vsf_sysutil_dir>))
 {
   const char* p_filename = vsf_sysutil_next_dirent(p_dir);
   str_empty(p_filename_str);
@@ -144,7 +143,7 @@ str_next_dirent(struct mystr* p_filename_str, struct vsf_sysutil_dir* p_dir)
 }
 
 int
-str_readlink(struct mystr* p_str, const struct mystr* p_filename_str)
+str_readlink(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str)
 {
   static char* p_readlink_buf;
   int retval;
@@ -165,14 +164,13 @@ str_readlink(struct mystr* p_str, const struct mystr* p_filename_str)
   return 0;
 }
 
-struct vsf_sysutil_user*
-str_getpwnam(const struct mystr* p_user_str)
+struct vsf_sysutil_user *str_getpwnam(_Ptr<const struct mystr> p_user_str) /*unsafe itype*/ : itype(_Ptr<struct vsf_sysutil_user>)
 {
   return vsf_sysutil_getpwnam(str_getbuf(p_user_str));
 }
 
 void
-str_syslog(const struct mystr* p_str, int severe)
+str_syslog(_Ptr<const struct mystr> p_str, int severe)
 {
   vsf_sysutil_syslog(str_getbuf(p_str), severe);
 }

@@ -16,19 +16,10 @@
 #include "sysutil.h"
 #include "tunables.h"
 
-static void build_dir_line(struct mystr* p_str,
-                           const struct mystr* p_filename_str,
-                           const struct vsf_sysutil_statbuf* p_stat,
-                           long curr_time);
+static void build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str, const struct vsf_sysutil_statbuf *p_stat /*unsafe itype*/ : itype(_Ptr<const struct vsf_sysutil_statbuf>), long curr_time);
 
 void
-vsf_ls_populate_dir_list(struct mystr_list* p_list,
-                         struct mystr_list* p_subdir_list,
-                         struct vsf_sysutil_dir* p_dir,
-                         const struct mystr* p_base_dir_str,
-                         const struct mystr* p_option_str,
-                         const struct mystr* p_filter_str,
-                         int is_verbose)
+vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list, _Ptr<struct mystr_list> p_subdir_list, struct vsf_sysutil_dir *p_dir /*unsafe itype*/ : itype(_Ptr<struct vsf_sysutil_dir>), _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose)
 {
   struct mystr dirline_str = INIT_MYSTR;
   struct mystr normalised_base_dir_str = INIT_MYSTR;
@@ -190,8 +181,8 @@ vsf_ls_populate_dir_list(struct mystr_list* p_list,
      */
     {
       static struct mystr s_temp_str;
-      const struct mystr* p_sort_str = 0;
-      const struct mystr* p_sort_subdir_str = 0;
+      _Ptr<const struct mystr> p_sort_str = 0;
+      _Ptr<const struct mystr> p_sort_subdir_str = 0;
       if (!t_option)
       {
         p_sort_str = &s_next_filename_str;
@@ -220,9 +211,7 @@ vsf_ls_populate_dir_list(struct mystr_list* p_list,
 }
 
 int
-vsf_filename_passes_filter(const struct mystr* p_filename_str,
-                           const struct mystr* p_filter_str,
-                           unsigned int* iters)
+vsf_filename_passes_filter(_Ptr<const struct mystr> p_filename_str, _Ptr<const struct mystr> p_filter_str, _Ptr<unsigned int> iters)
 {
   /* A simple routine to match a filename against a pattern.
    * This routine is used instead of e.g. fnmatch(3), because we should be
@@ -369,8 +358,7 @@ out:
 }
 
 static void
-build_dir_line(struct mystr* p_str, const struct mystr* p_filename_str,
-               const struct vsf_sysutil_statbuf* p_stat, long curr_time)
+build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str, const struct vsf_sysutil_statbuf *p_stat /*unsafe itype*/ : itype(_Ptr<const struct vsf_sysutil_statbuf>), long curr_time)
 {
   static struct mystr s_tmp_str;
   filesize_t size = vsf_sysutil_statbuf_get_size(p_stat);

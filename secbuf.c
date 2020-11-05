@@ -15,7 +15,7 @@
 #include "sysdeputil.h"
 
 void
-vsf_secbuf_alloc(char** p_ptr, unsigned int size)
+vsf_secbuf_alloc(char **p_ptr /*unsafe itype*/ : itype(_Ptr<_Nt_array_ptr<char>>), unsigned int size)
 {
   unsigned int page_offset;
   unsigned int round_up;
@@ -62,7 +62,7 @@ vsf_secbuf_alloc(char** p_ptr, unsigned int size)
 }
 
 void
-vsf_secbuf_free(char** p_ptr)
+vsf_secbuf_free(char **p_ptr /*unsafe itype*/ : itype(_Ptr<_Nt_array_ptr<char>>))
 {
   unsigned int map_size;
   unsigned long page_offset;

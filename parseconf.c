@@ -22,8 +22,8 @@ static const char* s_p_saved_filename;
 /* Boolean settings */
 static struct parseconf_bool_setting
 {
-  const char* p_setting_name;
-  int* p_variable;
+  _Nt_array_ptr<const char> p_setting_name : count(2);
+  _Ptr<int> p_variable;
 }
 parseconf_bool_array[] =
 {
@@ -112,8 +112,8 @@ parseconf_bool_array[] =
 
 static struct parseconf_uint_setting
 {
-  const char* p_setting_name;
-  unsigned int* p_variable;
+  _Nt_array_ptr<const char> p_setting_name : count(2);
+  _Ptr<unsigned int> p_variable;
 }
 parseconf_uint_array[] =
 {
@@ -142,8 +142,8 @@ parseconf_uint_array[] =
 
 static struct parseconf_str_setting
 {
-  const char* p_setting_name;
-  const char** p_variable;
+  _Nt_array_ptr<const char> p_setting_name : count(2);
+  _Ptr<const char *> p_variable;
 }
 parseconf_str_array[] =
 {
@@ -183,7 +183,7 @@ parseconf_str_array[] =
 };
 
 void
-vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
+vsf_parseconf_load_file(const char *p_filename /*unsafe itype*/ : itype(_Nt_array_ptr<const char>), int errs_fatal)
 {
   struct mystr config_file_str = INIT_MYSTR;
   struct mystr config_setting_str = INIT_MYSTR;
@@ -198,7 +198,7 @@ vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
   {
     if (s_p_saved_filename)
     {
-      vsf_sysutil_free((char*)s_p_saved_filename);
+      vsf_sysutil_free<char>((char*)s_p_saved_filename);
     }
     s_p_saved_filename = vsf_sysutil_strdup(p_filename);
   }
@@ -232,7 +232,7 @@ vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
     {
       die("config file not owned by correct user, or not a file");
     }
-    vsf_sysutil_free(p_statbuf);
+    vsf_sysutil_free<struct vsf_sysutil_statbuf>(p_statbuf);
   }
   while (str_getline(&config_file_str, &config_setting_str, &str_pos))
   {
@@ -250,7 +250,7 @@ vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
 }
 
 void
-vsf_parseconf_load_setting(const char* p_setting, int errs_fatal)
+vsf_parseconf_load_setting(const char *p_setting : itype(_Nt_array_ptr<const char>), int errs_fatal)
 {
   static struct mystr s_setting_str;
   static struct mystr s_value_str;
@@ -268,10 +268,10 @@ vsf_parseconf_load_setting(const char* p_setting, int errs_fatal)
       if (str_equal_text(&s_setting_str, p_str_setting->p_setting_name))
       {
         /* Got it */
-        const char** p_curr_setting = p_str_setting->p_variable;
+        _Ptr<const char *> p_curr_setting = p_str_setting->p_variable;
         if (*p_curr_setting)
         {
-          vsf_sysutil_free((char*) *p_curr_setting);
+          vsf_sysutil_free<char>((char*) *p_curr_setting);
         }
         if (str_isempty(&s_value_str))
         {

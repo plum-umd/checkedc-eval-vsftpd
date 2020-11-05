@@ -51,7 +51,7 @@ struct vsf_session
   struct mystr http_get_arg;
 
   /* Details of FTP session state */
-  struct mystr_list* p_visited_dir_list;
+  _Ptr<struct mystr_list> p_visited_dir_list;
 
   /* Details of userids which are interesting to us */
   int anon_ftp_uid;

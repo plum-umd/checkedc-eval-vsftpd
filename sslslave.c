@@ -17,7 +17,7 @@
 #include "defs.h"
 
 void
-ssl_slave(struct vsf_session* p_sess)
+ssl_slave(_Ptr<struct vsf_session> p_sess)
 {
   struct mystr data_str = INIT_MYSTR;
   str_reserve(&data_str, VSFTP_DATA_BUFSIZE);

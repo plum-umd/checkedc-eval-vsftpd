@@ -17,7 +17,7 @@
 #include "utility.h"
 
 int
-str_fileread(struct mystr* p_str, const char* p_filename, unsigned int maxsize)
+str_fileread(_Ptr<struct mystr> p_str, const char *p_filename /*unsafe itype*/ : itype(_Ptr<const char>), unsigned int maxsize)
 {
   int fd;
   int retval = 0;
@@ -53,7 +53,7 @@ str_fileread(struct mystr* p_str, const char* p_filename, unsigned int maxsize)
     str_alloc_memchunk(p_str, p_sec_buf, (unsigned int) size);
   }
 free_out:
-  vsf_sysutil_free(p_stat);
+  vsf_sysutil_free<struct vsf_sysutil_statbuf>(p_stat);
   vsf_secbuf_free(&p_sec_buf);
   vsf_sysutil_close(fd);
   return retval;

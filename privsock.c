@@ -21,7 +21,7 @@
 #include "session.h"
 
 void
-priv_sock_init(struct vsf_session* p_sess)
+priv_sock_init(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   struct vsf_sysutil_socketpair_retval retval;
   if (p_sess->parent_fd != -1)
@@ -38,7 +38,7 @@ priv_sock_init(struct vsf_session* p_sess)
 }
 
 void
-priv_sock_close(struct vsf_session* p_sess)
+priv_sock_close(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   if (p_sess->parent_fd != -1)
   {
@@ -53,7 +53,7 @@ priv_sock_close(struct vsf_session* p_sess)
 }
 
 void
-priv_sock_set_parent_context(struct vsf_session* p_sess)
+priv_sock_set_parent_context(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   if (p_sess->child_fd == -1)
   {
@@ -64,7 +64,7 @@ priv_sock_set_parent_context(struct vsf_session* p_sess)
 }
 
 void
-priv_sock_set_child_context(struct vsf_session* p_sess)
+priv_sock_set_child_context(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   if (p_sess->parent_fd == -1)
   {
@@ -85,7 +85,7 @@ priv_sock_send_cmd(int fd, char cmd)
 }
 
 void
-priv_sock_send_str(int fd, const struct mystr* p_str)
+priv_sock_send_str(int fd, _Ptr<const struct mystr> p_str)
 {
   unsigned int len = str_getlen(p_str);
   priv_sock_send_int(fd, (int) len);
@@ -96,7 +96,7 @@ priv_sock_send_str(int fd, const struct mystr* p_str)
 }
 
 void
-priv_sock_send_buf(int fd, const char* p_buf, unsigned int len)
+priv_sock_send_buf(int fd, const char *p_buf /*unsafe itype*/ : itype(_Ptr<const char>), unsigned int len)
 {
   priv_sock_send_int(fd, (int) len);
   if (len > 0)
@@ -109,7 +109,7 @@ priv_sock_send_buf(int fd, const char* p_buf, unsigned int len)
 }
 
 void
-priv_sock_recv_buf(int fd, char* p_buf, unsigned int len)
+priv_sock_recv_buf(int fd, char *p_buf /*unsafe itype*/ : itype(_Ptr<char>), unsigned int len)
 {
   unsigned int recv_len = (unsigned int) priv_sock_get_int(fd);
   if (recv_len > len)
@@ -150,7 +150,7 @@ priv_sock_get_cmd(int fd)
 }
 
 void
-priv_sock_get_str(int fd, struct mystr* p_dest)
+priv_sock_get_str(int fd, _Ptr<struct mystr> p_dest)
 {
   unsigned int len = (unsigned int) priv_sock_get_int(fd);
   if (len > VSFTP_PRIVSOCK_MAXSTR)

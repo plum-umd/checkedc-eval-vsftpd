@@ -11,7 +11,7 @@ struct vsf_session;
  * PARAMETERS
  * p_sess       - the current session object
  */
-void priv_sock_init(struct vsf_session* p_sess);
+void priv_sock_init(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 /* priv_sock_close()
  * PURPOSE
@@ -20,7 +20,7 @@ void priv_sock_init(struct vsf_session* p_sess);
  * PARAMETERS
  * p_sess       - the current session object
  */
-void priv_sock_close(struct vsf_session* p_sess);
+void priv_sock_close(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 /* priv_sock_set_parent_context()
  * PURPOSE
@@ -29,7 +29,7 @@ void priv_sock_close(struct vsf_session* p_sess);
  * PARAMETERS
  * p_sess       - the current session object
  */
-void priv_sock_set_parent_context(struct vsf_session* p_sess);
+void priv_sock_set_parent_context(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 /* priv_sock_set_child_context()
  * PURPOSE
@@ -38,7 +38,7 @@ void priv_sock_set_parent_context(struct vsf_session* p_sess);
  * PARAMETERS
  * p_sess       - the current session object
  */
-void priv_sock_set_child_context(struct vsf_session* p_sess);
+void priv_sock_set_child_context(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 /* priv_sock_send_cmd()
  * PURPOSE
@@ -56,7 +56,7 @@ void priv_sock_send_cmd(int fd, char cmd);
  * fd           - the fd on which to send the string
  * p_str        - the string to send
  */
-void priv_sock_send_str(int fd, const struct mystr* p_str);
+void priv_sock_send_str(int fd, _Ptr<const struct mystr> p_str);
 
 /* priv_sock_send_buf()
  * PURPOSE
@@ -67,7 +67,7 @@ void priv_sock_send_str(int fd, const struct mystr* p_str);
  * p_buf        - the buffer to send
  * len          - length of the buffer
  */
-void priv_sock_send_buf(int fd, const char* p_buf, unsigned int len);
+void priv_sock_send_buf(int fd, const char *p_buf /*unsafe itype*/ : itype(_Ptr<const char>), unsigned int len);
 
 /* priv_sock_recv_buf()
  * PURPOSE
@@ -78,7 +78,7 @@ void priv_sock_send_buf(int fd, const char* p_buf, unsigned int len);
  * p_buf        - the buffer to write into
  * len          - length of the buffer
  */
-void priv_sock_recv_buf(int fd, char* p_buf, unsigned int len);
+void priv_sock_recv_buf(int fd, char *p_buf /*unsafe itype*/ : itype(_Ptr<char>), unsigned int len);
 
 /* priv_sock_get_result()
  * PURPOSE
@@ -107,7 +107,7 @@ char priv_sock_get_cmd(int fd);
  * fd           - the fd on which to receive the string
  * p_dest       - where to copy the received string
  */
-void priv_sock_get_str(int fd, struct mystr* p_dest);
+void priv_sock_get_str(int fd, _Ptr<struct mystr> p_dest);
 
 /* priv_sock_send_result()
  * PURPOSE

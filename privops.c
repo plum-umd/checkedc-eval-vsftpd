@@ -28,7 +28,7 @@ static enum EVSFPrivopLoginResult handle_login(_Ptr<struct vsf_session> p_sess, 
 int
 vsf_privop_get_ftp_port_sock(_Ptr<struct vsf_session> p_sess, unsigned short remote_port, int use_port_sockaddr)
 {
-  static struct vsf_sysutil_sockaddr* p_sockaddr;
+  static _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr = ((void *)0);
   const struct vsf_sysutil_sockaddr* p_connect_to;
   int retval;
   int i;
@@ -111,7 +111,7 @@ vsf_privop_pasv_active(_Ptr<struct vsf_session> p_sess)
 unsigned short
 vsf_privop_pasv_listen(_Ptr<struct vsf_session> p_sess)
 {
-  static struct vsf_sysutil_sockaddr* s_p_sockaddr;
+  static _Ptr<struct vsf_sysutil_sockaddr> s_p_sockaddr = ((void *)0);
   int bind_retries = 10;
   unsigned short the_port;
   /* IPPORT_RESERVED */

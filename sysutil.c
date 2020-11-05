@@ -1997,7 +1997,7 @@ vsf_sysutil_sockaddr_set_ipv4addr(struct vsf_sysutil_sockaddr *p_sockptr : itype
   }
   else if (p_sockptr->u.u_sockaddr.sa_family == AF_INET6)
   {
-    static struct vsf_sysutil_sockaddr* s_p_sockaddr;
+    static _Ptr<struct vsf_sysutil_sockaddr> s_p_sockaddr = ((void *)0);
     vsf_sysutil_sockaddr_alloc_ipv4(&s_p_sockaddr);
     vsf_sysutil_memcpy(&s_p_sockaddr->u.u_sockaddr_in.sin_addr, p_raw,
                        sizeof(s_p_sockaddr->u.u_sockaddr_in.sin_addr));

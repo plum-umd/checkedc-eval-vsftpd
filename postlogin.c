@@ -564,7 +564,7 @@ handle_pasv(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int is
 {
   unsigned short the_port;
   static struct mystr s_pasv_res_str;
-  static struct vsf_sysutil_sockaddr* s_p_sockaddr;
+  static _Ptr<struct vsf_sysutil_sockaddr> s_p_sockaddr = ((void *)0);
   int is_ipv6 = vsf_sysutil_sockaddr_is_ipv6(p_sess->p_local_addr);
   if (is_epsv && !str_isempty(&p_sess->ftp_arg_str))
   {

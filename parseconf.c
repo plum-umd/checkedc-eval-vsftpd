@@ -198,7 +198,7 @@ vsf_parseconf_load_file(const char *p_filename /*unsafe itype*/ : itype(_Nt_arra
   {
     if (s_p_saved_filename)
     {
-      vsf_sysutil_free<char>((char*)s_p_saved_filename);
+      vsf_sysutil_free<char>((_Ptr<char>)s_p_saved_filename);
     }
     s_p_saved_filename = (_Nt_array_ptr<const char>) vsf_sysutil_strdup(p_filename);
   }
@@ -220,7 +220,7 @@ vsf_parseconf_load_file(const char *p_filename /*unsafe itype*/ : itype(_Nt_arra
     }
   }
   {
-    struct vsf_sysutil_statbuf* p_statbuf = 0;
+    _Ptr<struct vsf_sysutil_statbuf> p_statbuf = 0;
     retval = vsf_sysutil_stat(p_filename, &p_statbuf);
     /* Security: check current user owns the config file. These are sanity
      * checks for the admin, and are NOT designed to be checks safe from

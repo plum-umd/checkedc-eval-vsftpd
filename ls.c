@@ -81,7 +81,7 @@ vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list, _Ptr<struct mystr_list>
   {
     static struct mystr s_next_filename_str;
     static struct mystr s_next_path_and_filename_str;
-    static struct vsf_sysutil_statbuf* s_p_statbuf;
+    static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf = ((void *)0);
     str_next_dirent(&s_next_filename_str, p_dir);
     if (str_isempty(&s_next_filename_str))
     {
@@ -378,7 +378,7 @@ build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str
   else
   {
     int uid = vsf_sysutil_statbuf_get_uid(p_stat);
-    struct vsf_sysutil_user* p_user = 0;
+    _Ptr<struct vsf_sysutil_user> p_user = 0;
     if (tunable_text_userdb_names)
     {
       p_user = vsf_sysutil_getpwuid(uid);
@@ -403,7 +403,7 @@ build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str
   else
   {
     int gid = vsf_sysutil_statbuf_get_gid(p_stat);
-    struct vsf_sysutil_group* p_group = 0;
+    _Ptr<struct vsf_sysutil_group> p_group = 0;
     if (tunable_text_userdb_names)
     {
       p_group = vsf_sysutil_getgrgid(gid);

@@ -217,7 +217,7 @@ vsf_privop_accept_pasv(_Ptr<struct vsf_session> p_sess)
 void
 vsf_privop_do_file_chown(_Ptr<struct vsf_session> p_sess, int fd)
 {
-  static struct vsf_sysutil_statbuf* s_p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf = ((void *)0);
   vsf_sysutil_fstat(fd, &s_p_statbuf);
   /* Do nothing if it is already owned by the desired user. */
   if (vsf_sysutil_statbuf_get_uid(s_p_statbuf) ==

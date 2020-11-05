@@ -215,7 +215,7 @@ int capset(_Ptr<struct __user_cap_header_struct> header, const _Ptr<struct __use
 extern char ** environ;
 static unsigned int s_proctitle_space = 0;
 static int s_proctitle_inited = 0;
-static char* s_p_proctitle = 0;
+static _Array_ptr<char> s_p_proctitle : byte_count(s_proctitle_space) = 0;
 #endif
 
 #ifndef VSF_SYSDEP_HAVE_MAP_ANON
@@ -933,7 +933,7 @@ vsf_sysutil_setproctitle_init(int argc, const char **argv /*unsafe itype*/ : ity
   }
   /* Oops :-) */
   environ = 0;
-  s_p_proctitle = (char*) argv[0];
+  s_p_proctitle = (_Array_ptr<char>) argv[0];
   vsf_sysutil_memclr<char>(s_p_proctitle, s_proctitle_space);
 }
 

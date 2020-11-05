@@ -60,7 +60,7 @@ hash_lookup_entry(_Ptr<struct hash> p_hash, void* p_key)
 void
 hash_add_entry(_Ptr<struct hash> p_hash, void* p_key, void* p_value)
 {
-  struct hash_node** p_bucket;
+  _Ptr<struct hash_node *> p_bucket = ((void *)0);
   struct hash_node* p_new_node;
   if (hash_lookup_entry(p_hash, p_key))
   {
@@ -90,7 +90,7 @@ hash_add_entry(_Ptr<struct hash> p_hash, void* p_key, void* p_value)
 void
 hash_free_entry(_Ptr<struct hash> p_hash, void* p_key)
 {
-  struct hash_node* p_node = hash_get_node_by_key(p_hash, p_key);
+  _Ptr<struct hash_node> p_node = hash_get_node_by_key(p_hash, p_key);
   if (!p_node)
   {
     bug("hash node not found");
@@ -104,7 +104,7 @@ hash_free_entry(_Ptr<struct hash> p_hash, void* p_key)
   }
   else
   {
-    struct hash_node** p_bucket = hash_get_bucket(p_hash, p_key);
+    _Ptr<struct hash_node *> p_bucket = hash_get_bucket(p_hash, p_key);
     *p_bucket = p_node->p_next;
   }
   if (p_node->p_next)
@@ -127,7 +127,7 @@ struct hash_node **hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key) /*unsa
 
 struct hash_node *hash_get_node_by_key(_Ptr<struct hash> p_hash, void* p_key) /*unsafe itype*/ : itype(_Ptr<struct hash_node>)
 {
-  struct hash_node** p_bucket = hash_get_bucket(p_hash, p_key);
+  _Ptr<struct hash_node *> p_bucket = hash_get_bucket(p_hash, p_key);
   struct hash_node* p_node = *p_bucket;
   if (!p_node)
   {

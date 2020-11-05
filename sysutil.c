@@ -1902,7 +1902,7 @@ vsf_sysutil_sockaddr_alloc_ipv6(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe
 void
 vsf_sysutil_sockaddr_clone(struct vsf_sysutil_sockaddr **p_sockptr /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct vsf_sysutil_sockaddr>>), const struct vsf_sysutil_sockaddr *p_src : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
 {
-  struct vsf_sysutil_sockaddr* p_sockaddr = 0;
+  _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr = 0;
   vsf_sysutil_sockaddr_alloc(p_sockptr);
   p_sockaddr = *p_sockptr;
   if (p_src->u.u_sockaddr.sa_family == AF_INET)
@@ -2624,7 +2624,7 @@ vsf_sysutil_get_time_usec(void)
 void
 vsf_sysutil_qsort(void* p_base, unsigned int num_elem, unsigned int elem_size, _Ptr<int (const void *, const void *)> p_compar)
 {
-  qsort(p_base, num_elem, elem_size, (int(*)(const void*,const void*)) p_compar);
+  qsort(p_base, num_elem, elem_size, (_Ptr<int (const void *, const void *)>) p_compar);
 }
 
 void
@@ -2692,9 +2692,9 @@ vsf_sysutil_parse_time(const char *p_text : itype(_Nt_array_ptr<const char>))
   vsf_sysutil_memclr<struct tm>(&the_time, sizeof(the_time));
   if (len >= 8)
   {
-    char yr[5];
-    char mon[3];
-    char day[3];
+    char yr _Checked[5];
+    char mon _Checked[3];
+    char day _Checked[3];
     vsf_sysutil_strcpy(yr, p_text, 5);
     vsf_sysutil_strcpy(mon, p_text + 4, 3);
     vsf_sysutil_strcpy(day, p_text + 6, 3);
@@ -2704,9 +2704,9 @@ vsf_sysutil_parse_time(const char *p_text : itype(_Nt_array_ptr<const char>))
   }
   if (len >= 14)
   {
-    char hr[3];
-    char mins[3];
-    char sec[3];
+    char hr _Checked[3];
+    char mins _Checked[3];
+    char sec _Checked[3];
     vsf_sysutil_strcpy(hr, p_text + 8, 3);
     vsf_sysutil_strcpy(mins, p_text + 10, 3);
     vsf_sysutil_strcpy(sec, p_text + 12, 3);

@@ -644,7 +644,7 @@ static void
 handle_retr(struct vsf_session *p_sess /*unsafe itype*/ : itype(_Ptr<struct vsf_session>), int is_http)
 {
   static struct mystr s_mark_str;
-  static struct vsf_sysutil_statbuf* s_p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf = ((void *)0);
   struct vsf_transfer_ret trans_ret;
   int remote_fd;
   int opened_file;
@@ -797,9 +797,9 @@ handle_dir_common(struct vsf_session *p_sess /*unsafe itype*/ : itype(_Ptr<struc
   static struct mystr s_option_str;
   static struct mystr s_filter_str;
   static struct mystr s_dir_name_str;
-  static struct vsf_sysutil_statbuf* s_p_dirstat;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_dirstat = ((void *)0);
   int dir_allow_read = 1;
-  struct vsf_sysutil_dir* p_dir = 0;
+  _Ptr<struct vsf_sysutil_dir> p_dir = 0;
   int retval = 0;
   int use_control = 0;
   str_empty(&s_option_str);
@@ -966,7 +966,7 @@ static void
 handle_port(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   unsigned short the_port;
-  unsigned char vals[6];
+  unsigned char vals _Checked[6];
   _Ptr<const unsigned char> p_raw = ((void *)0);
   pasv_cleanup(p_sess);
   port_cleanup(p_sess);
@@ -1009,7 +1009,7 @@ handle_stor(struct vsf_session *p_sess /*unsafe itype*/ : itype(_Ptr<struct vsf_
 static void
 handle_upload_common(struct vsf_session *p_sess /*unsafe itype*/ : itype(_Ptr<struct vsf_session>), int is_append, int is_unique)
 {
-  static struct vsf_sysutil_statbuf* s_p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf = ((void *)0);
   static struct mystr s_filename;
   _Ptr<struct mystr> p_filename = ((void *)0);
   struct vsf_transfer_ret trans_ret;
@@ -1274,7 +1274,7 @@ handle_rest(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 static void
 handle_rnfr(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
-  static struct vsf_sysutil_statbuf* p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> p_statbuf = ((void *)0);
   int retval;
   /* Clear old value */
   str_free(&p_sess->rnfr_filename_str);
@@ -1467,7 +1467,7 @@ handle_size(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
    * version 2.6.1. Proftpd-1.2.0pre fails to do this.
    * I will not do it because it is a potential I/O DoS.
    */
-  static struct vsf_sysutil_statbuf* s_p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf = ((void *)0);
   int retval;
   resolve_tilde(&p_sess->ftp_arg_str, p_sess);
   if (!vsf_access_check_file(&p_sess->ftp_arg_str))
@@ -1599,7 +1599,7 @@ static void
 handle_mdtm(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   static struct mystr s_filename_str;
-  static struct vsf_sysutil_statbuf* s_p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf = ((void *)0);
   int do_write = 0;
   long modtime = 0;
   struct str_locate_result loc = str_locate_char(&p_sess->ftp_arg_str, ' ');
@@ -1676,7 +1676,7 @@ handle_eprt(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
   static struct mystr s_scopeid_str;
   int proto;
   int port;
-  const unsigned char* p_raw_addr;
+  _Ptr<const unsigned char> p_raw_addr = ((void *)0);
   int is_ipv6 = vsf_sysutil_sockaddr_is_ipv6(p_sess->p_local_addr);
   port_cleanup(p_sess);
   pasv_cleanup(p_sess);
@@ -1781,7 +1781,7 @@ get_unique_filename(_Ptr<struct mystr> p_outstr, _Ptr<const struct mystr> p_base
   /* Use silly wu-ftpd algorithm for compatibility. It has races of course, if
    * two sessions are using the same file prefix at the same time.
    */
-  static struct vsf_sysutil_statbuf* s_p_statbuf;
+  static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf = ((void *)0);
   static struct mystr s_stou_str;
   unsigned int suffix = 1;
   _Ptr<const struct mystr> p_real_base_str = p_base_str;
@@ -1923,7 +1923,7 @@ resolve_tilde(_Ptr<struct mystr> p_str, struct vsf_session *p_sess : itype(_Ptr<
     else if (tunable_tilde_user_enable && len > 1)
     {
       static struct mystr s_user_str;
-      struct vsf_sysutil_user* p_user;
+      _Ptr<struct vsf_sysutil_user> p_user = ((void *)0);
       str_copy(&s_rhs_str, p_str);
       str_split_char(&s_rhs_str, &s_user_str, '~');
       str_split_char(&s_user_str, &s_rhs_str, '/');

@@ -16,7 +16,7 @@
 #include "sysutil.h"
 #include "utility.h"
 
-static const char* s_p_saved_filename;
+static _Nt_array_ptr<const char> s_p_saved_filename;
 
 /* Tables mapping setting names to runtime variables */
 /* Boolean settings */
@@ -200,7 +200,7 @@ vsf_parseconf_load_file(const char *p_filename /*unsafe itype*/ : itype(_Nt_arra
     {
       vsf_sysutil_free<char>((char*)s_p_saved_filename);
     }
-    s_p_saved_filename = vsf_sysutil_strdup(p_filename);
+    s_p_saved_filename = (_Nt_array_ptr<const char>) vsf_sysutil_strdup(p_filename);
   }
   if (!p_filename)
   {

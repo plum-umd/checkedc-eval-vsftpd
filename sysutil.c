@@ -2624,7 +2624,7 @@ vsf_sysutil_get_time_usec(void)
 void
 vsf_sysutil_qsort(void* p_base, unsigned int num_elem, unsigned int elem_size, _Ptr<int (const void *, const void *)> p_compar)
 {
-  qsort(p_base, num_elem, elem_size, p_compar);
+  qsort(p_base, num_elem, elem_size, (int(*)(const void*,const void*)) p_compar);
 }
 
 void

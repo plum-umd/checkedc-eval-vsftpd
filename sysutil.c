@@ -774,8 +774,8 @@ vsf_sysutil_deactivate_noblock(int fd)
   }
 }
 
-int
-vsf_sysutil_recv_peek(const int fd, void* p_buf, unsigned int len)
+_Itype_for_any(T) int
+vsf_sysutil_recv_peek(const int fd, void* p_buf : itype(_Array_ptr<T>) byte_count(len), unsigned int len)
 {
   while (1)
   {
@@ -1113,8 +1113,8 @@ vsf_sysutil_translate_memprot(const enum EVSFSysUtilMapPermission perm)
   return retval;
 }
 
-void
-vsf_sysutil_memprotect(void* p_addr, unsigned int len,
+_Itype_for_any(T) void
+vsf_sysutil_memprotect(void* p_addr : itype(_Array_ptr<T>) byte_count(len), unsigned int len,
                        const enum EVSFSysUtilMapPermission perm)
 {
   int prot = vsf_sysutil_translate_memprot(perm);
@@ -1125,8 +1125,8 @@ vsf_sysutil_memprotect(void* p_addr, unsigned int len,
   }
 }
 
-void
-vsf_sysutil_memunmap(void* p_start, unsigned int length)
+_Itype_for_any(T) void
+vsf_sysutil_memunmap(void* p_start : itype(_Array_ptr<T>) byte_count(length), unsigned int length)
 {
   int retval = munmap(p_start, length);
   if (retval != 0)
@@ -2025,8 +2025,8 @@ vsf_sysutil_sockaddr_set_ipv6addr(struct vsf_sysutil_sockaddr *p_sockptr : itype
   }
 }
 
-const void*
-vsf_sysutil_sockaddr_ipv6_v4(const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
+_Itype_for_any(T) const void*
+vsf_sysutil_sockaddr_ipv6_v4(const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>)) : itype(_Ptr<const T>)
 {
   static unsigned char pattern[12] =
       { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF };
@@ -2043,8 +2043,8 @@ vsf_sysutil_sockaddr_ipv6_v4(const struct vsf_sysutil_sockaddr *p_addr : itype(_
   return &p_addr_start[12];
 }
 
-const void*
-vsf_sysutil_sockaddr_ipv4_v6(const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>))
+_Itype_for_any(T) const void*
+vsf_sysutil_sockaddr_ipv4_v6(const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>)) : itype(_Ptr<const T>)
 {
   static unsigned char ret[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF };
   if (p_addr->u.u_sockaddr.sa_family != AF_INET)
@@ -2055,8 +2055,8 @@ vsf_sysutil_sockaddr_ipv4_v6(const struct vsf_sysutil_sockaddr *p_addr : itype(_
   return ret;
 }
 
-void*
-vsf_sysutil_sockaddr_get_raw_addr(struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<struct vsf_sysutil_sockaddr>))
+_Itype_for_any(T) void*
+vsf_sysutil_sockaddr_get_raw_addr(struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<struct vsf_sysutil_sockaddr>)) : itype(_Ptr<T>)
 {
   if (p_sockptr->u.u_sockaddr.sa_family == AF_INET)
   {
@@ -2196,7 +2196,7 @@ const char *vsf_sysutil_inet_ntop(const struct vsf_sysutil_sockaddr *p_sockptr :
   }
 }
 
-const char *vsf_sysutil_inet_ntoa(const void* p_raw_addr) /*unsafe itype*/ : itype(_Nt_array_ptr<const char>)
+_Itype_for_any(T) const char *vsf_sysutil_inet_ntoa(const void* p_raw_addr : itype(_Ptr<const T>)) /*unsafe itype*/ : itype(_Nt_array_ptr<const char>)
 {
   return inet_ntoa(*((struct in_addr*)p_raw_addr));
 }

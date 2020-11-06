@@ -140,9 +140,9 @@ enum EVSFSysUtilMapPermission
   kVSFSysUtilMapProtReadOnly = 1,
   kVSFSysUtilMapProtNone
 };
-void vsf_sysutil_memprotect(void* p_addr, unsigned int len,
-                            const enum EVSFSysUtilMapPermission perm);
-void vsf_sysutil_memunmap(void* p_start, unsigned int length);
+_Itype_for_any(T) void vsf_sysutil_memprotect(void* p_addr : itype(_Array_ptr<T>) byte_count(len), unsigned int len,
+                                              const enum EVSFSysUtilMapPermission perm);
+_Itype_for_any(T) void vsf_sysutil_memunmap(void* p_start : itype(_Array_ptr<T>) byte_count(length), unsigned int length);
 
 /* Memory allocating/freeing */
 _Itype_for_any(T) void* vsf_sysutil_malloc(unsigned int size) : itype(_Array_ptr<T>) byte_count(size);
@@ -212,9 +212,9 @@ void vsf_sysutil_sockaddr_set_port(struct vsf_sysutil_sockaddr *p_sockptr : ityp
 int vsf_sysutil_is_port_reserved(unsigned short port);
 int vsf_sysutil_get_ipsock(const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>));
 unsigned int vsf_sysutil_get_ipaddr_size(void);
-void* vsf_sysutil_sockaddr_get_raw_addr(struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<struct vsf_sysutil_sockaddr>));
-const void* vsf_sysutil_sockaddr_ipv6_v4(const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>));
-const void* vsf_sysutil_sockaddr_ipv4_v6(const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>));
+_Itype_for_any(T) void* vsf_sysutil_sockaddr_get_raw_addr(struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<struct vsf_sysutil_sockaddr>)) : itype(_Ptr<T>);
+_Itype_for_any(T) const void* vsf_sysutil_sockaddr_ipv6_v4(const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>)) : itype(_Ptr<const T>);
+_Itype_for_any(T) const void* vsf_sysutil_sockaddr_ipv4_v6(const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>)) : itype(_Ptr<const T>);
 int vsf_sysutil_get_ipv4_sock(void);
 int vsf_sysutil_get_ipv6_sock(void);
 struct vsf_sysutil_socketpair_retval
@@ -241,10 +241,10 @@ void vsf_sysutil_deactivate_noblock(int fd);
 void vsf_sysutil_shutdown_failok(int fd);
 /* And this does SHUT_RD */
 void vsf_sysutil_shutdown_read_failok(int fd);
-int vsf_sysutil_recv_peek(const int fd, void* p_buf, unsigned int len);
+_Itype_for_any(T) int vsf_sysutil_recv_peek(const int fd, void* p_buf : itype(_Array_ptr<T>) byte_count(len), unsigned int len);
 
 const char *vsf_sysutil_inet_ntop(const struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<const struct vsf_sysutil_sockaddr>)) /*unsafe itype*/ : itype(_Nt_array_ptr<const char>);
-const char *vsf_sysutil_inet_ntoa(const void* p_raw_addr) /*unsafe itype*/ : itype(_Nt_array_ptr<const char>);
+_Itype_for_any(T) const char *vsf_sysutil_inet_ntoa(const void* p_raw_addr : itype(_Ptr<const T>)) /*unsafe itype*/ : itype(_Nt_array_ptr<const char>);
 int vsf_sysutil_inet_aton(const char *p_text /*unsafe itype*/ : itype(_Ptr<const char>), struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<struct vsf_sysutil_sockaddr>));
 
 /* User database queries etc. */

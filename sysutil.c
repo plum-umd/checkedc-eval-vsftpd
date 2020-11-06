@@ -353,8 +353,8 @@ vsf_sysutil_clear_alarm(void)
   vsf_sysutil_set_alarm(0);
 }
 
-int
-vsf_sysutil_read(const int fd, void* p_buf, const unsigned int size)
+_Itype_for_any(T) int
+vsf_sysutil_read(const int fd, void* p_buf : itype(_Ptr<T>), const unsigned int size)
 {
   while (1)
   {
@@ -369,8 +369,8 @@ vsf_sysutil_read(const int fd, void* p_buf, const unsigned int size)
   }
 }
 
-int
-vsf_sysutil_write(const int fd, const void* p_buf, const unsigned int size)
+_Itype_for_any(T) int
+vsf_sysutil_write(const int fd, const void* p_buf : itype(_Ptr<const T>), const unsigned int size)
 {
   while (1)
   {
@@ -385,8 +385,8 @@ vsf_sysutil_write(const int fd, const void* p_buf, const unsigned int size)
   }
 }
 
-int
-vsf_sysutil_read_loop(const int fd, void* p_buf, unsigned int size)
+_Itype_for_any(T) int
+vsf_sysutil_read_loop(const int fd, void* p_buf : itype(_Ptr<T>), unsigned int size)
 {
   int retval;
   int num_read = 0;
@@ -420,8 +420,8 @@ vsf_sysutil_read_loop(const int fd, void* p_buf, unsigned int size)
   }
 }
 
-int
-vsf_sysutil_write_loop(const int fd, const void* p_buf, unsigned int size)
+_Itype_for_any(T) int
+vsf_sysutil_write_loop(const int fd, const void* p_buf : itype(_Ptr<const T>), unsigned int size)
 {
   int retval;
   int num_written = 0;

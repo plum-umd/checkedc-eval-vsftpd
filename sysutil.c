@@ -353,8 +353,7 @@ vsf_sysutil_clear_alarm(void)
   vsf_sysutil_set_alarm(0);
 }
 
-int
-vsf_sysutil_read(const int fd, void* p_buf, const unsigned int size)
+_Itype_for_any(T) int vsf_sysutil_read(const int fd, void* p_buf : itype(_Array_ptr<T>) byte_count(size), const unsigned int size)
 {
   while (1)
   {
@@ -369,8 +368,7 @@ vsf_sysutil_read(const int fd, void* p_buf, const unsigned int size)
   }
 }
 
-int
-vsf_sysutil_write(const int fd, const void* p_buf, const unsigned int size)
+_Itype_for_any(T) int vsf_sysutil_write(const int fd, const void* p_buf : itype(_Array_ptr<const T>) byte_count(size), const unsigned int size)
 {
   while (1)
   {
@@ -385,18 +383,18 @@ vsf_sysutil_write(const int fd, const void* p_buf, const unsigned int size)
   }
 }
 
-int
-vsf_sysutil_read_loop(const int fd, void* p_buf, unsigned int size)
+_Itype_for_any(T) int vsf_sysutil_read_loop(const int fd, void* p_buf : itype(_Array_ptr<T>) byte_count(size), unsigned int size)
 {
   int retval;
   int num_read = 0;
-  if (size > INT_MAX)
+  unsigned int temp = size;
+  if (temp > INT_MAX)
   {
     die("size too big in vsf_sysutil_read_loop");
   }
   while (1)
   {
-    retval = vsf_sysutil_read(fd, (char*)p_buf + num_read, size);
+    retval = vsf_sysutil_read(fd, (char*)p_buf + num_read, temp);
     if (retval < 0)
     {
       return retval;
@@ -406,13 +404,13 @@ vsf_sysutil_read_loop(const int fd, void* p_buf, unsigned int size)
       /* Read all we're going to read.. */
       return num_read; 
     }
-    if ((unsigned int) retval > size)
+    if ((unsigned int) retval > temp)
     {
       die("retval too big in vsf_sysutil_read_loop");
     }
     num_read += retval;
-    size -= (unsigned int) retval;
-    if (size == 0)
+    temp -= (unsigned int) retval;
+    if (temp == 0)
     {
       /* Hit the read target, cool. */
       return num_read;
@@ -420,18 +418,18 @@ vsf_sysutil_read_loop(const int fd, void* p_buf, unsigned int size)
   }
 }
 
-int
-vsf_sysutil_write_loop(const int fd, const void* p_buf, unsigned int size)
+_Itype_for_any(T) int vsf_sysutil_write_loop(const int fd, const void* p_buf : itype(_Array_ptr<const T>) byte_count(size), unsigned int size)
 {
   int retval;
   int num_written = 0;
-  if (size > INT_MAX)
+  unsigned int temp = size;
+  if (temp > INT_MAX)
   {
     die("size too big in vsf_sysutil_write_loop");
   }
   while (1)
   {
-    retval = vsf_sysutil_write(fd, (const char*)p_buf + num_written, size);
+    retval = vsf_sysutil_write(fd, (const char*)p_buf + num_written, temp);
     if (retval < 0)
     {
       /* Error */
@@ -442,13 +440,13 @@ vsf_sysutil_write_loop(const int fd, const void* p_buf, unsigned int size)
       /* Written all we're going to write.. */
       return num_written;
     }
-    if ((unsigned int) retval > size)
+    if ((unsigned int) retval > temp)
     {
       die("retval too big in vsf_sysutil_write_loop");
     }
     num_written += retval;
-    size -= (unsigned int) retval;
-    if (size == 0)
+    temp -= (unsigned int) retval;
+    if (temp == 0)
     {
       /* Hit the write target, cool. */
       return num_written;

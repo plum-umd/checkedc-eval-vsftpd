@@ -471,7 +471,7 @@ do_file_send_rwloop(_Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii)
   while (1)
   {
     unsigned int num_to_write;
-    int retval = vsf_sysutil_read(file_fd, p_readbuf, chunk_size);
+    int retval = vsf_sysutil_read<char>(file_fd, p_readbuf, chunk_size);
     if (vsf_sysutil_retval_is_error(retval))
     {
       ret_struct.retval = -1;
@@ -609,7 +609,7 @@ do_file_recv(_Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii)
       prev_cr = ret.last_was_cr;
       p_writebuf = ret.p_buf;
     }
-    retval = vsf_sysutil_write_loop(file_fd, p_writebuf, num_to_write);
+    retval = vsf_sysutil_write_loop<const char>(file_fd, p_writebuf, num_to_write);
     if (vsf_sysutil_retval_is_error(retval) ||
         (unsigned int) retval != num_to_write)
     {

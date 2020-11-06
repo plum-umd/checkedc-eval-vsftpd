@@ -87,7 +87,7 @@ ftp_read_data(_Ptr<struct vsf_session> p_sess, char *p_buf /*unsafe itype*/ : it
   }
   else
   {
-    return vsf_sysutil_read(p_sess->data_fd, p_buf, len);
+    return vsf_sysutil_read<char>(p_sess->data_fd, p_buf, len);
   }
 }
 
@@ -110,7 +110,7 @@ ftp_write_data(_Ptr<const struct vsf_session> p_sess, const char *p_buf /*unsafe
   }
   else
   {
-    return vsf_sysutil_write_loop(p_sess->data_fd, p_buf, len);
+    return vsf_sysutil_write_loop<const char>(p_sess->data_fd, p_buf, len);
   }
 }
 
@@ -158,7 +158,7 @@ static int
 plain_read_adapter(_Ptr<struct vsf_session> p_sess, char *p_buf /*unsafe itype*/ : itype(_Array_ptr<char>), unsigned int len)
 {
   (void) p_sess;
-  return vsf_sysutil_read_loop(VSFTP_COMMAND_FD, p_buf, len);
+  return vsf_sysutil_read_loop<char>(VSFTP_COMMAND_FD, p_buf, len);
 }
 
 static int

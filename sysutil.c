@@ -396,7 +396,7 @@ vsf_sysutil_read_loop(const int fd, void* p_buf : itype(_Ptr<T>), unsigned int s
   }
   while (1)
   {
-    retval = vsf_sysutil_read(fd, (char*)p_buf + num_read, size);
+    retval = vsf_sysutil_read<char>(fd, (char*)p_buf + num_read, size);
     if (retval < 0)
     {
       return retval;
@@ -431,7 +431,7 @@ vsf_sysutil_write_loop(const int fd, const void* p_buf : itype(_Ptr<const T>), u
   }
   while (1)
   {
-    retval = vsf_sysutil_write(fd, (const char*)p_buf + num_written, size);
+    retval = vsf_sysutil_write<const char>(fd, (const char*)p_buf + num_written, size);
     if (retval < 0)
     {
       /* Error */

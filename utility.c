@@ -42,17 +42,17 @@ bug(const char *p_text /*unsafe itype*/ : itype(_Nt_array_ptr<const char>))
 {
   /* Rats. Try and write the reason to the network for diagnostics */
   vsf_sysutil_activate_noblock(VSFTP_COMMAND_FD);
-  (void) vsf_sysutil_write_loop(VSFTP_COMMAND_FD, "500 OOPS: ", 10);
-  (void) vsf_sysutil_write_loop(VSFTP_COMMAND_FD, p_text,
+  (void) vsf_sysutil_write_loop<char>(VSFTP_COMMAND_FD, "500 OOPS: ", 10);
+  (void) vsf_sysutil_write_loop<const char>(VSFTP_COMMAND_FD, p_text,
                                 vsf_sysutil_strlen(p_text));
-  (void) vsf_sysutil_write_loop(VSFTP_COMMAND_FD, "\r\n", 2);
+  (void) vsf_sysutil_write_loop<char>(VSFTP_COMMAND_FD, "\r\n", 2);
   vsf_sysutil_exit(2);
 }
 
 void
 vsf_exit(const char *p_text /*unsafe itype*/ : itype(_Nt_array_ptr<const char>))
 {
-  (void) vsf_sysutil_write_loop(VSFTP_COMMAND_FD, p_text,
+  (void) vsf_sysutil_write_loop<const char>(VSFTP_COMMAND_FD, p_text,
                                 vsf_sysutil_strlen(p_text));
   vsf_sysutil_exit(0);
 }

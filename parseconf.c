@@ -26,7 +26,7 @@ struct parseconf_bool_setting
   _Ptr<int> p_variable;
 };
 
-static struct parseconf_bool_setting parseconf_bool_array[] =
+static struct parseconf_bool_setting parseconf_bool_array _Checked[81] =
 {
   { "anonymous_enable", &tunable_anonymous_enable },
   { "local_enable", &tunable_local_enable },
@@ -117,7 +117,7 @@ struct parseconf_uint_setting
   _Ptr<unsigned int> p_variable;
 };
 
-static struct parseconf_uint_setting parseconf_uint_array[] =
+static struct parseconf_uint_setting parseconf_uint_array _Checked[21] =
 {
   { "accept_timeout", &tunable_accept_timeout },
   { "connect_timeout", &tunable_connect_timeout },
@@ -148,7 +148,7 @@ struct parseconf_str_setting
   _Ptr<const char *> p_variable;
 };
 
-static struct parseconf_str_setting parseconf_str_array[] =
+static struct parseconf_str_setting parseconf_str_array _Checked[33] =
 {
   { "secure_chroot_dir", &tunable_secure_chroot_dir },
   { "ftp_username", &tunable_ftp_username },
@@ -268,7 +268,7 @@ vsf_parseconf_load_setting(const char *p_setting : itype(_Nt_array_ptr<const cha
   str_split_char(&s_setting_str, &s_value_str, '=');
   /* Is it a string setting? */
   {
-    const struct parseconf_str_setting* p_str_setting = parseconf_str_array;
+    _Array_ptr<const struct parseconf_str_setting> p_str_setting = parseconf_str_array;
     while (p_str_setting->p_setting_name != 0)
     {
       if (str_equal_text(&s_setting_str, p_str_setting->p_setting_name))
@@ -305,7 +305,7 @@ vsf_parseconf_load_setting(const char *p_setting : itype(_Nt_array_ptr<const cha
   }
   /* Is it a boolean value? */
   {
-    const struct parseconf_bool_setting* p_bool_setting = parseconf_bool_array;
+    _Array_ptr<const struct parseconf_bool_setting> p_bool_setting = parseconf_bool_array;
     while (p_bool_setting->p_setting_name != 0)
     {
       if (str_equal_text(&s_setting_str, p_bool_setting->p_setting_name))
@@ -336,7 +336,7 @@ vsf_parseconf_load_setting(const char *p_setting : itype(_Nt_array_ptr<const cha
   }
   /* Is it an unsigned integer setting? */
   {
-    const struct parseconf_uint_setting* p_uint_setting = parseconf_uint_array;
+    _Array_ptr<const struct parseconf_uint_setting> p_uint_setting = parseconf_uint_array;
     while (p_uint_setting->p_setting_name != 0)
     {
       if (str_equal_text(&s_setting_str, p_uint_setting->p_setting_name))

@@ -43,8 +43,13 @@ str_write_loop(_Ptr<const struct mystr> p_str, const int fd)
 int
 str_read_loop(_Ptr<struct mystr> p_str, const int fd)
 {
-  return vsf_sysutil_read_loop<char>(
-    fd, (_Ptr<char>) str_getbuf(p_str), str_getlen(p_str));
+  _Nt_array_ptr<const char> buf = (_Nt_array_ptr<const char>) str_getbuf(p_str);
+  if (*buf) {
+    return vsf_sysutil_read_loop<const char>(fd, buf, str_getlen(p_str));
+  } else {
+    bug("");
+    return -1;
+  }
 }
 
 int

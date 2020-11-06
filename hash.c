@@ -15,8 +15,8 @@ struct hash_node
 {
   void* p_key;
   void* p_value;
-  struct hash_node* p_prev;
-  struct hash_node* p_next;
+  _Ptr<struct hash_node> p_prev;
+  _Ptr<struct hash_node> p_next;
 };
 
 struct hash
@@ -29,7 +29,7 @@ struct hash
 };
 
 /* Internal functions */
-struct hash_node **hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key) /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct hash_node>>);
+struct hash_node **hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key) /*unsafe itype*/ : itype(_Ptr<_Ptr<struct hash_node>>);
 struct hash_node *hash_get_node_by_key(_Ptr<struct hash> p_hash, void* p_key) /*unsafe itype*/ : itype(_Ptr<struct hash_node>);
 
 _Ptr<struct hash> hash_alloc(unsigned int buckets, unsigned int key_size, unsigned int value_size, _Ptr<unsigned int (unsigned int , void *)> hash_func)
@@ -60,13 +60,13 @@ hash_lookup_entry(_Ptr<struct hash> p_hash, void* p_key)
 void
 hash_add_entry(_Ptr<struct hash> p_hash, void* p_key, void* p_value)
 {
-  _Ptr<struct hash_node *> p_bucket = ((void *)0);
-  struct hash_node* p_new_node;
+  _Ptr<_Ptr<struct hash_node>> p_bucket = ((void *)0);
+  _Ptr<struct hash_node> p_new_node = ((void *) 0);
   if (hash_lookup_entry(p_hash, p_key))
   {
     bug("duplicate hash key");
   }
-  p_bucket = hash_get_bucket(p_hash, p_key);
+  p_bucket = (_Ptr<_Ptr<struct hash_node>>) hash_get_bucket(p_hash, p_key);
   p_new_node = vsf_sysutil_malloc<struct hash_node>(sizeof(*p_new_node));
   p_new_node->p_prev = 0;
   p_new_node->p_next = 0;
@@ -104,7 +104,7 @@ hash_free_entry(_Ptr<struct hash> p_hash, void* p_key)
   }
   else
   {
-    _Ptr<struct hash_node *> p_bucket = hash_get_bucket(p_hash, p_key);
+    _Ptr<_Ptr<struct hash_node>> p_bucket = (_Ptr<_Ptr<struct hash_node>>) hash_get_bucket(p_hash, p_key);
     *p_bucket = p_node->p_next;
   }
   if (p_node->p_next)
@@ -115,7 +115,7 @@ hash_free_entry(_Ptr<struct hash> p_hash, void* p_key)
   vsf_sysutil_free<struct hash_node>(p_node);
 }
 
-struct hash_node **hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key) /*unsafe itype*/ : itype(_Ptr<_Array_ptr<struct hash_node>>)
+struct hash_node **hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key) /*unsafe itype*/ : itype(_Ptr<_Ptr<struct hash_node>>)
 {
   unsigned int bucket = (*p_hash->hash_func)(p_hash->buckets, p_key);
   if (bucket >= p_hash->buckets)
@@ -127,8 +127,8 @@ struct hash_node **hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key) /*unsa
 
 struct hash_node *hash_get_node_by_key(_Ptr<struct hash> p_hash, void* p_key) /*unsafe itype*/ : itype(_Ptr<struct hash_node>)
 {
-  _Ptr<struct hash_node *> p_bucket = hash_get_bucket(p_hash, p_key);
-  struct hash_node* p_node = *p_bucket;
+  _Ptr<_Ptr<struct hash_node>> p_bucket = (_Ptr<_Ptr<struct hash_node>>) hash_get_bucket(p_hash, p_key);
+  _Ptr<struct hash_node> p_node = *p_bucket;
   if (!p_node)
   {
     return p_node;

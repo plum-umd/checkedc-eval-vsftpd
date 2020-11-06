@@ -20,12 +20,13 @@ static _Nt_array_ptr<const char> s_p_saved_filename;
 
 /* Tables mapping setting names to runtime variables */
 /* Boolean settings */
-static struct parseconf_bool_setting
+struct parseconf_bool_setting
 {
   _Nt_array_ptr<const char> p_setting_name : count(2);
   _Ptr<int> p_variable;
-}
-parseconf_bool_array[] =
+};
+
+static struct parseconf_bool_setting parseconf_bool_array[] =
 {
   { "anonymous_enable", &tunable_anonymous_enable },
   { "local_enable", &tunable_local_enable },
@@ -110,12 +111,13 @@ parseconf_bool_array[] =
   { 0, 0 }
 };
 
-static struct parseconf_uint_setting
+struct parseconf_uint_setting
 {
   _Nt_array_ptr<const char> p_setting_name : count(2);
   _Ptr<unsigned int> p_variable;
-}
-parseconf_uint_array[] =
+};
+
+static struct parseconf_uint_setting parseconf_uint_array[] =
 {
   { "accept_timeout", &tunable_accept_timeout },
   { "connect_timeout", &tunable_connect_timeout },
@@ -140,12 +142,13 @@ parseconf_uint_array[] =
   { 0, 0 }
 };
 
-static struct parseconf_str_setting
+struct parseconf_str_setting
 {
   _Nt_array_ptr<const char> p_setting_name : count(2);
   _Ptr<const char *> p_variable;
-}
-parseconf_str_array[] =
+};
+
+static struct parseconf_str_setting parseconf_str_array[] =
 {
   { "secure_chroot_dir", &tunable_secure_chroot_dir },
   { "ftp_username", &tunable_ftp_username },

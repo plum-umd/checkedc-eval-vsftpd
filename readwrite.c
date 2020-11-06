@@ -151,7 +151,7 @@ static int
 plain_peek_adapter(_Ptr<struct vsf_session> p_sess, char *p_buf /*unsafe itype*/ : itype(_Array_ptr<char>), unsigned int len)
 {
   (void) p_sess;
-  return vsf_sysutil_recv_peek(VSFTP_COMMAND_FD, p_buf, len);
+  return vsf_sysutil_recv_peek<char>(VSFTP_COMMAND_FD, p_buf, len);
 }
 
 static int

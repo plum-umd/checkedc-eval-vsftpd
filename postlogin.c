@@ -624,7 +624,7 @@ handle_pasv(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int is
     const void* p_v4addr = vsf_sysutil_sockaddr_ipv6_v4(s_p_sockaddr);
     if (p_v4addr)
     {
-      str_append_text(&s_pasv_res_str, vsf_sysutil_inet_ntoa(p_v4addr));
+      str_append_text(&s_pasv_res_str, vsf_sysutil_inet_ntoa<const void>(p_v4addr));
     }
     else
     {

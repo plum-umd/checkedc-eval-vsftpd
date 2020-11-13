@@ -185,7 +185,7 @@
 #include <linux/capability.h>
 #include <errno_checked.h>
 #include <syscall.h>
-int capset(cap_user_header_t header, const cap_user_data_t data)
+int capset(_Ptr<struct __user_cap_header_struct> header, const _Ptr<struct __user_cap_data_struct> data)
 {
   return syscall(__NR_capset, header, data);
 }
@@ -232,15 +232,12 @@ static void vsf_sysutil_setproctitle_internal(const char* p_text);
 static struct mystr s_proctitle_prefix_str;
 
 /* These two aren't static to avoid OpenBSD build warnings. */
-void vsf_insert_uwtmp(const struct mystr* p_user_str,
-                      const struct mystr* p_host_str);
+void vsf_insert_uwtmp(_Ptr<const struct mystr> p_user_str, _Ptr<const struct mystr> p_host_str);
 void vsf_remove_uwtmp(void);
 
 #ifndef VSF_SYSDEP_HAVE_PAM
 int
-vsf_sysdep_check_auth(struct mystr* p_user_str,
-                      const struct mystr* p_pass_str,
-                      const struct mystr* p_remote_host)
+vsf_sysdep_check_auth(_Ptr<struct mystr> p_user_str, _Ptr<const struct mystr> p_pass_str, _Ptr<const struct mystr> p_remote_host)
 {
   const char* p_crypted;
   const struct passwd* p_pwd = getpwnam(str_getbuf(p_user_str));
@@ -650,9 +647,7 @@ vsf_sysdep_adopt_capabilities(unsigned int caps)
 #endif /* VSF_SYSDEP_HAVE_CAPABILITIES || VSF_SYSDEP_HAVE_LIBCAP */
 
 int
-vsf_sysutil_sendfile(const int out_fd, const int in_fd,
-                     filesize_t* p_offset, filesize_t num_send,
-                     unsigned int max_chunk)
+vsf_sysutil_sendfile(const int out_fd, const int in_fd, _Ptr<filesize_t> p_offset, filesize_t num_send, unsigned int max_chunk)
 {
   /* Grr - why is off_t signed? */
   if (*p_offset < 0 || num_send < 0)
@@ -844,14 +839,14 @@ static int do_sendfile(const int out_fd, const int in_fd,
 }
 
 void
-vsf_sysutil_set_proctitle_prefix(const struct mystr* p_str)
+vsf_sysutil_set_proctitle_prefix(_Ptr<const struct mystr> p_str)
 {
   str_copy(&s_proctitle_prefix_str, p_str);
 }
 
 /* This delegation is common to all setproctitle() implementations */
 void
-vsf_sysutil_setproctitle_str(const struct mystr* p_str)
+vsf_sysutil_setproctitle_str(_Ptr<const struct mystr> p_str)
 {
   vsf_sysutil_setproctitle(str_getbuf(p_str));
 }
@@ -904,10 +899,10 @@ vsf_sysutil_setproctitle_internal(const char* p_buf)
 }
 #elif defined(VSF_SYSDEP_TRY_LINUX_SETPROCTITLE_HACK)
 void
-vsf_sysutil_setproctitle_init(int argc, const char* argv[])
+vsf_sysutil_setproctitle_init(int argc, _Array_ptr<const char *> argv : count(argc))
 {
   int i;
-  char** p_env = environ;
+  _Array_ptr<_Nt_array_ptr<char>> p_env = environ;
   if (s_proctitle_inited)
   {
     bug("vsf_sysutil_setproctitle_init called twice");
@@ -1181,8 +1176,7 @@ static int s_uwtmp_inserted;
 static struct utmpx s_utent;
 
 void
-vsf_insert_uwtmp(const struct mystr* p_user_str,
-                 const struct mystr* p_host_str)
+vsf_insert_uwtmp(_Ptr<const struct mystr> p_user_str, _Ptr<const struct mystr> p_host_str)
 {
   if (sizeof(s_utent.ut_line) < 16)
   {

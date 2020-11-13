@@ -52,7 +52,7 @@ int vsf_ftpdataio_get_port_fd(struct vsf_session* p_sess);
  * RETURNS
  * 1 on success, 0 otherwise.
  */
-int vsf_ftpdataio_post_mark_connect(struct vsf_session* p_sess);
+int vsf_ftpdataio_post_mark_connect(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 /* vsf_ftpdataio_transfer_file()
  * PURPOSE
@@ -74,9 +74,7 @@ struct vsf_transfer_ret
   int retval;
   filesize_t transferred;
 };
-struct vsf_transfer_ret vsf_ftpdataio_transfer_file(
-  struct vsf_session* p_sess,
-  int remote_fd, int file_fd, int is_recv, int is_ascii);
+struct vsf_transfer_ret vsf_ftpdataio_transfer_file(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int remote_fd, int file_fd, int is_recv, int is_ascii);
 
 /* vsf_ftpdataio_transfer_dir()
  * PURPOSE
@@ -91,12 +89,7 @@ struct vsf_transfer_ret vsf_ftpdataio_transfer_file(
  * p_filter_str   - the filter string provided to "ls"
  * is_verbose     - set to 0 if NLST used, 1 if LIST used
  */
-int vsf_ftpdataio_transfer_dir(struct vsf_session* p_sess, int is_control,
-                               struct vsf_sysutil_dir* p_dir,
-                               const struct mystr* p_base_dir_str,
-                               const struct mystr* p_option_str,
-                               const struct mystr* p_filter_str,
-                               int is_verbose);
+int vsf_ftpdataio_transfer_dir(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int is_control, struct vsf_sysutil_dir* p_dir, _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose);
 
 #endif /* VSF_FTPDATAIO_H */
 

@@ -21,13 +21,13 @@
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
 
-static int socket_validator(struct pt_sandbox* p_sandbox, void* p_arg);
-static int connect_validator(struct pt_sandbox* p_sandbox, void* p_arg);
-static int getsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg);
-static int setsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg);
+static int socket_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
+static int connect_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
+static int getsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
+static int setsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
 
 void
-policy_setup(struct pt_sandbox* p_sandbox, const struct vsf_session* p_sess)
+policy_setup(_Ptr<struct pt_sandbox> p_sandbox, const struct vsf_session* p_sess)
 {
   int is_anon = p_sess->is_anonymous;
   /* Always need to be able to exit! */
@@ -158,7 +158,7 @@ policy_setup(struct pt_sandbox* p_sandbox, const struct vsf_session* p_sess)
 }
 
 static int
-socket_validator(struct pt_sandbox* p_sandbox, void* p_arg)
+socket_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   int ret;
   struct vsf_session* p_sess = (struct vsf_session*) p_arg;
@@ -187,7 +187,7 @@ socket_validator(struct pt_sandbox* p_sandbox, void* p_arg)
 }
 
 static int
-connect_validator(struct pt_sandbox* p_sandbox, void* p_arg)
+connect_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   int ret;
   struct vsf_session* p_sess = (struct vsf_session*) p_arg;
@@ -256,7 +256,7 @@ connect_validator(struct pt_sandbox* p_sandbox, void* p_arg)
 }
 
 static int
-getsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg)
+getsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   int ret;
   unsigned long arg2;
@@ -280,7 +280,7 @@ getsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg)
 }
 
 static int
-setsockopt_validator(struct pt_sandbox* p_sandbox, void* p_arg)
+setsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   int ret;
   unsigned long arg2;

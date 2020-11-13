@@ -26,14 +26,14 @@
 #include "opts.h"
 
 /* Functions used */
-static void check_limits(struct vsf_session* p_sess);
-static void emit_greeting(struct vsf_session* p_sess);
+static void check_limits(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
+static void emit_greeting(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void parse_username_password(struct vsf_session* p_sess);
 static void handle_user_command(struct vsf_session* p_sess);
 static void handle_pass_command(struct vsf_session* p_sess);
 static void handle_get(struct vsf_session* p_sess);
 static void check_login_delay();
-static void check_login_fails(struct vsf_session* p_sess);
+static void check_login_fails(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 void
 init_connection(struct vsf_session* p_sess)
@@ -63,7 +63,7 @@ init_connection(struct vsf_session* p_sess)
 }
 
 static void
-check_limits(struct vsf_session* p_sess)
+check_limits(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   struct mystr str_log_line = INIT_MYSTR;
   /* Check for client limits (standalone mode only) */
@@ -95,7 +95,7 @@ check_limits(struct vsf_session* p_sess)
 }
 
 static void
-emit_greeting(struct vsf_session* p_sess)
+emit_greeting(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   if (!str_isempty(&p_sess->banner_str))
   {
@@ -293,7 +293,7 @@ static void check_login_delay()
   }
 }
 
-static void check_login_fails(struct vsf_session* p_sess)
+static void check_login_fails(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   if (++p_sess->login_fails >= tunable_max_login_fails)
   {

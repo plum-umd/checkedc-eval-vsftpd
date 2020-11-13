@@ -12,7 +12,7 @@
  *                Any previous buffer pointed to is freed.
  * size         - size in bytes required for the secure buffer.
  */
-void vsf_secbuf_alloc(char** p_ptr, unsigned int size);
+void vsf_secbuf_alloc(_Ptr<char *> p_ptr, unsigned int size);
 
 /* vsf_secbuf_free()
  * PURPOSE
@@ -21,7 +21,7 @@ void vsf_secbuf_alloc(char** p_ptr, unsigned int size);
  * p_ptr        - pointer to a pointer containing the buffer to be freed. The
  *                buffer pointer is nullified by this call.
  */
-void vsf_secbuf_free(char** p_ptr);
+void vsf_secbuf_free(_Ptr<char *> p_ptr);
 
 #endif /* VSF_SECBUF_H */
 

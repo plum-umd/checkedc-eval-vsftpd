@@ -54,10 +54,7 @@ vsf_ascii_ascii_to_bin(char* p_buf, unsigned int in_len, int prev_cr)
 }
 
 struct bin_to_ascii_ret
-vsf_ascii_bin_to_ascii(const char* p_in,
-                       char* p_out,
-                       unsigned int in_len,
-                       int prev_cr)
+vsf_ascii_bin_to_ascii(const char *p_in : itype(_Array_ptr<const char>) count(in_len), char *p_out : itype(_Array_ptr<char>), unsigned int in_len, int prev_cr)
 {
   /* Task: translate all \n not preceeded by \r into \r\n.
    * Note that \r\n stays as \r\n. We used to map it to \r\r\n like wu-ftpd

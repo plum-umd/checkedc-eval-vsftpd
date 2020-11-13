@@ -13,7 +13,7 @@
 #include "tunables.h"
 
 void
-handle_feat(struct vsf_session* p_sess)
+handle_feat(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   vsf_cmdio_write_hyphen(p_sess, FTP_FEAT, "Features:");
   if (tunable_ssl_enable)

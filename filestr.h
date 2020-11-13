@@ -19,8 +19,7 @@ struct mystr;
  * the "p_str" string object. If not successful, "p_str" will point to an
  * empty buffer.
  */
-int str_fileread(struct mystr* p_str, const char* p_filename,
-                 unsigned int maxsize);
+int str_fileread(_Ptr<struct mystr> p_str, const char* p_filename, unsigned int maxsize);
 
 #endif /* VSF_FILESTR_H */
 

@@ -33,15 +33,9 @@ static void drop_all_privs(void);
 static void handle_sigchld(void* duff);
 static void handle_sigterm(void* duff);
 static void process_login_req(struct vsf_session* p_sess);
-static void common_do_login(struct vsf_session* p_sess,
-                            const struct mystr* p_user_str, int do_chroot,
-                            int anon);
-static void handle_per_user_config(const struct mystr* p_user_str);
-static void calculate_chdir_dir(int anon, struct mystr* p_userdir_str,
-                                struct mystr* p_chroot_str,
-                                struct mystr* p_chdir_str,
-                                const struct mystr* p_user_str,
-                                const struct mystr* p_orig_user_str);
+static void common_do_login(struct vsf_session* p_sess, _Ptr<const struct mystr> p_user_str, int do_chroot, int anon);
+static void handle_per_user_config(_Ptr<const struct mystr> p_user_str);
+static void calculate_chdir_dir(int anon_login, _Ptr<struct mystr> p_userdir_str, _Ptr<struct mystr> p_chroot_str, _Ptr<struct mystr> p_chdir_str, _Ptr<const struct mystr> p_user_str, _Ptr<const struct mystr> p_orig_user_str);
 
 static void
 handle_sigchld(void* duff)
@@ -180,8 +174,7 @@ drop_all_privs(void)
 }
 
 void
-vsf_two_process_login(struct vsf_session* p_sess,
-                      const struct mystr* p_pass_str)
+vsf_two_process_login(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), _Ptr<const struct mystr> p_pass_str)
 {
   char result;
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_LOGIN);
@@ -218,7 +211,7 @@ vsf_two_process_login(struct vsf_session* p_sess,
 }
 
 int
-vsf_two_process_get_priv_data_sock(struct vsf_session* p_sess)
+vsf_two_process_get_priv_data_sock(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   char res;
   unsigned short port = vsf_sysutil_sockaddr_get_port(p_sess->p_port_sockaddr);
@@ -237,7 +230,7 @@ vsf_two_process_get_priv_data_sock(struct vsf_session* p_sess)
 }
 
 void
-vsf_two_process_pasv_cleanup(struct vsf_session* p_sess)
+vsf_two_process_pasv_cleanup(_Ptr<struct vsf_session> p_sess)
 {
   char res;
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_PASV_CLEANUP);
@@ -249,21 +242,21 @@ vsf_two_process_pasv_cleanup(struct vsf_session* p_sess)
 }
 
 int
-vsf_two_process_pasv_active(struct vsf_session* p_sess)
+vsf_two_process_pasv_active(_Ptr<struct vsf_session> p_sess)
 {
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_PASV_ACTIVE);
   return priv_sock_get_int(p_sess->child_fd);
 }
 
 unsigned short
-vsf_two_process_listen(struct vsf_session* p_sess)
+vsf_two_process_listen(_Ptr<struct vsf_session> p_sess)
 {
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_PASV_LISTEN);
   return (unsigned short) priv_sock_get_int(p_sess->child_fd);
 }
 
 int
-vsf_two_process_get_pasv_fd(struct vsf_session* p_sess)
+vsf_two_process_get_pasv_fd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
   char res;
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_PASV_ACCEPT);
@@ -280,7 +273,7 @@ vsf_two_process_get_pasv_fd(struct vsf_session* p_sess)
 }
 
 void
-vsf_two_process_chown_upload(struct vsf_session* p_sess, int fd)
+vsf_two_process_chown_upload(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int fd)
 {
   char res;
   priv_sock_send_cmd(p_sess->child_fd, PRIV_SOCK_CHOWN);
@@ -379,11 +372,10 @@ process_login_req(struct vsf_session* p_sess)
 }
 
 static void
-common_do_login(struct vsf_session* p_sess, const struct mystr* p_user_str,
-                int do_chroot, int anon)
+common_do_login(struct vsf_session* p_sess, _Ptr<const struct mystr> p_user_str, int do_chroot, int anon)
 {
   int was_anon = anon;
-  const struct mystr* p_orig_user_str = p_user_str;
+  _Ptr<const struct mystr> p_orig_user_str = p_user_str;
   int newpid;
   vsf_sysutil_install_null_sighandler(kVSFSysUtilSigCHLD);
   /* Tells the pre-login child all is OK (it may exit in response) */
@@ -484,7 +476,7 @@ common_do_login(struct vsf_session* p_sess, const struct mystr* p_user_str,
 }
 
 static void
-handle_per_user_config(const struct mystr* p_user_str)
+handle_per_user_config(_Ptr<const struct mystr> p_user_str)
 {
   struct mystr filename_str = INIT_MYSTR;
   struct vsf_sysutil_statbuf* p_statbuf = 0;
@@ -518,11 +510,7 @@ handle_per_user_config(const struct mystr* p_user_str)
 }
 
 static void
-calculate_chdir_dir(int anon_login, struct mystr* p_userdir_str,
-                    struct mystr* p_chroot_str,
-                    struct mystr* p_chdir_str,
-                    const struct mystr* p_user_str,
-                    const struct mystr* p_orig_user_str)
+calculate_chdir_dir(int anon_login, _Ptr<struct mystr> p_userdir_str, _Ptr<struct mystr> p_chroot_str, _Ptr<struct mystr> p_chdir_str, _Ptr<const struct mystr> p_user_str, _Ptr<const struct mystr> p_orig_user_str)
 {
   if (!anon_login)
   {

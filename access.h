@@ -12,7 +12,7 @@ struct mystr;
  * RETURNS
  * Returns 1 if access is granted, otherwise 0.
  */
-int vsf_access_check_file(const struct mystr* p_filename_str);
+int vsf_access_check_file(_Ptr<const struct mystr> p_filename_str);
 
 /* vsf_access_check_file_visible()
  * PURPOSE
@@ -23,7 +23,7 @@ int vsf_access_check_file(const struct mystr* p_filename_str);
  * RETURNS
  * Returns 1 if the file should be visible, otherwise 0.
  */
-int vsf_access_check_file_visible(const struct mystr* p_filename_str);
+int vsf_access_check_file_visible(_Ptr<const struct mystr> p_filename_str);
 
 #endif /* VSF_ACCESS_H */
 

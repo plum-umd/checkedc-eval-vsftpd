@@ -79,14 +79,14 @@ static size_t s_syscall_index;
 static size_t s_1_arg_validations;
 static size_t s_2_arg_validations;
 static size_t s_3_arg_validations;
-static int s_syscalls[kMaxSyscalls];
-static int s_errnos[kMaxSyscalls];
-static int s_args_1[kMaxSyscalls];
-static int s_vals_1[kMaxSyscalls];
-static int s_args_2[kMaxSyscalls];
-static int s_vals_2[kMaxSyscalls];
-static int s_args_3[kMaxSyscalls];
-static int s_vals_3[kMaxSyscalls];
+static int s_syscalls _Checked[100];
+static int s_errnos _Checked[100];
+static int s_args_1 _Checked[100];
+static int s_vals_1 _Checked[100];
+static int s_args_2 _Checked[100];
+static int s_vals_2 _Checked[100];
+static int s_args_3 _Checked[100];
+static int s_vals_3 _Checked[100];
 
 static void
 allow_nr(int nr)
@@ -320,7 +320,7 @@ seccomp_sandbox_init()
 }
 
 void
-seccomp_sandbox_setup_prelogin(const struct vsf_session* p_sess)
+seccomp_sandbox_setup_prelogin(const struct vsf_session *p_sess : itype(_Ptr<const struct vsf_session>))
 {
   (void) p_sess;
 
@@ -363,7 +363,7 @@ seccomp_sandbox_setup_prelogin(const struct vsf_session* p_sess)
 }
 
 void
-seccomp_sandbox_setup_postlogin(const struct vsf_session* p_sess)
+seccomp_sandbox_setup_postlogin(const struct vsf_session *p_sess : itype(_Ptr<const struct vsf_session>))
 {
   int is_anon = p_sess->is_anonymous;
   int open_flag = kOpenFlags;

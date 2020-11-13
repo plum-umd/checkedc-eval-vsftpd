@@ -24,7 +24,7 @@
 #define VSFTP_MAX_MSGFILE_SIZE 4000
 
 void
-vsf_banner_dir_changed(struct vsf_session* p_sess, int ftpcode)
+vsf_banner_dir_changed(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int ftpcode)
 {
   struct mystr dir_str = INIT_MYSTR;
   /* Do nothing if .message support is off */
@@ -66,7 +66,7 @@ vsf_banner_dir_changed(struct vsf_session* p_sess, int ftpcode)
 }
 
 void
-vsf_banner_write(struct vsf_session* p_sess, struct mystr* p_str, int ftpcode)
+vsf_banner_write(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, int ftpcode)
 {
   struct mystr msg_line_str = INIT_MYSTR;
   unsigned int str_pos = 0;

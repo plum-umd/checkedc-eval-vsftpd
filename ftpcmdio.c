@@ -50,13 +50,13 @@ vsf_cmdio_write(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), in
 }
 
 void
-vsf_cmdio_write_hyphen(struct vsf_session *p_sess, int status, _Nt_array_ptr<const char> p_text)
+vsf_cmdio_write_hyphen(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int status, _Nt_array_ptr<const char> p_text)
 {
   ftp_write_text_common(p_sess, status, p_text, '-');
 }
 
 void
-vsf_cmdio_write_raw(struct vsf_session *p_sess, const char *p_text : itype(_Nt_array_ptr<const char>))
+vsf_cmdio_write_raw(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), const char *p_text)
 {
   static struct mystr s_the_str;
   int retval;
@@ -73,7 +73,7 @@ vsf_cmdio_write_raw(struct vsf_session *p_sess, const char *p_text : itype(_Nt_a
 }
 
 void
-vsf_cmdio_write_exit(struct vsf_session *p_sess, int status, _Nt_array_ptr<const char> p_text, int exit_val)
+vsf_cmdio_write_exit(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int status, _Nt_array_ptr<const char> p_text, int exit_val)
 {
   /* Unblock any readers on the dying control channel. This is needed for SSL
    * connections, where the SSL control channel slave is in a separate

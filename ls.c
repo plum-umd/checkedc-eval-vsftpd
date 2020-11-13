@@ -16,7 +16,7 @@
 #include "sysutil.h"
 #include "tunables.h"
 
-static void build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str, const struct vsf_sysutil_statbuf* p_stat, long curr_time);
+static void build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str, const struct vsf_sysutil_statbuf *p_stat : itype(_Ptr<const struct vsf_sysutil_statbuf>), long curr_time);
 
 void
 vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list, _Ptr<struct mystr_list> p_subdir_list, struct vsf_sysutil_dir* p_dir, _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose)
@@ -358,7 +358,7 @@ out:
 }
 
 static void
-build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str, const struct vsf_sysutil_statbuf* p_stat, long curr_time)
+build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str, const struct vsf_sysutil_statbuf *p_stat : itype(_Ptr<const struct vsf_sysutil_statbuf>), long curr_time)
 {
   static struct mystr s_tmp_str;
   filesize_t size = vsf_sysutil_statbuf_get_size(p_stat);

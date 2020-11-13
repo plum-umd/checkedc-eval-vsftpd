@@ -85,7 +85,7 @@ void
 str_alloc_text(_Ptr<struct mystr> p_str, const char *p_src : itype(_Nt_array_ptr<const char>))
 {
   unsigned int len = vsf_sysutil_strlen(p_src);
-  private_str_alloc_memchunk(p_str, p_src, len);
+  private_str_alloc_memchunk(p_str, ((const char *)p_src), len);
 }
 
 void
@@ -237,7 +237,7 @@ int
 str_equal_text(_Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text)
 {
   unsigned int cmplen = vsf_sysutil_strlen(p_text);
-  return (str_equal_internal(p_str->p_buf, p_str->len, p_text, cmplen) == 0);
+  return (str_equal_internal(p_str->p_buf, p_str->len, ((const char *)p_text), cmplen) == 0);
 }
 
 void
@@ -250,7 +250,7 @@ void
 str_append_text(_Ptr<struct mystr> p_str, const char *p_src : itype(_Nt_array_ptr<const char>))
 {
   unsigned int len = vsf_sysutil_strlen(p_src);
-  private_str_append_memchunk(p_str, p_src, len);
+  private_str_append_memchunk(p_str, ((const char *)p_src), len);
 }
 
 void
@@ -486,7 +486,7 @@ str_locate_text(_Ptr<const struct mystr> p_str, const char *p_text : itype(_Nt_a
   }
   for (i=0; i <= (p_str->len - text_len); i++)
   {
-    if (vsf_sysutil_memcmp<char>(p_str->p_buf + i, ((const void *)p_text), text_len) == 0)
+    if (vsf_sysutil_memcmp<char>(((const void *)p_str->p_buf + i), ((const void *)p_text), text_len) == 0)
     {
       retval.found = 1;
       retval.index = i;
@@ -514,7 +514,7 @@ str_locate_text_reverse(_Ptr<const struct mystr> p_str, const char *p_text : ity
   /* Want to go through loop once even if i==0 */
   while (1)
   {
-    if (vsf_sysutil_memcmp<char>(p_str->p_buf + i, ((const void *)p_text), text_len) == 0)
+    if (vsf_sysutil_memcmp<char>(((const void *)p_str->p_buf + i), ((const void *)p_text), text_len) == 0)
     {
       retval.found = 1;
       retval.index = i;

@@ -30,7 +30,7 @@ void vsf_cmdio_write(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>
  * status       - the status code to report
  * p_text       - the text to report
  */
-void vsf_cmdio_write_hyphen(struct vsf_session *p_sess, int status, _Nt_array_ptr<const char> p_text);
+void vsf_cmdio_write_hyphen(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int status, _Nt_array_ptr<const char> p_text);
 
 /* vsf_cmdio_write_raw()
  * PURPOSE
@@ -41,14 +41,14 @@ void vsf_cmdio_write_hyphen(struct vsf_session *p_sess, int status, _Nt_array_pt
  * p_sess       - the current session object
  * p_text       - the text to report
  */
-void vsf_cmdio_write_raw(struct vsf_session *p_sess, const char *p_text : itype(_Nt_array_ptr<const char>));
+void vsf_cmdio_write_raw(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), const char *p_text);
 
 /* vsf_cmdio_write_exit()
  * PURPOSE
  * The same as vsf_cmdio_write(), and then the calling process is exited. The
  * write is _guaranteed_ to not block (ditching output if neccessary).
  */
-void vsf_cmdio_write_exit(struct vsf_session *p_sess, int status, _Nt_array_ptr<const char> p_text, int exit_val);
+void vsf_cmdio_write_exit(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int status, _Nt_array_ptr<const char> p_text, int exit_val);
 
 /* vsf_cmdio_write_str()
  * PURPOSE

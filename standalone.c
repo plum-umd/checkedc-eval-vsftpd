@@ -20,8 +20,8 @@
 #include "ipaddrparse.h"
 
 static unsigned int s_children;
-static struct hash* s_p_ip_count_hash;
-static struct hash* s_p_pid_ip_hash;
+static _Ptr<struct hash> s_p_ip_count_hash = ((void *)0);
+static _Ptr<struct hash> s_p_pid_ip_hash = ((void *)0);
 static unsigned int s_ipaddr_size;
 
 static void handle_sigchld(void*  duff);
@@ -94,7 +94,7 @@ vsf_standalone_main(void)
       }
     }
     retval = vsf_sysutil_bind(listen_sock, p_sockaddr);
-    vsf_sysutil_free(p_sockaddr);
+    vsf_sysutil_free<struct vsf_sysutil_sockaddr>(p_sockaddr);
     if (vsf_sysutil_retval_is_error(retval))
     {
       die("could not bind listening IPv4 socket");
@@ -124,7 +124,7 @@ vsf_standalone_main(void)
       vsf_sysutil_sockaddr_set_ipv6addr(p_sockaddr, p_raw_addr);
     }
     retval = vsf_sysutil_bind(listen_sock, p_sockaddr);
-    vsf_sysutil_free(p_sockaddr);
+    vsf_sysutil_free<struct vsf_sysutil_sockaddr>(p_sockaddr);
     if (vsf_sysutil_retval_is_error(retval))
     {
       die("could not bind listening IPv6 socket");

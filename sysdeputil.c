@@ -228,7 +228,7 @@ static int s_zero_fd = -1;
 /* File private functions/variables */
 static int do_sendfile(const int out_fd, const int in_fd,
                        unsigned int num_send, filesize_t start_pos);
-static void vsf_sysutil_setproctitle_internal(const char* p_text);
+static void vsf_sysutil_setproctitle_internal(const char *p_buf : itype(_Nt_array_ptr<const char>));
 static struct mystr s_proctitle_prefix_str;
 
 /* These two aren't static to avoid OpenBSD build warnings. */
@@ -583,8 +583,8 @@ vsf_sysdep_adopt_capabilities(unsigned int caps)
   {
     bug("asked to adopt no capabilities");
   }
-  vsf_sysutil_memclr(&cap_head, sizeof(cap_head));
-  vsf_sysutil_memclr(&cap_data, sizeof(cap_data));
+  vsf_sysutil_memclr<struct __user_cap_header_struct>(&cap_head, sizeof(cap_head));
+  vsf_sysutil_memclr<struct __user_cap_data_struct>(&cap_data, sizeof(cap_data));
   cap_head.version = _LINUX_CAPABILITY_VERSION;
   cap_head.pid = 0;
   if (caps & kCapabilityCAP_CHOWN)
@@ -852,7 +852,7 @@ vsf_sysutil_setproctitle_str(_Ptr<const struct mystr> p_str)
 }
 
 void
-vsf_sysutil_setproctitle(const char* p_text)
+vsf_sysutil_setproctitle(const char *p_text : itype(_Nt_array_ptr<const char>))
 {
   struct mystr proctitle_str = INIT_MYSTR;
   str_copy(&proctitle_str, &s_proctitle_prefix_str);
@@ -929,11 +929,11 @@ vsf_sysutil_setproctitle_init(int argc, _Array_ptr<const char *> argv : count(ar
   /* Oops :-) */
   environ = 0;
   s_p_proctitle = (char*) argv[0];
-  vsf_sysutil_memclr(s_p_proctitle, s_proctitle_space);
+  vsf_sysutil_memclr<char>(s_p_proctitle, s_proctitle_space);
 }
 
 void
-vsf_sysutil_setproctitle_internal(const char* p_buf)
+vsf_sysutil_setproctitle_internal(const char *p_buf : itype(_Nt_array_ptr<const char>))
 {
   struct mystr proctitle_str = INIT_MYSTR;
   unsigned int to_copy;
@@ -941,7 +941,7 @@ vsf_sysutil_setproctitle_internal(const char* p_buf)
   {
     bug("vsf_sysutil_setproctitle: not initialized");
   }
-  vsf_sysutil_memclr(s_p_proctitle, s_proctitle_space);
+  vsf_sysutil_memclr<char>(s_p_proctitle, s_proctitle_space);
   if (s_proctitle_space < 32)
   {
     return;
@@ -953,7 +953,7 @@ vsf_sysutil_setproctitle_internal(const char* p_buf)
   {
     to_copy = s_proctitle_space - 1;
   }
-  vsf_sysutil_memcpy(s_p_proctitle, str_getbuf(&proctitle_str), to_copy);
+  vsf_sysutil_memcpy<char>(s_p_proctitle, str_getbuf(&proctitle_str), to_copy);
   str_free(&proctitle_str);
   s_p_proctitle[to_copy] = '\0';
 }
@@ -1223,8 +1223,8 @@ vsf_remove_uwtmp(void)
   }
   s_uwtmp_inserted = 0;
   s_utent.ut_type = DEAD_PROCESS;
-  vsf_sysutil_memclr(s_utent.ut_user, sizeof(s_utent.ut_user));
-  vsf_sysutil_memclr(s_utent.ut_host, sizeof(s_utent.ut_host));
+  vsf_sysutil_memclr<char>(s_utent.ut_user, sizeof(s_utent.ut_user));
+  vsf_sysutil_memclr<char>(s_utent.ut_host, sizeof(s_utent.ut_host));
   s_utent.ut_tv.tv_sec = 0;
   setutxent();
   (void) pututxline(&s_utent);

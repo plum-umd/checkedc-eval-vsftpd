@@ -67,8 +67,7 @@ static void port_cleanup(struct vsf_session *p_sess : itype(_Ptr<struct vsf_sess
 static void handle_dir_common(struct vsf_session* p_sess, int full_details,
                               int stat_cmd);
 static void prepend_path_to_filename(_Ptr<struct mystr> p_str);
-static int get_remote_transfer_fd(struct vsf_session* p_sess,
-                                  const char* p_status_msg);
+static int get_remote_transfer_fd(struct vsf_session* p_sess, const char *p_status_msg : itype(_Nt_array_ptr<const char>));
 static void check_abor(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_sigurg(void* p_private);
 static void handle_upload_common(struct vsf_session* p_sess, int is_append,
@@ -1422,7 +1421,7 @@ handle_sigurg(void* p_private)
 }
 
 static int
-get_remote_transfer_fd(struct vsf_session* p_sess, const char* p_status_msg)
+get_remote_transfer_fd(struct vsf_session* p_sess, const char *p_status_msg : itype(_Nt_array_ptr<const char>))
 {
   int remote_fd;
   if (!pasv_active(p_sess) && !port_active(p_sess))

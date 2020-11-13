@@ -22,7 +22,7 @@ die(const char* p_text)
 }
 
 void
-die2(const char* p_text1, const char* p_text2)
+die2(_Nt_array_ptr<const char> p_text1, const char *p_text2 : itype(_Nt_array_ptr<const char>))
 {
   struct mystr die_str = INIT_MYSTR;
   str_alloc_text(&die_str, p_text1);

@@ -35,7 +35,7 @@ vsf_banner_dir_changed(struct vsf_session *p_sess : itype(_Ptr<struct vsf_sessio
   if (p_sess->p_visited_dir_list == 0)
   {
     struct mystr_list the_list = INIT_STRLIST;
-    p_sess->p_visited_dir_list = vsf_sysutil_malloc(sizeof(struct mystr_list));
+    p_sess->p_visited_dir_list = vsf_sysutil_malloc<struct mystr_list>(sizeof(struct mystr_list));
     *p_sess->p_visited_dir_list = the_list;
   }
   str_getcwd(&dir_str);

@@ -221,13 +221,13 @@ connect_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
   ret = ptrace_sandbox_get_buf(p_sandbox, arg2, expected_len, p_buf);
   if (ret != 0)
   {
-    vsf_sysutil_free(p_buf);
+    vsf_sysutil_free<void>(p_buf);
     return -2;
   }
   p_sockaddr = (struct sockaddr*) p_buf;
   if (p_sockaddr->sa_family != expected_family)
   {
-    vsf_sysutil_free(p_buf);
+    vsf_sysutil_free<void>(p_buf);
     return -3;
   }
   if (expected_family == AF_INET)
@@ -248,10 +248,10 @@ connect_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
   }
   if (!vsf_sysutil_sockaddr_addr_equal(p_sess->p_remote_addr, p_sockptr))
   {
-    vsf_sysutil_free(p_buf);
+    vsf_sysutil_free<void>(p_buf);
     return -4;
   }
-  vsf_sysutil_free(p_buf);
+  vsf_sysutil_free<void>(p_buf);
   return 0;
 }
 

@@ -20,7 +20,7 @@ void die(const char* p_text);
  * p_text1      - text string describing why the process is exiting
  * p_text2      - text to safely concatenate to p_text1
  */
-void die2(const char* p_text1, const char* p_text2);
+void die2(_Nt_array_ptr<const char> p_text1, const char *p_text2 : itype(_Nt_array_ptr<const char>));
 
 /* bug()
  * PURPOSE

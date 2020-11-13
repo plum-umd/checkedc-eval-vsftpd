@@ -118,7 +118,7 @@ main(int argc, _Array_ptr<const char *> argv : count(argc))
     {
       vsf_parseconf_load_file(VSFTP_DEFAULT_CONFIG, 1);
     }
-    vsf_sysutil_free(p_statbuf);
+    vsf_sysutil_free<struct vsf_sysutil_statbuf>(p_statbuf);
   }
   /* Resolve pasv_address if required */
   if (tunable_pasv_address && tunable_pasv_addr_resolve)
@@ -126,10 +126,10 @@ main(int argc, _Array_ptr<const char *> argv : count(argc))
     struct vsf_sysutil_sockaddr* p_addr = 0;
     const char* p_numeric_addr;
     vsf_sysutil_dns_resolve(&p_addr, tunable_pasv_address);
-    vsf_sysutil_free((char*) tunable_pasv_address);
+    vsf_sysutil_free<char>((char*) tunable_pasv_address);
     p_numeric_addr = vsf_sysutil_inet_ntop(p_addr);
     tunable_pasv_address = vsf_sysutil_strdup(p_numeric_addr);
-    vsf_sysutil_free(p_addr);
+    vsf_sysutil_free<struct vsf_sysutil_sockaddr>(p_addr);
   }
   if (!tunable_run_as_launching_user)
   {
@@ -275,7 +275,7 @@ do_sanity_checks(void)
     {
       die("vsftpd: not configured for standalone, must be started from inetd");
     }
-    vsf_sysutil_free(p_statbuf);
+    vsf_sysutil_free<struct vsf_sysutil_statbuf>(p_statbuf);
   }
   if (tunable_one_process_model)
   {

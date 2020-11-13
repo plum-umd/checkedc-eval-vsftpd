@@ -296,7 +296,7 @@ install_str_setting(const char* p_value, _Ptr<const char *> p_storage)
   char* p_curr_val = (char*) *p_storage;
   if (p_curr_val != 0)
   {
-    vsf_sysutil_free(p_curr_val);
+    vsf_sysutil_free<char>(p_curr_val);
   }
   if (p_value != 0)
   {

@@ -43,7 +43,7 @@ str_list_free(_Ptr<struct mystr_list> p_list)
   p_list->alloc_len = 0;
   if (p_list->p_nodes)
   {
-    vsf_sysutil_free(p_list->p_nodes);
+    vsf_sysutil_free<struct mystr_list_node>(p_list->p_nodes);
     p_list->p_nodes = 0;
   }
 }
@@ -78,7 +78,7 @@ str_list_add(struct mystr_list *p_list : itype(_Ptr<struct mystr_list>), _Ptr<co
     if (p_list->alloc_len == 0)
     {
       p_list->alloc_len = 32;
-      p_list->p_nodes = vsf_sysutil_malloc(
+      p_list->p_nodes = vsf_sysutil_malloc<struct mystr_list_node>(
           p_list->alloc_len * (unsigned int) sizeof(struct mystr_list_node));
     }
     else
@@ -88,7 +88,7 @@ str_list_add(struct mystr_list *p_list : itype(_Ptr<struct mystr_list>), _Ptr<co
       {
         die("excessive strlist");
       }
-      p_list->p_nodes = vsf_sysutil_realloc(
+      p_list->p_nodes = vsf_sysutil_realloc<struct mystr_list_node>(
           p_list->p_nodes,
           p_list->alloc_len * (unsigned int) sizeof(struct mystr_list_node));
     }

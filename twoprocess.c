@@ -166,7 +166,7 @@ drop_all_privs(void)
       die2("vsftpd: not found: directory given in 'secure_chroot_dir':",
            tunable_secure_chroot_dir);
     }
-    vsf_sysutil_free(p_statbuf);
+    vsf_sysutil_free<struct vsf_sysutil_statbuf>(p_statbuf);
   }
   vsf_secutil_change_credentials(&user_str, &dir_str, 0, 0, option);
   str_free(&user_str);
@@ -506,7 +506,7 @@ handle_per_user_config(_Ptr<const struct mystr> p_user_str)
     die("error opening per-user config file");
   }
   str_free(&filename_str);
-  vsf_sysutil_free(p_statbuf);
+  vsf_sysutil_free<struct vsf_sysutil_statbuf>(p_statbuf);
 }
 
 static void

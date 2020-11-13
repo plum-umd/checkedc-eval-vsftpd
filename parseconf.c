@@ -256,7 +256,7 @@ vsf_parseconf_load_setting(const char *p_setting : itype(_Nt_array_ptr<const cha
   static struct mystr s_value_str;
   while (vsf_sysutil_isspace(*p_setting))
   {
-    p_setting++;
+    p_setting = _Assume_bounds_cast<_Nt_array_ptr<const char>>(p_setting + 1, count(0));
   }
   str_alloc_text(&s_setting_str, p_setting);
   str_split_char(&s_setting_str, &s_value_str, '=');

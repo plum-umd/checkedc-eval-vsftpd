@@ -19,7 +19,7 @@ void vsf_cmdio_sock_setup(void);
  * status       - the status code to report
  * p_text       - the text to report
  */
-void vsf_cmdio_write(struct vsf_session *p_sess, int status, const char *p_text : itype(_Nt_array_ptr<const char>));
+void vsf_cmdio_write(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int status, const char *p_text : itype(_Nt_array_ptr<const char>));
 
 /* vsf_cmdio_write_hyphen()
  * PURPOSE

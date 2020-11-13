@@ -22,7 +22,7 @@
 
 /* Internal functions */
 static int control_getline(_Ptr<struct mystr> p_str, struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
-static void ftp_write_text_common(_Ptr<struct vsf_session> p_sess, int status, _Nt_array_ptr<const char> p_text, char sep);
+static void ftp_write_text_common(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int status, _Nt_array_ptr<const char> p_text, char sep);
 static void ftp_write_str_common(_Ptr<struct vsf_session> p_sess, int status, char sep, _Ptr<const struct mystr> p_str);
 static void handle_alarm_timeout(void* p_private);
 
@@ -44,7 +44,7 @@ handle_alarm_timeout(void* p_private)
 }
 
 void
-vsf_cmdio_write(struct vsf_session *p_sess, int status, const char *p_text : itype(_Nt_array_ptr<const char>))
+vsf_cmdio_write(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int status, const char *p_text : itype(_Nt_array_ptr<const char>))
 {
   ftp_write_text_common(p_sess, status, p_text, ' ');
 }
@@ -87,7 +87,7 @@ vsf_cmdio_write_exit(struct vsf_session *p_sess, int status, _Nt_array_ptr<const
 }
 
 static void
-ftp_write_text_common(_Ptr<struct vsf_session> p_sess, int status, _Nt_array_ptr<const char> p_text, char sep)
+ftp_write_text_common(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int status, _Nt_array_ptr<const char> p_text, char sep)
 {
   /* XXX - could optimize */
   static struct mystr s_the_str;

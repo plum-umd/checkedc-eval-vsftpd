@@ -22,7 +22,7 @@ static int ssl_peek_adapter(_Ptr<struct vsf_session> p_sess, char* p_buf, unsign
 static int ssl_read_adapter(_Ptr<struct vsf_session> p_sess, char* p_buf, unsigned int len);
 
 int
-ftp_write_str(_Ptr<const struct vsf_session> p_sess, _Ptr<const struct mystr> p_str, enum EVSFRWTarget target)
+ftp_write_str(const struct vsf_session *p_sess : itype(_Ptr<const struct vsf_session>), _Ptr<const struct mystr> p_str, enum EVSFRWTarget target)
 {
   if (target == kVSFRWData)
   {

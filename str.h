@@ -54,12 +54,12 @@ void str_upper(_Ptr<struct mystr> p_str);
 void str_rpad(_Ptr<struct mystr> p_str, const unsigned int min_width);
 void str_lpad(_Ptr<struct mystr> p_str, const unsigned int min_width);
 void str_replace_char(_Ptr<struct mystr> p_str, char from, char to);
-void str_replace_text(_Ptr<struct mystr> p_str, const char *p_from : itype(_Nt_array_ptr<const char>) count(2), const char *p_to : itype(_Nt_array_ptr<const char>));
+void str_replace_text(_Ptr<struct mystr> p_str, const char *p_from : itype(_Nt_array_ptr<const char>) count(1), const char *p_to : itype(_Nt_array_ptr<const char>));
 
 void str_split_char(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, char c);
 void str_split_char_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, char c);
-void str_split_text(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, _Nt_array_ptr<const char> p_text : count(2));
-void str_split_text_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, _Nt_array_ptr<const char> p_text : count(2));
+void str_split_text(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, _Nt_array_ptr<const char> p_text : count(1));
+void str_split_text_reverse(_Ptr<struct mystr> p_src, _Ptr<struct mystr> p_rhs, _Nt_array_ptr<const char> p_text : count(1));
 
 struct str_locate_result
 {
@@ -71,8 +71,8 @@ struct str_locate_result
 struct str_locate_result str_locate_char(_Ptr<const struct mystr> p_str, char look_char);
 struct str_locate_result str_locate_str(_Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_look_str);
 struct str_locate_result str_locate_str_reverse(_Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_look_str);
-struct str_locate_result str_locate_text(_Ptr<const struct mystr> p_str, const char *p_text : itype(_Nt_array_ptr<const char>) count(2));
-struct str_locate_result str_locate_text_reverse(_Ptr<const struct mystr> p_str, const char *p_text : itype(_Nt_array_ptr<const char>) count(2));
+struct str_locate_result str_locate_text(_Ptr<const struct mystr> p_str, const char *p_text : itype(_Nt_array_ptr<const char>) count(1));
+struct str_locate_result str_locate_text_reverse(_Ptr<const struct mystr> p_str, const char *p_text : itype(_Nt_array_ptr<const char>) count(1));
 struct str_locate_result str_locate_chars(_Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_chars);
 
 void str_left(_Ptr<const struct mystr> p_str, _Ptr<struct mystr> p_out, unsigned int chars);

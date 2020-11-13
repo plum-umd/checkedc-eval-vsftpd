@@ -43,7 +43,8 @@ hash_alloc(unsigned int buckets, unsigned int key_size, unsigned int value_size,
   p_hash->hash_func = hash_func;
   size = (unsigned int) sizeof(struct hash_node*) * buckets;
   p_hash->p_nodes = vsf_sysutil_malloc<struct hash_node *>(size);
-  vsf_sysutil_memclr<struct hash_node *>(p_hash->p_nodes, size);
+  _Array_ptr<struct hash_node *> temp : byte_count(size) = _Assume_bounds_cast<_Array_ptr<struct hash_node *>>(p_hash->p_nodes, byte_count(size));
+  vsf_sysutil_memclr<struct hash_node *>(temp, size);
   return p_hash;
 }
 
@@ -124,7 +125,7 @@ hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key)
   {
     bug("bad bucket lookup");
   }
-  return &(p_hash->p_nodes[bucket]);
+  return _Assume_bounds_cast<_Ptr<struct hash_node *>>(p_hash->p_nodes + bucket);
 }
 
 struct hash_node*

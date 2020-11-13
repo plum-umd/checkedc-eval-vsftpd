@@ -1284,34 +1284,34 @@ vsf_sysutil_dir_stat(const struct vsf_sysutil_dir* p_dir, _Ptr<struct vsf_sysuti
 }
 
 int
-vsf_sysutil_statbuf_is_regfile(const struct vsf_sysutil_statbuf* p_stat)
+vsf_sysutil_statbuf_is_regfile(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>))
 {
   const struct stat* p_realstat = (const struct stat*) p_stat;
   return S_ISREG(p_realstat->st_mode);
 }
 
 int
-vsf_sysutil_statbuf_is_symlink(const struct vsf_sysutil_statbuf* p_stat)
+vsf_sysutil_statbuf_is_symlink(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>))
 {
   const struct stat* p_realstat = (const struct stat*) p_stat;
   return S_ISLNK(p_realstat->st_mode);
 }
 
 int
-vsf_sysutil_statbuf_is_socket(const struct vsf_sysutil_statbuf* p_stat)
+vsf_sysutil_statbuf_is_socket(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>))
 {
   const struct stat* p_realstat = (const struct stat*) p_stat;
   return S_ISSOCK(p_realstat->st_mode);
 }
 
 int
-vsf_sysutil_statbuf_is_dir(const struct vsf_sysutil_statbuf* p_stat)
+vsf_sysutil_statbuf_is_dir(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>))
 {
   const struct stat* p_realstat = (const struct stat*) p_stat;
   return S_ISDIR(p_realstat->st_mode);
 }
 
-const char *vsf_sysutil_statbuf_get_perms(const struct vsf_sysutil_statbuf* p_statbuf) : itype(_Nt_array_ptr<const char>) count(11)
+const char *vsf_sysutil_statbuf_get_perms(const struct vsf_sysutil_statbuf* p_statbuf: itype(_Ptr<const struct vsf_sysutil_statbuf>)) : itype(_Nt_array_ptr<const char>) count(11)
 {
   static char perms _Nt_checked[11];
   int i;
@@ -1348,7 +1348,7 @@ const char *vsf_sysutil_statbuf_get_perms(const struct vsf_sysutil_statbuf* p_st
   return perms;
 }
 
-const char *vsf_sysutil_statbuf_get_date(const struct vsf_sysutil_statbuf* p_statbuf, int use_localtime, long curr_time) : itype(_Nt_array_ptr<const char>) count(64)
+const char *vsf_sysutil_statbuf_get_date(const struct vsf_sysutil_statbuf* p_statbuf: itype(_Ptr<const struct vsf_sysutil_statbuf>), int use_localtime, long curr_time) : itype(_Nt_array_ptr<const char>) count(64)
 {
   static char datebuf _Nt_checked[64];
   int retval;
@@ -1378,7 +1378,7 @@ const char *vsf_sysutil_statbuf_get_date(const struct vsf_sysutil_statbuf* p_sta
   return datebuf;
 }
 
-const char *vsf_sysutil_statbuf_get_numeric_date(const struct vsf_sysutil_statbuf* p_statbuf, int use_localtime) : itype(_Nt_array_ptr<const char>) count(15)
+const char *vsf_sysutil_statbuf_get_numeric_date(const struct vsf_sysutil_statbuf* p_statbuf: itype(_Ptr<const struct vsf_sysutil_statbuf>), int use_localtime) : itype(_Nt_array_ptr<const char>) count(15)
 {
   static char datebuf _Nt_checked[15];
   const struct stat* p_stat = (const struct stat*) p_statbuf;
@@ -1401,7 +1401,7 @@ const char *vsf_sysutil_statbuf_get_numeric_date(const struct vsf_sysutil_statbu
 }
 
 filesize_t
-vsf_sysutil_statbuf_get_size(const struct vsf_sysutil_statbuf* p_statbuf)
+vsf_sysutil_statbuf_get_size(const struct vsf_sysutil_statbuf* p_statbuf: itype(_Ptr<const struct vsf_sysutil_statbuf>))
 {
   const struct stat* p_stat = (const struct stat*) p_statbuf;
   if (p_stat->st_size < 0)
@@ -1412,21 +1412,21 @@ vsf_sysutil_statbuf_get_size(const struct vsf_sysutil_statbuf* p_statbuf)
 }
 
 int
-vsf_sysutil_statbuf_get_uid(const struct vsf_sysutil_statbuf* p_statbuf)
+vsf_sysutil_statbuf_get_uid(const struct vsf_sysutil_statbuf* p_statbuf: itype(_Ptr<const struct vsf_sysutil_statbuf>))
 {
   const struct stat* p_stat = (const struct stat*) p_statbuf;
   return p_stat->st_uid;
 }
 
 int
-vsf_sysutil_statbuf_get_gid(const struct vsf_sysutil_statbuf* p_statbuf)
+vsf_sysutil_statbuf_get_gid(const struct vsf_sysutil_statbuf* p_statbuf: itype(_Ptr<const struct vsf_sysutil_statbuf>))
 {
   const struct stat* p_stat = (const struct stat*) p_statbuf;
   return p_stat->st_gid;
 }
 
 unsigned int
-vsf_sysutil_statbuf_get_links(const struct vsf_sysutil_statbuf* p_statbuf)
+vsf_sysutil_statbuf_get_links(const struct vsf_sysutil_statbuf* p_statbuf: itype(_Ptr<const struct vsf_sysutil_statbuf>))
 {
   const struct stat* p_stat = (const struct stat*) p_statbuf;
   return p_stat->st_nlink;
@@ -1434,7 +1434,7 @@ vsf_sysutil_statbuf_get_links(const struct vsf_sysutil_statbuf* p_statbuf)
 
 int
 vsf_sysutil_statbuf_is_readable_other(
-  const struct vsf_sysutil_statbuf* p_statbuf)
+  const struct vsf_sysutil_statbuf* p_statbuf: itype(_Ptr<const struct vsf_sysutil_statbuf>))
 {
   const struct stat* p_stat = (const struct stat*) p_statbuf;
   if (p_stat->st_mode & S_IROTH)
@@ -1444,7 +1444,7 @@ vsf_sysutil_statbuf_is_readable_other(
   return 0;
 }
 
-const char *vsf_sysutil_statbuf_get_sortkey_mtime(const struct vsf_sysutil_statbuf* p_statbuf) : itype(_Nt_array_ptr<const char>) count(32)
+const char *vsf_sysutil_statbuf_get_sortkey_mtime(const struct vsf_sysutil_statbuf* p_statbuf : itype(_Ptr<const struct vsf_sysutil_statbuf>)) : itype(_Nt_array_ptr<const char>) count(32)
 {
   static char intbuf _Nt_checked[32];
   const struct stat* p_stat = (const struct stat*) p_statbuf;

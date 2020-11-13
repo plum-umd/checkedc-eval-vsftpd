@@ -110,22 +110,22 @@ int vsf_sysutil_stat(const char* p_name, _Ptr<struct vsf_sysutil_statbuf *> p_pt
 int vsf_sysutil_lstat(const char* p_name, _Ptr<struct vsf_sysutil_statbuf *> p_ptr);
 void vsf_sysutil_fstat(int fd, _Ptr<struct vsf_sysutil_statbuf *> p_ptr);
 void vsf_sysutil_dir_stat(const struct vsf_sysutil_dir* p_dir, _Ptr<struct vsf_sysutil_statbuf *> p_ptr);
-int vsf_sysutil_statbuf_is_regfile(const struct vsf_sysutil_statbuf* p_stat);
-int vsf_sysutil_statbuf_is_symlink(const struct vsf_sysutil_statbuf* p_stat);
-int vsf_sysutil_statbuf_is_socket(const struct vsf_sysutil_statbuf* p_stat);
-int vsf_sysutil_statbuf_is_dir(const struct vsf_sysutil_statbuf* p_stat);
+int vsf_sysutil_statbuf_is_regfile(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>));
+int vsf_sysutil_statbuf_is_symlink(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>));
+int vsf_sysutil_statbuf_is_socket(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>));
+int vsf_sysutil_statbuf_is_dir(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>));
 filesize_t vsf_sysutil_statbuf_get_size(
-  const struct vsf_sysutil_statbuf* p_stat);
-const char *vsf_sysutil_statbuf_get_perms(const struct vsf_sysutil_statbuf* p_stat) : itype(_Nt_array_ptr<const char>) count(11);
-const char *vsf_sysutil_statbuf_get_date(const struct vsf_sysutil_statbuf* p_stat, int use_localtime, long curr_time) : itype(_Nt_array_ptr<const char>) count(64);
-const char *vsf_sysutil_statbuf_get_numeric_date(const struct vsf_sysutil_statbuf* p_stat, int use_localtime) : itype(_Nt_array_ptr<const char>) count(15);
+  const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>));
+const char *vsf_sysutil_statbuf_get_perms(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>)) : itype(_Nt_array_ptr<const char>) count(11);
+const char *vsf_sysutil_statbuf_get_date(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>), int use_localtime, long curr_time) : itype(_Nt_array_ptr<const char>) count(64);
+const char *vsf_sysutil_statbuf_get_numeric_date(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>), int use_localtime) : itype(_Nt_array_ptr<const char>) count(15);
 unsigned int vsf_sysutil_statbuf_get_links(
-  const struct vsf_sysutil_statbuf* p_stat);
-int vsf_sysutil_statbuf_get_uid(const struct vsf_sysutil_statbuf* p_stat);
-int vsf_sysutil_statbuf_get_gid(const struct vsf_sysutil_statbuf* p_stat);
+  const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>));
+int vsf_sysutil_statbuf_get_uid(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>));
+int vsf_sysutil_statbuf_get_gid(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>));
 int vsf_sysutil_statbuf_is_readable_other(
-  const struct vsf_sysutil_statbuf* p_stat);
-const char *vsf_sysutil_statbuf_get_sortkey_mtime(const struct vsf_sysutil_statbuf* p_stat) : itype(_Nt_array_ptr<const char>) count(32);
+  const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>));
+const char *vsf_sysutil_statbuf_get_sortkey_mtime(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>)) : itype(_Nt_array_ptr<const char>) count(32);
 
 int vsf_sysutil_chmod(const char* p_filename, unsigned int mode);
 void vsf_sysutil_fchown(const int fd, const int uid, const int gid);

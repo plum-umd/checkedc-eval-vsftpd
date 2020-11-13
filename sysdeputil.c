@@ -902,7 +902,7 @@ void
 vsf_sysutil_setproctitle_init(int argc, _Array_ptr<const char *> argv : count(argc))
 {
   int i;
-  _Array_ptr<_Nt_array_ptr<char>> p_env = environ;
+  _Nt_array_ptr<_Nt_array_ptr<char>> p_env = _Assume_bounds_cast<_Nt_array_ptr<_Nt_array_ptr<char>>>(environ, count(0));
   if (s_proctitle_inited)
   {
     bug("vsf_sysutil_setproctitle_init called twice");
@@ -923,7 +923,8 @@ vsf_sysutil_setproctitle_init(int argc, _Array_ptr<const char *> argv : count(ar
   while (*p_env != 0)
   {
     s_proctitle_space += vsf_sysutil_strlen(*p_env) + 1;
-    p_env++;
+
+    p_env = _Assume_bounds_cast<_Nt_array_ptr<_Nt_array_ptr<char>>>(environ + 1, count(0));
   }
   /* Oops :-) */
   environ = 0;

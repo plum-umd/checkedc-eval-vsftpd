@@ -41,7 +41,7 @@ void vsf_cmdio_write_hyphen(struct vsf_session *p_sess : itype(_Ptr<struct vsf_s
  * p_sess       - the current session object
  * p_text       - the text to report
  */
-void vsf_cmdio_write_raw(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), const char *p_text);
+void vsf_cmdio_write_raw(struct vsf_session *p_sess, const char *p_text : itype(_Nt_array_ptr<const char>));
 
 /* vsf_cmdio_write_exit()
  * PURPOSE

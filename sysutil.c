@@ -2707,24 +2707,24 @@ vsf_sysutil_parse_time(const char *p_text : itype(_Nt_array_ptr<const char>))
   vsf_sysutil_memclr<struct tm>(&the_time, sizeof(the_time));
   if (len >= 8)
   {
-    char yr[5];
-    char mon[3];
-    char day[3];
-    vsf_sysutil_strcpy(yr, ((_Array_ptr<const char>)p_text), 5);
-    vsf_sysutil_strcpy(mon, ((_Array_ptr<const char>)p_text + 4), 3);
-    vsf_sysutil_strcpy(day, ((_Array_ptr<const char>)p_text + 6), 3);
+    char yr _Nt_checked[5];
+    char mon _Nt_checked[3];
+    char day _Nt_checked[3];
+    vsf_sysutil_strcpy(((char *)yr), ((_Array_ptr<const char>)p_text), 5);
+    vsf_sysutil_strcpy(((char *)mon), ((_Array_ptr<const char>)p_text + 4), 3);
+    vsf_sysutil_strcpy(((char *)day), ((_Array_ptr<const char>)p_text + 6), 3);
     the_time.tm_year = vsf_sysutil_atoi(yr) - 1900;
     the_time.tm_mon = vsf_sysutil_atoi(mon) - 1;
     the_time.tm_mday = vsf_sysutil_atoi(day);
   }
   if (len >= 14)
   {
-    char hr[3];
-    char mins[3];
-    char sec[3];
-    vsf_sysutil_strcpy(hr, ((_Array_ptr<const char>)p_text + 8), 3);
-    vsf_sysutil_strcpy(mins, ((_Array_ptr<const char>)p_text + 10), 3);
-    vsf_sysutil_strcpy(sec, ((_Array_ptr<const char>)p_text + 12), 3);
+    char hr _Nt_checked[3];
+    char mins _Nt_checked[3];
+    char sec _Nt_checked[3];
+    vsf_sysutil_strcpy(((char *)hr), ((_Array_ptr<const char>)p_text + 8), 3);
+    vsf_sysutil_strcpy(((char *)mins), ((_Array_ptr<const char>)p_text + 10), 3);
+    vsf_sysutil_strcpy(((char *)sec), ((_Array_ptr<const char>)p_text + 12), 3);
     the_time.tm_hour = vsf_sysutil_atoi(hr);
     the_time.tm_min = vsf_sysutil_atoi(mins);
     the_time.tm_sec = vsf_sysutil_atoi(sec);

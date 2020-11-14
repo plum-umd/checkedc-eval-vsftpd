@@ -116,9 +116,10 @@ priv_sock_recv_buf(int fd, _Array_ptr<char> p_buf : byte_count(len), unsigned in
   {
     bug("recv_len bigger than buffer");
   }
+  _Array_ptr<char> temp : byte_count(recv_len) = _Assume_bounds_cast<_Array_ptr<char>>(p_buf, byte_count(recv_len));
   if (recv_len > 0)
   {
-    if (vsf_sysutil_read_loop<char>(fd, p_buf, recv_len) != (int) recv_len)
+    if (vsf_sysutil_read_loop<char>(fd, temp, recv_len) != (int) recv_len)
     {
       die("priv_sock_recv_buf");
     }

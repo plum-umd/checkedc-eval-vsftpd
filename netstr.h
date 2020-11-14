@@ -31,7 +31,7 @@ typedef int (*str_netfd_read_t)(struct vsf_session*
  * of bytes read, _including_ the terminator. 0 for an EOF on the socket.
  * Does not return (exits) for a serious socket error.
  */
-int str_netfd_alloc(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, char term, char* p_readbuf, unsigned int maxlen, _Ptr<int (_Ptr<struct vsf_session> , char *, unsigned int )> p_peekfunc, _Ptr<int (_Ptr<struct vsf_session> , char *, unsigned int )> p_readfunc);
+int str_netfd_alloc(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, char term, char* p_readbuf, unsigned int maxlen, _Ptr, _Ptr<int (_Ptr<struct vsf_session> , _Array_ptr<char> , unsigned int )> p_readfunc);
 
 /* str_netfd_read()
  * PURPOSE

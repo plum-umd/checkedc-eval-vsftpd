@@ -67,7 +67,7 @@ void priv_sock_send_str(int fd, _Ptr<const struct mystr> p_str);
  * p_buf        - the buffer to send
  * len          - length of the buffer
  */
-void priv_sock_send_buf(int fd, const char* p_buf, unsigned int len);
+void priv_sock_send_buf(int fd, _Array_ptr<const char> p_buf : byte_count(len), unsigned int len);
 
 /* priv_sock_recv_buf()
  * PURPOSE
@@ -78,7 +78,7 @@ void priv_sock_send_buf(int fd, const char* p_buf, unsigned int len);
  * p_buf        - the buffer to write into
  * len          - length of the buffer
  */
-void priv_sock_recv_buf(int fd, char* p_buf, unsigned int len);
+void priv_sock_recv_buf(int fd, _Array_ptr<char> p_buf : byte_count(len), unsigned int len);
 
 /* priv_sock_get_result()
  * PURPOSE

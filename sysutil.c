@@ -394,7 +394,7 @@ _Itype_for_any(T) int vsf_sysutil_read_loop(const int fd, void* p_buf : itype(_A
   }
   while (1)
   {
-    retval = vsf_sysutil_read(fd, (char*)p_buf + num_read, temp);
+    retval = vsf_sysutil_read<char>(fd, (_Array_ptr<char>)p_buf + num_read, temp);
     if (retval < 0)
     {
       return retval;
@@ -429,7 +429,7 @@ _Itype_for_any(T) int vsf_sysutil_write_loop(const int fd, const void* p_buf : i
   }
   while (1)
   {
-    retval = vsf_sysutil_write(fd, (const char*)p_buf + num_written, temp);
+    retval = vsf_sysutil_write<const char>(fd, (_Array_ptr<const char>)p_buf + num_written, temp);
     if (retval < 0)
     {
       /* Error */

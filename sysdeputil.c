@@ -804,7 +804,7 @@ static int do_sendfile(const int out_fd, const int in_fd,
     {
       num_read_this_time = num_send;
     }
-    retval = vsf_sysutil_read(in_fd, p_recvbuf, num_read_this_time);
+    retval = vsf_sysutil_read<char>(in_fd, p_recvbuf, num_read_this_time);
     if (retval < 0)
     {
       return retval;
@@ -814,7 +814,7 @@ static int do_sendfile(const int out_fd, const int in_fd,
       return -1;
     }
     num_read = (unsigned int) retval;
-    retval = vsf_sysutil_write_loop(out_fd, p_recvbuf, num_read);
+    retval = vsf_sysutil_write_loop<char>(out_fd, p_recvbuf, num_read);
     if (retval < 0)
     {
       return retval;

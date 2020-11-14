@@ -77,7 +77,7 @@ priv_sock_set_child_context(struct vsf_session *p_sess : itype(_Ptr<struct vsf_s
 void
 priv_sock_send_cmd(int fd, char cmd)
 {
-  int retval = vsf_sysutil_write_loop(fd, &cmd, sizeof(cmd));
+  int retval = vsf_sysutil_write_loop<char>(fd, &cmd, sizeof(cmd));
   if (retval != sizeof(cmd))
   {
     die("priv_sock_send_cmd");
@@ -96,12 +96,12 @@ priv_sock_send_str(int fd, _Ptr<const struct mystr> p_str)
 }
 
 void
-priv_sock_send_buf(int fd, const char* p_buf, unsigned int len)
+priv_sock_send_buf(int fd, _Array_ptr<const char> p_buf : byte_count(len), unsigned int len)
 {
   priv_sock_send_int(fd, (int) len);
   if (len > 0)
   {
-    if (vsf_sysutil_write_loop(fd, p_buf, len) != (int) len)
+    if (vsf_sysutil_write_loop<const char>(fd, p_buf, len) != (int) len)
     {
       die("priv_sock_send_buf");
     }
@@ -109,7 +109,7 @@ priv_sock_send_buf(int fd, const char* p_buf, unsigned int len)
 }
 
 void
-priv_sock_recv_buf(int fd, char* p_buf, unsigned int len)
+priv_sock_recv_buf(int fd, _Array_ptr<char> p_buf : byte_count(len), unsigned int len)
 {
   unsigned int recv_len = (unsigned int) priv_sock_get_int(fd);
   if (recv_len > len)
@@ -118,7 +118,7 @@ priv_sock_recv_buf(int fd, char* p_buf, unsigned int len)
   }
   if (recv_len > 0)
   {
-    if (vsf_sysutil_read_loop(fd, p_buf, recv_len) != (int) recv_len)
+    if (vsf_sysutil_read_loop<char>(fd, p_buf, recv_len) != (int) recv_len)
     {
       die("priv_sock_recv_buf");
     }
@@ -129,7 +129,7 @@ char
 priv_sock_get_result(int fd)
 {
   char res;
-  int retval = vsf_sysutil_read_loop(fd, &res, sizeof(res));
+  int retval = vsf_sysutil_read_loop<char>(fd, &res, sizeof(res));
   if (retval != sizeof(res))
   {
     die("priv_sock_get_result");
@@ -141,7 +141,7 @@ char
 priv_sock_get_cmd(int fd)
 {
   char res;
-  int retval = vsf_sysutil_read_loop(fd, &res, sizeof(res));
+  int retval = vsf_sysutil_read_loop<char>(fd, &res, sizeof(res));
   if (retval != sizeof(res))
   {
     die("priv_sock_get_cmd");
@@ -171,7 +171,7 @@ priv_sock_get_str(int fd, _Ptr<struct mystr> p_dest)
 void
 priv_sock_send_result(int fd, char res)
 {
-  int retval = vsf_sysutil_write_loop(fd, &res, sizeof(res));
+  int retval = vsf_sysutil_write_loop<char>(fd, &res, sizeof(res));
   if (retval != sizeof(res))
   {
     die("priv_sock_send_result");
@@ -193,7 +193,7 @@ priv_sock_recv_fd(int fd)
 void
 priv_sock_send_int(int fd, int the_int)
 {
-  int retval = vsf_sysutil_write_loop(fd, &the_int, sizeof(the_int));
+  int retval = vsf_sysutil_write_loop<int>(fd, &the_int, sizeof(the_int));
   if (retval != sizeof(the_int))
   {
     die("priv_sock_send_int");
@@ -204,7 +204,7 @@ int
 priv_sock_get_int(int fd)
 {
   int the_int;
-  int retval = vsf_sysutil_read_loop(fd, &the_int, sizeof(the_int));
+  int retval = vsf_sysutil_read_loop<int>(fd, &the_int, sizeof(the_int));
   if (retval != sizeof(the_int))
   {
     die("priv_sock_get_int");

@@ -41,7 +41,7 @@ str_fileread(_Ptr<struct mystr> p_str, const char *p_filename : itype(_Nt_array_
     }
     vsf_secbuf_alloc(&p_sec_buf, (unsigned int) size);
 
-    retval = vsf_sysutil_read_loop(fd, p_sec_buf, (unsigned int) size);
+    retval = vsf_sysutil_read_loop<char>(fd, p_sec_buf, (unsigned int) size);
     if (vsf_sysutil_retval_is_error(retval))
     {
       goto free_out;

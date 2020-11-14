@@ -16,7 +16,7 @@
 #include "sysutil.h"
 
 int
-str_netfd_alloc(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, char term, char* p_readbuf, unsigned int maxlen, _Ptr<int (_Ptr<struct vsf_session> , char *, unsigned int )> p_peekfunc, _Ptr<int (_Ptr<struct vsf_session> , char *, unsigned int )> p_readfunc)
+str_netfd_alloc(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, char term, char* p_readbuf, unsigned int maxlen, _Ptr, _Ptr<int (_Ptr<struct vsf_session> , _Array_ptr<char> , unsigned int )> p_readfunc)
 {
   int retval;
   unsigned int bytes_read;

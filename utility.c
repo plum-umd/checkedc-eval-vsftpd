@@ -13,7 +13,7 @@
 #define DIE_DEBUG
 
 void
-die(const char* p_text)
+die(const char *p_text : itype(_Nt_array_ptr<const char>))
 {
 #ifdef DIE_DEBUG
   bug(p_text);
@@ -38,21 +38,21 @@ die2(_Nt_array_ptr<const char> p_text1, const char *p_text2 : itype(_Nt_array_pt
 }
 
 void
-bug(const char* p_text)
+bug(_Nt_array_ptr<const char> p_text)
 {
   /* Rats. Try and write the reason to the network for diagnostics */
   vsf_sysutil_activate_noblock(VSFTP_COMMAND_FD);
-  (void) vsf_sysutil_write_loop(VSFTP_COMMAND_FD, "500 OOPS: ", 10);
-  (void) vsf_sysutil_write_loop(VSFTP_COMMAND_FD, p_text,
+  (void) vsf_sysutil_write_loop<char>(VSFTP_COMMAND_FD, ((const void *)"500 OOPS: "), 10);
+  (void) vsf_sysutil_write_loop<const char>(VSFTP_COMMAND_FD, ((const void *)p_text),
                                 vsf_sysutil_strlen(p_text));
-  (void) vsf_sysutil_write_loop(VSFTP_COMMAND_FD, "\r\n", 2);
+  (void) vsf_sysutil_write_loop<char>(VSFTP_COMMAND_FD, ((const void *)"\r\n"), 2);
   vsf_sysutil_exit(2);
 }
 
 void
-vsf_exit(const char* p_text)
+vsf_exit(_Nt_array_ptr<const char> p_text)
 {
-  (void) vsf_sysutil_write_loop(VSFTP_COMMAND_FD, p_text,
+  (void) vsf_sysutil_write_loop<const char>(VSFTP_COMMAND_FD, ((const void *)p_text),
                                 vsf_sysutil_strlen(p_text));
   vsf_sysutil_exit(0);
 }

@@ -10,7 +10,7 @@ struct mystr;
  * PARAMETERS
  * p_text       - text string describing why the process is exiting
  */
-void die(const char* p_text);
+void die(const char *p_text : itype(_Nt_array_ptr<const char>));
 
 /* die2()
  * PURPOSE
@@ -29,7 +29,7 @@ void die2(_Nt_array_ptr<const char> p_text1, const char *p_text2 : itype(_Nt_arr
  * PARAMETERS
  * p_text       - text string describing what bug trap has triggered
  *       */
-void bug(const char* p_text);
+void bug(_Nt_array_ptr<const char> p_text);
 
 /* vsf_exit()
  * PURPOSE
@@ -38,7 +38,7 @@ void bug(const char* p_text);
  * PARAMETERS
  * p_text       - text string describing why the process is exiting
  */
-void vsf_exit(const char* p_text);
+void vsf_exit(_Nt_array_ptr<const char> p_text);
 
 #endif
 

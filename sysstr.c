@@ -20,14 +20,14 @@ void
 str_getcwd(_Ptr<struct mystr> p_str)
 {
   static char* p_getcwd_buf;
-  _Ptr<char> p_ret = ((void *)0);
+  _Nt_array_ptr<char> p_ret = ((void *)0);
   if (p_getcwd_buf == 0)
   {
     vsf_secbuf_alloc(&p_getcwd_buf, VSFTP_PATH_MAX);
   }
   /* In case getcwd() fails */
   str_empty(p_str);
-  p_ret = vsf_sysutil_getcwd(p_getcwd_buf, VSFTP_PATH_MAX);
+  p_ret = (_Nt_array_ptr<char>) vsf_sysutil_getcwd(p_getcwd_buf, VSFTP_PATH_MAX);
   if (p_ret != 0)
   {
     str_alloc_text(p_str, p_getcwd_buf);
@@ -134,7 +134,7 @@ struct vsf_sysutil_dir *str_opendir(_Ptr<const struct mystr> p_str) : itype(_Ptr
 void
 str_next_dirent(_Ptr<struct mystr> p_filename_str, _Ptr<struct vsf_sysutil_dir> p_dir)
 {
-  _Nt_array_ptr<const char> p_filename = vsf_sysutil_next_dirent(p_dir);
+  _Nt_array_ptr<const char> p_filename = (_Nt_array_ptr<const char>) vsf_sysutil_next_dirent(p_dir);
   str_empty(p_filename_str);
   if (p_filename != 0)
   {

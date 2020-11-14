@@ -283,7 +283,7 @@ handle_io(int retval, int fd, void* p_private)
 }
 
 int
-vsf_ftpdataio_transfer_dir(struct vsf_session *p_sess, int is_control, struct vsf_sysutil_dir *p_dir : itype(_Ptr<struct vsf_sysutil_dir>), _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose)
+vsf_ftpdataio_transfer_dir(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int is_control, struct vsf_sysutil_dir *p_dir : itype(_Ptr<struct vsf_sysutil_dir>), _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose)
 {
   return transfer_dir_internal(p_sess, is_control, p_dir, p_base_dir_str,
                                p_option_str, p_filter_str, is_verbose);

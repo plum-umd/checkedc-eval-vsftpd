@@ -112,7 +112,7 @@ main(int argc, _Array_ptr<const char *> argv : count(argc))
   }
   /* Parse default config file if necessary */
   if (!config_loaded) {
-    struct vsf_sysutil_statbuf* p_statbuf = 0;
+    _Ptr<struct vsf_sysutil_statbuf> p_statbuf = 0;
     int retval = vsf_sysutil_stat(VSFTP_DEFAULT_CONFIG, &p_statbuf);
     if (!vsf_sysutil_retval_is_error(retval))
     {
@@ -269,7 +269,7 @@ static void
 do_sanity_checks(void)
 {
   {
-    struct vsf_sysutil_statbuf* p_statbuf = 0;
+    _Ptr<struct vsf_sysutil_statbuf> p_statbuf = 0;
     vsf_sysutil_fstat(VSFTP_COMMAND_FD, &p_statbuf);
     if (!vsf_sysutil_statbuf_is_socket(p_statbuf))
     {

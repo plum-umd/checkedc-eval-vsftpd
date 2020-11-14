@@ -85,7 +85,7 @@ void
 str_alloc_text(_Ptr<struct mystr> p_str, const char *p_src : itype(_Nt_array_ptr<const char>))
 {
   unsigned int len = vsf_sysutil_strlen(p_src);
-  private_str_alloc_memchunk(p_str, ((const char *)p_src), len);
+  private_str_alloc_memchunk(p_str, ((_Array_ptr<const char>)p_src), len);
 }
 
 void
@@ -237,7 +237,7 @@ int
 str_equal_text(_Ptr<const struct mystr> p_str, _Nt_array_ptr<const char> p_text)
 {
   unsigned int cmplen = vsf_sysutil_strlen(p_text);
-  return (str_equal_internal(p_str->p_buf, p_str->len, ((const char *)p_text), cmplen) == 0);
+  return (str_equal_internal(p_str->p_buf, p_str->len, ((_Array_ptr<const char>)p_text), cmplen) == 0);
 }
 
 void
@@ -250,7 +250,7 @@ void
 str_append_text(_Ptr<struct mystr> p_str, const char *p_src : itype(_Nt_array_ptr<const char>))
 {
   unsigned int len = vsf_sysutil_strlen(p_src);
-  private_str_append_memchunk(p_str, ((const char *)p_src), len);
+  private_str_append_memchunk(p_str, ((_Array_ptr<const char>)p_src), len);
 }
 
 void

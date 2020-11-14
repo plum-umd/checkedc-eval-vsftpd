@@ -220,7 +220,7 @@ vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
     }
   }
   {
-    struct vsf_sysutil_statbuf* p_statbuf = 0;
+    _Ptr<struct vsf_sysutil_statbuf> p_statbuf = 0;
     retval = vsf_sysutil_stat(p_filename, &p_statbuf);
     /* Security: check current user owns the config file. These are sanity
      * checks for the admin, and are NOT designed to be checks safe from

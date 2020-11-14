@@ -24,8 +24,8 @@ int str_open(_Ptr<const struct mystr> p_str, const enum EVSFSysStrOpenMode mode)
 int str_create(_Ptr<const struct mystr> p_str);
 int str_create_exclusive(_Ptr<const struct mystr> p_str);
 int str_chmod(_Ptr<const struct mystr> p_str, unsigned int mode);
-int str_stat(_Ptr<const struct mystr> p_str, _Ptr<struct vsf_sysutil_statbuf *> p_ptr);
-int str_lstat(_Ptr<const struct mystr> p_str, _Ptr<struct vsf_sysutil_statbuf *> p_ptr);
+int str_stat(_Ptr<const struct mystr> p_str, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);
+int str_lstat(_Ptr<const struct mystr> p_str, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);
 int str_rename(_Ptr<const struct mystr> p_from_str, _Ptr<const struct mystr> p_to_str);
 struct vsf_sysutil_dir* str_opendir(_Ptr<const struct mystr> p_str);
 void str_next_dirent(_Ptr<struct mystr> p_filename_str, struct vsf_sysutil_dir* p_dir);

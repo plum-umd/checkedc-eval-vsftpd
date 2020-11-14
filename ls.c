@@ -81,7 +81,7 @@ vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list, _Ptr<struct mystr_list>
   {
     static struct mystr s_next_filename_str;
     static struct mystr s_next_path_and_filename_str;
-    static struct vsf_sysutil_statbuf* s_p_statbuf;
+    static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf = ((void *)0);
     str_next_dirent(&s_next_filename_str, p_dir);
     if (str_isempty(&s_next_filename_str))
     {

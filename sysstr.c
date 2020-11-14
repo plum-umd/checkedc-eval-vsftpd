@@ -90,13 +90,13 @@ str_open(_Ptr<const struct mystr> p_str, const enum EVSFSysStrOpenMode mode)
 }
 
 int
-str_stat(_Ptr<const struct mystr> p_str, _Ptr<struct vsf_sysutil_statbuf *> p_ptr)
+str_stat(_Ptr<const struct mystr> p_str, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 {
   return vsf_sysutil_stat(str_getbuf(p_str), p_ptr);
 }
 
 int
-str_lstat(_Ptr<const struct mystr> p_str, _Ptr<struct vsf_sysutil_statbuf *> p_ptr)
+str_lstat(_Ptr<const struct mystr> p_str, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 {
   return vsf_sysutil_lstat(str_getbuf(p_str), p_ptr);
 }

@@ -23,7 +23,7 @@ str_fileread(_Ptr<struct mystr> p_str, const char* p_filename, unsigned int maxs
   int retval = 0;
   filesize_t size;
   char* p_sec_buf = 0;
-  struct vsf_sysutil_statbuf* p_stat = 0;
+  _Ptr<struct vsf_sysutil_statbuf> p_stat = 0;
   /* In case we fail, make sure we return an empty string */
   str_empty(p_str);
   fd = vsf_sysutil_open_file(p_filename, kVSFSysUtilOpenReadOnly);

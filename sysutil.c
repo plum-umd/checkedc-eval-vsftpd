@@ -101,7 +101,7 @@ static int vsf_sysutil_translate_memprot(
   const enum EVSFSysUtilMapPermission perm);
 static int vsf_sysutil_translate_openmode(
   const enum EVSFSysUtilOpenMode mode);
-static void vsf_sysutil_alloc_statbuf(_Ptr<struct vsf_sysutil_statbuf *> p_ptr);
+static void vsf_sysutil_alloc_statbuf(_Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);
 void vsf_sysutil_sockaddr_alloc(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr);
 static int lock_internal(int fd, int lock_type);
 
@@ -1242,7 +1242,7 @@ vsf_sysutil_write_access(_Nt_array_ptr<const char> p_filename)
 }
 
 static void
-vsf_sysutil_alloc_statbuf(_Ptr<struct vsf_sysutil_statbuf *> p_ptr)
+vsf_sysutil_alloc_statbuf(_Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 {
   if (*p_ptr == NULL)
   {
@@ -1277,7 +1277,7 @@ vsf_sysutil_lstat(const char* p_name, struct vsf_sysutil_statbuf ** p_ptr: itype
 }
 
 void
-vsf_sysutil_dir_stat(const struct vsf_sysutil_dir* p_dir, _Ptr<struct vsf_sysutil_statbuf *> p_ptr)
+vsf_sysutil_dir_stat(const struct vsf_sysutil_dir* p_dir, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr)
 {
   int fd = dirfd((DIR*) p_dir);
   vsf_sysutil_fstat(fd, p_ptr);

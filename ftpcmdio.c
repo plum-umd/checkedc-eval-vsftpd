@@ -56,7 +56,7 @@ vsf_cmdio_write_hyphen(struct vsf_session *p_sess : itype(_Ptr<struct vsf_sessio
 }
 
 void
-vsf_cmdio_write_raw(struct vsf_session *p_sess, const char *p_text : itype(_Nt_array_ptr<const char>))
+vsf_cmdio_write_raw(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), const char *p_text : itype(_Nt_array_ptr<const char>))
 {
   static struct mystr s_the_str;
   int retval;

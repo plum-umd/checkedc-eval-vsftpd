@@ -1677,7 +1677,7 @@ vsf_sysutil_accept_timeout(int fd, struct vsf_sysutil_sockaddr *p_sockaddr : ity
   socklen_t socklen = sizeof(remote_addr);
   if (p_sockaddr)
   {
-    vsf_sysutil_memclr<struct vsf_sysutil_sockaddr>(p_sockaddr, sizeof(*p_sockaddr));
+    vsf_sysutil_memclr<struct vsf_sysutil_sockaddr>(((void *)p_sockaddr), sizeof(*p_sockaddr));
   }
   if (wait_seconds > 0)
   {
@@ -2710,9 +2710,9 @@ vsf_sysutil_parse_time(const char *p_text : itype(_Nt_array_ptr<const char>))
     char yr _Nt_checked[5];
     char mon _Nt_checked[3];
     char day _Nt_checked[3];
-    vsf_sysutil_strcpy(((char *)yr), ((_Array_ptr<const char>)p_text), 5);
-    vsf_sysutil_strcpy(((char *)mon), ((_Array_ptr<const char>)p_text + 4), 3);
-    vsf_sysutil_strcpy(((char *)day), ((_Array_ptr<const char>)p_text + 6), 3);
+    vsf_sysutil_strcpy(((_Array_ptr<char>)yr), ((_Array_ptr<const char>)p_text), 5);
+    vsf_sysutil_strcpy(((_Array_ptr<char>)mon), ((_Array_ptr<const char>)p_text + 4), 3);
+    vsf_sysutil_strcpy(((_Array_ptr<char>)day), ((_Array_ptr<const char>)p_text + 6), 3);
     the_time.tm_year = vsf_sysutil_atoi(yr) - 1900;
     the_time.tm_mon = vsf_sysutil_atoi(mon) - 1;
     the_time.tm_mday = vsf_sysutil_atoi(day);
@@ -2722,9 +2722,9 @@ vsf_sysutil_parse_time(const char *p_text : itype(_Nt_array_ptr<const char>))
     char hr _Nt_checked[3];
     char mins _Nt_checked[3];
     char sec _Nt_checked[3];
-    vsf_sysutil_strcpy(((char *)hr), ((_Array_ptr<const char>)p_text + 8), 3);
-    vsf_sysutil_strcpy(((char *)mins), ((_Array_ptr<const char>)p_text + 10), 3);
-    vsf_sysutil_strcpy(((char *)sec), ((_Array_ptr<const char>)p_text + 12), 3);
+    vsf_sysutil_strcpy(((_Array_ptr<char>)hr), ((_Array_ptr<const char>)p_text + 8), 3);
+    vsf_sysutil_strcpy(((_Array_ptr<char>)mins), ((_Array_ptr<const char>)p_text + 10), 3);
+    vsf_sysutil_strcpy(((_Array_ptr<char>)sec), ((_Array_ptr<const char>)p_text + 12), 3);
     the_time.tm_hour = vsf_sysutil_atoi(hr);
     the_time.tm_min = vsf_sysutil_atoi(mins);
     the_time.tm_sec = vsf_sysutil_atoi(sec);

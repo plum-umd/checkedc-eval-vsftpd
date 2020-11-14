@@ -232,7 +232,7 @@ vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
     {
       die("config file not owned by correct user, or not a file");
     }
-    vsf_sysutil_free((void*)p_statbuf);
+    vsf_sysutil_free<void>((void*)p_statbuf);
   }
   while (str_getline(&config_file_str, &config_setting_str, &str_pos))
   {

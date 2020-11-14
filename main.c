@@ -118,7 +118,7 @@ main(int argc, _Array_ptr<const char *> argv : count(argc))
     {
       vsf_parseconf_load_file(VSFTP_DEFAULT_CONFIG, 1);
     }
-    vsf_sysutil_free((void*) p_statbuf);
+    vsf_sysutil_free<void>((void*) p_statbuf);
   }
   /* Resolve pasv_address if required */
   if (tunable_pasv_address && tunable_pasv_addr_resolve)

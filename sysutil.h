@@ -228,7 +228,7 @@ int vsf_sysutil_bind(int fd, const struct vsf_sysutil_sockaddr *p_sockptr : ityp
 int vsf_sysutil_listen(int fd, const unsigned int backlog);
 void vsf_sysutil_getsockname(int fd, _Ptr<struct vsf_sysutil_sockaddr *> p_sockptr);
 void vsf_sysutil_getpeername(int fd, _Ptr<struct vsf_sysutil_sockaddr *> p_sockptr);
-int vsf_sysutil_accept_timeout(int fd, struct vsf_sysutil_sockaddr* p_sockaddr,
+int vsf_sysutil_accept_timeout(int fd,  struct vsf_sysutil_sockaddr *p_sockaddr : itype(_Ptr<struct vsf_sysutil_sockaddr>),
                                unsigned int wait_seconds);
 int vsf_sysutil_connect_timeout(int fd, const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>), unsigned int wait_seconds);
 void vsf_sysutil_dns_resolve(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr, const char* p_name);

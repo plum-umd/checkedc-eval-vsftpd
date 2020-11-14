@@ -1666,7 +1666,7 @@ vsf_sysutil_listen(int fd, const unsigned int backlog)
  * non re-entrant calls such as malloc().
  */
 int
-vsf_sysutil_accept_timeout(int fd, struct vsf_sysutil_sockaddr* p_sockaddr,
+vsf_sysutil_accept_timeout(int fd, struct vsf_sysutil_sockaddr *p_sockaddr : itype(_Ptr<struct vsf_sysutil_sockaddr>),
                            unsigned int wait_seconds)
 {
   struct vsf_sysutil_sockaddr remote_addr;

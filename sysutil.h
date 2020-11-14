@@ -182,7 +182,7 @@ void vsf_sysutil_strcpy(char *p_dest : itype(_Array_ptr<char>), const char *p_sr
 _Itype_for_any(T) int vsf_sysutil_memcmp(const void* p_src1 : itype(_Array_ptr<const T>) byte_count(size), const void* p_src2 : itype(_Array_ptr<const T>) byte_count(size),
                                          unsigned int size);
 int vsf_sysutil_strcmp(const char *p_src1 : itype(_Nt_array_ptr<const char>), const char *p_src2 : itype(_Nt_array_ptr<const char>));
-int vsf_sysutil_atoi(const char* p_str);
+int vsf_sysutil_atoi(const char* p_str : itype(_Nt_array_ptr<const char>));
 filesize_t vsf_sysutil_a_to_filesize_t(const char *p_str : itype(_Nt_array_ptr<const char>));
 const char *vsf_sysutil_ulong_to_str(unsigned long the_ulong) : itype(_Nt_array_ptr<const char>) count(32);
 const char *vsf_sysutil_filesize_t_to_str(filesize_t the_filesize) : itype(_Nt_array_ptr<const char>) count(32);

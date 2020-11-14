@@ -791,7 +791,7 @@ vsf_sysutil_recv_peek(const int fd, void* p_buf, unsigned int len)
 }
 
 int
-vsf_sysutil_atoi(const char* p_str)
+vsf_sysutil_atoi(const char* p_str : itype(_Nt_array_ptr<const char>))
 {
   return atoi(p_str);
 }

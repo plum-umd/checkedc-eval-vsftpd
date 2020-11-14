@@ -15,7 +15,7 @@
 void
 vsf_secutil_change_credentials(_Ptr<const struct mystr> p_user_str, _Ptr<const struct mystr> p_dir_str, _Ptr<const struct mystr> p_ext_dir_str, unsigned int caps, unsigned int options)
 {
-  struct vsf_sysutil_user* p_user;
+  _Ptr<struct vsf_sysutil_user> p_user = ((void *)0);
   if (!vsf_sysutil_running_as_root())
   {
     bug("vsf_secutil_change_credentials: not running as root");

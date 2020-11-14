@@ -83,7 +83,7 @@ ftp_read_data(_Ptr<struct vsf_session> p_sess, char *p_buf : itype(_Array_ptr<ch
   }
   else if (p_sess->data_use_ssl)
   {
-    return ssl_read(p_sess, p_sess->p_data_ssl, ((_Ptr<char>)p_buf), len);
+    return ssl_read(p_sess, p_sess->p_data_ssl, ((char *)((_Ptr<char>)p_buf)), len);
   }
   else
   {
@@ -106,7 +106,7 @@ ftp_write_data(_Ptr<const struct vsf_session> p_sess, const char *p_buf : itype(
   }
   else if (p_sess->data_use_ssl)
   {
-    return ssl_write(p_sess->p_data_ssl, ((_Ptr<const char>)p_buf), len);
+    return ssl_write(p_sess->p_data_ssl, ((const char *)((_Ptr<const char>)p_buf)), len);
   }
   else
   {

@@ -39,7 +39,7 @@ static struct vsf_transfer_ret do_file_recv(_Ptr<struct vsf_session> p_sess, int
 static void handle_sigalrm(void* p_private);
 static void start_data_alarm(struct vsf_session* p_sess);
 static void handle_io(int retval, int fd, void* p_private);
-static int transfer_dir_internal(_Ptr<struct vsf_session> p_sess, int is_control, struct vsf_sysutil_dir* p_dir, _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose);
+static int transfer_dir_internal(_Ptr<struct vsf_session> p_sess, int is_control, _Ptr<struct vsf_sysutil_dir> p_dir, _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose);
 static int write_dir_list(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr_list> p_dir_list, enum EVSFRWTarget target);
 static unsigned int get_chunk_size();
 
@@ -283,14 +283,14 @@ handle_io(int retval, int fd, void* p_private)
 }
 
 int
-vsf_ftpdataio_transfer_dir(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int is_control, struct vsf_sysutil_dir* p_dir, _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose)
+vsf_ftpdataio_transfer_dir(struct vsf_session *p_sess, int is_control, struct vsf_sysutil_dir *p_dir : itype(_Ptr<struct vsf_sysutil_dir>), _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose)
 {
   return transfer_dir_internal(p_sess, is_control, p_dir, p_base_dir_str,
                                p_option_str, p_filter_str, is_verbose);
 }
 
 static int
-transfer_dir_internal(_Ptr<struct vsf_session> p_sess, int is_control, struct vsf_sysutil_dir* p_dir, _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose)
+transfer_dir_internal(_Ptr<struct vsf_session> p_sess, int is_control, _Ptr<struct vsf_sysutil_dir> p_dir, _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose)
 {
   struct mystr_list dir_list = INIT_STRLIST;
   struct mystr_list subdir_list = INIT_STRLIST;
@@ -333,7 +333,7 @@ transfer_dir_internal(_Ptr<struct vsf_session> p_sess, int is_control, struct vs
     for (subdir_index = 0; subdir_index < num_subdirs; subdir_index++)
     {
       int retval;
-      struct vsf_sysutil_dir* p_subdir;
+      _Ptr<struct vsf_sysutil_dir> p_subdir = ((void *)0);
       _Ptr<const struct mystr> p_subdir_str = 
         str_list_get_pstr(&subdir_list, subdir_index);
       if (str_equal_text(p_subdir_str, ".") ||

@@ -19,7 +19,7 @@ struct vsf_sysutil_dir;
  * p_filter_str   - the filter string given to LIST/NLST - e.g. "*.mp3"
  * is_verbose     - set to 1 for LIST, 0 for NLST
  */
-void vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list, _Ptr<struct mystr_list> p_subdir_list, struct vsf_sysutil_dir* p_dir, _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose);
+void vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list, _Ptr<struct mystr_list> p_subdir_list, _Ptr<struct vsf_sysutil_dir> p_dir, _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose);
 
 /* vsf_filename_passes_filter()
  * PURPOSE

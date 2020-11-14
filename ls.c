@@ -19,7 +19,7 @@
 static void build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str, const struct vsf_sysutil_statbuf *p_stat : itype(_Ptr<const struct vsf_sysutil_statbuf>), long curr_time);
 
 void
-vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list, _Ptr<struct mystr_list> p_subdir_list, struct vsf_sysutil_dir* p_dir, _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose)
+vsf_ls_populate_dir_list(_Ptr<struct mystr_list> p_list, _Ptr<struct mystr_list> p_subdir_list, _Ptr<struct vsf_sysutil_dir> p_dir, _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose)
 {
   struct mystr dirline_str = INIT_MYSTR;
   struct mystr normalised_base_dir_str = INIT_MYSTR;
@@ -378,7 +378,7 @@ build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str
   else
   {
     int uid = vsf_sysutil_statbuf_get_uid(p_stat);
-    struct vsf_sysutil_user* p_user = 0;
+    _Ptr<struct vsf_sysutil_user> p_user = 0;
     if (tunable_text_userdb_names)
     {
       p_user = vsf_sysutil_getpwuid(uid);
@@ -403,7 +403,7 @@ build_dir_line(_Ptr<struct mystr> p_str, _Ptr<const struct mystr> p_filename_str
   else
   {
     int gid = vsf_sysutil_statbuf_get_gid(p_stat);
-    struct vsf_sysutil_group* p_group = 0;
+    _Ptr<struct vsf_sysutil_group> p_group = 0;
     if (tunable_text_userdb_names)
     {
       p_group = vsf_sysutil_getgrgid(gid);

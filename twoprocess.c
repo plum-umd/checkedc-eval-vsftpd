@@ -514,7 +514,7 @@ calculate_chdir_dir(int anon_login, _Ptr<struct mystr> p_userdir_str, _Ptr<struc
 {
   if (!anon_login)
   {
-    const struct vsf_sysutil_user* p_user = str_getpwnam(p_user_str);
+    _Ptr<const struct vsf_sysutil_user> p_user = str_getpwnam(p_user_str);
     if (p_user == 0)
     {
       die2("cannot locate user entry:", str_getbuf(p_user_str));

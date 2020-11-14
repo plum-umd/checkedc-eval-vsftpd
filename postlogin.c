@@ -626,7 +626,7 @@ handle_pasv(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int is
     const void* p_v4addr = vsf_sysutil_sockaddr_ipv6_v4(s_p_sockaddr);
     if (p_v4addr)
     {
-      str_append_text(&s_pasv_res_str, vsf_sysutil_inet_ntoa(p_v4addr));
+      str_append_text(&s_pasv_res_str, vsf_sysutil_inet_ntoa<const void>(p_v4addr));
     }
     else
     {
@@ -1925,7 +1925,7 @@ resolve_tilde(_Ptr<struct mystr> p_str, struct vsf_session *p_sess : itype(_Ptr<
     else if (tunable_tilde_user_enable && len > 1)
     {
       static struct mystr s_user_str;
-      struct vsf_sysutil_user* p_user;
+      _Ptr<struct vsf_sysutil_user> p_user = ((void *)0);
       str_copy(&s_rhs_str, p_str);
       str_split_char(&s_rhs_str, &s_user_str, '~');
       str_split_char(&s_user_str, &s_rhs_str, '/');

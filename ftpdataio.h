@@ -89,7 +89,7 @@ struct vsf_transfer_ret vsf_ftpdataio_transfer_file(struct vsf_session *p_sess :
  * p_filter_str   - the filter string provided to "ls"
  * is_verbose     - set to 0 if NLST used, 1 if LIST used
  */
-int vsf_ftpdataio_transfer_dir(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int is_control, struct vsf_sysutil_dir* p_dir, _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose);
+int vsf_ftpdataio_transfer_dir(struct vsf_session *p_sess, int is_control, struct vsf_sysutil_dir *p_dir : itype(_Ptr<struct vsf_sysutil_dir>), _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose);
 
 #endif /* VSF_FTPDATAIO_H */
 

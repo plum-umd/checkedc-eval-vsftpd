@@ -76,15 +76,15 @@ enum EVSFSysUtilOpenMode
   kVSFSysUtilOpenWriteOnly,
   kVSFSysUtilOpenReadWrite
 };
-int vsf_sysutil_open_file(const char* p_filename,
-                          const enum EVSFSysUtilOpenMode);
+
+int vsf_sysutil_open_file(const char* p_filename : itype(_Nt_array_ptr<const char>), const enum EVSFSysUtilOpenMode);
 /* Fails if file already exists */
-int vsf_sysutil_create_file_exclusive(const char* p_filename);
+int vsf_sysutil_create_file_exclusive(const char* p_filename : itype(_Nt_array_ptr<const char>));
 /* Creates file or appends if already exists */
-int vsf_sysutil_create_or_open_file_append(const char* p_filename,
+int vsf_sysutil_create_or_open_file_append(const char* p_filename : itype(_Nt_array_ptr<const char>),
                                            unsigned int mode);
 /* Creates or appends */
-int vsf_sysutil_create_or_open_file(const char* p_filename, unsigned int mode);
+int vsf_sysutil_create_or_open_file(const char* p_filename : itype(_Nt_array_ptr<const char>), unsigned int mode);
 void vsf_sysutil_dupfd2(int old_fd, int new_fd);
 void vsf_sysutil_close(int fd);
 int vsf_sysutil_close_failok(int fd);

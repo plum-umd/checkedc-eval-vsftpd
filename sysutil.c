@@ -1161,14 +1161,14 @@ vsf_sysutil_translate_openmode(const enum EVSFSysUtilOpenMode mode)
 }
 
 int
-vsf_sysutil_open_file(const char* p_filename,
+vsf_sysutil_open_file(const char* p_filename : itype(_Nt_array_ptr<const char>),
                       const enum EVSFSysUtilOpenMode mode)
 {
   return open(p_filename, vsf_sysutil_translate_openmode(mode) | O_NONBLOCK);
 }
 
 int
-vsf_sysutil_create_file_exclusive(const char* p_filename)
+vsf_sysutil_create_file_exclusive(const char* p_filename : itype(_Nt_array_ptr<const char>))
 {
   /* umask() also contributes to end mode */
   return open(p_filename, O_CREAT | O_EXCL | O_WRONLY | O_APPEND,
@@ -1176,13 +1176,13 @@ vsf_sysutil_create_file_exclusive(const char* p_filename)
 }
 
 int
-vsf_sysutil_create_or_open_file(const char* p_filename, unsigned int mode)
+vsf_sysutil_create_or_open_file(const char* p_filename : itype(_Nt_array_ptr<const char>), unsigned int mode)
 {
   return open(p_filename, O_CREAT | O_WRONLY | O_NONBLOCK, mode);
 }
 
 int
-vsf_sysutil_create_or_open_file_append(const char* p_filename,
+vsf_sysutil_create_or_open_file_append(const char* p_filename : itype(_Nt_array_ptr<const char>),
                                        unsigned int mode)
 {
   return open(p_filename, O_CREAT | O_WRONLY | O_NONBLOCK | O_APPEND, mode);

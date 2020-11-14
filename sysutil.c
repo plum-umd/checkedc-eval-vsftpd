@@ -1251,7 +1251,7 @@ vsf_sysutil_alloc_statbuf(_Ptr<struct vsf_sysutil_statbuf *> p_ptr)
 }
 
 void
-vsf_sysutil_fstat(int fd, _Ptr<struct vsf_sysutil_statbuf *> p_ptr)
+vsf_sysutil_fstat(int fd, struct vsf_sysutil_statbuf **p_ptr : itype(_Ptr<_Ptr<struct vsf_sysutil_statbuf>>))
 {
   int retval;
   vsf_sysutil_alloc_statbuf(p_ptr);
@@ -1263,14 +1263,14 @@ vsf_sysutil_fstat(int fd, _Ptr<struct vsf_sysutil_statbuf *> p_ptr)
 }
 
 int
-vsf_sysutil_stat(const char* p_name, _Ptr<struct vsf_sysutil_statbuf *> p_ptr)
+vsf_sysutil_stat(const char* p_name, struct vsf_sysutil_statbuf ** p_ptr: itype(_Ptr<_Ptr<struct vsf_sysutil_statbuf>>))
 {
   vsf_sysutil_alloc_statbuf(p_ptr);
   return stat(p_name, (struct stat*) (*p_ptr));
 }
 
 int
-vsf_sysutil_lstat(const char* p_name, _Ptr<struct vsf_sysutil_statbuf *> p_ptr)
+vsf_sysutil_lstat(const char* p_name, struct vsf_sysutil_statbuf ** p_ptr: itype(_Ptr<_Ptr<struct vsf_sysutil_statbuf>>))
 {
   vsf_sysutil_alloc_statbuf(p_ptr);
   return lstat(p_name, (struct stat*) (*p_ptr));

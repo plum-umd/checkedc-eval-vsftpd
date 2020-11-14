@@ -83,7 +83,7 @@ ftp_read_data(_Ptr<struct vsf_session> p_sess, char *p_buf : itype(_Array_ptr<ch
   }
   else if (p_sess->data_use_ssl)
   {
-    return ssl_read(p_sess, p_sess->p_data_ssl, ((char *)p_buf), len);
+    return ssl_read(p_sess, p_sess->p_data_ssl, ((_Ptr<char>)p_buf), len);
   }
   else
   {
@@ -106,7 +106,7 @@ ftp_write_data(_Ptr<const struct vsf_session> p_sess, const char *p_buf : itype(
   }
   else if (p_sess->data_use_ssl)
   {
-    return ssl_write(p_sess->p_data_ssl, ((const char *)p_buf), len);
+    return ssl_write(p_sess->p_data_ssl, ((_Ptr<const char>)p_buf), len);
   }
   else
   {
@@ -115,7 +115,7 @@ ftp_write_data(_Ptr<const struct vsf_session> p_sess, const char *p_buf : itype(
 }
 
 int
-ftp_getline(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, char* p_buf)
+ftp_getline(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, char *p_buf : itype(_Array_ptr<char>))
 {
   if (p_sess->control_use_ssl && p_sess->ssl_slave_active)
   {
@@ -151,24 +151,24 @@ static int
 plain_peek_adapter(_Ptr<struct vsf_session> p_sess, _Array_ptr<char> p_buf, unsigned int len)
 {
   (void) p_sess;
-  return vsf_sysutil_recv_peek(VSFTP_COMMAND_FD, (char*) p_buf, len);
+  return vsf_sysutil_recv_peek<char>(VSFTP_COMMAND_FD, (_Array_ptr<char>) p_buf, len);
 }
 
 static int
 plain_read_adapter(_Ptr<struct vsf_session> p_sess, _Array_ptr<char> p_buf, unsigned int len)
 {
   (void) p_sess;
-  return vsf_sysutil_read_loop<char>(VSFTP_COMMAND_FD, (char*) p_buf, len);
+  return vsf_sysutil_read_loop<char>(VSFTP_COMMAND_FD, (_Array_ptr<char>) p_buf, len);
 }
 
 static int
 ssl_peek_adapter(_Ptr<struct vsf_session> p_sess, _Array_ptr<char> p_buf, unsigned int len)
 {
-  return ssl_peek(p_sess, p_sess->p_control_ssl, (char*) p_buf, len);
+  return ssl_peek(p_sess, p_sess->p_control_ssl, (_Ptr<char>) p_buf, len);
 }
 
 static int
 ssl_read_adapter(_Ptr<struct vsf_session> p_sess, _Array_ptr<char> p_buf , unsigned int len)
 {
-  return ssl_read(p_sess, p_sess->p_control_ssl, ((char *)p_buf), len);
+  return ssl_read(p_sess, p_sess->p_control_ssl, ((_Ptr<char>)p_buf), len);
 }

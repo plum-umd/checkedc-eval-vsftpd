@@ -16,12 +16,12 @@
 #include "sysutil.h"
 
 int
-str_netfd_alloc(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, char term, _Array_ptr<char> p_readbuf : count(maxlen), unsigned int maxlen, _Ptr, _Ptr)
+str_netfd_alloc(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_str, char term, _Array_ptr<char> p_readbuf : count(maxlen), unsigned int maxlen, _Ptr<int (_Ptr<struct vsf_session> , _Array_ptr<char> , unsigned int )> p_peekfunc, _Ptr<int (_Ptr<struct vsf_session> , _Array_ptr<char> , unsigned int )> p_readfunc)
 {
   int retval;
   unsigned int bytes_read;
   unsigned int i;
-  _Array_ptr<char> p_readpos = p_readbuf;
+  _Array_ptr<char> p_readpos : count(maxlen) = p_readbuf;
   unsigned int left = maxlen;
   str_empty(p_str);
   while (1)

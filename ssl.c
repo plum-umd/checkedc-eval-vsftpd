@@ -752,7 +752,7 @@ handle_prot(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 }
 
 int
-ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl, char *p_buf : itype(_Ptr<char>), unsigned int len)
+ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl, char *p_buf : itype(_Array_ptr<char>), unsigned int len)
 {
   (void) p_sess;
   (void) p_ssl;
@@ -762,7 +762,7 @@ ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl, char *p_buf : itype(_Ptr<
 }
 
 int
-ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl, char *p_buf : itype(_Ptr<char>), unsigned int len)
+ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl, char *p_buf : itype(_Array_ptr<char>), unsigned int len)
 {
   (void) p_sess;
   (void) p_ssl;
@@ -772,7 +772,7 @@ ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl, char *p_buf : itype(_Ptr<
 }
 
 int
-ssl_write(void* p_ssl, const char *p_buf : itype(_Ptr<const char>), unsigned int len)
+ssl_write(void* p_ssl, const char *p_buf : itype(_Array_ptr<const char>), unsigned int len)
 {
   (void) p_ssl;
   (void) p_buf;

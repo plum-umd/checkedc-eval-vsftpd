@@ -85,7 +85,8 @@ void
 str_alloc_text(_Ptr<struct mystr> p_str, const char *p_src : itype(_Nt_array_ptr<const char>))
 {
   unsigned int len = vsf_sysutil_strlen(p_src);
-  private_str_alloc_memchunk(p_str, ((_Array_ptr<const char>)p_src), len);
+  _Array_ptr<const char> temp : byte_count(len) = _Assume_bounds_cast<_Array_ptr<const char>>(p_src, byte_count(len));
+  private_str_alloc_memchunk(p_str, temp, len);
 }
 
 void
@@ -250,7 +251,8 @@ void
 str_append_text(_Ptr<struct mystr> p_str, const char *p_src : itype(_Nt_array_ptr<const char>))
 {
   unsigned int len = vsf_sysutil_strlen(p_src);
-  private_str_append_memchunk(p_str, ((_Array_ptr<const char>)p_src), len);
+  _Array_ptr<const char> temp : byte_count(len) = _Assume_bounds_cast<_Array_ptr<const char>>(p_src, byte_count(len));
+  private_str_append_memchunk(p_str, temp, len);
 }
 
 void

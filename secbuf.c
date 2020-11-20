@@ -41,7 +41,7 @@ vsf_secbuf_alloc(_Ptr<char *> p_ptr, unsigned int size)
   /* Add on another two pages to make inaccessible */
   round_up += page_size * 2;
 
-  p_mmap = vsf_sysutil_map_anon_pages(round_up);
+  p_mmap = vsf_sysutil_map_anon_pages<char>(round_up);
   /* Map the first and last page inaccessible */
   p_no_access_page = p_mmap + round_up - page_size;
   vsf_sysutil_memprotect<char>(p_no_access_page, page_size, kVSFSysUtilMapProtNone);

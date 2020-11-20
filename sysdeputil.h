@@ -45,7 +45,7 @@ void vsf_sysutil_set_proctitle_prefix(_Ptr<const struct mystr> p_str);
 
 /* For now, maps read/write private pages. API to be extended.. */
 void vsf_sysutil_map_anon_pages_init(void);
-void* vsf_sysutil_map_anon_pages(unsigned int length);
+_Itype_for_any(T) void* vsf_sysutil_map_anon_pages(unsigned int length) : itype(_Array_ptr<T>) byte_count(length);
 
 /* File descriptor passing/receiving */
 void vsf_sysutil_send_fd(int sock_fd, int send_fd);

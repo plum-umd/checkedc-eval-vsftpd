@@ -44,14 +44,14 @@ vsf_secbuf_alloc(_Ptr<char *> p_ptr, unsigned int size)
   p_mmap = vsf_sysutil_map_anon_pages(round_up);
   /* Map the first and last page inaccessible */
   p_no_access_page = p_mmap + round_up - page_size;
-  vsf_sysutil_memprotect(p_no_access_page, page_size, kVSFSysUtilMapProtNone);
+  vsf_sysutil_memprotect<char>(p_no_access_page, page_size, kVSFSysUtilMapProtNone);
   /* Before we make the "before" page inaccessible, store the size in it.
    * A little hack so that we don't need to explicitly be passed the size
    * when freeing an existing secure buffer
    */
   *((unsigned int*)p_mmap) = round_up;
   p_no_access_page = p_mmap;
-  vsf_sysutil_memprotect(p_no_access_page, page_size, kVSFSysUtilMapProtNone);
+  vsf_sysutil_memprotect<char>(p_no_access_page, page_size, kVSFSysUtilMapProtNone);
 
   p_mmap += page_size;
   if (page_offset)
@@ -80,10 +80,10 @@ vsf_secbuf_free(_Ptr<char *> p_ptr)
   }
   p_mmap -= page_size;
   /* First make the first page readable so we can get the size */
-  vsf_sysutil_memprotect(p_mmap, page_size, kVSFSysUtilMapProtReadOnly);
+  vsf_sysutil_memprotect<char>(p_mmap, page_size, kVSFSysUtilMapProtReadOnly);
   /* Extract the mapping size */
   map_size = *((unsigned int*)p_mmap);
   /* Lose the mapping */
-  vsf_sysutil_memunmap(p_mmap, map_size);
+  vsf_sysutil_memunmap<char>(p_mmap, map_size);
 }
 

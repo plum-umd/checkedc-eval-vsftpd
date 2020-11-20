@@ -88,7 +88,7 @@ int vsf_sysutil_create_or_open_file(const char* p_filename : itype(_Nt_array_ptr
 void vsf_sysutil_dupfd2(int old_fd, int new_fd);
 void vsf_sysutil_close(int fd);
 int vsf_sysutil_close_failok(int fd);
-int vsf_sysutil_unlink(const char* p_dead);
+int vsf_sysutil_unlink(const char* p_dead : itype(_Nt_array_ptr<const char>));
 int vsf_sysutil_write_access(_Nt_array_ptr<const char> p_filename);
 void vsf_sysutil_ftruncate(int fd);
 
@@ -126,11 +126,10 @@ int vsf_sysutil_statbuf_is_readable_other(
   const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>));
 const char *vsf_sysutil_statbuf_get_sortkey_mtime(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>)) : itype(_Nt_array_ptr<const char>) count(32);
 
-int vsf_sysutil_chmod(const char* p_filename, unsigned int mode);
+int vsf_sysutil_chmod(const char* p_filename : itype(_Nt_array_ptr<const char>), unsigned int mode);
 void vsf_sysutil_fchown(const int fd, const int uid, const int gid);
 void vsf_sysutil_fchmod(const int fd, unsigned int mode);
-int vsf_sysutil_readlink(const char* p_filename, char* p_dest,
-                         unsigned int bufsiz);
+int vsf_sysutil_readlink(const char* p_filename : itype(_Nt_array_ptr<const char>) , char* p_dest : itype(_Nt_array_ptr<char>), unsigned int bufsiz);
 
 /* Get / unget various locks. Lock gets are blocking. Write locks are
  * exclusive; read locks are shared.
@@ -145,9 +144,9 @@ enum EVSFSysUtilMapPermission
   kVSFSysUtilMapProtReadOnly = 1,
   kVSFSysUtilMapProtNone
 };
-void vsf_sysutil_memprotect(void* p_addr, unsigned int len,
+_Itype_for_any(T) void vsf_sysutil_memprotect(void* p_addr : itype(_Array_ptr<T>) byte_count(len), unsigned int len,
                             const enum EVSFSysUtilMapPermission perm);
-void vsf_sysutil_memunmap(void* p_start, unsigned int length);
+_Itype_for_any(T) void vsf_sysutil_memunmap(void* p_start : itype(_Array_ptr<T>) byte_count(length), unsigned int length);
 
 /* Memory allocating/freeing */
 _Itype_for_any(T) void* vsf_sysutil_malloc(unsigned int size) : itype(_Array_ptr<T>) byte_count(size);

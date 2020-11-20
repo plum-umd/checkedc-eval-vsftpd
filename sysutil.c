@@ -1531,7 +1531,7 @@ vsf_sysutil_unlock_file(int fd)
 }
 
 int
-vsf_sysutil_readlink(const char* p_filename, char* p_dest, unsigned int bufsiz)
+vsf_sysutil_readlink(const char* p_filename : itype(_Nt_array_ptr<const char>) , char* p_dest : itype(_Nt_array_ptr<char>), unsigned int bufsiz)
 {
   int retval;
   if (bufsiz == 0) {

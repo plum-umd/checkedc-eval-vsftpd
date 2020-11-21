@@ -66,7 +66,7 @@ static void pasv_cleanup(struct vsf_session *p_sess : itype(_Ptr<struct vsf_sess
 static void port_cleanup(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_dir_common(_Ptr<struct vsf_session> p_sess, int full_details, int stat_cmd);
 static void prepend_path_to_filename(_Ptr<struct mystr> p_str);
-static int get_remote_transfer_fd(_Ptr<struct vsf_session> p_sess, const char *p_status_msg);
+static int get_remote_transfer_fd(_Ptr<struct vsf_session> p_sess, const char *p_status_msg : itype(_Nt_array_ptr<const char>));
 static void check_abor(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_sigurg(void* p_private);
 static void handle_upload_common(_Ptr<struct vsf_session> p_sess, int is_append, int is_unique);
@@ -564,7 +564,7 @@ handle_pasv(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int is
 {
   unsigned short the_port;
   static struct mystr s_pasv_res_str;
-  static struct vsf_sysutil_sockaddr* s_p_sockaddr;
+  static _Ptr<struct vsf_sysutil_sockaddr> s_p_sockaddr = ((void *)0);
   int is_ipv6 = vsf_sysutil_sockaddr_is_ipv6(p_sess->p_local_addr);
   if (is_epsv && !str_isempty(&p_sess->ftp_arg_str))
   {
@@ -1419,7 +1419,7 @@ handle_sigurg(void* p_private)
 }
 
 static int
-get_remote_transfer_fd(_Ptr<struct vsf_session> p_sess, const char *p_status_msg)
+get_remote_transfer_fd(_Ptr<struct vsf_session> p_sess, const char *p_status_msg : itype(_Nt_array_ptr<const char>))
 {
   int remote_fd;
   if (!pasv_active(p_sess) && !port_active(p_sess))

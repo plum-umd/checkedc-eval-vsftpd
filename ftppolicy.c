@@ -197,7 +197,7 @@ connect_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
   unsigned long expected_len = sizeof(struct sockaddr_in);
   void* p_buf = 0;
   struct sockaddr* p_sockaddr;
-  static struct vsf_sysutil_sockaddr* p_sockptr;
+  static _Ptr<struct vsf_sysutil_sockaddr> p_sockptr = ((void *)0);
   if (vsf_sysutil_sockaddr_is_ipv6(p_sess->p_local_addr))
   {
     expected_family = AF_INET6;

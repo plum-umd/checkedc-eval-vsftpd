@@ -214,7 +214,7 @@ control_getline(_Ptr<struct mystr> p_str, struct vsf_session *p_sess : itype(_Pt
   {
     vsf_secbuf_alloc(&p_sess->p_control_line_buf, VSFTP_MAX_COMMAND_LINE);
   }
-  ret = ftp_getline(p_sess, p_str, ((char *)p_sess->p_control_line_buf));
+  ret = ftp_getline(p_sess, p_str, ((_Array_ptr<char>)p_sess->p_control_line_buf));
   if (ret == 0)
   {
     return ret;

@@ -36,7 +36,7 @@ static unsigned int hash_pid(unsigned int buckets, void* p_key);
 struct vsf_client_launch
 vsf_standalone_main(void)
 {
-  struct vsf_sysutil_sockaddr* p_accept_addr = 0;
+  _Ptr<struct vsf_sysutil_sockaddr> p_accept_addr = 0;
   int listen_sock = -1;
   int retval;
   s_ipaddr_size = vsf_sysutil_get_ipaddr_size();
@@ -78,7 +78,7 @@ vsf_standalone_main(void)
   vsf_sysutil_install_sighandler(kVSFSysUtilSigHUP, handle_sighup, 0, 1);
   if (tunable_listen)
   {
-    struct vsf_sysutil_sockaddr* p_sockaddr = 0;
+    _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr = 0;
     vsf_sysutil_sockaddr_alloc_ipv4(&p_sockaddr);
     vsf_sysutil_sockaddr_set_port(p_sockaddr,
                                   (unsigned short) tunable_listen_port);
@@ -102,7 +102,7 @@ vsf_standalone_main(void)
   }
   else
   {
-    struct vsf_sysutil_sockaddr* p_sockaddr = 0;
+    _Ptr<struct vsf_sysutil_sockaddr> p_sockaddr = 0;
     vsf_sysutil_sockaddr_alloc_ipv6(&p_sockaddr);
     vsf_sysutil_sockaddr_set_port(p_sockaddr,
                                   (unsigned short) tunable_listen_port);

@@ -198,7 +198,7 @@ vsf_parseconf_load_file(const char* p_filename : itype(_Nt_array_ptr<const char>
   {
     if (s_p_saved_filename)
     {
-      vsf_sysutil_free<char>(s_p_saved_filename);
+      vsf_sysutil_free<char>(((void *)s_p_saved_filename));
     }
     s_p_saved_filename = (_Nt_array_ptr<const char>) vsf_sysutil_strdup(p_filename);
   }
@@ -271,7 +271,7 @@ vsf_parseconf_load_setting(const char *p_setting : itype(_Nt_array_ptr<const cha
         _Ptr<_Nt_array_ptr<const char>> p_curr_setting = (_Ptr<_Nt_array_ptr<const char>>) p_str_setting->p_variable;
         if (*p_curr_setting)
         {
-          vsf_sysutil_free<char>( *p_curr_setting);
+          vsf_sysutil_free<char>( ((void *)*p_curr_setting));
         }
         if (str_isempty(&s_value_str))
         {

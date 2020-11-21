@@ -1823,7 +1823,7 @@ vsf_sysutil_getsockname(int fd, _Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockpt
   {
     socklen = sizeof(the_addr);
   }
-  vsf_sysutil_memcpy<struct vsf_sysutil_sockaddr>(*p_sockptr, &the_addr, socklen);
+  vsf_sysutil_memcpy<struct vsf_sysutil_sockaddr>(((void *)*p_sockptr), &the_addr, socklen);
 }
 
 void
@@ -1848,7 +1848,7 @@ vsf_sysutil_getpeername(int fd, _Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockpt
   {
     socklen = sizeof(the_addr);
   }
-  vsf_sysutil_memcpy<struct vsf_sysutil_sockaddr>(*p_sockptr, &the_addr, socklen);
+  vsf_sysutil_memcpy<struct vsf_sysutil_sockaddr>(((void *)*p_sockptr), &the_addr, socklen);
 }
 
 void
@@ -1886,7 +1886,7 @@ vsf_sysutil_sockaddr_alloc(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockptr)
 {
   vsf_sysutil_sockaddr_clear(p_sockptr);
   *p_sockptr = vsf_sysutil_malloc<struct vsf_sysutil_sockaddr>(sizeof(**p_sockptr));
-  vsf_sysutil_memclr<struct vsf_sysutil_sockaddr>(*p_sockptr, sizeof(**p_sockptr));
+  vsf_sysutil_memclr<struct vsf_sysutil_sockaddr>(((void *)*p_sockptr), sizeof(**p_sockptr));
 }
 
 void

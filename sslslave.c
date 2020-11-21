@@ -36,7 +36,7 @@ ssl_slave(_Ptr<struct vsf_session> p_sess)
     if (cmd == PRIV_SOCK_GET_USER_CMD)
     {
       ret = ftp_getline(p_sess, &p_sess->ftp_cmd_str,
-                        ((char *)p_sess->p_control_line_buf));
+                        ((_Array_ptr<char>)p_sess->p_control_line_buf));
       priv_sock_send_int(p_sess->ssl_slave_fd, ret);
       if (ret >= 0)
       {

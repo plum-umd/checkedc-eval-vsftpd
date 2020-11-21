@@ -1,4 +1,4 @@
-{"WildPtrInfo":{"InDirectWildPtrNum":1297,"InSrcInDirectWildPtrNum":210,"DirectWildPtrs":{"Num":1913,"InSrcNum":100,"Reasons":[{"Bad pointer type solution":{"Num":57,"InSrcNum":21,"TotalIndirect":54,"InSrcIndirect":53,"InSrcScore":1.045714e+01}},
+{"WildPtrInfo":{"InDirectWildPtrNum":1278,"InSrcInDirectWildPtrNum":191,"DirectWildPtrs":{"Num":1899,"InSrcNum":86,"Reasons":[{"Bad pointer type solution":{"Num":43,"InSrcNum":7,"TotalIndirect":35,"InSrcIndirect":34,"InSrcScore":9.100001e+00}},
 {"Cast from DIR * to struct vsf_sysutil_dir *":{"Num":1,"InSrcNum":0,"TotalIndirect":0,"InSrcIndirect":0,"InSrcScore":0.000000e+00}},
 {"Cast from char * to unsigned int *":{"Num":2,"InSrcNum":2,"TotalIndirect":16,"InSrcIndirect":16,"InSrcScore":1.600000e+00}},
 {"Cast from const char * to const unsigned char *":{"Num":1,"InSrcNum":0,"TotalIndirect":0,"InSrcIndirect":0,"InSrcScore":0.000000e+00}},

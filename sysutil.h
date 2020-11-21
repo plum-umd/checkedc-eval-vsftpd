@@ -200,11 +200,11 @@ struct vsf_sysutil_socketpair_retval
   int socket_one;
   int socket_two;
 };
-void vsf_sysutil_sockaddr_alloc(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr);
-void vsf_sysutil_sockaddr_clear(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr);
-void vsf_sysutil_sockaddr_alloc_ipv4(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr);
-void vsf_sysutil_sockaddr_alloc_ipv6(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr);
-void vsf_sysutil_sockaddr_clone(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr, const struct vsf_sysutil_sockaddr *p_src : itype(_Ptr<const struct vsf_sysutil_sockaddr>));
+void vsf_sysutil_sockaddr_alloc(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockptr);
+void vsf_sysutil_sockaddr_clear(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockptr);
+void vsf_sysutil_sockaddr_alloc_ipv4(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockptr);
+void vsf_sysutil_sockaddr_alloc_ipv6(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockptr);
+void vsf_sysutil_sockaddr_clone(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockptr, const struct vsf_sysutil_sockaddr *p_src : itype(_Ptr<const struct vsf_sysutil_sockaddr>));
 int vsf_sysutil_sockaddr_addr_equal(const struct vsf_sysutil_sockaddr *p1 : itype(_Ptr<const struct vsf_sysutil_sockaddr>), const struct vsf_sysutil_sockaddr *p2 : itype(_Ptr<const struct vsf_sysutil_sockaddr>));
 int vsf_sysutil_sockaddr_is_ipv6(const struct vsf_sysutil_sockaddr *p_sockaddr : itype(_Ptr<const struct vsf_sysutil_sockaddr>));
 void vsf_sysutil_sockaddr_set_ipv4addr(struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<struct vsf_sysutil_sockaddr>), const unsigned char* p_raw);
@@ -224,12 +224,12 @@ struct vsf_sysutil_socketpair_retval
   vsf_sysutil_unix_stream_socketpair(void);
 int vsf_sysutil_bind(int fd, const struct vsf_sysutil_sockaddr *p_sockptr : itype(_Ptr<const struct vsf_sysutil_sockaddr>));
 int vsf_sysutil_listen(int fd, const unsigned int backlog);
-void vsf_sysutil_getsockname(int fd, _Ptr<struct vsf_sysutil_sockaddr *> p_sockptr);
-void vsf_sysutil_getpeername(int fd, _Ptr<struct vsf_sysutil_sockaddr *> p_sockptr);
+void vsf_sysutil_getsockname(int fd, _Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockptr);
+void vsf_sysutil_getpeername(int fd, _Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockptr);
 int vsf_sysutil_accept_timeout(int fd,  struct vsf_sysutil_sockaddr *p_sockaddr : itype(_Ptr<struct vsf_sysutil_sockaddr>),
                                unsigned int wait_seconds);
 int vsf_sysutil_connect_timeout(int fd, const struct vsf_sysutil_sockaddr *p_addr : itype(_Ptr<const struct vsf_sysutil_sockaddr>), unsigned int wait_seconds);
-void vsf_sysutil_dns_resolve(_Ptr<struct vsf_sysutil_sockaddr *> p_sockptr, const char* p_name : itype(_Nt_array_ptr<const char>));
+void vsf_sysutil_dns_resolve(_Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockptr, const char* p_name : itype(_Nt_array_ptr<const char>));
 /* Option setting on sockets */
 void vsf_sysutil_activate_keepalive(int fd);
 void vsf_sysutil_set_iptos_throughput(int fd);

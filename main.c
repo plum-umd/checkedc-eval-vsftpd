@@ -123,7 +123,7 @@ main(int argc, _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
   /* Resolve pasv_address if required */
   if (tunable_pasv_address && tunable_pasv_addr_resolve)
   {
-    struct vsf_sysutil_sockaddr* p_addr = 0;
+    _Ptr<struct vsf_sysutil_sockaddr> p_addr = 0;
     _Nt_array_ptr<const char> p_numeric_addr = ((void *)0);
     vsf_sysutil_dns_resolve(&p_addr, tunable_pasv_address);
     vsf_sysutil_free<char>(tunable_pasv_address);

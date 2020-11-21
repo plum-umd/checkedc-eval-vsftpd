@@ -143,7 +143,7 @@ const char* tunable_rsa_private_key_file;
 const char* tunable_dsa_private_key_file;
 const char* tunable_ca_certs_file;
 
-static void install_str_setting(_Nt_array_ptr<const char> p_value, _Ptr<_Nt_array_ptr<const char>> p_storage);
+static void install_str_setting(_Nt_array_ptr<const char> p_value, const char ** p_storage : itype(_Ptr<_Nt_array_ptr<const char>>));
 
 void
 tunables_load_defaults()
@@ -291,16 +291,16 @@ tunables_load_defaults()
 }
 
 void
-install_str_setting(_Nt_array_ptr<const char> p_value, _Ptr<_Nt_array_ptr<const char>> p_storage)
+install_str_setting(_Nt_array_ptr<const char> p_value, const char ** p_storage : itype(_Ptr<_Nt_array_ptr<const char>>))
 {
-  _Ptr<char> p_curr_val = (_Ptr<char>) *p_storage;
+  _Ptr<char> p_curr_val = _Assume_bounds_cast<_Ptr<char>>(*p_storage);
   if (p_curr_val != 0)
   {
     vsf_sysutil_free<char>(p_curr_val);
   }
   if (p_value != 0)
   {
-    p_value = vsf_sysutil_strdup(p_value);
+    p_value = (_Nt_array_ptr<const char>) vsf_sysutil_strdup(p_value);
   }
   *p_storage = p_value;
 }

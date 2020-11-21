@@ -71,12 +71,12 @@ vsf_privop_get_ftp_port_sock(_Ptr<struct vsf_session> p_sess, unsigned short rem
   }
   if (use_port_sockaddr)
   {
-    p_connect_to = p_sess->p_port_sockaddr;
+    p_connect_to = _Assume_bounds_cast<_Ptr<const struct vsf_sysutil_sockaddr>>(p_sess->p_port_sockaddr);
   }
   else
   {
     vsf_sysutil_sockaddr_set_port(p_sess->p_remote_addr, remote_port);
-    p_connect_to = p_sess->p_remote_addr;
+    p_connect_to = _Assume_bounds_cast<_Ptr<const struct vsf_sysutil_sockaddr>>(p_sess->p_remote_addr);
   }
   retval = vsf_sysutil_connect_timeout(s, p_connect_to,
                                        tunable_connect_timeout);

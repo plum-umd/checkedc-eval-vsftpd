@@ -11,6 +11,6 @@ struct vsf_session;
  * PARAMETERS
  * p_sess         - the current session object
  */
-void init_connection(struct vsf_session* p_sess);
+void init_connection(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
 
 #endif /* VSF_PRELOGIN_H */

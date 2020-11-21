@@ -19,7 +19,7 @@ struct vsf_session;
  * 1 on success, 0 otherwise.
  * 
  */
-int vsf_ftpdataio_dispose_transfer_fd(struct vsf_session* p_sess);
+int vsf_ftpdataio_dispose_transfer_fd(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
 
 /* vsf_ftpdataio_get_pasv_fd()
  * PURPOSE
@@ -30,7 +30,7 @@ int vsf_ftpdataio_dispose_transfer_fd(struct vsf_session* p_sess);
  * RETURNS
  * The file descriptor upon success, or -1 upon error.
  */
-int vsf_ftpdataio_get_pasv_fd(struct vsf_session* p_sess);
+int vsf_ftpdataio_get_pasv_fd(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
 
 /* vsf_ftpdataio_get_pasv_fd()
  * PURPOSE
@@ -41,7 +41,7 @@ int vsf_ftpdataio_get_pasv_fd(struct vsf_session* p_sess);
  * RETURNS
  * The file descriptor upon success, or -1 upon error.
  */
-int vsf_ftpdataio_get_port_fd(struct vsf_session* p_sess);
+int vsf_ftpdataio_get_port_fd(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
 
 /* vsf_ftpdataio_post_mark_connect()
  * PURPOSE

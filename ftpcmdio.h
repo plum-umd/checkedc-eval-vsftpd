@@ -73,7 +73,7 @@ void vsf_cmdio_write_str_hyphen(_Ptr<struct vsf_session> p_sess, int status, _Pt
  * PARAMETERS
  * p_sess       - The current session object
  */
-void vsf_cmdio_set_alarm(struct vsf_session* p_sess);
+void vsf_cmdio_set_alarm(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
 
 /* vsf_cmdio_get_cmd_and_arg()
  * PURPOSE

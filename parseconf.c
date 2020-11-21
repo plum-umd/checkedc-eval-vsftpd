@@ -183,7 +183,7 @@ parseconf_str_array[] =
 };
 
 void
-vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
+vsf_parseconf_load_file(const char* p_filename : itype(_Nt_array_ptr<const char>), int errs_fatal)
 {
   struct mystr config_file_str = INIT_MYSTR;
   struct mystr config_setting_str = INIT_MYSTR;
@@ -192,7 +192,7 @@ vsf_parseconf_load_file(const char* p_filename, int errs_fatal)
   int retval;
   if (!p_filename)
   {
-    p_filename = s_p_saved_filename;
+    p_filename = _Assume_bounds_cast<_Nt_array_ptr<const char>>(s_p_saved_filename, count(0));
   }
   else
   {

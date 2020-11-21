@@ -26,7 +26,7 @@ struct ascii_to_bin_ret
   char* p_buf;
 };
 struct ascii_to_bin_ret vsf_ascii_ascii_to_bin(
-  char* p_in, unsigned int in_len, int prev_cr);
+  char* p_in : itype(_Nt_array_ptr<char>), unsigned int in_len, int prev_cr);
 
 /* vsf_ascii_bin_to_ascii()
  * PURPOSE

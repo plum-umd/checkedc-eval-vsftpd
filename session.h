@@ -18,15 +18,15 @@ struct mystr_list;
 struct vsf_session
 {
   /* Details of the control connection */
-  struct vsf_sysutil_sockaddr* p_local_addr;
-  struct vsf_sysutil_sockaddr* p_remote_addr;
-  char* p_control_line_buf;
+  struct vsf_sysutil_sockaddr* p_local_addr : itype(_Ptr<struct vsf_sysutil_sockaddr>);
+  struct vsf_sysutil_sockaddr* p_remote_addr : itype(_Ptr<struct vsf_sysutil_sockaddr>);
+  char* p_control_line_buf : itype(_Nt_array_ptr<char>);
   int idle_timeout;
   int data_timeout;
 
   /* Details of the data connection */
   int pasv_listen_fd;
-  struct vsf_sysutil_sockaddr* p_port_sockaddr;
+  struct vsf_sysutil_sockaddr* p_port_sockaddr : itype(_Ptr<struct vsf_sysutil_sockaddr>);
   int data_fd;
   int data_progress;
   unsigned int bw_rate_max;

@@ -4,11 +4,11 @@
 struct vsf_session;
 struct mystr;
 
-int ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl, char *p_buf : itype(_Array_ptr<char>), unsigned int len);
-int ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl, char *p_buf : itype(_Array_ptr<char>), unsigned int len);
-int ssl_write(void* p_ssl, const char *p_buf : itype(_Array_ptr<const char>), unsigned int len);
-int ssl_write_str(void* p_ssl, _Ptr<const struct mystr> p_str);
-int ssl_read_into_str(_Ptr<struct vsf_session> p_sess, void* p_ssl, _Ptr<struct mystr> p_str);
+_Itype_for_any(T) int ssl_read(_Ptr<struct vsf_session> p_sess, void* p_ssl : itype(_Ptr<T>), char *p_buf : itype(_Array_ptr<char>), unsigned int len);
+_Itype_for_any(T) int ssl_peek(_Ptr<struct vsf_session> p_sess, void* p_ssl : itype(_Ptr<T>), char *p_buf : itype(_Array_ptr<char>), unsigned int len);
+_Itype_for_any(T) int ssl_write(void* p_ssl : itype(_Ptr<T>), const char *p_buf : itype(_Array_ptr<const char>), unsigned int len);
+_Itype_for_any(T) int ssl_write_str(void* p_ssl : itype(_Ptr<T>), _Ptr<const struct mystr> p_str);
+_Itype_for_any(T) int ssl_read_into_str(_Ptr<struct vsf_session> p_sess, void* p_ssl : itype(_Ptr<T>), _Ptr<struct mystr> p_str);
 void ssl_init(_Ptr<struct vsf_session> p_sess);
 int ssl_accept(_Ptr<struct vsf_session> p_sess, int fd);
 int ssl_data_close(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));

@@ -12,6 +12,6 @@ struct vsf_session;
  * p_sandbox    - the sandbox to set the policy on
  * p_sess       - current vsftpd session object
  */
-void policy_setup(_Ptr<struct pt_sandbox> p_sandbox, const struct vsf_session* p_sess);
+void policy_setup(_Ptr<struct pt_sandbox> p_sandbox, const struct vsf_session* p_sess : itype(_Ptr<const struct vsf_session>));
 
 #endif /* VSF_FTPPOLICY_H */

@@ -11,7 +11,7 @@ struct vsf_session;
  * PARAMETERS
  * p_sess       - the current session object
  */
-void vsf_one_process_start(struct vsf_session* p_sess);
+void vsf_one_process_start(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
 
 /* vsf_one_process_login()
  * PURPOSE

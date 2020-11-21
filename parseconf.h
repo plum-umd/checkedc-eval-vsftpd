@@ -15,7 +15,7 @@
  * If p_filename is NULL, then the last filename passed to this function is
  * used to reload the configuration details.
  */
-void vsf_parseconf_load_file(const char* p_filename, int errs_fatal);
+void vsf_parseconf_load_file(const char* p_filename : itype(_Nt_array_ptr<const char>), int errs_fatal);
 
 /* vsf_parseconf_parse_setting()
  * PURPOSE

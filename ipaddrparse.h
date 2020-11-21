@@ -8,7 +8,7 @@ struct mystr;
  * and safety.
  */
 
-const unsigned char* vsf_sysutil_parse_ipv6(_Ptr<const struct mystr> p_str);
+const unsigned char* vsf_sysutil_parse_ipv6(_Ptr<const struct mystr> p_str) : itype(_Ptr<const unsigned char>);
 
 const unsigned char *vsf_sysutil_parse_ipv4(_Ptr<const struct mystr> p_str) : itype(_Ptr<const unsigned char>);
 

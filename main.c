@@ -33,7 +33,7 @@ static void env_init(void);
 static void limits_init(void);
 
 int
-main(int argc, _Array_ptr<const char *> argv : count(argc))
+main(int argc, _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
 {
   struct vsf_session the_session =
   {
@@ -88,7 +88,7 @@ main(int argc, _Array_ptr<const char *> argv : count(argc))
   }
   for (i = 1; i < argc; ++i)
   {
-    const char* p_arg = argv[i];
+    _Nt_array_ptr<const char> p_arg = argv[i];
     if (p_arg[0] != '-')
     {
       config_loaded = 1;
@@ -116,7 +116,7 @@ main(int argc, _Array_ptr<const char *> argv : count(argc))
     int retval = vsf_sysutil_stat(VSFTP_DEFAULT_CONFIG, &p_statbuf);
     if (!vsf_sysutil_retval_is_error(retval))
     {
-      vsf_parseconf_load_file(VSFTP_DEFAULT_CONFIG, 1);
+      vsf_parseconf_load_file(((const char *)VSFTP_DEFAULT_CONFIG), 1);
     }
     vsf_sysutil_free<void>((void*) p_statbuf);
   }
@@ -126,7 +126,7 @@ main(int argc, _Array_ptr<const char *> argv : count(argc))
     struct vsf_sysutil_sockaddr* p_addr = 0;
     _Nt_array_ptr<const char> p_numeric_addr = ((void *)0);
     vsf_sysutil_dns_resolve(&p_addr, tunable_pasv_address);
-    vsf_sysutil_free<char>((char*) tunable_pasv_address);
+    vsf_sysutil_free<char>((_Ptr<char>) tunable_pasv_address);
     p_numeric_addr = (_Nt_array_ptr<char>) vsf_sysutil_inet_ntop(p_addr);
     tunable_pasv_address = vsf_sysutil_strdup(p_numeric_addr);
     vsf_sysutil_free<struct vsf_sysutil_sockaddr>(p_addr);
@@ -160,7 +160,7 @@ main(int argc, _Array_ptr<const char *> argv : count(argc))
     the_session.tcp_wrapper_ok = vsf_tcp_wrapper_ok(VSFTP_COMMAND_FD);
   }
   {
-    const char* p_load_conf = vsf_sysutil_getenv("VSFTPD_LOAD_CONF");
+    _Nt_array_ptr<const char> p_load_conf = vsf_sysutil_getenv("VSFTPD_LOAD_CONF");
     if (p_load_conf)
     {
       vsf_parseconf_load_file(p_load_conf, 1);

@@ -21,7 +21,7 @@ void vsf_one_process_start(struct vsf_session* p_sess : itype(_Ptr<struct vsf_se
  * p_sess       - the current session object
  * p_pass_str   - the proposed password
  */
-void vsf_one_process_login(struct vsf_session* p_sess, _Ptr<const struct mystr> p_pass_str);
+void vsf_one_process_login(_Ptr<struct vsf_session> p_sess, _Ptr<const struct mystr> p_pass_str);
 
 /* vsf_one_process_get_priv_data_sock()
  * PURPOSE

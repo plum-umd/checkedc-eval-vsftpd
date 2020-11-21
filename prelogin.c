@@ -28,10 +28,10 @@
 /* Functions used */
 static void check_limits(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void emit_greeting(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
-static void parse_username_password(struct vsf_session* p_sess);
-static void handle_user_command(struct vsf_session* p_sess);
-static void handle_pass_command(struct vsf_session* p_sess);
-static void handle_get(struct vsf_session* p_sess);
+static void parse_username_password(_Ptr<struct vsf_session> p_sess);
+static void handle_user_command(_Ptr<struct vsf_session> p_sess);
+static void handle_pass_command(_Ptr<struct vsf_session> p_sess);
+static void handle_get(_Ptr<struct vsf_session> p_sess);
 static void check_login_delay();
 static void check_login_fails(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
@@ -115,7 +115,7 @@ emit_greeting(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 }
 
 static void
-parse_username_password(struct vsf_session* p_sess)
+parse_username_password(_Ptr<struct vsf_session> p_sess)
 {
   while (1)
   {
@@ -186,7 +186,7 @@ parse_username_password(struct vsf_session* p_sess)
 }
 
 static void
-handle_get(struct vsf_session* p_sess)
+handle_get(_Ptr<struct vsf_session> p_sess)
 {
   p_sess->is_http = 1;
   str_copy(&p_sess->http_get_arg, &p_sess->ftp_arg_str);
@@ -196,7 +196,7 @@ handle_get(struct vsf_session* p_sess)
 }
 
 static void
-handle_user_command(struct vsf_session* p_sess)
+handle_user_command(_Ptr<struct vsf_session> p_sess)
 {
   /* SECURITY: If we're in anonymous only-mode, immediately reject
    * non-anonymous usernames in the hope we save passwords going plaintext
@@ -263,7 +263,7 @@ handle_user_command(struct vsf_session* p_sess)
 }
 
 static void
-handle_pass_command(struct vsf_session* p_sess)
+handle_pass_command(_Ptr<struct vsf_session> p_sess)
 {
   if (str_isempty(&p_sess->user_str))
   {

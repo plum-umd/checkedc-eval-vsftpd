@@ -36,7 +36,7 @@ ssl_slave(_Ptr<struct vsf_session> p_sess)
     if (cmd == PRIV_SOCK_GET_USER_CMD)
     {
       ret = ftp_getline(p_sess, &p_sess->ftp_cmd_str,
-                        p_sess->p_control_line_buf);
+                        ((char *)p_sess->p_control_line_buf));
       priv_sock_send_int(p_sess->ssl_slave_fd, ret);
       if (ret >= 0)
       {
@@ -81,7 +81,7 @@ ssl_slave(_Ptr<struct vsf_session> p_sess)
         bug("invalid state");
       }
       str_trunc(&data_str, (unsigned int) size);
-      ret = ssl_read_into_str(p_sess, p_sess->p_data_ssl, &data_str);
+      ret = ssl_read_into_str<void>(p_sess, p_sess->p_data_ssl, &data_str);
       priv_sock_send_int(p_sess->ssl_slave_fd, ret);
       priv_sock_send_str(p_sess->ssl_slave_fd, &data_str);
     }
@@ -92,7 +92,7 @@ ssl_slave(_Ptr<struct vsf_session> p_sess)
         bug("invalid state");
       }
       priv_sock_get_str(p_sess->ssl_slave_fd, &data_str);
-      ret = ssl_write(p_sess->p_data_ssl,
+      ret = ssl_write<void>(p_sess->p_data_ssl,
                       str_getbuf(&data_str),
                       str_getlen(&data_str));
       priv_sock_send_int(p_sess->ssl_slave_fd, ret);

@@ -16,7 +16,7 @@
 #include "sysutil.h"
 #include "utility.h"
 
-static const char* s_p_saved_filename;
+static _Nt_array_ptr<const char> s_p_saved_filename = ((void *)0);
 
 /* Tables mapping setting names to runtime variables */
 /* Boolean settings */
@@ -143,7 +143,7 @@ parseconf_uint_array[] =
 static struct parseconf_str_setting
 {
   _Nt_array_ptr<const char> p_setting_name;
-  _Ptr<const char *> p_variable;
+  _Ptr<_Nt_array_ptr<const char>> p_variable;
 }
 parseconf_str_array[] =
 {
@@ -198,7 +198,7 @@ vsf_parseconf_load_file(const char* p_filename : itype(_Nt_array_ptr<const char>
   {
     if (s_p_saved_filename)
     {
-      vsf_sysutil_free<char>((char*)s_p_saved_filename);
+      vsf_sysutil_free<char>((_Ptr<char>)s_p_saved_filename);
     }
     s_p_saved_filename = vsf_sysutil_strdup(p_filename);
   }
@@ -268,10 +268,10 @@ vsf_parseconf_load_setting(const char *p_setting : itype(_Nt_array_ptr<const cha
       if (str_equal_text(&s_setting_str, p_str_setting->p_setting_name))
       {
         /* Got it */
-        _Ptr<const char *> p_curr_setting = p_str_setting->p_variable;
+        _Ptr<_Nt_array_ptr<const char>> p_curr_setting = p_str_setting->p_variable;
         if (*p_curr_setting)
         {
-          vsf_sysutil_free<char>((char*) *p_curr_setting);
+          vsf_sysutil_free<char>((_Ptr<char>) *p_curr_setting);
         }
         if (str_isempty(&s_value_str))
         {

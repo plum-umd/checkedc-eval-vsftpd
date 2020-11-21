@@ -32,46 +32,44 @@
 static void handle_pwd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_cwd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_pasv(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int is_epsv);
-static void handle_retr(struct vsf_session* p_sess, int is_http);
+static void handle_retr(_Ptr<struct vsf_session> p_sess, int is_http);
 static void handle_cdup(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
-static void handle_list(struct vsf_session* p_sess);
+static void handle_list(_Ptr<struct vsf_session> p_sess);
 static void handle_type(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_port(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
-static void handle_stor(struct vsf_session* p_sess);
+static void handle_stor(_Ptr<struct vsf_session> p_sess);
 static void handle_mkd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_rmd(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_dele(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_rest(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_rnfr(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_rnto(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
-static void handle_nlst(struct vsf_session* p_sess);
+static void handle_nlst(_Ptr<struct vsf_session> p_sess);
 static void handle_size(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_site(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
-static void handle_appe(struct vsf_session* p_sess);
+static void handle_appe(_Ptr<struct vsf_session> p_sess);
 static void handle_mdtm(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_site_chmod(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_arg_str);
 static void handle_site_umask(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_arg_str);
 static void handle_eprt(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_help(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
-static void handle_stou(struct vsf_session* p_sess);
+static void handle_stou(_Ptr<struct vsf_session> p_sess);
 static void handle_stat(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
-static void handle_stat_file(struct vsf_session* p_sess);
+static void handle_stat_file(_Ptr<struct vsf_session> p_sess);
 static void handle_logged_in_user(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_logged_in_pass(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
-static void handle_http(struct vsf_session* p_sess);
+static void handle_http(_Ptr<struct vsf_session> p_sess);
 
 static int pasv_active(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static int port_active(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void pasv_cleanup(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void port_cleanup(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
-static void handle_dir_common(struct vsf_session* p_sess, int full_details,
-                              int stat_cmd);
+static void handle_dir_common(_Ptr<struct vsf_session> p_sess, int full_details, int stat_cmd);
 static void prepend_path_to_filename(_Ptr<struct mystr> p_str);
-static int get_remote_transfer_fd(struct vsf_session* p_sess, const char *p_status_msg : itype(_Nt_array_ptr<const char>));
+static int get_remote_transfer_fd(_Ptr<struct vsf_session> p_sess, const char *p_status_msg);
 static void check_abor(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void handle_sigurg(void* p_private);
-static void handle_upload_common(struct vsf_session* p_sess, int is_append,
-                                 int is_unique);
+static void handle_upload_common(_Ptr<struct vsf_session> p_sess, int is_append, int is_unique);
 static void get_unique_filename(_Ptr<struct mystr> p_outstr, _Ptr<const struct mystr> p_base_str);
 static int data_transfer_checks_ok(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 static void resolve_tilde(_Ptr<struct mystr> p_str, struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
@@ -643,7 +641,7 @@ handle_pasv(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), int is
 }
 
 static void
-handle_retr(struct vsf_session* p_sess, int is_http)
+handle_retr(_Ptr<struct vsf_session> p_sess, int is_http)
 {
   static struct mystr s_mark_str;
   static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf = ((void *)0);
@@ -788,13 +786,13 @@ file_close_out:
 }
 
 static void
-handle_list(struct vsf_session* p_sess)
+handle_list(_Ptr<struct vsf_session> p_sess)
 {
   handle_dir_common(p_sess, 1, 0);
 }
 
 static void
-handle_dir_common(struct vsf_session* p_sess, int full_details, int stat_cmd)
+handle_dir_common(_Ptr<struct vsf_session> p_sess, int full_details, int stat_cmd)
 {
   static struct mystr s_option_str;
   static struct mystr s_filter_str;
@@ -1003,13 +1001,13 @@ handle_port(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 }
 
 static void
-handle_stor(struct vsf_session* p_sess)
+handle_stor(_Ptr<struct vsf_session> p_sess)
 {
   handle_upload_common(p_sess, 0, 0);
 }
 
 static void
-handle_upload_common(struct vsf_session* p_sess, int is_append, int is_unique)
+handle_upload_common(_Ptr<struct vsf_session> p_sess, int is_append, int is_unique)
 {
   static _Ptr<struct vsf_sysutil_statbuf> s_p_statbuf = ((void *)0);
   static struct mystr s_filename;
@@ -1349,7 +1347,7 @@ handle_rnto(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 }
 
 static void
-handle_nlst(struct vsf_session* p_sess)
+handle_nlst(_Ptr<struct vsf_session> p_sess)
 {
   handle_dir_common(p_sess, 0, 0);
 }
@@ -1421,7 +1419,7 @@ handle_sigurg(void* p_private)
 }
 
 static int
-get_remote_transfer_fd(struct vsf_session* p_sess, const char *p_status_msg : itype(_Nt_array_ptr<const char>))
+get_remote_transfer_fd(_Ptr<struct vsf_session> p_sess, const char *p_status_msg)
 {
   int remote_fd;
   if (!pasv_active(p_sess) && !port_active(p_sess))
@@ -1592,7 +1590,7 @@ handle_site_umask(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr> p_arg_str)
 }
 
 static void
-handle_appe(struct vsf_session* p_sess)
+handle_appe(_Ptr<struct vsf_session> p_sess)
 {
   handle_upload_common(p_sess, 1, 0);
 }
@@ -1772,7 +1770,7 @@ handle_help(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 }
 
 static void
-handle_stou(struct vsf_session* p_sess)
+handle_stou(_Ptr<struct vsf_session> p_sess)
 {
   handle_upload_common(p_sess, 0, 1);
 }
@@ -1885,7 +1883,7 @@ handle_stat(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 }
 
 static void
-handle_stat_file(struct vsf_session* p_sess)
+handle_stat_file(_Ptr<struct vsf_session> p_sess)
 {
   handle_dir_common(p_sess, 1, 1);
 }
@@ -1965,7 +1963,7 @@ static void handle_logged_in_pass(struct vsf_session *p_sess : itype(_Ptr<struct
 }
 
 static void
-handle_http(struct vsf_session* p_sess)
+handle_http(_Ptr<struct vsf_session> p_sess)
 {
   /* Warning: Doesn't respect cmds_allowed etc. because there is currently only
    * one command (GET)!

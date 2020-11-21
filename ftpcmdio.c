@@ -152,7 +152,7 @@ vsf_cmdio_set_alarm(struct vsf_session* p_sess)
 }
 
 void
-vsf_cmdio_get_cmd_and_arg(struct vsf_session* p_sess, _Ptr<struct mystr> p_cmd_str, _Ptr<struct mystr> p_arg_str, int set_alarm)
+vsf_cmdio_get_cmd_and_arg(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), _Ptr<struct mystr> p_cmd_str, _Ptr<struct mystr> p_arg_str, int set_alarm)
 {
   int ret;
   /* Prepare an alarm to timeout the session.. */
@@ -214,7 +214,7 @@ control_getline(_Ptr<struct mystr> p_str, struct vsf_session *p_sess : itype(_Pt
   {
     vsf_secbuf_alloc(&p_sess->p_control_line_buf, VSFTP_MAX_COMMAND_LINE);
   }
-  ret = ftp_getline(p_sess, p_str, p_sess->p_control_line_buf);
+  ret = ftp_getline(p_sess, p_str, ((char *)p_sess->p_control_line_buf));
   if (ret == 0)
   {
     return ret;

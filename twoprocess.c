@@ -32,8 +32,8 @@
 static void drop_all_privs(void);
 static void handle_sigchld(void* duff);
 static void handle_sigterm(void* duff);
-static void process_login_req(struct vsf_session* p_sess);
-static void common_do_login(struct vsf_session* p_sess, _Ptr<const struct mystr> p_user_str, int do_chroot, int anon);
+static void process_login_req(_Ptr<struct vsf_session> p_sess);
+static void common_do_login(_Ptr<struct vsf_session> p_sess, _Ptr<const struct mystr> p_user_str, int do_chroot, int anon);
 static void handle_per_user_config(_Ptr<const struct mystr> p_user_str);
 static void calculate_chdir_dir(int anon_login, _Ptr<struct mystr> p_userdir_str, _Ptr<struct mystr> p_chroot_str, _Ptr<struct mystr> p_chdir_str, _Ptr<const struct mystr> p_user_str, _Ptr<const struct mystr> p_orig_user_str);
 
@@ -286,7 +286,7 @@ vsf_two_process_chown_upload(struct vsf_session *p_sess : itype(_Ptr<struct vsf_
 }
 
 static void
-process_login_req(struct vsf_session* p_sess)
+process_login_req(_Ptr<struct vsf_session> p_sess)
 {
   enum EVSFPrivopLoginResult e_login_result = kVSFLoginNull;
   char cmd;
@@ -372,7 +372,7 @@ process_login_req(struct vsf_session* p_sess)
 }
 
 static void
-common_do_login(struct vsf_session* p_sess, _Ptr<const struct mystr> p_user_str, int do_chroot, int anon)
+common_do_login(_Ptr<struct vsf_session> p_sess, _Ptr<const struct mystr> p_user_str, int do_chroot, int anon)
 {
   int was_anon = anon;
   _Ptr<const struct mystr> p_orig_user_str = p_user_str;

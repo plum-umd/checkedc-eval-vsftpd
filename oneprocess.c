@@ -112,7 +112,7 @@ one_process_start(void* p_arg)
 }
 
 void
-vsf_one_process_login(struct vsf_session* p_sess, _Ptr<const struct mystr> p_pass_str)
+vsf_one_process_login(_Ptr<struct vsf_session> p_sess, _Ptr<const struct mystr> p_pass_str)
 {
   enum EVSFPrivopLoginResult login_result =
     vsf_privop_do_login(p_sess, p_pass_str);

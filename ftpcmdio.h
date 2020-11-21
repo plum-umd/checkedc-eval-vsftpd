@@ -84,7 +84,7 @@ void vsf_cmdio_set_alarm(struct vsf_session* p_sess : itype(_Ptr<struct vsf_sess
  * p_arg_str    - Where to put the FTP argument string (may be empty)
  * set_alarm    - If true, the control connection inactivity monitor is used
  */
-void vsf_cmdio_get_cmd_and_arg(struct vsf_session* p_sess, _Ptr<struct mystr> p_cmd_str, _Ptr<struct mystr> p_arg_str, int set_alarm);
+void vsf_cmdio_get_cmd_and_arg(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>), _Ptr<struct mystr> p_cmd_str, _Ptr<struct mystr> p_arg_str, int set_alarm);
 
 #endif /* VSF_FTPCMDIO_H */
 

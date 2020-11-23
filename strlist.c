@@ -71,7 +71,7 @@ str_list_contains_str(const struct mystr_list *p_list : itype(_Ptr<const struct 
 void
 str_list_add(struct mystr_list *p_list : itype(_Ptr<struct mystr_list>), _Ptr<const struct mystr> p_str, _Ptr<const struct mystr> p_sort_key_str)
 {
-  struct mystr_list_node* p_node;
+  _Ptr<struct mystr_list_node> p_node = ((void *)0);
   /* Expand the node allocation if we have to */
   if (p_list->list_len == p_list->alloc_len)
   {

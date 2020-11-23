@@ -64,11 +64,11 @@ hash_add_entry(struct hash *p_hash : itype(_Ptr<struct hash>), void* p_key, void
 {
   _Ptr<_Ptr<struct hash_node>> p_bucket = ((void *)0);
   _Ptr<struct hash_node> p_new_node = ((void *)0);
-  if (hash_lookup_entry<void>(p_hash, p_key))
+  if (hash_lookup_entry<void, void>(p_hash, p_key))
   {
     bug("duplicate hash key");
   }
-  p_bucket = hash_get_bucket<void>(p_hash, p_key);
+  p_bucket = (_Ptr<_Ptr<struct hash_node>>) hash_get_bucket<void>(p_hash, p_key);
   p_new_node = vsf_sysutil_malloc<struct hash_node>(sizeof(*p_new_node));
   p_new_node->p_prev = 0;
   p_new_node->p_next = 0;
@@ -106,7 +106,7 @@ hash_free_entry(struct hash *p_hash : itype(_Ptr<struct hash>), void* p_key)
   }
   else
   {
-    _Ptr<_Ptr<struct hash_node>> p_bucket = hash_get_bucket<void>(p_hash, p_key);
+    _Ptr<_Ptr<struct hash_node>> p_bucket = (_Ptr<_Ptr<struct hash_node>>) hash_get_bucket<void>(p_hash, p_key);
     *p_bucket = p_node->p_next;
   }
   if (p_node->p_next)
@@ -131,7 +131,7 @@ hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key : itype(_Ptr<K>)) : itype(
 _Itype_for_any(K) struct hash_node*
 hash_get_node_by_key(_Ptr<struct hash> p_hash, void* p_key : itype(_Ptr<K>)) : itype(_Ptr<struct hash_node>)
 {
-  _Ptr<_Ptr<struct hash_node>> p_bucket = hash_get_bucket<void>(p_hash, p_key);
+  _Ptr<_Ptr<struct hash_node>> p_bucket = (_Ptr<_Ptr<struct hash_node>>) hash_get_bucket<void>(p_hash, p_key);
   _Ptr<struct hash_node> p_node = *p_bucket;
   if (!p_node)
   {

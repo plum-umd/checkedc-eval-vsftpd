@@ -1,11 +1,14 @@
-{"WildPtrInfo":{"InDirectWildPtrNum":1213,"InSrcInDirectWildPtrNum":128,"DirectWildPtrs":{"Num":1348,"InSrcNum":34,"Reasons":[{"Bad pointer type solution":{"Num":53,"InSrcNum":8,"TotalIndirect":22,"InSrcIndirect":21,"InSrcScore":9.549999e+00}},
+{"WildPtrInfo":{"InDirectWildPtrNum":1207,"InSrcInDirectWildPtrNum":122,"DirectWildPtrs":{"Num":1350,"InSrcNum":30,"Reasons":[{"Bad pointer type solution":{"Num":51,"InSrcNum":8,"TotalIndirect":22,"InSrcIndirect":21,"InSrcScore":9.549999e+00}},
 {"Cast from DIR * to struct vsf_sysutil_dir *":{"Num":1,"InSrcNum":0,"TotalIndirect":0,"InSrcIndirect":0,"InSrcScore":0.000000e+00}},
 {"Cast from _Array_ptr<struct mystr_list_node> to void *":{"Num":2,"InSrcNum":0,"TotalIndirect":0,"InSrcIndirect":0,"InSrcScore":0.000000e+00}},
+{"Cast from _Itype_for_any(1) int (*)(_Ptr<struct pt_sandbox>, void * : itype(_Ptr<T>)) to _Ptr<int (_Ptr<struct pt_sandbox>, void *)>":{"Num":5,"InSrcNum":0,"TotalIndirect":5,"InSrcIndirect":5,"InSrcScore":5.000000e+00}},
 {"Cast from _Itype_for_any(1) unsigned int (*)(unsigned int, void * : itype(_Ptr<T>)) to _Ptr<unsigned int (unsigned int, void *)>":{"Num":2,"InSrcNum":0,"TotalIndirect":2,"InSrcIndirect":2,"InSrcScore":1.000000e+00}},
 {"Cast from _Itype_for_any(1) void (*)(int, int, void * : itype(_Ptr<T>)) to _Ptr<void (int, int, void *)>":{"Num":1,"InSrcNum":0,"TotalIndirect":2,"InSrcIndirect":2,"InSrcScore":1.000000e+00}},
 {"Cast from _Itype_for_any(1) void (*)(void * : itype(_Ptr<T>)) to _Ptr<void (void *)>":{"Num":6,"InSrcNum":0,"TotalIndirect":6,"InSrcIndirect":6,"InSrcScore":6.666667e-01}},
 {"Cast from _Nt_array_ptr<const char> to const void *":{"Num":2,"InSrcNum":0,"TotalIndirect":0,"InSrcIndirect":0,"InSrcScore":0.000000e+00}},
 {"Cast from _Nt_array_ptr<const char> to void *":{"Num":2,"InSrcNum":0,"TotalIndirect":0,"InSrcIndirect":0,"InSrcScore":0.000000e+00}},
+{"Cast from _Ptr<K> to void *":{"Num":1,"InSrcNum":0,"TotalIndirect":0,"InSrcIndirect":0,"InSrcScore":0.000000e+00}},
+{"Cast from _Ptr<V> to void *":{"Num":2,"InSrcNum":0,"TotalIndirect":0,"InSrcIndirect":0,"InSrcScore":0.000000e+00}},
 {"Cast from _Ptr<struct vsf_sysutil_sockaddr> to void *":{"Num":3,"InSrcNum":0,"TotalIndirect":0,"InSrcIndirect":0,"InSrcScore":0.000000e+00}},
 {"Cast from _Ptr<struct vsf_sysutil_statbuf> to void *":{"Num":6,"InSrcNum":0,"TotalIndirect":0,"InSrcIndirect":0,"InSrcScore":0.000000e+00}},
 {"Cast from _Ptr<void (int, int, void *)> to _Ptr<void (int, int, void * : itype(_Ptr<void>))>":{"Num":1,"InSrcNum":0,"TotalIndirect":2,"InSrcIndirect":2,"InSrcScore":1.000000e+00}},
@@ -471,4 +474,4 @@
 {"Union or external struct field encountered":{"Num":153,"InSrcNum":0,"TotalIndirect":163,"InSrcIndirect":9,"InSrcScore":5.333333e+00}},
 {"Unsafe call to allocator function.":{"Num":2,"InSrcNum":0,"TotalIndirect":2,"InSrcIndirect":2,"InSrcScore":2.000000e+00}},
 {"Variable number of arguments.":{"Num":18,"InSrcNum":0,"TotalIndirect":17,"InSrcIndirect":0,"InSrcScore":0.000000e+00}},
-{"Variable type is va_list.":{"Num":96,"InSrcNum":22,"TotalIndirect":90,"InSrcIndirect":37,"InSrcScore":2.683333e+01}}]}}}
+{"Variable type is va_list.":{"Num":92,"InSrcNum":18,"TotalIndirect":79,"InSrcIndirect":26,"InSrcScore":1.583333e+01}}]}}}

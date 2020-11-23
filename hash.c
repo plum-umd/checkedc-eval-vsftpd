@@ -74,10 +74,10 @@ hash_add_entry(struct hash *p_hash : itype(_Ptr<struct hash>), void* p_key : ity
   p_new_node->p_next = 0;
   _Ptr<K> new_key = vsf_sysutil_malloc<K>(p_hash->key_size);
   p_new_node->p_key = new_key;
-  vsf_sysutil_memcpy<K>(new_key, p_key, p_hash->key_size);
+  vsf_sysutil_memcpy<K>(((void *)new_key), ((const void *)p_key), p_hash->key_size);
   _Ptr<V> new_val = vsf_sysutil_malloc<V>(p_hash->value_size);
   p_new_node->p_value = new_val;
-  vsf_sysutil_memcpy<V>(new_val, p_value, p_hash->value_size);
+  vsf_sysutil_memcpy<V>(((void *)new_val), ((const void *)p_value), p_hash->value_size);
 
   if (!*p_bucket)
   {
@@ -101,7 +101,7 @@ hash_free_entry(struct hash *p_hash : itype(_Ptr<struct hash>), void* p_key : it
   }
   _Ptr<K> old_key = _Assume_bounds_cast<_Ptr<K>>(p_node->p_key);
   vsf_sysutil_free<K>(old_key);
-  vsf_sysutil_free<void>((void*) p_node->p_value);
+  vsf_sysutil_free<void>((_Ptr<void>) p_node->p_value);
 
   if (p_node->p_prev)
   {

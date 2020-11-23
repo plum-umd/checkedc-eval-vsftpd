@@ -161,7 +161,7 @@ static int
 socket_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   int ret;
-  struct vsf_session* p_sess = (struct vsf_session*) p_arg;
+  _Ptr<struct vsf_session> p_sess = (_Ptr<struct vsf_session>) p_arg;
   unsigned long arg1;
   unsigned long arg2;
   unsigned long expected_family = AF_INET;
@@ -190,7 +190,7 @@ static int
 connect_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg)
 {
   int ret;
-  struct vsf_session* p_sess = (struct vsf_session*) p_arg;
+  _Ptr<struct vsf_session> p_sess = (_Ptr<struct vsf_session>) p_arg;
   unsigned long arg2;
   unsigned long arg3;
   unsigned long expected_family = AF_INET;

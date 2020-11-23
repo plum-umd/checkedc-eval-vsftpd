@@ -21,10 +21,10 @@
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
 
-static int socket_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
-static int connect_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
-static int getsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
-static int setsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg);
+static _Itype_for_any(T) int socket_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg : itype(_Ptr<T>));
+static _Itype_for_any(T) int connect_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg : itype(_Ptr<T>));
+static _Itype_for_any(T) int getsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg : itype(_Ptr<T>));
+static _Itype_for_any(T) int setsockopt_validator(_Ptr<struct pt_sandbox> p_sandbox, void* p_arg : itype(_Ptr<T>));
 
 void
 policy_setup(_Ptr<struct pt_sandbox> p_sandbox, const struct vsf_session* p_sess)

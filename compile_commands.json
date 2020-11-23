@@ -10,364 +10,6 @@
             "-Wall",
             "-W",
             "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "vsftpd_features.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "vsftpd_features.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "main.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "main.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "ls.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "ls.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "sysstr.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "sysstr.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "secutil.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "secutil.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "sslslave.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "sslslave.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "ptracesandbox.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "ptracesandbox.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "postprivparent.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "postprivparent.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "ftpdataio.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "ftpdataio.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "sysdeputil.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "sysdeputil.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "sysutil.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "sysutil.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "tunables.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "tunables.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "privops.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "privops.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "readwrite.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "readwrite.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "privsock.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "privsock.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "opts.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "opts.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "tcpwrap.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "tcpwrap.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
             "-Wformat-security",
             "-D_FORTIFY_SOURCE=0",
             "-idirafter",
@@ -388,15 +30,14 @@
             "-Wall",
             "-W",
             "-Wshadow",
-            "-Werror",
             "-Wformat-security",
             "-D_FORTIFY_SOURCE=0",
             "-idirafter",
             "dummyinc",
-            "banner.c"
+            "sysstr.c"
         ],
         "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "banner.c"
+        "file": "sysstr.c"
     },
     {
         "arguments": [
@@ -409,238 +50,6 @@
             "-Wall",
             "-W",
             "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "netstr.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "netstr.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "parseconf.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "parseconf.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "standalone.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "standalone.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "seccompsandbox.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "seccompsandbox.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "ipaddrparse.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "ipaddrparse.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "utility.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "utility.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "twoprocess.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "twoprocess.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "hash.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "hash.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "ascii.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "ascii.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "logging.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "logging.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
-            "-Wformat-security",
-            "-D_FORTIFY_SOURCE=0",
-            "-idirafter",
-            "dummyinc",
-            "oneprocess.c"
-        ],
-        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "oneprocess.c"
-    },
-    {
-        "arguments": [
-            "clang",
-            "-c",
-            "-O2",
-            "-fPIE",
-            "-fstack-protector",
-            "--param=ssp-buffer-size=4",
-            "-Wall",
-            "-W",
-            "-Wshadow",
-            "-Werror",
             "-Wformat-security",
             "-D_FORTIFY_SOURCE=0",
             "-idirafter",
@@ -661,15 +70,14 @@
             "-Wall",
             "-W",
             "-Wshadow",
-            "-Werror",
             "-Wformat-security",
             "-D_FORTIFY_SOURCE=0",
             "-idirafter",
             "dummyinc",
-            "ftppolicy.c"
+            "main.c"
         ],
         "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "ftppolicy.c"
+        "file": "main.c"
     },
     {
         "arguments": [
@@ -682,15 +90,14 @@
             "-Wall",
             "-W",
             "-Wshadow",
-            "-Werror",
             "-Wformat-security",
             "-D_FORTIFY_SOURCE=0",
             "-idirafter",
             "dummyinc",
-            "filestr.c"
+            "sysdeputil.c"
         ],
         "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "filestr.c"
+        "file": "sysdeputil.c"
     },
     {
         "arguments": [
@@ -703,15 +110,14 @@
             "-Wall",
             "-W",
             "-Wshadow",
-            "-Werror",
             "-Wformat-security",
             "-D_FORTIFY_SOURCE=0",
             "-idirafter",
             "dummyinc",
-            "secbuf.c"
+            "netstr.c"
         ],
         "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "secbuf.c"
+        "file": "netstr.c"
     },
     {
         "arguments": [
@@ -724,15 +130,14 @@
             "-Wall",
             "-W",
             "-Wshadow",
-            "-Werror",
             "-Wformat-security",
             "-D_FORTIFY_SOURCE=0",
             "-idirafter",
             "dummyinc",
-            "access.c"
+            "utility.c"
         ],
         "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "access.c"
+        "file": "utility.c"
     },
     {
         "arguments": [
@@ -745,7 +150,206 @@
             "-Wall",
             "-W",
             "-Wshadow",
-            "-Werror",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "ipaddrparse.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "ipaddrparse.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "ptracesandbox.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "ptracesandbox.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "privops.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "privops.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "ls.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "ls.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "twoprocess.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "twoprocess.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "parseconf.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "parseconf.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "hash.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "hash.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "oneprocess.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "oneprocess.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "sslslave.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "sslslave.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "tunables.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "tunables.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
             "-Wformat-security",
             "-D_FORTIFY_SOURCE=0",
             "-idirafter",
@@ -766,7 +370,126 @@
             "-Wall",
             "-W",
             "-Wshadow",
-            "-Werror",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "readwrite.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "readwrite.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "standalone.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "standalone.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "secbuf.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "secbuf.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "access.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "access.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "ftpdataio.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "ftpdataio.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "banner.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "banner.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
             "-Wformat-security",
             "-D_FORTIFY_SOURCE=0",
             "-idirafter",
@@ -787,7 +510,226 @@
             "-Wall",
             "-W",
             "-Wshadow",
-            "-Werror",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "opts.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "opts.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "str.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "str.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "privsock.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "privsock.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "secutil.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "secutil.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "filestr.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "filestr.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "seccompsandbox.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "seccompsandbox.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "postprivparent.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "postprivparent.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "tcpwrap.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "tcpwrap.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "sysutil.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "sysutil.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "vsftpd_features.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "vsftpd_features.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "ftppolicy.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "ftppolicy.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
             "-Wformat-security",
             "-D_FORTIFY_SOURCE=0",
             "-idirafter",
@@ -808,14 +750,33 @@
             "-Wall",
             "-W",
             "-Wshadow",
-            "-Werror",
             "-Wformat-security",
             "-D_FORTIFY_SOURCE=0",
             "-idirafter",
             "dummyinc",
-            "str.c"
+            "ascii.c"
         ],
         "directory": "/home/cc/Downloads/vsftpd-3.0.3",
-        "file": "str.c"
+        "file": "ascii.c"
+    },
+    {
+        "arguments": [
+            "clang",
+            "-c",
+            "-O2",
+            "-fPIE",
+            "-fstack-protector",
+            "--param=ssp-buffer-size=4",
+            "-Wall",
+            "-W",
+            "-Wshadow",
+            "-Wformat-security",
+            "-D_FORTIFY_SOURCE=0",
+            "-idirafter",
+            "dummyinc",
+            "logging.c"
+        ],
+        "directory": "/home/cc/Downloads/vsftpd-3.0.3",
+        "file": "logging.c"
     }
 ]

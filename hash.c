@@ -15,8 +15,8 @@ struct hash_node
 {
   void* p_key;
   void* p_value;
-  struct hash_node* p_prev;
-  struct hash_node* p_next;
+  struct hash_node* p_prev : itype(_Ptr<struct hash_node>);
+  struct hash_node* p_next : itype(_Ptr<struct hash_node>);
 };
 
 struct hash
@@ -29,8 +29,8 @@ struct hash
 };
 
 /* Internal functions */
-_Ptr<struct hash_node *>  hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key);
-struct hash_node* hash_get_node_by_key(_Ptr<struct hash> p_hash, void* p_key);
+_Itype_for_any(K) struct hash_node** hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key : itype(_Ptr<K>)) : itype(_Ptr<_Ptr<struct hash_node>>);
+_Itype_for_any(K) struct hash_node* hash_get_node_by_key(_Ptr<struct hash> p_hash, void* p_key : itype(_Ptr<K>)) : itype(_Ptr<struct hash_node>);
 
 _Ptr<struct hash> 
 hash_alloc(unsigned int buckets, unsigned int key_size, unsigned int value_size, _Ptr<unsigned int (unsigned int , void *)> hash_func)
@@ -117,19 +117,19 @@ hash_free_entry(struct hash *p_hash : itype(_Ptr<struct hash>), void* p_key)
   vsf_sysutil_free<struct hash_node>(p_node);
 }
 
-_Ptr<struct hash_node *> 
-hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key)
+_Itype_for_any(K) struct hash_node**
+hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key : itype(_Ptr<K>)) : itype(_Ptr<_Ptr<struct hash_node>>)
 {
   unsigned int bucket = (*p_hash->hash_func)(p_hash->buckets, p_key);
   if (bucket >= p_hash->buckets)
   {
     bug("bad bucket lookup");
   }
-  return _Assume_bounds_cast<_Ptr<struct hash_node *>>(p_hash->p_nodes + bucket);
+  return _Assume_bounds_cast<_Ptr<_Ptr<struct hash_node>>>(p_hash->p_nodes + bucket);
 }
 
-struct hash_node*
-hash_get_node_by_key(_Ptr<struct hash> p_hash, void* p_key)
+_Itype_for_any(K) struct hash_node*
+hash_get_node_by_key(_Ptr<struct hash> p_hash, void* p_key : itype(_Ptr<K>)) : itype(_Ptr<struct hash_node>)
 {
   _Ptr<struct hash_node *> p_bucket = hash_get_bucket(p_hash, p_key);
   struct hash_node* p_node = *p_bucket;

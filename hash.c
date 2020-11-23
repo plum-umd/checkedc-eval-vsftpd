@@ -101,7 +101,7 @@ hash_free_entry(struct hash *p_hash : itype(_Ptr<struct hash>), void* p_key : it
   }
   _Ptr<K> old_key = _Assume_bounds_cast<_Ptr<K>>(p_node->p_key);
   vsf_sysutil_free<K>(old_key);
-  vsf_sysutil_free<void>((_Ptr<void>) p_node->p_value);
+  vsf_sysutil_free<void>(_Assume_bounds_cast<_Ptr<void>>(p_node->p_value));
 
   if (p_node->p_prev)
   {

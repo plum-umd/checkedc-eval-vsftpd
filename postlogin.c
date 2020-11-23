@@ -799,7 +799,7 @@ handle_dir_common(_Ptr<struct vsf_session> p_sess, int full_details, int stat_cm
   static struct mystr s_dir_name_str;
   static _Ptr<struct vsf_sysutil_statbuf> s_p_dirstat = ((void *)0);
   int dir_allow_read = 1;
-  struct vsf_sysutil_dir* p_dir = 0;
+  _Ptr<struct vsf_sysutil_dir> p_dir = 0;
   int retval = 0;
   int use_control = 0;
   str_empty(&s_option_str);

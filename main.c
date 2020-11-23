@@ -113,7 +113,7 @@ main(int argc, _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc))
   /* Parse default config file if necessary */
   if (!config_loaded) {
     _Ptr<struct vsf_sysutil_statbuf> p_statbuf = 0;
-    int retval = vsf_sysutil_stat(VSFTP_DEFAULT_CONFIG, &p_statbuf);
+    int retval = vsf_sysutil_stat(((const char *)VSFTP_DEFAULT_CONFIG), &p_statbuf);
     if (!vsf_sysutil_retval_is_error(retval))
     {
       vsf_parseconf_load_file(((_Nt_array_ptr<const char>)VSFTP_DEFAULT_CONFIG), 1);

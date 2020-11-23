@@ -793,7 +793,7 @@ static int do_sendfile(const int out_fd, const int in_fd,
 #endif /* VSF_SYSDEP_HAVE_LINUX_SENDFILE || VSF_SYSDEP_HAVE_FREEBSD_SENDFILE */
   if (p_recvbuf == 0)
   {
-    vsf_secbuf_alloc(&p_recvbuf, VSFTP_DATA_BUFSIZE);
+    vsf_secbuf_alloc(((char **)&p_recvbuf), VSFTP_DATA_BUFSIZE);
   }
   while (1)
   {

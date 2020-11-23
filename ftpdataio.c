@@ -451,7 +451,7 @@ do_file_send_rwloop(_Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii)
   int prev_cr = 0;
   if (p_readbuf == 0)
   {
-    vsf_secbuf_alloc(&p_readbuf, VSFTP_DATA_BUFSIZE);
+    vsf_secbuf_alloc(((char **)&p_readbuf), VSFTP_DATA_BUFSIZE);
   }
   if (is_ascii)
   {
@@ -460,7 +460,7 @@ do_file_send_rwloop(_Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii)
       /* NOTE!! * 2 factor because we can double the data by doing our ASCII
        * linefeed mangling
        */
-      vsf_secbuf_alloc(&p_asciibuf, VSFTP_DATA_BUFSIZE * 2);
+      vsf_secbuf_alloc(((char **)&p_asciibuf), VSFTP_DATA_BUFSIZE * 2);
     }
     p_writefrom_buf = p_asciibuf;
   }
@@ -579,7 +579,7 @@ do_file_recv(_Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii)
      * last buffer fragment eneded in a '\r' and the current buffer fragment
      * does not start with a '\n'.
      */
-    vsf_secbuf_alloc(&p_recvbuf, VSFTP_DATA_BUFSIZE + 1);
+    vsf_secbuf_alloc(((char **)&p_recvbuf), VSFTP_DATA_BUFSIZE + 1);
   }
   while (1)
   {

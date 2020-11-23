@@ -1823,7 +1823,7 @@ vsf_sysutil_getsockname(int fd, _Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockpt
   {
     socklen = sizeof(the_addr);
   }
-  vsf_sysutil_memcpy<struct vsf_sysutil_sockaddr>(((void *)*p_sockptr), &the_addr, socklen);
+  vsf_sysutil_memcpy<struct vsf_sysutil_sockaddr>(((void *)*p_sockptr), ((const void *)&the_addr), socklen);
 }
 
 void
@@ -1848,7 +1848,7 @@ vsf_sysutil_getpeername(int fd, _Ptr<_Ptr<struct vsf_sysutil_sockaddr>> p_sockpt
   {
     socklen = sizeof(the_addr);
   }
-  vsf_sysutil_memcpy<struct vsf_sysutil_sockaddr>(((void *)*p_sockptr), &the_addr, socklen);
+  vsf_sysutil_memcpy<struct vsf_sysutil_sockaddr>(((void *)*p_sockptr), ((const void *)&the_addr), socklen);
 }
 
 void

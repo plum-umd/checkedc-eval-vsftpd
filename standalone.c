@@ -174,7 +174,7 @@ vsf_standalone_main(void)
       vsf_sysutil_close(new_client_sock);
       if (new_child > 0)
       {
-        hash_add_entry(s_p_pid_ip_hash, (void*)&new_child, p_raw_addr);
+        hash_add_entry<void,void>(s_p_pid_ip_hash, (void*)&new_child, p_raw_addr);
       }
       else
       {
@@ -216,7 +216,7 @@ drop_ip_count(void* p_raw_addr)
 {
   unsigned int count;
   unsigned int* p_count =
-    (unsigned int*)hash_lookup_entry(s_p_ip_count_hash, p_raw_addr);
+    (unsigned int*)hash_lookup_entry<void,unsigned int>(s_p_ip_count_hash, p_raw_addr);
   if (!p_count)
   {
     bug("IP address missing from hash");
@@ -230,7 +230,7 @@ drop_ip_count(void* p_raw_addr)
   *p_count = count;
   if (!count)
   {
-    hash_free_entry(s_p_ip_count_hash, p_raw_addr);
+    hash_free_entry<void>(s_p_ip_count_hash, p_raw_addr);
   }
 }
 
@@ -249,9 +249,9 @@ handle_sigchld(void* duff)
       --s_children;
       /* Account per-IP limit */
       p_ip = (struct vsf_sysutil_ipaddr*)
-        hash_lookup_entry(s_p_pid_ip_hash, (void*)&reap_one);
+        hash_lookup_entry<void,struct vsf_sysutil_ipaddr>(s_p_pid_ip_hash, (void*)&reap_one);
       drop_ip_count(p_ip);      
-      hash_free_entry(s_p_pid_ip_hash, (void*)&reap_one);
+      hash_free_entry<void>(s_p_pid_ip_hash, (void*)&reap_one);
     }
   }
 }
@@ -295,12 +295,12 @@ static unsigned int
 handle_ip_count(void* p_ipaddr)
 {
   unsigned int* p_count =
-    (unsigned int*)hash_lookup_entry(s_p_ip_count_hash, p_ipaddr);
+    (unsigned int*)hash_lookup_entry<void,unsigned int>(s_p_ip_count_hash, p_ipaddr);
   unsigned int count;
   if (!p_count)
   {
     count = 1;
-    hash_add_entry(s_p_ip_count_hash, p_ipaddr, (void*)&count);
+    hash_add_entry<void,void>(s_p_ip_count_hash, p_ipaddr, (void*)&count);
   }
   else
   {

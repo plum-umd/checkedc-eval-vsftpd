@@ -51,7 +51,7 @@ hash_alloc(unsigned int buckets, unsigned int key_size, unsigned int value_size,
 void*
 hash_lookup_entry(struct hash *p_hash : itype(_Ptr<struct hash>), void* p_key)
 {
-  struct hash_node* p_node = hash_get_node_by_key(p_hash, p_key);
+  struct hash_node* p_node = hash_get_node_by_key<void>(p_hash, p_key);
   if (!p_node)
   {
     return p_node;
@@ -62,20 +62,20 @@ hash_lookup_entry(struct hash *p_hash : itype(_Ptr<struct hash>), void* p_key)
 void
 hash_add_entry(struct hash *p_hash : itype(_Ptr<struct hash>), void* p_key, void* p_value)
 {
-  _Ptr<struct hash_node *> p_bucket = ((void *)0);
-  struct hash_node* p_new_node;
-  if (hash_lookup_entry(p_hash, p_key))
+  _Ptr<_Ptr<struct hash_node>> p_bucket = ((void *)0);
+  _Ptr<struct hash_node> p_new_node = ((void *)0);
+  if (hash_lookup_entry<void>(p_hash, p_key))
   {
     bug("duplicate hash key");
   }
-  p_bucket = hash_get_bucket(p_hash, p_key);
+  p_bucket = hash_get_bucket<void>(p_hash, p_key);
   p_new_node = vsf_sysutil_malloc<struct hash_node>(sizeof(*p_new_node));
   p_new_node->p_prev = 0;
   p_new_node->p_next = 0;
   p_new_node->p_key = vsf_sysutil_malloc(p_hash->key_size);
-  vsf_sysutil_memcpy<void>(p_new_node->p_key, p_key, p_hash->key_size);
+  vsf_sysutil_memcpy<void>(p_new_node->p_key, ((const void *)p_key), p_hash->key_size);
   p_new_node->p_value = vsf_sysutil_malloc(p_hash->value_size);
-  vsf_sysutil_memcpy<void>(p_new_node->p_value, p_value, p_hash->value_size);
+  vsf_sysutil_memcpy<void>(p_new_node->p_value, ((const void *)p_value), p_hash->value_size);
 
   if (!*p_bucket)
   {
@@ -92,7 +92,7 @@ hash_add_entry(struct hash *p_hash : itype(_Ptr<struct hash>), void* p_key, void
 void
 hash_free_entry(struct hash *p_hash : itype(_Ptr<struct hash>), void* p_key)
 {
-  struct hash_node* p_node = hash_get_node_by_key(p_hash, p_key);
+  _Ptr<struct hash_node> p_node = hash_get_node_by_key<void>(p_hash, p_key);
   if (!p_node)
   {
     bug("hash node not found");
@@ -106,7 +106,7 @@ hash_free_entry(struct hash *p_hash : itype(_Ptr<struct hash>), void* p_key)
   }
   else
   {
-    _Ptr<struct hash_node *> p_bucket = hash_get_bucket(p_hash, p_key);
+    _Ptr<_Ptr<struct hash_node>> p_bucket = hash_get_bucket<void>(p_hash, p_key);
     *p_bucket = p_node->p_next;
   }
   if (p_node->p_next)
@@ -131,14 +131,14 @@ hash_get_bucket(_Ptr<struct hash> p_hash, void* p_key : itype(_Ptr<K>)) : itype(
 _Itype_for_any(K) struct hash_node*
 hash_get_node_by_key(_Ptr<struct hash> p_hash, void* p_key : itype(_Ptr<K>)) : itype(_Ptr<struct hash_node>)
 {
-  _Ptr<struct hash_node *> p_bucket = hash_get_bucket(p_hash, p_key);
-  struct hash_node* p_node = *p_bucket;
+  _Ptr<_Ptr<struct hash_node>> p_bucket = hash_get_bucket<void>(p_hash, p_key);
+  _Ptr<struct hash_node> p_node = *p_bucket;
   if (!p_node)
   {
     return p_node;
   }
   while (p_node != 0 &&
-         vsf_sysutil_memcmp<void>(p_key, p_node->p_key, p_hash->key_size) != 0)
+         vsf_sysutil_memcmp<void>(((const void *)p_key), p_node->p_key, p_hash->key_size) != 0)
   {
     p_node = p_node->p_next;
   }

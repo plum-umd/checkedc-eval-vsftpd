@@ -105,10 +105,10 @@ _Itype_for_any(T) int vsf_sysutil_read_loop(const int fd, void* p_buf : itype(_A
 _Itype_for_any(T) int vsf_sysutil_write_loop(const int fd, const void* p_buf : itype(_Array_ptr<const T>) byte_count(size), unsigned int size);
 
 struct vsf_sysutil_statbuf;
-int vsf_sysutil_stat(const char* p_name, struct vsf_sysutil_statbuf ** p_ptr: itype(_Ptr<_Ptr<struct vsf_sysutil_statbuf>>));
-int vsf_sysutil_lstat(const char* p_name, struct vsf_sysutil_statbuf ** p_ptr: itype(_Ptr<_Ptr<struct vsf_sysutil_statbuf>>));
+int vsf_sysutil_stat(const char* p_name : itype(_Nt_array_ptr<const char>), struct vsf_sysutil_statbuf ** p_ptr: itype(_Ptr<_Ptr<struct vsf_sysutil_statbuf>>));
+int vsf_sysutil_lstat(const char* p_name : itype(_Nt_array_ptr<const char>), struct vsf_sysutil_statbuf ** p_ptr: itype(_Ptr<_Ptr<struct vsf_sysutil_statbuf>>));
 void vsf_sysutil_fstat(int fd, struct vsf_sysutil_statbuf **p_ptr : itype(_Ptr<_Ptr<struct vsf_sysutil_statbuf>>));
-void vsf_sysutil_dir_stat(const struct vsf_sysutil_dir* p_dir, _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);
+void vsf_sysutil_dir_stat(const struct vsf_sysutil_dir* p_dir : itype(_Ptr<const struct vsf_sysutil_dir>), _Ptr<_Ptr<struct vsf_sysutil_statbuf>> p_ptr);
 int vsf_sysutil_statbuf_is_regfile(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>));
 int vsf_sysutil_statbuf_is_symlink(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>));
 int vsf_sysutil_statbuf_is_socket(const struct vsf_sysutil_statbuf* p_stat: itype(_Ptr<const struct vsf_sysutil_statbuf>));

@@ -212,7 +212,7 @@ int capset(_Ptr<struct __user_cap_header_struct> header, const _Ptr<struct __use
 #endif
 
 #ifdef VSF_SYSDEP_TRY_LINUX_SETPROCTITLE_HACK
-extern char** environ;
+extern char** environ : itype(_Nt_array_ptr<_Nt_array_ptr<char>>);
 static unsigned int s_proctitle_space = 0;
 static int s_proctitle_inited = 0;
 static _Array_ptr<char> s_p_proctitle : byte_count(s_proctitle_space) = 0;

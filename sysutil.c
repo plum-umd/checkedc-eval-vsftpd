@@ -76,7 +76,7 @@ static struct vsf_sysutil_sig_details
   volatile sig_atomic_t pending;
   int running;
   int use_alarm;
-} s_sig_details[NSIG];
+} s_sig_details _Checked[NSIG];
 
 static _Ptr<void (int , int , void *)> s_io_handler = ((void *)0);
 static void* s_p_io_handler_private;

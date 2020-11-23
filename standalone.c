@@ -24,14 +24,14 @@ static _Ptr<struct hash> s_p_ip_count_hash = ((void *)0);
 static _Ptr<struct hash> s_p_pid_ip_hash = ((void *)0);
 static unsigned int s_ipaddr_size;
 
-static void handle_sigchld(void*  duff);
-static void handle_sighup(void*  duff);
+static _Itype_for_any(T) void handle_sigchld(void*  duff : itype(_Ptr<T>));
+static _Itype_for_any(T) void handle_sighup(void*  duff : itype(_Ptr<T>));
 static void prepare_child(int sockfd);
-static unsigned int handle_ip_count(void* p_raw_addr);
-static void drop_ip_count(void* p_raw_addr);
+static _Itype_for_any(T) unsigned int handle_ip_count(void* p_raw_addr : itype(_Ptr<T>));
+static _Itype_for_any(T) void drop_ip_count(void* p_raw_addr : itype(_Ptr<T>));
 
-static unsigned int hash_ip(unsigned int buckets, void* p_key);
-static unsigned int hash_pid(unsigned int buckets, void* p_key);
+static _Itype_for_any(T) unsigned int hash_ip(unsigned int buckets, void* p_key : itype(_Ptr<T>));
+static _Itype_for_any(T) unsigned int hash_pid(unsigned int buckets, void* p_key : itype(_Ptr<T>));
 
 struct vsf_client_launch
 vsf_standalone_main(void)

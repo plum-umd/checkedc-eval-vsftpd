@@ -30,8 +30,8 @@
 #include "seccompsandbox.h"
 
 static void drop_all_privs(void);
-static void handle_sigchld(void* duff);
-static void handle_sigterm(void* duff);
+static _Itype_for_any(T) void handle_sigchld(void* duff : itype(_Ptr<T>));
+static _Itype_for_any(T) void handle_sigterm(void* duff : itype(_Ptr<T>));
 static void process_login_req(_Ptr<struct vsf_session> p_sess);
 static void common_do_login(_Ptr<struct vsf_session> p_sess, _Ptr<const struct mystr> p_user_str, int do_chroot, int anon);
 static void handle_per_user_config(_Ptr<const struct mystr> p_user_str);

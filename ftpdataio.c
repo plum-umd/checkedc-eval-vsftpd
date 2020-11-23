@@ -31,14 +31,14 @@
 #include "readwrite.h"
 #include "privsock.h"
 
-static void init_data_sock_params(struct vsf_session* p_sess, int sock_fd);
+static void init_data_sock_params(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>), int sock_fd);
 static filesize_t calc_num_send(int file_fd, filesize_t init_offset);
 static struct vsf_transfer_ret do_file_send_sendfile(_Ptr<struct vsf_session> p_sess, int net_fd, int file_fd, filesize_t curr_file_offset, filesize_t bytes_to_send);
 static struct vsf_transfer_ret do_file_send_rwloop(_Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii);
 static struct vsf_transfer_ret do_file_recv(_Ptr<struct vsf_session> p_sess, int file_fd, int is_ascii);
-static void handle_sigalrm(void* p_private);
-static void start_data_alarm(struct vsf_session* p_sess);
-static void handle_io(int retval, int fd, void* p_private);
+static _Itype_for_any(T) void handle_sigalrm(void* p_private : itype(_Ptr<T>));
+static void start_data_alarm(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>));
+static _Itype_for_any(T) void handle_io(int retval, int fd, void* p_private : itype(_Ptr<T>));
 static int transfer_dir_internal(_Ptr<struct vsf_session> p_sess, int is_control, _Ptr<struct vsf_sysutil_dir> p_dir, _Ptr<const struct mystr> p_base_dir_str, _Ptr<const struct mystr> p_option_str, _Ptr<const struct mystr> p_filter_str, int is_verbose);
 static int write_dir_list(_Ptr<struct vsf_session> p_sess, _Ptr<struct mystr_list> p_dir_list, enum EVSFRWTarget target);
 static unsigned int get_chunk_size();
@@ -183,8 +183,8 @@ vsf_ftpdataio_post_mark_connect(struct vsf_session *p_sess : itype(_Ptr<struct v
   return ret;
 }
 
-static void
-handle_sigalrm(void* p_private)
+static _Itype_for_any(T) void
+handle_sigalrm(void* p_private : itype(_Ptr<T>))
 {
   struct vsf_session* p_sess = (struct vsf_session*) p_private;
   if (!p_sess->data_progress)
@@ -202,7 +202,7 @@ handle_sigalrm(void* p_private)
 }
 
 void
-start_data_alarm(struct vsf_session* p_sess)
+start_data_alarm(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
 {
   if (tunable_data_connection_timeout > 0)
   {
@@ -219,7 +219,7 @@ start_data_alarm(struct vsf_session* p_sess)
 }
 
 static void
-init_data_sock_params(struct vsf_session* p_sess, int sock_fd)
+init_data_sock_params(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>), int sock_fd)
 {
   if (p_sess->data_fd != -1)
   {
@@ -235,8 +235,8 @@ init_data_sock_params(struct vsf_session* p_sess, int sock_fd)
   start_data_alarm(p_sess);
 }
 
-static void
-handle_io(int retval, int fd, void* p_private)
+static _Itype_for_any(T) void
+handle_io(int retval, int fd, void* p_private : itype(_Ptr<T>))
 {
   long curr_sec;
   long curr_usec;

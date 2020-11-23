@@ -75,7 +75,7 @@ static int data_transfer_checks_ok(struct vsf_session *p_sess : itype(_Ptr<struc
 static void resolve_tilde(_Ptr<struct mystr> p_str, struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>));
 
 void
-process_post_login(struct vsf_session* p_sess)
+process_post_login(struct vsf_session* p_sess : itype(_Ptr<struct vsf_session>))
 {
   str_getcwd(&p_sess->home_str);
   if (p_sess->is_anonymous)

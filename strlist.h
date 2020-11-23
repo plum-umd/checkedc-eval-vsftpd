@@ -9,7 +9,7 @@ struct mystr_list
 {
   unsigned int PRIVATE_HANDS_OFF_alloc_len;
   unsigned int PRIVATE_HANDS_OFF_list_len;
-  struct mystr_list_node* PRIVATE_HANDS_OFF_p_nodes;
+  _Array_ptr<struct mystr_list_node> PRIVATE_HANDS_OFF_p_nodes : count(PRIVATE_HANDS_OFF_alloc_len);
 };
 
 #define INIT_STRLIST \

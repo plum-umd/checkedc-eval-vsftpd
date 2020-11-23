@@ -109,12 +109,12 @@ str_list_sort(_Ptr<struct mystr_list> p_list, int reverse)
 {
   if (!reverse)
   {
-    vsf_sysutil_qsort(p_list->p_nodes, p_list->list_len,
+    vsf_sysutil_qsort((void*) p_list->p_nodes, p_list->list_len,
                       sizeof(struct mystr_list_node), sort_compare_func);
   }
   else
   {
-    vsf_sysutil_qsort(p_list->p_nodes, p_list->list_len,
+    vsf_sysutil_qsort((void*) p_list->p_nodes, p_list->list_len,
                       sizeof(struct mystr_list_node),
                       sort_compare_func_reverse);
   }
@@ -137,8 +137,8 @@ sort_compare_common(const void* p1, const void* p2, int reverse)
 {
   _Ptr<const struct mystr> p_cmp1 = ((void *)0);
   _Ptr<const struct mystr> p_cmp2 = ((void *)0);
-  const struct mystr_list_node* p_node1 = (const struct mystr_list_node*) p1;
-  const struct mystr_list_node* p_node2 = (const struct mystr_list_node*) p2;
+  const _Ptr<struct mystr_list_node> p_node1 = _Assume_bounds_cast<_Ptr<const struct mystr_list_node>>(p1);
+  const _Ptr<struct mystr_list_node> p_node2 = _Assume_bounds_cast<_Ptr<const struct mystr_list_node>>(p2);
   if (!str_isempty(&p_node1->sort_key_str))
   {
     p_cmp1 = &p_node1->sort_key_str;

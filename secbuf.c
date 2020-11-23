@@ -15,12 +15,12 @@
 #include "sysdeputil.h"
 
 void
-vsf_secbuf_alloc(_Ptr<char *> p_ptr, unsigned int size)
+vsf_secbuf_alloc(char ** p_ptr : itype(_Ptr<_Array_ptr<char>>), unsigned int size)
 {
   unsigned int page_offset;
   unsigned int round_up;
-  char* p_mmap;
-  char* p_no_access_page;
+  _Array_ptr<char> p_mmap;
+  _Array_ptr<char> p_no_access_page;
   unsigned int page_size = vsf_sysutil_getpagesize();
 
   /* Free any previous buffer */
@@ -44,14 +44,14 @@ vsf_secbuf_alloc(_Ptr<char *> p_ptr, unsigned int size)
   p_mmap = vsf_sysutil_map_anon_pages<char>(round_up);
   /* Map the first and last page inaccessible */
   p_no_access_page = p_mmap + round_up - page_size;
-  vsf_sysutil_memprotect<char>(p_no_access_page, page_size, kVSFSysUtilMapProtNone);
+  vsf_sysutil_memprotect<char>(_Assume_bounds_cast<_Array_ptr<char>>(p_no_access_page, byte_count(page_size)), page_size, kVSFSysUtilMapProtNone);
   /* Before we make the "before" page inaccessible, store the size in it.
    * A little hack so that we don't need to explicitly be passed the size
    * when freeing an existing secure buffer
    */
   *((unsigned int*)p_mmap) = round_up;
   p_no_access_page = p_mmap;
-  vsf_sysutil_memprotect<char>(p_no_access_page, page_size, kVSFSysUtilMapProtNone);
+  vsf_sysutil_memprotect<char>(_Assume_bounds_cast<_Array_ptr<char>>(p_no_access_page, byte_count(page_size)), page_size, kVSFSysUtilMapProtNone);
 
   p_mmap += page_size;
   if (page_offset)
@@ -62,11 +62,11 @@ vsf_secbuf_alloc(_Ptr<char *> p_ptr, unsigned int size)
 }
 
 void
-vsf_secbuf_free(_Ptr<char *> p_ptr)
+vsf_secbuf_free(char ** p_ptr : itype(_Ptr<_Array_ptr<char>>))
 {
   unsigned int map_size;
   unsigned long page_offset;
-  char* p_mmap = *p_ptr;
+  _Array_ptr<char> p_mmap = *p_ptr;
   unsigned int page_size = vsf_sysutil_getpagesize();
   if (p_mmap == 0)
   {
@@ -80,10 +80,10 @@ vsf_secbuf_free(_Ptr<char *> p_ptr)
   }
   p_mmap -= page_size;
   /* First make the first page readable so we can get the size */
-  vsf_sysutil_memprotect<char>(p_mmap, page_size, kVSFSysUtilMapProtReadOnly);
+  vsf_sysutil_memprotect<char>(_Assume_bounds_cast<_Array_ptr<char>>(p_mmap, byte_count(page_size)), page_size, kVSFSysUtilMapProtReadOnly);
   /* Extract the mapping size */
   map_size = *((unsigned int*)p_mmap);
   /* Lose the mapping */
-  vsf_sysutil_memunmap<char>(p_mmap, map_size);
+  vsf_sysutil_memunmap<char>(_Assume_bounds_cast<_Array_ptr<char>>(p_mmap, byte_count(page_size)), map_size);
 }
 

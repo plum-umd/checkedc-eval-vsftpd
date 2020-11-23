@@ -9,6 +9,8 @@
 #include "filesize.h"
 #endif
 
+#include "defs.h"
+
 struct vsf_sysutil_sockaddr;
 struct mystr_list;
 
@@ -20,7 +22,7 @@ struct vsf_session
   /* Details of the control connection */
   struct vsf_sysutil_sockaddr* p_local_addr : itype(_Ptr<struct vsf_sysutil_sockaddr>);
   struct vsf_sysutil_sockaddr* p_remote_addr : itype(_Ptr<struct vsf_sysutil_sockaddr>);
-  char* p_control_line_buf : itype(_Nt_array_ptr<char>);
+  char* p_control_line_buf : itype(_Array_ptr<char>) count(VSFTP_MAX_COMMAND_LINE);
   int idle_timeout;
   int data_timeout;
 

@@ -543,7 +543,7 @@ pasv_active(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 static void
 port_cleanup(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
 {
-  vsf_sysutil_sockaddr_clear(&p_sess->p_port_sockaddr);
+  vsf_sysutil_sockaddr_clear(_Assume_bounds_cast<_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>>(&p_sess->p_port_sockaddr));
 }
 
 static void
@@ -978,7 +978,7 @@ handle_port(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
     return;
   }
   the_port = (unsigned short) ((vals[4] << 8) | vals[5]);
-  vsf_sysutil_sockaddr_clone(&p_sess->p_port_sockaddr, p_sess->p_local_addr);
+  vsf_sysutil_sockaddr_clone(_Assume_bounds_cast<_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>>(&p_sess->p_port_sockaddr), p_sess->p_local_addr);
   vsf_sysutil_sockaddr_set_ipv4addr(p_sess->p_port_sockaddr, vals);
   vsf_sysutil_sockaddr_set_port(p_sess->p_port_sockaddr, the_port);
   /* SECURITY:
@@ -1720,7 +1720,7 @@ handle_eprt(struct vsf_session *p_sess : itype(_Ptr<struct vsf_session>))
   {
     goto bad_eprt;
   }
-  vsf_sysutil_sockaddr_clone(&p_sess->p_port_sockaddr, p_sess->p_local_addr);
+  vsf_sysutil_sockaddr_clone(_Assume_bounds_cast<_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>>(&p_sess->p_port_sockaddr), p_sess->p_local_addr);
   if (proto == 2)
   {
     vsf_sysutil_sockaddr_set_ipv6addr(p_sess->p_port_sockaddr, p_raw_addr);

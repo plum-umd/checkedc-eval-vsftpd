@@ -332,8 +332,8 @@ static void
 session_init(_Ptr<struct vsf_session> p_sess)
 {
   /* Get the addresses of the control connection */
-  vsf_sysutil_getpeername(VSFTP_COMMAND_FD, &p_sess->p_remote_addr);
-  vsf_sysutil_getsockname(VSFTP_COMMAND_FD, &p_sess->p_local_addr);
+  vsf_sysutil_getpeername(VSFTP_COMMAND_FD, _Assume_bounds_cast<_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>>(&p_sess->p_remote_addr));
+  vsf_sysutil_getsockname(VSFTP_COMMAND_FD, _Assume_bounds_cast<_Ptr<_Ptr<struct vsf_sysutil_sockaddr>>>(&p_sess->p_local_addr));
   /* If anonymous mode is active, fetch the uid of the anonymous user */
   if (tunable_anonymous_enable)
   {

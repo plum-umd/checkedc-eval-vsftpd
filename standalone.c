@@ -244,10 +244,10 @@ handle_sigchld(void* duff)
     reap_one = (unsigned int)vsf_sysutil_wait_reap_one();
     if (reap_one)
     {
-      _Ptr<struct vsf_sysutil_ipaddr> p_ip = ((void *)0)
+      _Ptr<struct vsf_sysutil_ipaddr> p_ip = ((void *)0);
 
       /* Account total number of instances */
-      --s_children;
+      s_children = s_children - 1;
 
       /* Account per-IP limit */
       p_ip = (_Ptr<struct vsf_sysutil_ipaddr>)

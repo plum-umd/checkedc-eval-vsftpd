@@ -1063,20 +1063,20 @@ vsf_sysutil_recv_fd(const int sock_fd)
   char recvchar;
   struct iovec vec;
   int recv_fd;
-  char cmsgbuf[CMSG_SPACE(sizeof(recv_fd))];
-  struct cmsghdr* p_cmsg;
-  int* p_fd;
+  char cmsgbuf _Checked[CMSG_SPACE(sizeof(recv_fd))];
+  _Ptr<struct cmsghdr> p_cmsg = 0;
+  _Ptr<int> p_fd = 0;
   vec.iov_base = &recvchar;
   vec.iov_len = sizeof(recvchar);
   msg.msg_name = NULL;
   msg.msg_namelen = 0;
   msg.msg_iov = &vec;
   msg.msg_iovlen = 1;
-  msg.msg_control = cmsgbuf;
+  msg.msg_control = (char*) cmsgbuf;
   msg.msg_controllen = sizeof(cmsgbuf);
   msg.msg_flags = 0;
   /* In case something goes wrong, set the fd to -1 before the syscall */
-  p_fd = (int*)CMSG_DATA(CMSG_FIRSTHDR(&msg));
+  p_fd = _Assume_bounds_cast<_Ptr<int>>(CMSG_DATA(CMSG_FIRSTHDR(&msg)));
   *p_fd = -1;  
   retval = recvmsg(sock_fd, &msg, 0);
   if (retval != 1)
@@ -1091,7 +1091,7 @@ vsf_sysutil_recv_fd(const int sock_fd)
   /* We used to verify the returned cmsg_level, cmsg_type and cmsg_len here,
    * but Linux 2.0 totally uselessly fails to fill these in.
    */
-  p_fd = (int*)CMSG_DATA(p_cmsg);
+  p_fd = _Assume_bounds_cast<_Ptr<int>>(CMSG_DATA(p_cmsg));
   recv_fd = *p_fd;
   if (recv_fd == -1)
   {

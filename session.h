@@ -93,9 +93,9 @@ struct vsf_session
   /* Secure connections state */
   int control_use_ssl;
   int data_use_ssl;
-  void* p_ssl_ctx;
-  void* p_control_ssl;
-  void* p_data_ssl;
+  _Ptr<void> p_ssl_ctx;
+  _Ptr<void> p_control_ssl;
+  _Ptr<void> p_data_ssl;
   struct mystr control_cert_digest;
   int ssl_slave_active;
   int ssl_slave_fd;

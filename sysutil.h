@@ -276,7 +276,7 @@ void vsf_sysutil_make_session_leader(void);
 void vsf_sysutil_reopen_standard_fds(void);
 void vsf_sysutil_tzset(void);
 const char *vsf_sysutil_get_current_date(void) : itype(_Nt_array_ptr<const char>) count(64);
-void vsf_sysutil_qsort(void* p_base, unsigned int num_elem, unsigned int elem_size, _Ptr<int (const void *, const void *)> p_compar);
+void vsf_sysutil_qsort(void* p_base : itype(_Ptr<void>), unsigned int num_elem, unsigned int elem_size, _Ptr<int (const void * : itype(_Ptr<const void>), const void * : itype(_Ptr<const void>))> p_compar);
 char *vsf_sysutil_getenv(_Nt_array_ptr<const char> p_var) : itype(_Nt_array_ptr<char>);
 typedef void (*exitfunc_t)(void);
 void vsf_sysutil_set_exit_func(_Ptr<void (void)> exitfunc);

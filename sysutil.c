@@ -71,15 +71,15 @@ static long s_timezone;
 /* Our internal signal handling implementation details */
 static struct vsf_sysutil_sig_details
 {
-  _Ptr<void (void *)> sync_sig_handler;
-  void* p_private;
+  _Ptr<void (void * : itype(_Ptr<void>))> sync_sig_handler;
+  void* p_private : itype(_Ptr<void>);
   volatile sig_atomic_t pending;
   int running;
   int use_alarm;
 } s_sig_details _Checked[NSIG];
 
-static _Ptr<void (int , int , void *)> s_io_handler = ((void *)0);
-static void* s_p_io_handler_private;
+static _Ptr<void (int , int , void * : itype(_Ptr<void>))> s_io_handler = ((void *)0);
+static void* s_p_io_handler_private : itype(_Ptr<void>);
 static int s_io_handler_running;
 
 struct vsf_sysutil_sockaddr

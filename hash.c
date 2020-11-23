@@ -13,8 +13,8 @@
 
 struct hash_node
 {
-  void* p_key;
-  void* p_value;
+  _Array_ptr<void> p_key;
+  _Array_ptr<void> p_value;
   struct hash_node* p_prev : itype(_Ptr<struct hash_node>);
   struct hash_node* p_next : itype(_Ptr<struct hash_node>);
 };

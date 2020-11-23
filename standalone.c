@@ -215,8 +215,8 @@ static void
 drop_ip_count(void* p_raw_addr)
 {
   unsigned int count;
-  unsigned int* p_count =
-    (unsigned int*)hash_lookup_entry<void,unsigned int>(s_p_ip_count_hash, p_raw_addr);
+  _Ptr<unsigned int> p_count =
+    (_Ptr<unsigned int>)hash_lookup_entry<void,unsigned int>(s_p_ip_count_hash, p_raw_addr);
   if (!p_count)
   {
     bug("IP address missing from hash");
@@ -244,11 +244,13 @@ handle_sigchld(void* duff)
     reap_one = (unsigned int)vsf_sysutil_wait_reap_one();
     if (reap_one)
     {
-      struct vsf_sysutil_ipaddr* p_ip;
+      _Ptr<struct vsf_sysutil_ipaddr> p_ip = ((void *)0)
+
       /* Account total number of instances */
       --s_children;
+
       /* Account per-IP limit */
-      p_ip = (struct vsf_sysutil_ipaddr*)
+      p_ip = (_Ptr<struct vsf_sysutil_ipaddr>)
         hash_lookup_entry<void,struct vsf_sysutil_ipaddr>(s_p_pid_ip_hash, (void*)&reap_one);
       drop_ip_count<struct vsf_sysutil_ipaddr>(p_ip);      
       hash_free_entry<void>(s_p_pid_ip_hash, (void*)&reap_one);
@@ -294,8 +296,8 @@ hash_pid(unsigned int buckets, void* p_key)
 static unsigned int
 handle_ip_count(void* p_ipaddr)
 {
-  unsigned int* p_count =
-    (unsigned int*)hash_lookup_entry<void,unsigned int>(s_p_ip_count_hash, p_ipaddr);
+  _Ptr<unsigned int> p_count =
+    (_Ptr<unsigned int>)hash_lookup_entry<void,unsigned int>(s_p_ip_count_hash, p_ipaddr);
   unsigned int count;
   if (!p_count)
   {

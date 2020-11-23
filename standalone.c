@@ -152,7 +152,7 @@ vsf_standalone_main(void)
     child_info.num_children = s_children;
     child_info.num_this_ip = 0;
     p_raw_addr = vsf_sysutil_sockaddr_get_raw_addr(p_accept_addr);
-    child_info.num_this_ip = handle_ip_count(p_raw_addr);
+    child_info.num_this_ip = handle_ip_count<void>(p_raw_addr);
     if (tunable_isolate)
     {
       if (tunable_http_enable && tunable_isolate_network)
@@ -180,7 +180,7 @@ vsf_standalone_main(void)
       {
         /* fork() failed, clear up! */
         --s_children;
-        drop_ip_count(p_raw_addr);
+        drop_ip_count<void>(p_raw_addr);
       }
       /* Fall through to while() loop and accept() again */
     }
@@ -250,7 +250,7 @@ handle_sigchld(void* duff)
       /* Account per-IP limit */
       p_ip = (struct vsf_sysutil_ipaddr*)
         hash_lookup_entry<void,struct vsf_sysutil_ipaddr>(s_p_pid_ip_hash, (void*)&reap_one);
-      drop_ip_count(p_ip);      
+      drop_ip_count<struct vsf_sysutil_ipaddr>(p_ip);      
       hash_free_entry<void>(s_p_pid_ip_hash, (void*)&reap_one);
     }
   }
@@ -287,7 +287,7 @@ hash_ip(unsigned int buckets, void* p_key)
 static unsigned int
 hash_pid(unsigned int buckets, void* p_key)
 {
-  unsigned int* p_pid = (unsigned int*)p_key;
+  _Ptr<unsigned int> p_pid = (_Ptr<unsigned int>)p_key;
   return (*p_pid) % buckets;
 }
 

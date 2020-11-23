@@ -186,7 +186,7 @@ vsf_ftpdataio_post_mark_connect(struct vsf_session *p_sess : itype(_Ptr<struct v
 static _Itype_for_any(T) void
 handle_sigalrm(void* p_private : itype(_Ptr<T>))
 {
-  struct vsf_session* p_sess = (struct vsf_session*) p_private;
+  _Ptr<struct vsf_session> p_sess = (_Ptr<struct vsf_session>) p_private;
   if (!p_sess->data_progress)
   {
     p_sess->data_timeout = 1;
@@ -244,7 +244,7 @@ handle_io(int retval, int fd, void* p_private : itype(_Ptr<T>))
   double elapsed;
   double pause_time;
   double rate_ratio;
-  struct vsf_session* p_sess = (struct vsf_session*) p_private;
+  _Ptr<struct vsf_session> p_sess = (_Ptr<struct vsf_session>) p_private;
   if (p_sess->data_fd != fd || vsf_sysutil_retval_is_error(retval) ||
       retval == 0)
   {
